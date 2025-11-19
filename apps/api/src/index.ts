@@ -24,31 +24,24 @@ validateEnvironment();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
-app.use(cors({
-  origin: process.env.FRONTEND_URL || "http://localhost:5173",
-  credentials: true,
+app.use(helmet({
+  contentSecurityPolicy: process.env.NODE_ENV === "production"
+    ? false // ❗ Necesario en Railway, Vercel, etc.
+    : {
+        directives: {
+          defaultSrc: ["'self'"],
+        },
+      },
+  hsts: process.env.NODE_ENV === "production"
+    ? {
+        maxAge: 31536000,
+        includeSubDomains: true,
+        preload: true,
+      }
+    : false
 }));
 
-// Security headers
-app.use(helmet({
-  contentSecurityPolicy: {
-    directives: {
-      defaultSrc: ["'self'"],
-      scriptSrc: ["'self'"],
-      styleSrc: ["'self'", "'unsafe-inline'"],
-      imgSrc: ["'self'", "data:", "https:"],
-      connectSrc: ["'self'", process.env.SUPABASE_URL || ""],
-      fontSrc: ["'self'"],
-      objectSrc: ["'none'"],
-      upgradeInsecureRequests: process.env.NODE_ENV === 'production' ? [] : null,
-    },
-  },
-  hsts: {
-    maxAge: 31536000,
-    includeSubDomains: true,
-    preload: true,
-  },
-}));
+
 
 // General API rate limiting
 app.use('/api', generalApiLimiter);
