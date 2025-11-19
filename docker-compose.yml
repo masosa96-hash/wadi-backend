@@ -1,0 +1,99 @@
+version: '3.8'
+
+services:
+  # WADI Frontend
+  frontend:
+    build:
+      context: .
+      dockerfile: apps/frontend/Dockerfile
+    container_name: wadi-frontend
+    ports:
+      - "3000:80"
+    environment:
+      - NODE_ENV=production
+    depends_on:
+      - backend
+    restart: unless-stopped
+    networks:
+      - wadi-network
+    deploy:
+      resources:
+        limits:
+          cpus: '0.5'
+          memory: 512M
+        reservations:
+          cpus: '0.25'
+          memory: 256M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # WADI Backend API
+  backend:
+    build:
+      context: .
+      dockerfile: apps/api/Dockerfile
+    container_name: wadi-backend
+    ports:
+      - "4000:4000"
+    environment:
+      - NODE_ENV=production
+      - PORT=4000
+      - SUPABASE_URL=${SUPABASE_URL}
+      - SUPABASE_ANON_KEY=${SUPABASE_ANON_KEY}
+      - SUPABASE_SERVICE_KEY=${SUPABASE_SERVICE_KEY}
+      - OPENAI_API_KEY=${OPENAI_API_KEY}
+      - OPENAI_DEFAULT_MODEL=${OPENAI_DEFAULT_MODEL:-gpt-3.5-turbo}
+      - FRONTEND_URL=http://localhost:3000
+    volumes:
+      - api-temp:/app/apps/api/temp
+      - api-logs:/app/apps/api/logs
+    restart: unless-stopped
+    networks:
+      - wadi-network
+    healthcheck:
+      test: ["CMD", "wget", "--quiet", "--tries=1", "--spider", "http://localhost:4000/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+    deploy:
+      resources:
+        limits:
+          cpus: '1.0'
+          memory: 1G
+        reservations:
+          cpus: '0.5'
+          memory: 512M
+    logging:
+      driver: "json-file"
+      options:
+        max-size: "10m"
+        max-file: "3"
+
+  # Redis for real-time features (optional, for future phases)
+  redis:
+    image: redis:7-alpine
+    container_name: wadi-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    restart: unless-stopped
+    networks:
+      - wadi-network
+    command: redis-server --appendonly yes
+
+volumes:
+  api-temp:
+    driver: local
+  api-logs:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  wadi-network:
+    driver: bridge

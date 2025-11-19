@@ -1,0 +1,44 @@
+{
+  "local": {
+    "id": "local",
+    "wordCounts": {
+      "hola": 2,
+      "porque": 1,
+      "me": 1,
+      "respondes": 1,
+      "eso": 2,
+      "que": 1,
+      "cosa": 1,
+      "y": 1,
+      "si": 1,
+      "viene": 1,
+      "pasando": 1,
+      "con": 1,
+      "tus": 1,
+      "respuestas": 1
+    },
+    "commonPhrases": {
+      "porque me": 1,
+      "me respondes": 1,
+      "respondes eso": 1,
+      "porque me respondes": 1,
+      "me respondes eso": 1,
+      "que cosa": 1,
+      "y si": 1,
+      "si eso": 1,
+      "eso viene": 1,
+      "viene pasando": 1,
+      "pasando con": 1,
+      "con tus": 1,
+      "tus respuestas": 1,
+      "y si eso": 1,
+      "si eso viene": 1,
+      "eso viene pasando": 1,
+      "viene pasando con": 1,
+      "pasando con tus": 1,
+      "con tus respuestas": 1
+    },
+    "shortAvg": 5,
+    "updatedAt": 1762972983868
+  }
+}
