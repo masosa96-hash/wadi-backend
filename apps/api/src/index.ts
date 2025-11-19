@@ -24,6 +24,15 @@ validateEnvironment();
 const app = express();
 const PORT = process.env.PORT || 4000;
 
+// CORS Configuration
+const corsOrigin = process.env.FRONTEND_URL || "http://localhost:5173";
+app.use(cors({
+  origin: corsOrigin,
+  credentials: true,
+  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+  allowedHeaders: ['Content-Type', 'Authorization'],
+}));
+
 app.use(helmet({
   contentSecurityPolicy: process.env.NODE_ENV === "production"
     ? false // ❗ Necesario en Railway, Vercel, etc.
@@ -40,8 +49,6 @@ app.use(helmet({
       }
     : false
 }));
-
-
 
 // General API rate limiting
 app.use('/api', generalApiLimiter);
