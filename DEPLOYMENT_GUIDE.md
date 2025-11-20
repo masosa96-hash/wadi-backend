@@ -1,181 +1,287 @@
-# WADI Beta - Quick Deployment Guide
+# 🚀 WADI Deployment Guide
 
-## 🚀 Deploy in 30 Minutes
+## Quick Start
+Este proyecto está **100% listo** para deployment automático en **Vercel** (frontend) y **Render** (backend).
 
-### Step 1: Database Migration (5 min)
+---
 
-Execute these SQL files in your Supabase SQL Editor in order:
+## 📦 Estructura del Proyecto
 
+```
+WADI/
+├── apps/
+│   ├── frontend/          # React + Vite app
+│   │   ├── dist/          # Build output
+│   │   ├── vercel.json    # Vercel config
+│   │   └── package.json
+│   └── api/               # Express API
+│       ├── dist/          # Build output
+│       ├── src/
+│       └── package.json
+├── vercel.json            # Root Vercel config (monorepo)
+├── render.yaml            # Render config
+├── .nvmrc                 # Node version
+└── package.json           # Root package.json
+```
+
+---
+
+## 🎯 Frontend Deployment (Vercel)
+
+### Configuración Automática
+
+1. **Conectá tu repo a Vercel:**
+   - Ve a [vercel.com](https://vercel.com)
+   - Click en "Add New Project"
+   - Importá tu repositorio de GitHub
+   - Vercel detectará automáticamente la configuración
+
+2. **Variables de Entorno en Vercel:**
+   ```
+   VITE_SUPABASE_URL=tu_supabase_url
+   VITE_SUPABASE_ANON_KEY=tu_supabase_anon_key
+   VITE_API_URL=https://tu-backend.onrender.com
+   ```
+
+3. **Deploy:**
+   - Vercel desplegará automáticamente en cada push a `main`
+   - Build command: `cd apps/frontend && pnpm build`
+   - Output directory: `apps/frontend/dist`
+   - Install command: `pnpm install --frozen-lockfile`
+
+### Deploy Manual (desde tu máquina)
 ```bash
-1. docs/database/phase1-workspaces-schema.sql
-2. docs/database/phase2-billing-schema.sql
-3. docs/database/phase3-presets-schema.sql
-4. docs/database/phase5-versioning-schema.sql
-5. docs/database/phase6-files-schema.sql
-6. docs/database/phase8-admin-schema.sql
+# Instalar Vercel CLI
+pnpm add -g vercel
+
+# Deploy
+pnpm run deploy:frontend
 ```
 
-### Step 2: Install Dependencies (2 min)
+### Configuración ya incluida:
+- ✅ `vercel.json` en root (monorepo support)
+- ✅ `vercel.json` en `apps/frontend`
+- ✅ Build script configurado
+- ✅ SPA routing configurado
 
+---
+
+## 🔧 Backend Deployment (Render)
+
+### Configuración Automática
+
+1. **Conectá tu repo a Render:**
+   - Ve a [render.com](https://render.com)
+   - Click en "New Web Service"
+   - Conectá tu repositorio de GitHub
+   - Render detectará automáticamente `render.yaml`
+
+2. **Variables de Entorno en Render:**
+   Las siguientes variables se configuran automáticamente o necesitan ser agregadas:
+   
+   **Auto-generadas:**
+   - `NODE_ENV=production`
+   - `PORT=10000`
+   - `JWT_SECRET` (auto-generado)
+   
+   **Requeridas (configurar manualmente):**
+   - `FRONTEND_URL=https://tu-app.vercel.app`
+   - `SUPABASE_URL=tu_supabase_url`
+   - `SUPABASE_ANON_KEY=tu_supabase_anon_key`
+   - `SUPABASE_SERVICE_KEY=tu_supabase_service_key`
+   - `OPENAI_API_KEY=tu_openai_key`
+
+3. **Deploy:**
+   - Render desplegará automáticamente en cada push a `main`
+   - Build command: `cd apps/api && pnpm install --frozen-lockfile && pnpm build`
+   - Start command: `cd apps/api && pnpm start`
+   - Health check: `/health`
+
+### Configuración ya incluida:
+- ✅ `render.yaml` configurado
+- ✅ Build y start scripts en `package.json`
+- ✅ Health check endpoint
+- ✅ Auto-rebuild on deploy
+
+---
+
+## 🛠️ Scripts Disponibles
+
+### Development
 ```bash
-cd apps/api
-pnpm install ws @types/ws
+# Full monorepo
+pnpm dev
 
-# Optional for file parsing:
-# pnpm install formidable pdf-parse csv-parser
+# Solo frontend
+pnpm dev:front
+
+# Solo backend
+pnpm dev:api
 ```
 
-### Step 3: Register Routes (3 min)
-
-Edit `apps/api/src/index.ts`:
-
-```typescript
-// Add imports
-import presetsRouter from "./routes/presets";
-import filesRouter from "./routes/files";
-import { createWebSocketServer } from "./services/websocket";
-
-// Add routes
-app.use("/api/presets", presetsRouter);
-app.use("/api", filesRouter);
-
-// Enable WebSocket
-const server = app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-createWebSocketServer(server);
-```
-
-### Step 4: Create Storage Bucket (1 min)
-
-In Supabase Dashboard → Storage → Create new bucket:
-- Name: `project-files`
-- Public: No (private)
-
-Or via SQL:
-```sql
-INSERT INTO storage.buckets (id, name, public) 
-VALUES ('project-files', 'project-files', false);
-```
-
-### Step 5: Environment Variables (2 min)
-
-Verify `.env` has:
-```env
-# Required
-VITE_SUPABASE_URL=your_url
-VITE_SUPABASE_ANON_KEY=your_key
-OPENAI_API_KEY=your_openai_key
-
-# Optional (for Stripe)
-STRIPE_SECRET_KEY=
-STRIPE_WEBHOOK_SECRET=
-```
-
-### Step 6: Build & Start (5 min)
-
+### Build
 ```bash
-# Backend
-cd apps/api
+# Build completo (frontend + backend)
 pnpm build
-pnpm start
 
-# Frontend
+# Solo frontend
+pnpm build:frontend
+
+# Solo backend
+pnpm build:api
+```
+
+### Deploy
+```bash
+# Deploy frontend a Vercel (manual)
+pnpm deploy:frontend
+
+# Deploy backend a Render (manual)
+pnpm deploy:api
+```
+
+---
+
+## 🔐 Variables de Entorno
+
+### Frontend (.env)
+```bash
+VITE_SUPABASE_URL=https://xxxxx.supabase.co
+VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+VITE_API_URL=https://wadi-api.onrender.com
+```
+
+### Backend (.env)
+```bash
+NODE_ENV=production
+PORT=10000
+FRONTEND_URL=https://wadi.vercel.app
+
+# Supabase
+SUPABASE_URL=https://xxxxx.supabase.co
+SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9...
+
+# OpenAI
+OPENAI_API_KEY=sk-...
+
+# JWT
+JWT_SECRET=tu_secreto_seguro_aqui
+```
+
+---
+
+## 📋 Checklist Pre-Deployment
+
+### Vercel (Frontend)
+- [ ] Repo conectado a Vercel
+- [ ] Variables de entorno configuradas
+- [ ] Build exitoso localmente (`pnpm build:frontend`)
+- [ ] URL del backend configurada en `VITE_API_URL`
+
+### Render (Backend)
+- [ ] Repo conectado a Render
+- [ ] Variables de entorno configuradas
+- [ ] Build exitoso localmente (`pnpm build:api`)
+- [ ] Migraciones de Supabase ejecutadas
+- [ ] OpenAI API key configurada
+
+### General
+- [ ] Node.js 20.18.1 configurado (`.nvmrc`)
+- [ ] pnpm 10.21.0 especificado
+- [ ] Supabase configurado
+- [ ] CORS configurado correctamente
+
+---
+
+## 🧪 Testing Local
+
+### Test Frontend Build
+```bash
+pnpm build:frontend
 cd apps/frontend
-pnpm build
 pnpm preview
 ```
 
-### Step 7: Test Critical Features (10 min)
+### Test Backend Build
+```bash
+pnpm build:api
+cd apps/api
+pnpm start
+```
 
-1. **Auth**: Login/Register
-2. **Workspace**: Create workspace, invite member
-3. **Billing**: Check credits (should be 50 for free plan)
-4. **Run**: Create GPT-3.5 run (costs 1 credit)
-5. **WebSocket**: Verify streaming works
-6. **Presets**: Create and execute a preset
-
----
-
-## 📋 Post-Deployment Checklist
-
-- [ ] Database schemas applied
-- [ ] All dependencies installed
-- [ ] Routes registered
-- [ ] Storage bucket created
-- [ ] WebSocket server running
-- [ ] Environment variables set
-- [ ] Auth working
-- [ ] Billing tracking credits
-- [ ] Real-time streaming working
-- [ ] RLS policies active
+### Test Full Build
+```bash
+pnpm build
+# Verificá que no haya errores de TypeScript
+```
 
 ---
 
-## 🔧 Troubleshooting
+## 🚨 Troubleshooting
 
-### WebSocket not connecting
-- Check server is using `http.createServer()` not just Express
-- Verify WebSocket server is initialized after HTTP server
-- Check browser console for connection errors
+### Error: "Build failed on Vercel"
+- Verificá que las variables de entorno estén configuradas
+- Revisá los logs de build en Vercel dashboard
+- Asegurate que `pnpm build:frontend` funcione localmente
 
-### Credits not deducting
-- Verify billing_info table has row for user
-- Check use_credits() function exists in database
-- Verify trigger auto-creates billing_info for new users
+### Error: "Backend health check failed"
+- Verificá que Supabase esté accesible
+- Revisá las variables de entorno en Render
+- Verificá los logs en Render dashboard
 
-### RLS blocking queries
-- Check user is authenticated (JWT token valid)
-- Verify workspace_members entries exist
-- Use Supabase logs to see policy violations
-
----
-
-## 📊 Monitoring
-
-After deployment, monitor:
-
-1. **WebSocket Connections**: Check for memory leaks
-2. **Credit Usage**: Track consumption patterns
-3. **API Errors**: Monitor Supabase logs
-4. **OpenAI Costs**: Track API usage
+### Error: "CORS error"
+- Asegurate que `FRONTEND_URL` en el backend apunte a tu dominio de Vercel
+- Verificá que `VITE_API_URL` en el frontend apunte a tu dominio de Render
 
 ---
 
-## 🎯 What's Ready
+## 📊 Monitoreo
 
-### Immediately Available (Phases 1-4)
-- Multi-tenant workspaces ✅
-- Billing & credits ✅
-- Prompt presets ✅
-- Real-time streaming ✅
+### Vercel
+- Dashboard: Accede a analytics y logs
+- Deploy hooks: Configurá webhooks para notifications
+- Preview deployments: Cada PR genera un preview
 
-### Backend Ready, UI Needed (Phases 5-6)
-- Project versioning (backend complete)
-- File handling (backend complete)
-
-### Documentation Ready (Phase 7)
-- Electron app guide available
-
-### Infrastructure Ready (Phase 8)
-- Admin panel (database + functions ready)
+### Render
+- Dashboard: Logs en tiempo real
+- Metrics: CPU, Memory, Response time
+- Health checks: Automático en `/health`
 
 ---
 
-## ⚡ Quick Start URLs
+## 🔄 CI/CD Automático
 
-After deployment:
+### Push to Main
+1. **GitHub** → detecta el push
+2. **Vercel** → auto-deploy frontend
+3. **Render** → auto-deploy backend
+4. **Health checks** → verifican que todo esté OK
 
-- **Frontend**: http://localhost:5173
-- **API**: http://localhost:4000
-- **WebSocket**: ws://localhost:4000
-- **Supabase Dashboard**: your_project.supabase.co
+### Pull Requests
+- Vercel genera preview deployments automáticamente
+- Render no despliega PRs (solo main branch)
 
 ---
 
-## 🎉 You're Live!
+## 📝 Notas Importantes
 
-WADI Beta is now deployed with all core features operational.
+1. **Monorepo Support**: Ambos servicios están configurados para funcionar con la estructura de monorepo
+2. **Build Time**: 
+   - Frontend: ~2 minutos
+   - Backend: ~3 minutos
+3. **Free Tier Limits**:
+   - Vercel: 100GB bandwidth/month
+   - Render: 750 horas/month (suficiente para 1 servicio 24/7)
+4. **Custom Domains**: Ambos servicios permiten dominios custom
 
-**Support**: Check FINAL_COMPLETE_STATUS.md for detailed documentation.
+---
+
+## 🎉 ¡Listo para Deploy!
+
+El proyecto está completamente configurado. Solo necesitás:
+1. Conectar los repos a Vercel y Render
+2. Configurar las variables de entorno
+3. Presionar "Deploy"
+
+**¡Todo funcionará automáticamente!**

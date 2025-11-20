@@ -188,7 +188,7 @@ export async function checkFileSizeLimit(
       return { allowed: fileSizeMB <= 5, maxSize: 5 };
     }
 
-    const maxSize = subscription.max_file_size_mb || 5;
+    const maxSize = (subscription as any).max_file_size_mb || 5;
     return { allowed: fileSizeMB <= maxSize, maxSize };
   } catch (error) {
     console.error("[LimitCheck] Error checking file size limit:", error);
