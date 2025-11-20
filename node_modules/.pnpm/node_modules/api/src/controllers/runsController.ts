@@ -10,9 +10,11 @@ export async function getRuns(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user_id;
     const projectId = req.params.id;
+    console.log("[getRuns] Request from user:", userId, "Project:", projectId);
 
     if (!userId) {
-      res.status(401).json({ error: "Unauthorized" });
+      console.error("[getRuns] Unauthorized: No user_id");
+      res.status(401).json({ ok: false, error: { code: "UNAUTHORIZED", message: "Unauthorized" } });
       return;
     }
 
@@ -25,7 +27,8 @@ export async function getRuns(req: Request, res: Response): Promise<void> {
       .single();
 
     if (projectError || !project) {
-      res.status(404).json({ error: "Project not found" });
+      console.error("[getRuns] Project not found:", projectError);
+      res.status(404).json({ ok: false, error: { code: "NOT_FOUND", message: "Project not found" } });
       return;
     }
 
@@ -46,21 +49,23 @@ export async function getRuns(req: Request, res: Response): Promise<void> {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching runs:", error);
-      res.status(500).json({ error: "Failed to fetch runs" });
+      console.error("[getRuns] Supabase error:", error);
+      res.status(500).json({ ok: false, error: { code: "DATABASE_ERROR", message: "Failed to fetch runs" } });
       return;
     }
 
-    res.json({ runs: data || [] });
+    console.log(`[getRuns] Success: Found ${data?.length || 0} runs`);
+    res.json({ ok: true, data: data || [] });
   } catch (error) {
-    console.error("Get runs error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("[getRuns] Exception:", error);
+    res.status(500).json({ ok: false, error: { code: "INTERNAL_ERROR", message: "Internal server error" } });
   }
 }
 
 /**
  * POST /api/projects/:id/runs
  * Creates a new run with AI generation
+ * Consumes credits based on model used
  */
 export async function createRun(req: Request, res: Response): Promise<void> {
   try {
@@ -105,12 +110,59 @@ export async function createRun(req: Request, res: Response): Promise<void> {
       return;
     }
 
+    // Calculate credit cost based on model
+    const creditCost = selectedModel.includes("gpt-4") ? 10 : 1;
+
+    // Check if user has enough credits
+    const { data: billingInfo, error: billingError } = await supabase
+      .from("billing_info")
+      .select("credits")
+      .eq("user_id", userId)
+      .single();
+
+    if (billingError || !billingInfo) {
+      console.error("[createRun] Failed to fetch billing info:", billingError);
+      res.status(500).json({ error: "Failed to verify credits" });
+      return;
+    }
+
+    if (billingInfo.credits < creditCost) {
+      res.status(402).json({ 
+        error: "Insufficient credits", 
+        code: "INSUFFICIENT_CREDITS",
+        required: creditCost,
+        available: billingInfo.credits
+      });
+      return;
+    }
+
+    // Use credits
+    const { data: creditSuccess, error: creditError } = await supabase.rpc("use_credits", {
+      p_user_id: userId,
+      p_amount: creditCost,
+      p_reason: "AI run generation",
+      p_metadata: { model: selectedModel, project_id: projectId },
+    });
+
+    if (creditError || !creditSuccess) {
+      console.error("[createRun] Failed to deduct credits:", creditError);
+      res.status(402).json({ error: "Failed to deduct credits" });
+      return;
+    }
+
     // Generate AI response
     let output: string;
     try {
       output = await generateCompletion(input.trim(), selectedModel);
     } catch (aiError: any) {
       console.error("AI generation error:", aiError);
+      // Refund credits on AI failure
+      await supabase.rpc("add_credits", {
+        p_user_id: userId,
+        p_amount: creditCost,
+        p_reason: "AI generation failed - refund",
+        p_metadata: { model: selectedModel, project_id: projectId },
+      });
       res.status(500).json({ error: aiError.message || "Failed to generate AI response" });
       return;
     }
@@ -164,7 +216,11 @@ export async function createRun(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    res.status(201).json({ run: data });
+    res.status(201).json({ 
+      run: data, 
+      credits_used: creditCost,
+      credits_remaining: billingInfo.credits - creditCost
+    });
   } catch (error) {
     console.error("Create run error:", error);
     res.status(500).json({ error: "Internal server error" });

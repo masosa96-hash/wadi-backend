@@ -1,307 +1,181 @@
-# WADI Deployment Guide
+# WADI Beta - Quick Deployment Guide
 
-This guide covers deploying WADI using Docker and Docker Compose.
+## 🚀 Deploy in 30 Minutes
 
-## Prerequisites
+### Step 1: Database Migration (5 min)
 
-- Docker Engine 20.10+
-- Docker Compose 2.0+
-- Supabase account and project
-- OpenAI API key
+Execute these SQL files in your Supabase SQL Editor in order:
 
-## Quick Start with Docker Compose
+```bash
+1. docs/database/phase1-workspaces-schema.sql
+2. docs/database/phase2-billing-schema.sql
+3. docs/database/phase3-presets-schema.sql
+4. docs/database/phase5-versioning-schema.sql
+5. docs/database/phase6-files-schema.sql
+6. docs/database/phase8-admin-schema.sql
+```
 
-### 1. Environment Setup
+### Step 2: Install Dependencies (2 min)
 
-Create a `.env` file in the project root:
+```bash
+cd apps/api
+pnpm install ws @types/ws
 
+# Optional for file parsing:
+# pnpm install formidable pdf-parse csv-parser
+```
+
+### Step 3: Register Routes (3 min)
+
+Edit `apps/api/src/index.ts`:
+
+```typescript
+// Add imports
+import presetsRouter from "./routes/presets";
+import filesRouter from "./routes/files";
+import { createWebSocketServer } from "./services/websocket";
+
+// Add routes
+app.use("/api/presets", presetsRouter);
+app.use("/api", filesRouter);
+
+// Enable WebSocket
+const server = app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
+
+createWebSocketServer(server);
+```
+
+### Step 4: Create Storage Bucket (1 min)
+
+In Supabase Dashboard → Storage → Create new bucket:
+- Name: `project-files`
+- Public: No (private)
+
+Or via SQL:
+```sql
+INSERT INTO storage.buckets (id, name, public) 
+VALUES ('project-files', 'project-files', false);
+```
+
+### Step 5: Environment Variables (2 min)
+
+Verify `.env` has:
 ```env
-# Supabase Configuration
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key-here
-SUPABASE_SERVICE_KEY=your-service-key-here
+# Required
+VITE_SUPABASE_URL=your_url
+VITE_SUPABASE_ANON_KEY=your_key
+OPENAI_API_KEY=your_openai_key
 
-# OpenAI Configuration
-OPENAI_API_KEY=sk-your-api-key-here
-OPENAI_DEFAULT_MODEL=gpt-3.5-turbo
+# Optional (for Stripe)
+STRIPE_SECRET_KEY=
+STRIPE_WEBHOOK_SECRET=
 ```
 
-### 2. Database Setup
-
-Execute the SQL schemas in your Supabase SQL Editor:
-
-1. Main schema: `docs/database-schema.md`
-2. Phase 1 additions: `docs/database-schema-phase1.sql`
-
-This will create:
-- `profiles`, `projects`, `runs`, `sessions` tables
-- `memories` table (vector store)
-- `tasks` table (project management)
-- All necessary indexes and RLS policies
-
-### 3. Build and Run
+### Step 6: Build & Start (5 min)
 
 ```bash
-# Build all services
-docker-compose build
+# Backend
+cd apps/api
+pnpm build
+pnpm start
 
-# Start all services
-docker-compose up -d
-
-# View logs
-docker-compose logs -f
-
-# Check status
-docker-compose ps
+# Frontend
+cd apps/frontend
+pnpm build
+pnpm preview
 ```
 
-### 4. Access the Application
-
-- **Frontend**: http://localhost:3000
-- **Backend API**: http://localhost:4000
-- **WebSocket**: ws://localhost:4000/ws
-- **Health Check**: http://localhost:4000/health
-
-## Service Architecture
-
-```
-┌─────────────┐      ┌─────────────┐      ┌──────────────┐
-│   Nginx     │────▶ │  Backend    │────▶ │   Supabase   │
-│ (Frontend)  │      │   (API)     │      │  (Database)  │
-│   :3000     │      │   :4000     │      │              │
-└─────────────┘      └─────────────┘      └──────────────┘
-                            │
-                            ▼
-                     ┌─────────────┐
-                     │    Redis    │
-                     │  (Optional) │
-                     │   :6379     │
-                     └─────────────┘
-```
-
-## Individual Service Management
-
-### Frontend Only
-
-```bash
-docker-compose up -d frontend
-```
-
-### Backend Only
-
-```bash
-docker-compose up -d backend
-```
-
-### Stop All Services
-
-```bash
-docker-compose down
-```
-
-### Remove Volumes (Clean Slate)
-
-```bash
-docker-compose down -v
-```
-
-## Production Deployment Checklist
-
-### Security
-
-- [ ] Use HTTPS with valid SSL certificates
-- [ ] Change all default ports
-- [ ] Set strong SECRET_KEY values
-- [ ] Enable firewall rules
-- [ ] Configure CORS properly
-- [ ] Use environment-specific .env files
-- [ ] Enable Supabase RLS policies
-
-### Performance
-
-- [ ] Enable Redis caching (already in docker-compose)
-- [ ] Configure CDN for static assets
-- [ ] Set up database connection pooling
-- [ ] Enable gzip compression (configured in Nginx)
-- [ ] Configure rate limiting
-
-### Monitoring
-
-- [ ] Set up logging aggregation
-- [ ] Configure health checks (already configured)
-- [ ] Set up uptime monitoring
-- [ ] Configure error tracking (Sentry recommended)
-- [ ] Set up performance monitoring
-
-### Backup
-
-- [ ] Configure Supabase automated backups
-- [ ] Set up volume backups for `api-temp`
-- [ ] Configure Redis persistence (already enabled)
-- [ ] Test restoration procedures
-
-## Scaling Strategies
-
-### Horizontal Scaling (Multiple Instances)
-
-Update `docker-compose.yml`:
-
-```yaml
-backend:
-  # ... existing config
-  deploy:
-    replicas: 3
-    update_config:
-      parallelism: 1
-      delay: 10s
-```
-
-### Load Balancing
-
-Add Nginx reverse proxy:
-
-```nginx
-upstream backend {
-    server backend:4000;
-    # Add more backend instances
-}
-
-server {
-    location /api {
-        proxy_pass http://backend;
-    }
-}
-```
-
-## Environment Variables Reference
-
-### Backend (Required)
-
-| Variable | Description | Example |
-|----------|-------------|---------|
-| `SUPABASE_URL` | Supabase project URL | `https://xxx.supabase.co` |
-| `SUPABASE_ANON_KEY` | Supabase anon key | `eyJhbG...` |
-| `SUPABASE_SERVICE_KEY` | Supabase service role key | `eyJhbG...` |
-| `OPENAI_API_KEY` | OpenAI API key | `sk-xxx` |
-| `OPENAI_DEFAULT_MODEL` | Default AI model | `gpt-3.5-turbo` |
-| `PORT` | API server port | `4000` |
-| `FRONTEND_URL` | Frontend URL for CORS | `http://localhost:3000` |
-
-### Backend (Optional)
-
-| Variable | Description | Default |
-|----------|-------------|---------|
-| `NODE_ENV` | Environment | `production` |
-| `REDIS_URL` | Redis connection URL | `redis://redis:6379` |
-
-## Troubleshooting
-
-### Backend Won't Start
-
-```bash
-# Check logs
-docker-compose logs backend
-
-# Common issues:
-# 1. Missing environment variables
-# 2. Supabase connection failure
-# 3. Port already in use
-```
-
-### Frontend Can't Connect to API
-
-```bash
-# Check backend health
-curl http://localhost:4000/health
-
-# Check CORS settings
-# Ensure FRONTEND_URL matches your deployment URL
-```
-
-### Database Connection Issues
-
-```bash
-# Verify Supabase credentials
-# Check if RLS policies are enabled
-# Ensure database tables exist
-```
-
-### WebSocket Connection Fails
-
-```bash
-# Test WebSocket
-wscat -c ws://localhost:4000/ws
-
-# Check if port 4000 is accessible
-# Verify proxy configuration if using reverse proxy
-```
-
-## Advanced Configuration
-
-### Custom Docker Build
-
-Build with specific Node version:
-
-```dockerfile
-FROM node:20-alpine AS builder
-# ... rest of Dockerfile
-```
-
-### Multi-Stage Build Optimization
-
-Current Dockerfiles already use multi-stage builds to minimize image size:
-
-- **Builder stage**: Installs all dependencies and builds
-- **Production stage**: Only copies built artifacts and production dependencies
-
-### Volume Mounts for Development
-
-```yaml
-backend:
-  volumes:
-    - ./apps/api/src:/app/apps/api/src
-  command: pnpm dev
-```
-
-## Maintenance
-
-### Update Application
-
-```bash
-# Pull latest changes
-git pull
-
-# Rebuild images
-docker-compose build
-
-# Restart services
-docker-compose up -d
-```
-
-### View Resource Usage
-
-```bash
-docker stats
-```
-
-### Clean Up
-
-```bash
-# Remove unused images
-docker image prune -a
-
-# Remove unused volumes
-docker volume prune
-```
-
-## Support
-
-For deployment issues:
-1. Check logs: `docker-compose logs -f`
-2. Verify environment variables
-3. Ensure database schema is up to date
-4. Review `PHASE_1_IMPLEMENTATION_STATUS.md`
+### Step 7: Test Critical Features (10 min)
+
+1. **Auth**: Login/Register
+2. **Workspace**: Create workspace, invite member
+3. **Billing**: Check credits (should be 50 for free plan)
+4. **Run**: Create GPT-3.5 run (costs 1 credit)
+5. **WebSocket**: Verify streaming works
+6. **Presets**: Create and execute a preset
 
 ---
 
-**WADI Docker Deployment** - Optimized for production with security and performance in mind.
+## 📋 Post-Deployment Checklist
+
+- [ ] Database schemas applied
+- [ ] All dependencies installed
+- [ ] Routes registered
+- [ ] Storage bucket created
+- [ ] WebSocket server running
+- [ ] Environment variables set
+- [ ] Auth working
+- [ ] Billing tracking credits
+- [ ] Real-time streaming working
+- [ ] RLS policies active
+
+---
+
+## 🔧 Troubleshooting
+
+### WebSocket not connecting
+- Check server is using `http.createServer()` not just Express
+- Verify WebSocket server is initialized after HTTP server
+- Check browser console for connection errors
+
+### Credits not deducting
+- Verify billing_info table has row for user
+- Check use_credits() function exists in database
+- Verify trigger auto-creates billing_info for new users
+
+### RLS blocking queries
+- Check user is authenticated (JWT token valid)
+- Verify workspace_members entries exist
+- Use Supabase logs to see policy violations
+
+---
+
+## 📊 Monitoring
+
+After deployment, monitor:
+
+1. **WebSocket Connections**: Check for memory leaks
+2. **Credit Usage**: Track consumption patterns
+3. **API Errors**: Monitor Supabase logs
+4. **OpenAI Costs**: Track API usage
+
+---
+
+## 🎯 What's Ready
+
+### Immediately Available (Phases 1-4)
+- Multi-tenant workspaces ✅
+- Billing & credits ✅
+- Prompt presets ✅
+- Real-time streaming ✅
+
+### Backend Ready, UI Needed (Phases 5-6)
+- Project versioning (backend complete)
+- File handling (backend complete)
+
+### Documentation Ready (Phase 7)
+- Electron app guide available
+
+### Infrastructure Ready (Phase 8)
+- Admin panel (database + functions ready)
+
+---
+
+## ⚡ Quick Start URLs
+
+After deployment:
+
+- **Frontend**: http://localhost:5173
+- **API**: http://localhost:4000
+- **WebSocket**: ws://localhost:4000
+- **Supabase Dashboard**: your_project.supabase.co
+
+---
+
+## 🎉 You're Live!
+
+WADI Beta is now deployed with all core features operational.
+
+**Support**: Check FINAL_COMPLETE_STATUS.md for detailed documentation.

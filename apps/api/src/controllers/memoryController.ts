@@ -1,207 +1,184 @@
-import type { Request, Response } from "express";
+import { Request, Response } from "express";
 import { supabase } from "../config/supabase";
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
 
 /**
- * GET /api/projects/:id/memory
- * Get project memory summary
+ * GET /api/memory
+ * Get all active memory for the authenticated user
  */
-export async function getProjectMemory(req: Request, res: Response): Promise<void> {
+export async function getUserMemory(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user_id;
-    const projectId = req.params.id;
+    console.log("[getUserMemory] Request from user:", userId);
 
     if (!userId) {
-      res.status(401).json({ error: "Unauthorized" });
+      res.status(401).json({ ok: false, error: "Unauthorized" });
       return;
     }
 
     const { data, error } = await supabase
-      .from("project_memory")
-      .select("*")
-      .eq("project_id", projectId)
-      .eq("user_id", userId)
-      .single();
+      .rpc("get_user_memory_for_chat", { p_user_id: userId });
 
-    if (error && error.code !== "PGRST116") {
-      console.error("Error fetching memory:", error);
-      res.status(500).json({ error: "Failed to fetch memory" });
+    if (error) {
+      console.error("[getUserMemory] Error:", error);
+      res.status(500).json({ ok: false, error: "Failed to fetch memory" });
       return;
     }
 
-    res.json({ memory: data || null });
+    console.log(`[getUserMemory] Success: Found ${data?.length || 0} memories`);
+    res.json({ ok: true, data: data || [] });
   } catch (error) {
-    console.error("Get memory error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("[getUserMemory] Exception:", error);
+    res.status(500).json({ ok: false, error: "Internal server error" });
   }
 }
 
 /**
- * POST /api/projects/:id/memory/generate
- * Generate or update project memory from recent runs
+ * POST /api/memory
+ * Save or update a memory entry
  */
-export async function generateProjectMemory(req: Request, res: Response): Promise<void> {
+export async function saveMemory(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user_id;
-    const projectId = req.params.id;
+    const { key, value, type, category, source, confidence, metadata } = req.body;
+
+    console.log("[saveMemory] Request from user:", userId, { key, type });
 
     if (!userId) {
-      res.status(401).json({ error: "Unauthorized" });
+      res.status(401).json({ ok: false, error: "Unauthorized" });
       return;
     }
 
-    const { data: project } = await supabase
-      .from("projects")
-      .select("id, name, description")
-      .eq("id", projectId)
-      .eq("user_id", userId)
-      .single();
-
-    if (!project) {
-      res.status(404).json({ error: "Project not found" });
+    // Validation
+    if (!key || !value || !type) {
+      res.status(400).json({ ok: false, error: "key, value, and type are required" });
       return;
     }
 
-    const { data: runs } = await supabase
-      .from("runs")
-      .select("input, output, created_at")
-      .eq("project_id", projectId)
-      .order("created_at", { ascending: false })
-      .limit(20);
-
-    if (!runs || runs.length === 0) {
-      res.status(400).json({ error: "No runs found to summarize" });
-      return;
-    }
-
-    const conversationText = runs
-      .reverse()
-      .map((r, i) => `[${i + 1}] User: ${r.input}\nAssistant: ${r.output}`)
-      .join("\n\n");
-
-    const systemPrompt = `You are summarizing a project conversation. Create a concise summary highlighting:
-1. Main objectives and goals
-2. Key decisions made
-3. Technical approaches discussed
-4. Important learnings
-5. Current status
-
-Project: ${project.name}${project.description ? ` - ${project.description}` : ""}
-
-Provide your response as JSON with this structure:
-{
-  "summary": "A 2-3 sentence high-level summary",
-  "key_points": ["point 1", "point 2", ...],
-  "topics": ["topic1", "topic2", ...]
-}`;
-
-    const completion = await openai.chat.completions.create({
-      model: "gpt-3.5-turbo",
-      messages: [
-        { role: "system", content: systemPrompt },
-        { role: "user", content: conversationText },
-      ],
-      temperature: 0.5,
-      max_tokens: 800,
+    const { data, error } = await supabase.rpc("upsert_user_memory", {
+      p_user_id: userId,
+      p_key: key,
+      p_value: value,
+      p_type: type,
+      p_category: category || null,
+      p_source: source || "explicit",
+      p_confidence: confidence || 1.0,
+      p_metadata: metadata || {},
     });
 
-    const content = completion.choices[0]?.message?.content;
-    if (!content) {
-      res.status(500).json({ error: "Failed to generate summary" });
+    if (error) {
+      console.error("[saveMemory] Error:", error);
+      res.status(500).json({ ok: false, error: "Failed to save memory" });
       return;
     }
 
-    const parsed = JSON.parse(content);
-
-    const { data: existingMemory } = await supabase
-      .from("project_memory")
-      .select("id")
-      .eq("project_id", projectId)
-      .single();
-
-    let memory;
-    if (existingMemory) {
-      const { data, error } = await supabase
-        .from("project_memory")
-        .update({
-          summary: parsed.summary,
-          key_points: parsed.key_points,
-          topics: parsed.topics,
-          run_count: runs.length,
-          last_updated: new Date().toISOString(),
-        })
-        .eq("project_id", projectId)
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Error updating memory:", error);
-        res.status(500).json({ error: "Failed to update memory" });
-        return;
-      }
-      memory = data;
-    } else {
-      const { data, error } = await supabase
-        .from("project_memory")
-        .insert({
-          project_id: projectId,
-          user_id: userId,
-          summary: parsed.summary,
-          key_points: parsed.key_points,
-          topics: parsed.topics,
-          run_count: runs.length,
-        })
-        .select()
-        .single();
-
-      if (error) {
-        console.error("Error creating memory:", error);
-        res.status(500).json({ error: "Failed to create memory" });
-        return;
-      }
-      memory = data;
-    }
-
-    res.json({ memory });
+    console.log("[saveMemory] Success:", key);
+    res.status(201).json({ ok: true, data });
   } catch (error) {
-    console.error("Generate memory error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("[saveMemory] Exception:", error);
+    res.status(500).json({ ok: false, error: "Internal server error" });
   }
 }
 
 /**
- * DELETE /api/projects/:id/memory
- * Clear project memory
+ * DELETE /api/memory/:memoryId
+ * Delete a specific memory entry
  */
-export async function deleteProjectMemory(req: Request, res: Response): Promise<void> {
+export async function deleteMemory(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user_id;
-    const projectId = req.params.id;
+    const { memoryId } = req.params;
+
+    console.log("[deleteMemory] Request from user:", userId, "Memory:", memoryId);
 
     if (!userId) {
-      res.status(401).json({ error: "Unauthorized" });
+      res.status(401).json({ ok: false, error: "Unauthorized" });
       return;
     }
 
     const { error } = await supabase
-      .from("project_memory")
+      .from("user_memory")
       .delete()
-      .eq("project_id", projectId)
+      .eq("id", memoryId)
       .eq("user_id", userId);
 
     if (error) {
-      console.error("Error deleting memory:", error);
-      res.status(500).json({ error: "Failed to delete memory" });
+      console.error("[deleteMemory] Error:", error);
+      res.status(500).json({ ok: false, error: "Failed to delete memory" });
       return;
     }
 
-    res.status(204).send();
+    console.log("[deleteMemory] Success");
+    res.json({ ok: true, message: "Memory deleted successfully" });
   } catch (error) {
-    console.error("Delete memory error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("[deleteMemory] Exception:", error);
+    res.status(500).json({ ok: false, error: "Internal server error" });
+  }
+}
+
+/**
+ * GET /api/memory/context
+ * Get formatted memory context for chat
+ */
+export async function getMemoryContext(req: Request, res: Response): Promise<void> {
+  try {
+    const userId = req.user_id;
+
+    if (!userId) {
+      res.status(401).json({ ok: false, error: "Unauthorized" });
+      return;
+    }
+
+    const { data, error } = await supabase
+      .rpc("get_user_memory_for_chat", { p_user_id: userId });
+
+    if (error) {
+      console.error("[getMemoryContext] Error:", error);
+      res.status(500).json({ ok: false, error: "Failed to fetch memory context" });
+      return;
+    }
+
+    // Format memory into contextual strings
+    const memoryByCategory: Record<string, any[]> = {};
+    (data || []).forEach((mem: any) => {
+      const cat = mem.category || mem.memory_type;
+      if (!memoryByCategory[cat]) {
+        memoryByCategory[cat] = [];
+      }
+      memoryByCategory[cat].push(mem);
+    });
+
+    const contextStrings: string[] = [];
+    
+    // Preferences
+    if (memoryByCategory.communication || memoryByCategory.preference) {
+      const prefs = [...(memoryByCategory.communication || []), ...(memoryByCategory.preference || [])];
+      contextStrings.push(
+        "Preferencias del usuario:",
+        ...prefs.map((m: any) => `- ${m.key}: ${m.value}`)
+      );
+    }
+
+    // Facts and context
+    if (memoryByCategory.fact || memoryByCategory.context) {
+      const facts = [...(memoryByCategory.fact || []), ...(memoryByCategory.context || [])];
+      contextStrings.push(
+        "\nContexto importante:",
+        ...facts.map((m: any) => `- ${m.value}`)
+      );
+    }
+
+    const formattedContext = contextStrings.join("\n");
+
+    res.json({ 
+      ok: true, 
+      data: {
+        raw: data || [],
+        formatted: formattedContext,
+        by_category: memoryByCategory,
+      }
+    });
+  } catch (error) {
+    console.error("[getMemoryContext] Exception:", error);
+    res.status(500).json({ ok: false, error: "Internal server error" });
   }
 }

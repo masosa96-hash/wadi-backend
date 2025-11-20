@@ -36,8 +36,8 @@ export default function Button({
 
   const variantStyles: Record<string, CSSProperties> = {
     primary: {
-      background: disabled ? theme.colors.text.tertiary : theme.gradients.accent,
-      color: disabled ? theme.colors.text.secondary : '#000',
+      background: disabled ? theme.colors.text.tertiary : theme.gradients.button,
+      color: disabled ? theme.colors.text.secondary : '#FFFFFF',
     },
     secondary: {
       background: theme.colors.background.tertiary,

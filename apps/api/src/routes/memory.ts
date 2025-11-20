@@ -1,15 +1,13 @@
 import { Router } from "express";
-import {
-  getProjectMemory,
-  generateProjectMemory,
-  deleteProjectMemory,
-} from "../controllers/memoryController";
 import { authMiddleware } from "../middleware/auth";
+import { getUserMemory, saveMemory, deleteMemory } from "../controllers/memoryController";
 
 const router = Router();
 
-router.get("/projects/:id/memory", authMiddleware, getProjectMemory);
-router.post("/projects/:id/memory/generate", authMiddleware, generateProjectMemory);
-router.delete("/projects/:id/memory", authMiddleware, deleteProjectMemory);
+router.use(authMiddleware);
+
+router.get("/", getUserMemory);
+router.post("/", saveMemory);
+router.delete("/:memoryId", deleteMemory);
 
 export default router;

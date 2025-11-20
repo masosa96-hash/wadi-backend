@@ -62,12 +62,12 @@ export default function RootGuard({
 
   // Redirect authenticated users away from guest-only pages
   if (requireGuest && user) {
-    return <Navigate to="/projects" replace />;
+    return <Navigate to="/home" replace />;
   }
 
   // Redirect unauthenticated users to login with return URL
   if (requireAuth && !user) {
-    const returnUrl = location.pathname !== '/' ? location.pathname : '/projects';
+    const returnUrl = location.pathname !== '/' ? location.pathname : '/home';
     return <Navigate to={`/login?returnUrl=${encodeURIComponent(returnUrl)}`} replace />;
   }
 

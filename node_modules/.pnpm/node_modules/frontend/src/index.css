@@ -1,23 +1,37 @@
-/* WADI Design System - Global Styles */
+/* WADI Design System - Global Styles (Web3 Premium) */
 
 /* Import Inter font from Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap');
 
 :root {
-  /* Color Palette */
-  --color-bg-primary: #0A0E14;
-  --color-bg-secondary: #13171F;
-  --color-bg-tertiary: #1A1F2B;
+  /* WADI Web3 Premium Light Theme */
+  --color-bg-primary: #F3F6FB;
+  --color-bg-secondary: #FFFFFF;
+  --color-bg-tertiary: #E8EEF7;
   
-  --color-border-subtle: #252933;
-  --color-border-accent: #2D3340;
+  /* Glassmorphism System */
+  --glass-surface: rgba(255, 255, 255, 0.7);
+  --glass-surface-heavy: rgba(255, 255, 255, 0.85);
+  --glass-blur: 12px;
+  --glass-blur-heavy: 20px;
   
-  --color-text-primary: #E6E8EC;
-  --color-text-secondary: #9BA3B4;
-  --color-text-tertiary: #6B7280;
+  --color-border-subtle: #D6E1F2;
+  --color-border-accent: #C5D4EB;
   
-  --color-accent-primary: #00D9A3;
-  --color-accent-secondary: #7C3AED;
+  --color-text-primary: #0F172A;
+  --color-text-secondary: #6B7280;
+  --color-text-tertiary: #9CA3AF;
+  
+  --color-accent-primary: #255FF5;
+  --color-accent-secondary: #7B8CFF;
+  --color-accent-y2k: #C5B3FF;
+  
+  /* Web3 Gradients */
+  --gradient-primary: linear-gradient(135deg, #255FF5 0%, #7B8CFF 50%, #C5B3FF 100%);
+  --gradient-hero: linear-gradient(135deg, #255FF5 0%, #7B8CFF 100%);
+  --gradient-button: linear-gradient(135deg, #255FF5 0%, #4A7BF7 100%);
+  --gradient-glow: linear-gradient(135deg, rgba(37, 95, 245, 0.15) 0%, rgba(197, 179, 255, 0.1) 100%);
+  --gradient-border: linear-gradient(135deg, rgba(37, 95, 245, 0.3) 0%, rgba(197, 179, 255, 0.2) 100%);
   
   --color-success: #10B981;
   --color-warning: #F59E0B;
@@ -34,7 +48,7 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 * {
@@ -68,7 +82,7 @@ a {
 }
 
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-secondary);
+  background: var(--color-bg-tertiary);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -84,4 +98,78 @@ a {
 *:focus-visible {
   outline: 2px solid var(--color-accent-primary);
   outline-offset: 2px;
+}
+
+/* Glassmorphism System - Consistent Premium Web3 Style */
+.glass-surface {
+  background: var(--glass-surface);
+  backdrop-filter: blur(var(--glass-blur)) saturate(180%);
+  border: 1px solid rgba(214, 225, 242, 0.5);
+}
+
+.glass-surface-heavy {
+  background: var(--glass-surface-heavy);
+  backdrop-filter: blur(var(--glass-blur-heavy)) saturate(180%);
+  border: 1px solid rgba(214, 225, 242, 0.6);
+}
+
+.glass-border {
+  border: 1px solid transparent;
+  background-origin: border-box;
+  background-clip: padding-box, border-box;
+  position: relative;
+}
+
+.glass-border::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  padding: 1px;
+  background: var(--gradient-border);
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+}
+
+/* Web3 glow effects - Subtle and Premium */
+.glow-primary {
+  box-shadow: 0 0 20px rgba(37, 95, 245, 0.15), 0 0 40px rgba(37, 95, 245, 0.08);
+}
+
+.glow-secondary {
+  box-shadow: 0 0 16px rgba(123, 140, 255, 0.15), 0 0 32px rgba(123, 140, 255, 0.08);
+}
+
+.glow-y2k {
+  box-shadow: 0 0 24px rgba(197, 179, 255, 0.2), 0 0 48px rgba(197, 179, 255, 0.12);
+}
+
+.glow-orb {
+  box-shadow: 
+    0 0 30px rgba(37, 95, 245, 0.2),
+    0 0 60px rgba(197, 179, 255, 0.15),
+    inset 0 0 20px rgba(255, 255, 255, 0.3);
+}
+
+/* Smooth transitions for interactive elements */
+.smooth-scale {
+  transition: transform 200ms ease-out, box-shadow 200ms ease-out;
+}
+
+.smooth-scale:hover {
+  transform: scale(1.02);
+}
+
+.smooth-scale:active {
+  transform: scale(0.98);
+}
+
+/* Web3 gradient text */
+.gradient-text {
+  background: var(--gradient-primary);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }

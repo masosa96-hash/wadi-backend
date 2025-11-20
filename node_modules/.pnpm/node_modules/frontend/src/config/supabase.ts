@@ -9,4 +9,14 @@ if (!supabaseUrl || !supabaseAnonKey) {
   );
 }
 
-export const supabase = createClient(supabaseUrl, supabaseAnonKey);
+export const supabase = createClient(supabaseUrl, supabaseAnonKey, {
+  auth: {
+    // Configure session persistence
+    // 'local' = persist session in localStorage (survives browser restarts)
+    // 'session' = persist in sessionStorage (cleared when browser closes)
+    // This will be controlled dynamically by the "Remember me" checkbox
+    persistSession: true,
+    autoRefreshToken: true,
+    detectSessionInUrl: true,
+  },
+});

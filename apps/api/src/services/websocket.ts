@@ -1,252 +1,255 @@
+import { Server as HttpServer } from "http";
 import { WebSocketServer, WebSocket } from "ws";
-import { Server } from "http";
 import { supabase } from "../config/supabase";
-import OpenAI from "openai";
+import { generateCompletionStream } from "./openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
-
-// WebSocket connection registry
-const connections = new Map<string, WebSocket>();
-const userConnections = new Map<string, Set<string>>();
-
-export interface WSMessage {
-  type: "auth" | "run" | "cancel" | "ping" | "pong";
-  token?: string;
-  projectId?: string;
-  input?: string;
-  model?: string;
-  requestId?: string;
+interface RunStreamClient {
+  ws: WebSocket;
+  runId: string;
+  userId: string;
+  isActive: boolean;
 }
 
-export interface WSResponse {
-  type: "authenticated" | "chunk" | "complete" | "error" | "status" | "pong";
-  content?: string;
-  status?: string;
-  run?: any;
-  error?: string;
-  requestId?: string;
-}
+const clients = new Map<string, RunStreamClient>();
 
-export function setupWebSocketServer(server: Server): WebSocketServer {
-  const wss = new WebSocketServer({ server, path: "/ws" });
+export function setupWebSocketServer(server: HttpServer) {
+  const wss = new WebSocketServer({ 
+    server,
+    path: "/ws"
+  });
 
-  wss.on("connection", (ws: WebSocket) => {
-    const connectionId = generateConnectionId();
-    let userId: string | null = null;
-    let authenticated = false;
+  console.log("[WebSocket] Server initialized");
 
-    connections.set(connectionId, ws);
+  wss.on("connection", (ws: WebSocket, req) => {
+    const url = new URL(req.url || "", `http://${req.headers.host}`);
+    const pathParts = url.pathname.split("/");
+    const runId = pathParts[pathParts.length - 2]; // /ws/runs/:runId/stream
+    const action = pathParts[pathParts.length - 1]; // stream
+    
+    if (action !== "stream" || !runId) {
+      ws.close(1008, "Invalid WebSocket path");
+      return;
+    }
 
-    // Heartbeat mechanism
-    const heartbeatInterval = setInterval(() => {
-      if (ws.readyState === WebSocket.OPEN) {
-        ws.send(JSON.stringify({ type: "ping" }));
-      }
-    }, 30000);
+    console.log(`[WebSocket] New connection for run: ${runId}`);
 
-    ws.on("message", async (data: Buffer) => {
+    // Store client
+    const clientId = `${runId}-${Date.now()}`;
+    const client: RunStreamClient = {
+      ws,
+      runId,
+      userId: "", // Will be set after auth
+      isActive: true
+    };
+    clients.set(clientId, client);
+
+    // Handle messages from client
+    ws.on("message", async (message: Buffer) => {
       try {
-        const message: WSMessage = JSON.parse(data.toString());
-
-        // Handle authentication
-        if (message.type === "auth") {
-          if (!message.token) {
-            ws.send(JSON.stringify({ type: "error", error: "Token required" }));
-            return;
-          }
-
-          // Validate token with Supabase
-          const { data: { user }, error } = await supabase.auth.getUser(message.token);
-          
-          if (error || !user) {
-            ws.send(JSON.stringify({ type: "error", error: "Invalid token" }));
-            ws.close();
-            return;
-          }
-
-          userId = user.id;
-          authenticated = true;
-
-          // Register user connection
-          if (!userConnections.has(userId)) {
-            userConnections.set(userId, new Set());
-          }
-          userConnections.get(userId)!.add(connectionId);
-
-          ws.send(JSON.stringify({ type: "authenticated", userId }));
-          return;
+        const data = JSON.parse(message.toString());
+        
+        if (data.type === "auth") {
+          // Authenticate and verify run access
+          await handleAuth(clientId, data.token, runId);
+        } else if (data.type === "stop") {
+          // Stop the run
+          await handleStop(clientId, runId);
         }
-
-        // Require authentication for other messages
-        if (!authenticated || !userId) {
-          ws.send(JSON.stringify({ type: "error", error: "Not authenticated" }));
-          return;
-        }
-
-        // Handle AI run request
-        if (message.type === "run") {
-          await handleRunRequest(ws, userId, message);
-          return;
-        }
-
-        // Handle cancellation
-        if (message.type === "cancel") {
-          ws.send(JSON.stringify({ type: "status", status: "cancelled", requestId: message.requestId }));
-          return;
-        }
-
-        // Handle ping/pong
-        if (message.type === "ping") {
-          ws.send(JSON.stringify({ type: "pong" }));
-          return;
-        }
-
-      } catch (error: any) {
-        console.error("WebSocket message error:", error);
-        ws.send(JSON.stringify({ type: "error", error: error.message || "Invalid message" }));
+      } catch (error) {
+        console.error("[WebSocket] Error handling message:", error);
+        ws.send(JSON.stringify({ type: "error", message: "Invalid message format" }));
       }
     });
 
     ws.on("close", () => {
-      clearInterval(heartbeatInterval);
-      connections.delete(connectionId);
-      
-      if (userId && userConnections.has(userId)) {
-        userConnections.get(userId)!.delete(connectionId);
-        if (userConnections.get(userId)!.size === 0) {
-          userConnections.delete(userId);
-        }
+      console.log(`[WebSocket] Connection closed for run: ${runId}`);
+      const client = clients.get(clientId);
+      if (client) {
+        client.isActive = false;
+        clients.delete(clientId);
       }
     });
 
     ws.on("error", (error) => {
-      console.error("WebSocket error:", error);
-      connections.delete(connectionId);
+      console.error(`[WebSocket] Error for run ${runId}:`, error);
     });
+
+    // Send welcome message
+    ws.send(JSON.stringify({ 
+      type: "connected", 
+      message: "WebSocket connection established",
+      runId 
+    }));
   });
 
   return wss;
 }
 
-async function handleRunRequest(ws: WebSocket, userId: string, message: WSMessage): Promise<void> {
-  const { projectId, input, model, requestId } = message;
-
-  if (!projectId || !input) {
-    ws.send(JSON.stringify({ type: "error", error: "Project ID and input required", requestId }));
-    return;
-  }
+async function handleAuth(clientId: string, token: string, runId: string) {
+  const client = clients.get(clientId);
+  if (!client) return;
 
   try {
-    // Verify project ownership
-    const { data: project } = await supabase
-      .from("projects")
-      .select("id, name")
-      .eq("id", projectId)
-      .eq("user_id", userId)
-      .single();
-
-    if (!project) {
-      ws.send(JSON.stringify({ type: "error", error: "Project not found", requestId }));
+    // Verify JWT token
+    const { data: { user }, error } = await supabase.auth.getUser(token);
+    
+    if (error || !user) {
+      client.ws.send(JSON.stringify({ type: "error", message: "Authentication failed" }));
+      client.ws.close(1008, "Unauthorized");
+      clients.delete(clientId);
       return;
     }
 
-    // Get or create active session
-    let sessionId: string | null = null;
-    const { data: activeSession } = await supabase
-      .from("sessions")
-      .select("id")
-      .eq("project_id", projectId)
-      .eq("user_id", userId)
-      .eq("is_active", true)
-      .single();
-
-    if (activeSession) {
-      sessionId = activeSession.id;
-    } else {
-      const { data: newSession } = await supabase
-        .from("sessions")
-        .insert({
-          project_id: projectId,
-          user_id: userId,
-          is_active: true,
-        })
-        .select()
-        .single();
-      
-      if (newSession) {
-        sessionId = newSession.id;
-      }
-    }
-
-    // Send status update
-    ws.send(JSON.stringify({ type: "status", status: "processing", requestId }));
-
-    // Stream AI response
-    let fullOutput = "";
-    const selectedModel = model || "gpt-3.5-turbo";
-
-    const stream = await openai.chat.completions.create({
-      model: selectedModel,
-      messages: [
-        { role: "system", content: "You are a helpful AI assistant." },
-        { role: "user", content: input.trim() },
-      ],
-      stream: true,
-      temperature: 0.7,
-    });
-
-    for await (const chunk of stream) {
-      const content = chunk.choices[0]?.delta?.content || "";
-      if (content) {
-        fullOutput += content;
-        ws.send(JSON.stringify({ type: "chunk", content, requestId }));
-      }
-    }
-
-    // Save run to database
-    const { data: run } = await supabase
+    // Verify run belongs to user
+    const { data: run, error: runError } = await supabase
       .from("runs")
-      .insert({
-        project_id: projectId,
-        user_id: userId,
-        input: input.trim(),
-        output: fullOutput,
-        model: selectedModel,
-        session_id: sessionId,
-      })
-      .select()
+      .select("id, user_id")
+      .eq("id", runId)
+      .eq("user_id", user.id)
       .single();
 
-    ws.send(JSON.stringify({ type: "complete", run, requestId }));
+    if (runError || !run) {
+      client.ws.send(JSON.stringify({ type: "error", message: "Run not found or access denied" }));
+      client.ws.close(1008, "Forbidden");
+      clients.delete(clientId);
+      return;
+    }
 
-  } catch (error: any) {
-    console.error("Run request error:", error);
-    ws.send(JSON.stringify({ 
-      type: "error", 
-      error: error.message || "Failed to process request",
-      requestId 
-    }));
+    client.userId = user.id;
+    client.ws.send(JSON.stringify({ type: "authenticated", userId: user.id }));
+    console.log(`[WebSocket] Client ${clientId} authenticated for run ${runId}`);
+  } catch (error) {
+    console.error("[WebSocket] Auth error:", error);
+    client.ws.send(JSON.stringify({ type: "error", message: "Authentication error" }));
+    client.ws.close(1011, "Authentication error");
+    clients.delete(clientId);
   }
 }
 
-function generateConnectionId(): string {
-  return `conn_${Date.now()}_${Math.random().toString(36).substring(2, 15)}`;
+async function handleStop(clientId: string, runId: string) {
+  const client = clients.get(clientId);
+  if (!client) return;
+
+  try {
+    // Update run status to stopped
+    await supabase
+      .from("runs")
+      .update({ status: "stopped" })
+      .eq("id", runId)
+      .eq("user_id", client.userId);
+
+    client.isActive = false;
+    client.ws.send(JSON.stringify({ type: "stopped", message: "Run stopped by user" }));
+  } catch (error) {
+    console.error("[WebSocket] Stop error:", error);
+    client.ws.send(JSON.stringify({ type: "error", message: "Failed to stop run" }));
+  }
 }
 
-export function getUserConnections(userId: string): Set<string> {
-  return userConnections.get(userId) || new Set();
-}
+export async function streamRunToClient(
+  runId: string, 
+  input: string, 
+  model: string,
+  userId: string
+) {
+  // Find all connected clients for this run
+  const runClients = Array.from(clients.values()).filter(
+    c => c.runId === runId && c.userId === userId && c.isActive
+  );
 
-export function broadcastToUser(userId: string, message: WSResponse): void {
-  const connectionIds = getUserConnections(userId);
-  const messageStr = JSON.stringify(message);
-  
-  connectionIds.forEach(connId => {
-    const ws = connections.get(connId);
-    if (ws && ws.readyState === WebSocket.OPEN) {
-      ws.send(messageStr);
+  if (runClients.length === 0) {
+    console.log(`[WebSocket] No active clients for run ${runId}, executing without streaming`);
+    return null;
+  }
+
+  // Send start event
+  runClients.forEach(client => {
+    client.ws.send(JSON.stringify({ 
+      type: "start", 
+      runId,
+      model,
+      timestamp: new Date().toISOString()
+    }));
+  });
+
+  let fullOutput = "";
+  let chunkCount = 0;
+
+  try {
+    // Stream AI response
+    for await (const chunk of generateCompletionStream(input, model)) {
+      fullOutput += chunk;
+      chunkCount++;
+
+      // Send chunk to all connected clients
+      runClients.forEach(client => {
+        if (client.isActive && client.ws.readyState === WebSocket.OPEN) {
+          client.ws.send(JSON.stringify({ 
+            type: "chunk", 
+            content: chunk,
+            chunkNumber: chunkCount,
+            timestamp: new Date().toISOString()
+          }));
+        }
+      });
+
+      // Check if run was stopped
+      const { data: run } = await supabase
+        .from("runs")
+        .select("status")
+        .eq("id", runId)
+        .single();
+
+      if (run?.status === "stopped") {
+        runClients.forEach(client => {
+          if (client.isActive) {
+            client.ws.send(JSON.stringify({ type: "stopped", message: "Run stopped" }));
+          }
+        });
+        return fullOutput;
+      }
     }
+
+    // Send completion event
+    runClients.forEach(client => {
+      if (client.isActive && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(JSON.stringify({ 
+          type: "complete", 
+          fullOutput,
+          totalChunks: chunkCount,
+          timestamp: new Date().toISOString()
+        }));
+      }
+    });
+
+    return fullOutput;
+  } catch (error: any) {
+    console.error("[WebSocket] Streaming error:", error);
+    
+    // Send error to clients
+    runClients.forEach(client => {
+      if (client.isActive && client.ws.readyState === WebSocket.OPEN) {
+        client.ws.send(JSON.stringify({ 
+          type: "error", 
+          message: error.message || "Streaming failed",
+          timestamp: new Date().toISOString()
+        }));
+      }
+    });
+
+    throw error;
+  }
+}
+
+export function getActiveConnections(): number {
+  return clients.size;
+}
+
+export function closeAllConnections() {
+  clients.forEach((client, clientId) => {
+    if (client.ws.readyState === WebSocket.OPEN) {
+      client.ws.close(1000, "Server shutting down");
+    }
+    clients.delete(clientId);
   });
 }

@@ -6,7 +6,7 @@
     "dev": "ts-node-dev --respawn --transpile-only src/index.ts"
   },
   "dependencies": {
-    "@supabase/supabase-js": "^2.81.1",
+    "@supabase/supabase-js": "^2.83.0",
     "@types/archiver": "^7.0.0",
     "@types/ws": "^8.18.1",
     "archiver": "^7.0.1",

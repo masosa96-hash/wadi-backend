@@ -1,5 +1,5 @@
 import { Router } from "express";
-import { getProjects, createProject } from "../controllers/projectsController";
+import { getProjects, createProject, getProject } from "../controllers/projectsController";
 import { authMiddleware } from "../middleware/auth";
 
 const router = Router();
@@ -12,5 +12,8 @@ router.get("/", getProjects);
 
 // POST /api/projects - Create new project
 router.post("/", createProject);
+
+// GET /api/projects/:id - Get specific project
+router.get("/:id", getProject);
 
 export default router;

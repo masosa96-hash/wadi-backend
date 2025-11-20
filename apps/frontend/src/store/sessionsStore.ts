@@ -87,13 +87,13 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
     }));
     
     try {
-      const data = await api.get<{ sessions: Session[] }>(`/api/projects/${projectId}/sessions`);
+      const response = await api.get<{ ok: boolean; data: Session[] }>(`/api/projects/${projectId}/sessions`);
       
       // Find active session
-      const activeSession = data.sessions.find(s => s.is_active);
+      const activeSession = response.data?.find(s => s.is_active);
       
       set((state) => ({
-        sessions: data.sessions,
+        sessions: response.data || [],
         activeSessionId: activeSession?.id || null,
         loadingStates: { ...state.loadingStates, fetchSessions: false },
       }));
@@ -125,18 +125,18 @@ export const useSessionsStore = create<SessionsState>((set, get) => ({
     }));
     
     try {
-      const data = await api.post<{ session: Session }>(`/api/projects/${projectId}/sessions`, {
+      const response = await api.post<{ ok: boolean; data: Session }>(`/api/projects/${projectId}/sessions`, {
         name,
         description,
       });
       
       set((state) => ({
-        sessions: [data.session, ...state.sessions.map(s => ({ ...s, is_active: false }))],
-        activeSessionId: data.session.id,
+        sessions: [response.data, ...state.sessions.map(s => ({ ...s, is_active: false }))],
+        activeSessionId: response.data.id,
         loadingStates: { ...state.loadingStates, createSession: false },
       }));
       
-      return data.session;
+      return response.data;
     } catch (error: any) {
       const errorState = createErrorState('createSession', error, true);
       set((state) => ({

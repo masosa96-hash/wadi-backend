@@ -12,6 +12,14 @@ import sharesRouter from "./routes/shares";
 import memoryRouter from "./routes/memory";
 import tasksRouter from "./routes/tasks";
 import invitationsRouter from "./routes/invitations";
+import workspacesRouter from "./routes/workspaces";
+import billingRouter from "./routes/billing";
+import presetsRouter from "./routes/presets";
+import filesRouter from "./routes/files";
+import chatRouter from "./routes/chat";
+import favoritesRouter from "./routes/favorites";
+import templatesRouter from "./routes/templates";
+import searchRouter from "./routes/search";
 import { checkSupabaseConnection } from "./config/supabase";
 import { setupWebSocketServer } from "./services/websocket";
 import { generalApiLimiter } from "./middleware/rateLimit";
@@ -65,6 +73,10 @@ app.get("/health", async (req, res) => {
 });
 
 // API Routes
+app.use("/api/workspaces", workspacesRouter);
+app.use("/api/billing", billingRouter);
+app.use("/api/presets", presetsRouter);
+app.use("/api/files", filesRouter);
 app.use("/api/projects", projectsRouter);
 app.use("/api/projects", runsRouter);
 app.use("/api/projects", tasksRouter);
@@ -73,6 +85,10 @@ app.use("/api", tagsRouter);
 app.use("/api/shares", sharesRouter);
 app.use("/api", memoryRouter);
 app.use("/api", invitationsRouter);
+app.use("/api/chat", chatRouter);
+app.use("/api/favorites", favoritesRouter);
+app.use("/api/templates", templatesRouter);
+app.use("/api/search", searchRouter);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);

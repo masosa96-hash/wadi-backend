@@ -3,8 +3,18 @@ import { useAuthStore } from "./store/authStore";
 import RootGuard from "./components/RootGuard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import Home from "./pages/Home";
+import Chat from "./pages/Chat";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
+import { WorkspaceDetail } from "./pages/WorkspaceDetail";
+import { Billing } from "./pages/Billing";
+import { Presets } from "./pages/Presets";
+import Settings from "./pages/Settings";
+import Favorites from "./pages/Favorites";
+import Templates from "./pages/Templates";
+import Search from "./pages/Search";
 import { theme } from "./styles/theme";
 
 // Root redirect component - sends users to appropriate page based on auth state
@@ -27,8 +37,8 @@ function RootRedirect() {
     );
   }
 
-  // Redirect authenticated users to /projects, unauthenticated to /login
-  return <Navigate to={user ? "/projects" : "/login"} replace />;
+  // Redirect authenticated users to /home, unauthenticated to /login
+  return <Navigate to={user ? "/home" : "/login"} replace />;
 }
 
 export const router = createBrowserRouter([
@@ -57,6 +67,30 @@ export const router = createBrowserRouter([
     ),
   },
   {
+    path: "/forgot-password",
+    element: (
+      <RootGuard requireGuest>
+        <ForgotPassword />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/home",
+    element: (
+      <RootGuard requireAuth>
+        <Home />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/chat",
+    element: (
+      <RootGuard requireAuth>
+        <Chat />
+      </RootGuard>
+    ),
+  },
+  {
     path: "/projects",
     element: (
       <RootGuard requireAuth>
@@ -69,6 +103,62 @@ export const router = createBrowserRouter([
     element: (
       <RootGuard requireAuth>
         <ProjectDetail />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/workspaces/:id",
+    element: (
+      <RootGuard requireAuth>
+        <WorkspaceDetail />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/billing",
+    element: (
+      <RootGuard requireAuth>
+        <Billing />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/presets",
+    element: (
+      <RootGuard requireAuth>
+        <Presets />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/settings",
+    element: (
+      <RootGuard requireAuth>
+        <Settings />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/favorites",
+    element: (
+      <RootGuard requireAuth>
+        <Favorites />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/templates",
+    element: (
+      <RootGuard requireAuth>
+        <Templates />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/search",
+    element: (
+      <RootGuard requireAuth>
+        <Search />
       </RootGuard>
     ),
   },

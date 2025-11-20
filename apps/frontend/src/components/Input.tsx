@@ -11,6 +11,7 @@ interface InputProps {
   minLength?: number;
   label?: string;
   autoFocus?: boolean;
+  style?: React.CSSProperties;
 }
 
 export default function Input({
@@ -24,9 +25,10 @@ export default function Input({
   minLength,
   label,
   autoFocus = false,
+  style,
 }: InputProps) {
   return (
-    <div style={{ marginBottom: theme.spacing.lg }}>
+    <div style={{ marginBottom: theme.spacing.lg, ...style }}>
       {label && (
         <label style={{
           display: 'block',

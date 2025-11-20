@@ -89,9 +89,9 @@ export const useRunsStore = create<RunsState>((set, get) => ({
     }));
     
     try {
-      const data = await api.get<{ runs: Run[] }>(`/api/projects/${projectId}/runs`);
+      const response = await api.get<{ ok: boolean; data: Run[] }>(`/api/projects/${projectId}/runs`);
       set((state) => ({
-        runs: data.runs,
+        runs: response.data || [],
         loadingStates: { ...state.loadingStates, fetchRuns: false },
       }));
     } catch (error: any) {
@@ -112,17 +112,17 @@ export const useRunsStore = create<RunsState>((set, get) => ({
     }));
     
     try {
-      const data = await api.post<{ run: Run }>(`/api/projects/${projectId}/runs`, {
+      const response = await api.post<{ ok: boolean; data: Run }>(`/api/projects/${projectId}/runs`, {
         input,
         model,
       });
       
       set((state) => ({
-        runs: [data.run, ...state.runs],
+        runs: [response.data, ...state.runs],
         loadingStates: { ...state.loadingStates, createRun: false },
       }));
       
-      return data.run;
+      return response.data;
     } catch (error: any) {
       const errorState = createErrorState('createRun', error, true);
       set((state) => ({

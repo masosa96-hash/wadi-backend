@@ -5,6 +5,7 @@ import { api } from "../config/api";
 export interface Project {
   id: string;
   user_id: string;
+  workspace_id?: string | null;
   name: string;
   description: string | null;
   created_at: string;
@@ -37,8 +38,8 @@ interface ProjectsState {
   error: ProjectErrorState | null;
   
   // Actions
-  fetchProjects: () => Promise<void>;
-  createProject: (name: string, description?: string) => Promise<Project>;
+  fetchProjects: (workspaceId?: string) => Promise<void>;
+  createProject: (name: string, description?: string, workspaceId?: string) => Promise<Project>;
   updateProject: (projectId: string, updates: Partial<Project>) => Promise<void>;
   deleteProject: (projectId: string) => Promise<void>;
   setSelectedProject: (projectId: string | null) => void;
@@ -70,16 +71,19 @@ export const useProjectsStore = create<ProjectsState>((set) => ({
   loadingStates: initialLoadingStates,
   error: null,
 
-  fetchProjects: async () => {
+  fetchProjects: async (workspaceId?: string) => {
     set((state) => ({
       loadingStates: { ...state.loadingStates, fetchProjects: true },
       error: null,
     }));
     
     try {
-      const data = await api.get<{ projects: Project[] }>("/api/projects");
+      const url = workspaceId 
+        ? `/api/projects?workspace_id=${workspaceId}` 
+        : "/api/projects";
+      const response = await api.get<{ ok: boolean; data: Project[] }>(url);
       set((state) => ({
-        projects: data.projects,
+        projects: response.data || [],
         loadingStates: { ...state.loadingStates, fetchProjects: false },
       }));
     } catch (error: any) {
@@ -92,24 +96,25 @@ export const useProjectsStore = create<ProjectsState>((set) => ({
     }
   },
 
-  createProject: async (name: string, description?: string) => {
+  createProject: async (name: string, description?: string, workspaceId?: string) => {
     set((state) => ({
       loadingStates: { ...state.loadingStates, createProject: true },
       error: null,
     }));
     
     try {
-      const data = await api.post<{ project: Project }>("/api/projects", {
+      const response = await api.post<{ ok: boolean; data: Project }>("/api/projects", {
         name,
         description,
+        workspace_id: workspaceId,
       });
       
       set((state) => ({
-        projects: [data.project, ...state.projects],
+        projects: [response.data, ...state.projects],
         loadingStates: { ...state.loadingStates, createProject: false },
       }));
       
-      return data.project;
+      return response.data;
     } catch (error: any) {
       const errorState = createErrorState('createProject', error, true);
       set((state) => ({

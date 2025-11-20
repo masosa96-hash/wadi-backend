@@ -1,0 +1,120 @@
+/* WADI Home - Y2K Banking Mobile-First Responsive Styles */
+
+/* Mobile-first base styles are inline in Home.tsx */
+
+/* Very small screens - single column workspace grid */
+@media (max-width: 380px) {
+  .workspace-grid {
+    grid-template-columns: 1fr !important;
+  }
+}
+
+/* Tablet and up - adjust mobile frame */
+@media (min-width: 768px) {
+  .wadi-mobile-frame {
+    border-radius: 32px;
+    box-shadow: 0 8px 40px rgba(15, 23, 42, 0.12);
+  }
+}
+
+/* Desktop - show as centered "phone" */
+@media (min-width: 1024px) {
+  .wadi-desktop-container {
+    padding: 2rem;
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .wadi-mobile-frame {
+    max-height: 844px; /* iPhone Pro Max height */
+    border-radius: 36px;
+    box-shadow: 
+      0 8px 40px rgba(15, 23, 42, 0.1),
+      0 0 0 1px rgba(15, 23, 42, 0.05),
+      inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+  }
+}
+
+/* Smooth scrolling for the mobile container */
+.wadi-content-scroll {
+  scroll-behavior: smooth;
+}
+
+.wadi-content-scroll::-webkit-scrollbar {
+  width: 6px;
+}
+
+.wadi-content-scroll::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.wadi-content-scroll::-webkit-scrollbar-thumb {
+  background: rgba(15, 23, 42, 0.2);
+  border-radius: 3px;
+}
+
+.wadi-content-scroll::-webkit-scrollbar-thumb:hover {
+  background: rgba(37, 95, 245, 0.3);
+}
+
+/* Y2K Glow animations */
+@keyframes pulse-glow {
+  0%, 100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.25;
+  }
+}
+
+.y2k-orb {
+  animation: pulse-glow 4s ease-in-out infinite;
+}
+
+/* Button hover effects */
+.wadi-hero-submit:hover {
+  transform: scale(1.05);
+  box-shadow: 0 0 24px rgba(37, 95, 245, 0.3);
+}
+
+.wadi-hero-submit:active {
+  transform: scale(0.95);
+}
+
+/* Workspace card hover */
+.workspace-card:hover {
+  border-color: rgba(37, 95, 245, 0.3);
+  box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
+}
+
+/* Bottom nav item active state */
+.nav-item-active {
+  animation: subtle-bounce 0.3s ease-in-out;
+}
+
+@keyframes subtle-bounce {
+  0%, 100% {
+    transform: translateY(0);
+  }
+  50% {
+    transform: translateY(-2px);
+  }
+}
+
+/* Glassmorphism effect for overlays */
+.glass-overlay {
+  backdrop-filter: blur(12px);
+  -webkit-backdrop-filter: blur(12px);
+}
+
+/* Pulse animation for loading skeletons */
+@keyframes pulse {
+  0%, 100% {
+    opacity: 0.6;
+  }
+  50% {
+    opacity: 0.3;
+  }
+}

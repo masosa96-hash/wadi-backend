@@ -15,6 +15,52 @@ const openai = new OpenAI({
 const DEFAULT_MODEL = process.env.OPENAI_DEFAULT_MODEL || "gpt-3.5-turbo";
 
 /**
+ * Generate AI response using OpenAI Chat Completion API with conversation history
+ * @param messages Array of message objects with role and content
+ * @param model Optional model name (defaults to env var or gpt-3.5-turbo)
+ * @returns AI-generated response text
+ */
+export async function generateChatCompletion(
+  messages: Array<{ role: string; content: string }>,
+  model: string = DEFAULT_MODEL
+): Promise<string> {
+  try {
+    const completion = await openai.chat.completions.create({
+      model: model,
+      messages: messages as any,
+      max_tokens: 1000,
+      temperature: 0.7,
+    });
+
+    const response = completion.choices[0]?.message?.content;
+
+    if (!response) {
+      throw new Error("No response generated from OpenAI");
+    }
+
+    return response;
+  } catch (error: any) {
+    // Handle OpenAI API errors
+    if (error.response) {
+      console.error("OpenAI API error:", error.response.status, error.response.data);
+      
+      if (error.response.status === 429) {
+        throw new Error("Rate limit exceeded. Please try again later.");
+      }
+      
+      if (error.response.status === 401) {
+        throw new Error("Invalid OpenAI API key");
+      }
+      
+      throw new Error(`OpenAI API error: ${error.response.data?.error?.message || "Unknown error"}`);
+    }
+
+    console.error("OpenAI service error:", error);
+    throw new Error("Failed to generate AI response");
+  }
+}
+
+/**
  * Generate AI response using OpenAI Chat Completion API
  * @param input User input text
  * @param model Optional model name (defaults to env var or gpt-3.5-turbo)
@@ -80,4 +126,55 @@ export function isValidModel(model: string): boolean {
   ];
   
   return validModels.includes(model);
+}
+
+/**
+ * Generate AI response with streaming using OpenAI Chat Completion API
+ * @param input User input text
+ * @param model Optional model name (defaults to env var or gpt-3.5-turbo)
+ * @returns AsyncGenerator yielding text chunks
+ */
+export async function* generateCompletionStream(
+  input: string,
+  model: string = DEFAULT_MODEL
+): AsyncGenerator<string, void, unknown> {
+  try {
+    const stream = await openai.chat.completions.create({
+      model: model,
+      messages: [
+        {
+          role: "user",
+          content: input,
+        },
+      ],
+      max_tokens: 1000,
+      temperature: 0.7,
+      stream: true,
+    });
+
+    for await (const chunk of stream) {
+      const content = chunk.choices[0]?.delta?.content;
+      if (content) {
+        yield content;
+      }
+    }
+  } catch (error: any) {
+    // Handle OpenAI API errors
+    if (error.response) {
+      console.error("OpenAI API error:", error.response.status, error.response.data);
+      
+      if (error.response.status === 429) {
+        throw new Error("Rate limit exceeded. Please try again later.");
+      }
+      
+      if (error.response.status === 401) {
+        throw new Error("Invalid OpenAI API key");
+      }
+      
+      throw new Error(`OpenAI API error: ${error.response.data?.error?.message || "Unknown error"}`);
+    }
+
+    console.error("OpenAI service error:", error);
+    throw new Error("Failed to generate AI response");
+  }
 }

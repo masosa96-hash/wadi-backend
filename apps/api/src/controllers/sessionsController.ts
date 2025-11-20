@@ -9,9 +9,11 @@ export async function getSessions(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user_id;
     const projectId = req.params.projectId;
+    console.log("[getSessions] Request from user:", userId, "Project:", projectId);
 
     if (!userId) {
-      res.status(401).json({ error: "Unauthorized" });
+      console.error("[getSessions] Unauthorized: No user_id");
+      res.status(401).json({ ok: false, error: { code: "UNAUTHORIZED", message: "Unauthorized" } });
       return;
     }
 
@@ -24,7 +26,8 @@ export async function getSessions(req: Request, res: Response): Promise<void> {
       .single();
 
     if (projectError || !project) {
-      res.status(404).json({ error: "Project not found" });
+      console.error("[getSessions] Project not found:", projectError);
+      res.status(404).json({ ok: false, error: { code: "NOT_FOUND", message: "Project not found" } });
       return;
     }
 
@@ -36,15 +39,16 @@ export async function getSessions(req: Request, res: Response): Promise<void> {
       .order("created_at", { ascending: false });
 
     if (error) {
-      console.error("Error fetching sessions:", error);
-      res.status(500).json({ error: "Failed to fetch sessions" });
+      console.error("[getSessions] Supabase error:", error);
+      res.status(500).json({ ok: false, error: { code: "DATABASE_ERROR", message: "Failed to fetch sessions" } });
       return;
     }
 
-    res.json({ sessions: data || [] });
+    console.log(`[getSessions] Success: Found ${data?.length || 0} sessions`);
+    res.json({ ok: true, data: data || [] });
   } catch (error) {
-    console.error("Get sessions error:", error);
-    res.status(500).json({ error: "Internal server error" });
+    console.error("[getSessions] Exception:", error);
+    res.status(500).json({ ok: false, error: { code: "INTERNAL_ERROR", message: "Internal server error" } });
   }
 }
 
