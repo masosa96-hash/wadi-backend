@@ -1,0 +1,29 @@
+services:
+  - type: web
+    name: wadi-api
+    env: node
+    region: oregon
+    plan: free
+    branch: main
+    buildCommand: cd apps/api && pnpm install --frozen-lockfile && pnpm build
+    startCommand: cd apps/api && pnpm start
+    healthCheckPath: /health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: PORT
+        value: 10000
+      - key: FRONTEND_URL
+        sync: false
+      - key: SUPABASE_URL
+        sync: false
+      - key: SUPABASE_ANON_KEY
+        sync: false
+      - key: SUPABASE_SERVICE_KEY
+        sync: false
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        generateValue: true
+      - key: PNPM_VERSION
+        value: 10.21.0

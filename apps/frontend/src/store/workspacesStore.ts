@@ -10,6 +10,11 @@ export interface Workspace {
   user_role: "owner" | "admin" | "member";
   created_at: string;
   updated_at: string;
+  is_archived?: boolean;
+  is_auto_created?: boolean;
+  detected_topic?: string | null;
+  message_count?: number;
+  last_message_at?: string | null;
 }
 
 export interface WorkspaceMember {

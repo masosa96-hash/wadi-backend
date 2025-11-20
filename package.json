@@ -7,6 +7,11 @@
     "dev": "pnpm -r run dev",
     "dev:api": "pnpm --filter api run dev",
     "dev:front": "pnpm --filter frontend run dev",
+    "build": "pnpm --filter frontend build && pnpm --filter api build",
+    "build:frontend": "pnpm --filter frontend build",
+    "build:api": "pnpm --filter api build",
+    "deploy:frontend": "cd apps/frontend && vercel --prod",
+    "deploy:api": "cd apps/api && render deploy",
     "build:desktop": "electron ."
   },
   "devDependencies": {
