@@ -8,14 +8,16 @@ import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
-import { WorkspaceDetail } from "./pages/WorkspaceDetail";
+import WorkspaceDetail from "./pages/WorkspaceDetail";
 import { Billing } from "./pages/Billing";
 import { Presets } from "./pages/Presets";
 import Settings from "./pages/Settings";
 import Favorites from "./pages/Favorites";
 import Templates from "./pages/Templates";
+import Workspaces from "./pages/Workspaces";
 import Search from "./pages/Search";
 import { theme } from "./styles/theme";
+
 
 // Root redirect component - sends users to appropriate page based on auth state
 function RootRedirect() {
@@ -151,6 +153,14 @@ export const router = createBrowserRouter([
     element: (
       <RootGuard requireAuth>
         <Templates />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/workspaces",
+    element: (
+      <RootGuard requireAuth>
+        <Workspaces />
       </RootGuard>
     ),
   },

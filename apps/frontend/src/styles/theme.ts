@@ -38,6 +38,7 @@ export const theme = {
     fontFamily: {
       primary: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
       secondary: 'Inter, sans-serif',
+      mono: 'ui-monospace, SFMono-Regular, "SF Mono", Menlo, Consolas, "Liberation Mono", monospace',
     },
     fontSize: {
       xs: '12px',

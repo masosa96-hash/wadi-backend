@@ -1,0 +1,20 @@
+
+> frontend@0.0.0 build E:\WADI\apps\frontend
+> tsc -b && vite build
+
+src/components/ShareModal.tsx(142,53): error TS2339: Property 'mono' does not exist on type '{ readonly primary: "Inter, -apple-system, BlinkMacSystemFont, \"Segoe UI\", sans-serif"; readonly secondary: "Inter, sans-serif"; }'.
+src/lib/utils.ts(1,39): error TS2307: Cannot find module 'clsx' or its corresponding type declarations.
+src/lib/utils.ts(2,25): error TS2307: Cannot find module 'tailwind-merge' or its corresponding type declarations.
+src/pages/Chat.tsx(4,10): error TS2614: Module '"../components/PhoneShell"' has no exported member 'PhoneShell'. Did you mean to use 'import PhoneShell from "../components/PhoneShell"' instead?
+src/pages/Chat.tsx(5,10): error TS2614: Module '"../components/BottomNav"' has no exported member 'BottomNav'. Did you mean to use 'import BottomNav from "../components/BottomNav"' instead?
+src/pages/Chat.tsx(6,10): error TS2614: Module '"../components/MessageBubble"' has no exported member 'MessageBubble'. Did you mean to use 'import MessageBubble from "../components/MessageBubble"' instead?
+src/pages/Chat.tsx(8,58): error TS2307: Cannot find module 'lucide-react' or its corresponding type declarations.
+src/pages/Chat.tsx(125,22): error TS2322: Type '"sm"' is not assignable to type '"small" | "large" | "medium" | undefined'.
+src/pages/Chat.tsx(155,22): error TS2322: Type '"lg"' is not assignable to type '"small" | "large" | "medium" | undefined'.
+src/pages/ForgotPassword.tsx(174,53): error TS2339: Property 'display' does not exist on type '{ readonly xs: "12px"; readonly sm: "13px"; readonly base: "14px"; readonly lg: "16px"; readonly xl: "20px"; readonly '2xl': "24px"; readonly '3xl': "32px"; readonly caption: "12px"; readonly bodySmall: "13px"; ... 4 more ...; readonly h1: "32px"; }'.
+src/pages/Login.tsx(26,37): error TS2554: Expected 2 arguments, but got 3.
+src/pages/Login.tsx(173,53): error TS2339: Property 'display' does not exist on type '{ readonly xs: "12px"; readonly sm: "13px"; readonly base: "14px"; readonly lg: "16px"; readonly xl: "20px"; readonly '2xl': "24px"; readonly '3xl': "32px"; readonly caption: "12px"; readonly bodySmall: "13px"; ... 4 more ...; readonly h1: "32px"; }'.
+src/pages/Register.tsx(118,49): error TS2339: Property 'display' does not exist on type '{ readonly xs: "12px"; readonly sm: "13px"; readonly base: "14px"; readonly lg: "16px"; readonly xl: "20px"; readonly '2xl': "24px"; readonly '3xl': "32px"; readonly caption: "12px"; readonly bodySmall: "13px"; ... 4 more ...; readonly h1: "32px"; }'.
+E:\WADI\apps\frontend:
+ÔÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILÔÇë frontend@0.0.0 build: `tsc -b && vite build`
+Exit status 2

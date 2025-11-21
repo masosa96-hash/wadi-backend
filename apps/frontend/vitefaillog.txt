@@ -1,0 +1,19 @@
+[36mvite v7.2.2 [32mbuilding client environment for production...[36m[39m
+transforming...
+[32mÔ£ô[39m 37 modules transformed.
+Ô£ù Build failed in 231ms
+error during build:
+[vite]: Rollup failed to resolve import "lucide-react" from "E:/WADI/apps/frontend/src/pages/Chat.tsx".
+This is most likely unintended because it can break your application at runtime.
+If you do want to externalize this module explicitly add it to
+`build.rollupOptions.external`
+    at viteLog (file:///E:/WADI/node_modules/.pnpm/vite@7.2.2_@types+node@24.1_e311e72493f4c80f8edc93dc01b1a315/node_modules/vite/dist/node/chunks/config.js:34254:57)
+    at file:///E:/WADI/node_modules/.pnpm/vite@7.2.2_@types+node@24.1_e311e72493f4c80f8edc93dc01b1a315/node_modules/vite/dist/node/chunks/config.js:34288:73
+    at onwarn (file:///E:/WADI/node_modules/.pnpm/@vitejs+plugin-react@5.1.1__d658db3538f81ab80b4ed1e6fa895602/node_modules/@vitejs/plugin-react/dist/index.js:76:7)
+    at file:///E:/WADI/node_modules/.pnpm/vite@7.2.2_@types+node@24.1_e311e72493f4c80f8edc93dc01b1a315/node_modules/vite/dist/node/chunks/config.js:34288:28
+    at onRollupLog (file:///E:/WADI/node_modules/.pnpm/vite@7.2.2_@types+node@24.1_e311e72493f4c80f8edc93dc01b1a315/node_modules/vite/dist/node/chunks/config.js:34283:63)
+    at onLog (file:///E:/WADI/node_modules/.pnpm/vite@7.2.2_@types+node@24.1_e311e72493f4c80f8edc93dc01b1a315/node_modules/vite/dist/node/chunks/config.js:34086:4)
+    at file:///E:/WADI/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:20961:32
+    at Object.logger [as onLog] (file:///E:/WADI/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:22848:9)
+    at ModuleLoader.handleInvalidResolvedId (file:///E:/WADI/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21592:26)
+    at file:///E:/WADI/node_modules/.pnpm/rollup@4.53.3/node_modules/rollup/dist/es/shared/node-entry.js:21550:26
