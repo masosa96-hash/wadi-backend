@@ -5,6 +5,7 @@ import { useAuthStore } from "../store/authStore";
 import { useChatStore } from "../store/chatStore";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
+import { SkeletonList } from "../components/Skeleton";
 
 export default function Home() {
   const navigate = useNavigate();
@@ -14,6 +15,7 @@ export default function Home() {
   useEffect(() => {
     loadConversations();
   }, []);
+
 
   const stats = {
     totalConversations: conversations.length,
@@ -168,13 +170,7 @@ export default function Home() {
           </div>
 
           {loadingConversations ? (
-            <div style={{
-              padding: theme.spacing.xl,
-              textAlign: "center",
-              color: theme.colors.text.secondary,
-            }}>
-              Cargando...
-            </div>
+            <SkeletonList count={3} />
           ) : conversations.length === 0 ? (
             <div style={{
               padding: theme.spacing.xl,

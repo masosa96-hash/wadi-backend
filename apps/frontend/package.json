@@ -13,10 +13,14 @@
     "@supabase/supabase-js": "^2.39.0",
     "@wadi/chat-core": "workspace:*",
     "framer-motion": "^12.23.24",
+    "prismjs": "^1.30.0",
     "react": "^19.2.0",
     "react-dom": "^19.2.0",
+    "react-markdown": "^10.1.0",
     "react-router-dom": "^6.20.1",
-    "zustand": "^4.4.7"
+    "rehype-highlight": "^7.0.2",
+    "remark-gfm": "^4.0.1",
+    "zustand": "^4.5.7"
   },
   "devDependencies": {
     "@eslint/js": "^9.39.1",

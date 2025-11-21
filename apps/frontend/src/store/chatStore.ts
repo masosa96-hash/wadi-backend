@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 import { api } from "../config/api";
 import { supabase } from "../config/supabase";
 import type { Message, Conversation, WebSocketMessage } from "../types/chat";
@@ -36,7 +37,7 @@ interface ChatState {
   clearError: () => void;
 }
 
-export const useChatStore = create<ChatState>((set, get) => ({
+export const useChatStore = create<ChatState>()((set, get) => ({
   // Initial state
   currentConversationId: null,
   currentConversation: null,

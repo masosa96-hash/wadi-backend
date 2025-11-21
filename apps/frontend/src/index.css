@@ -1,5 +1,7 @@
 /* WADI - AI Professional Design System */
 
+@import './styles/darkMode.css';
+
 * {
   margin: 0;
   padding: 0;

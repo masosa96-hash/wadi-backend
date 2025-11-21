@@ -1,21 +1,22 @@
-import { createBrowserRouter, Navigate } from "react-router-dom";
+import { createBrowserRouter, Navigate, type LoaderFunction } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
+import { useOnboardingStore } from "./store/onboardingStore";
 import RootGuard from "./components/RootGuard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
-import ForgotPassword from "./pages/ForgotPassword";
 import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import Projects from "./pages/Projects";
 import ProjectDetail from "./pages/ProjectDetail";
 import WorkspaceDetail from "./pages/WorkspaceDetail";
-import { Billing } from "./pages/Billing";
-import { Presets } from "./pages/Presets";
 import Settings from "./pages/Settings";
 import Favorites from "./pages/Favorites";
 import Templates from "./pages/Templates";
 import Workspaces from "./pages/Workspaces";
 import Search from "./pages/Search";
+import DebugPanel from "./pages/DebugPanel";
+import AdminPanel from "./pages/AdminPanel";
+import Onboarding from "./pages/Onboarding";
 import { theme } from "./styles/theme";
 
 
@@ -68,14 +69,15 @@ export const router = createBrowserRouter([
       </RootGuard>
     ),
   },
-  {
-    path: "/forgot-password",
-    element: (
-      <RootGuard requireGuest>
-        <ForgotPassword />
-      </RootGuard>
-    ),
-  },
+  // Forgot password temporarily disabled
+  // {
+  //   path: "/forgot-password",
+  //   element: (
+  //     <RootGuard requireGuest>
+  //       <ForgotPassword />
+  //     </RootGuard>
+  //   ),
+  // },
   {
     path: "/home",
     element: (
@@ -116,22 +118,24 @@ export const router = createBrowserRouter([
       </RootGuard>
     ),
   },
-  {
-    path: "/billing",
-    element: (
-      <RootGuard requireAuth>
-        <Billing />
-      </RootGuard>
-    ),
-  },
-  {
-    path: "/presets",
-    element: (
-      <RootGuard requireAuth>
-        <Presets />
-      </RootGuard>
-    ),
-  },
+  // Billing temporarily disabled
+  // {
+  //   path: "/billing",
+  //   element: (
+  //     <RootGuard requireAuth>
+  //       <Billing />
+  //     </RootGuard>
+  //   ),
+  // },
+  // Presets temporarily disabled
+  // {
+  //   path: "/presets",
+  //   element: (
+  //     <RootGuard requireAuth>
+  //       <Presets />
+  //     </RootGuard>
+  //   ),
+  // },
   {
     path: "/settings",
     element: (
@@ -172,4 +176,29 @@ export const router = createBrowserRouter([
       </RootGuard>
     ),
   },
+  {
+    path: "/debug",
+    element: (
+      <RootGuard requireAuth>
+        <DebugPanel />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/admin",
+    element: (
+      <RootGuard requireAuth>
+        <AdminPanel />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/onboarding",
+    element: (
+      <RootGuard requireAuth>
+        <Onboarding />
+      </RootGuard>
+    ),
+  },
 ]);
+
