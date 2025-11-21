@@ -43,15 +43,15 @@ export async function generateChatCompletion(
     // Handle OpenAI API errors
     if (error.response) {
       console.error("OpenAI API error:", error.response.status, error.response.data);
-      
+
       if (error.response.status === 429) {
         throw new Error("Rate limit exceeded. Please try again later.");
       }
-      
+
       if (error.response.status === 401) {
         throw new Error("Invalid OpenAI API key");
       }
-      
+
       throw new Error(`OpenAI API error: ${error.response.data?.error?.message || "Unknown error"}`);
     }
 
@@ -94,15 +94,15 @@ export async function generateCompletion(
     // Handle OpenAI API errors
     if (error.response) {
       console.error("OpenAI API error:", error.response.status, error.response.data);
-      
+
       if (error.response.status === 429) {
         throw new Error("Rate limit exceeded. Please try again later.");
       }
-      
+
       if (error.response.status === 401) {
         throw new Error("Invalid OpenAI API key");
       }
-      
+
       throw new Error(`OpenAI API error: ${error.response.data?.error?.message || "Unknown error"}`);
     }
 
@@ -124,29 +124,24 @@ export function isValidModel(model: string): boolean {
     "gpt-4o",
     "gpt-4o-mini",
   ];
-  
+
   return validModels.includes(model);
 }
 
 /**
  * Generate AI response with streaming using OpenAI Chat Completion API
- * @param input User input text
+ * @param messages Array of message objects with role and content
  * @param model Optional model name (defaults to env var or gpt-3.5-turbo)
  * @returns AsyncGenerator yielding text chunks
  */
 export async function* generateCompletionStream(
-  input: string,
+  messages: Array<{ role: string; content: string }>,
   model: string = DEFAULT_MODEL
 ): AsyncGenerator<string, void, unknown> {
   try {
     const stream = await openai.chat.completions.create({
       model: model,
-      messages: [
-        {
-          role: "user",
-          content: input,
-        },
-      ],
+      messages: messages as any,
       max_tokens: 1000,
       temperature: 0.7,
       stream: true,
@@ -162,15 +157,15 @@ export async function* generateCompletionStream(
     // Handle OpenAI API errors
     if (error.response) {
       console.error("OpenAI API error:", error.response.status, error.response.data);
-      
+
       if (error.response.status === 429) {
         throw new Error("Rate limit exceeded. Please try again later.");
       }
-      
+
       if (error.response.status === 401) {
         throw new Error("Invalid OpenAI API key");
       }
-      
+
       throw new Error(`OpenAI API error: ${error.response.data?.error?.message || "Unknown error"}`);
     }
 

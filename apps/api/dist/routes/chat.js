@@ -14,4 +14,6 @@ router.get("/", chatController_1.getConversations);
 router.get("/:conversationId", chatController_1.getConversation);
 // DELETE /api/chat/:conversationId - Delete conversation
 router.delete("/:conversationId", chatController_1.deleteConversation);
+// GET /api/chat/summary - Get chat summary stats
+router.get("/summary", chatController_1.getChatSummary);
 exports.default = router;

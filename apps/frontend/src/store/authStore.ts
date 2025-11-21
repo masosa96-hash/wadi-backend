@@ -6,9 +6,9 @@ interface AuthState {
   user: User | null;
   session: Session | null;
   loading: boolean;
-  
+
   // Actions
-  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
+  signIn: (email: string, password: string) => Promise<void>;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signOut: () => Promise<void>;
   initialize: () => Promise<void>;
@@ -20,7 +20,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   session: null,
   loading: true,
 
-  signIn: async (email: string, password: string, rememberMe: boolean = false) => {
+  signIn: async (email: string, password: string) => {
     // Clear any existing session first
     await supabase.auth.signOut();
 
@@ -31,15 +31,6 @@ export const useAuthStore = create<AuthState>((set) => ({
     });
 
     if (error) throw error;
-
-    // Handle session persistence based on rememberMe
-    if (!rememberMe && data.session) {
-      // If user doesn't want to be remembered, store flag in sessionStorage
-      sessionStorage.setItem('wadi_temp_session', 'true');
-    } else {
-      // Remove temp session flag if it exists
-      sessionStorage.removeItem('wadi_temp_session');
-    }
 
     set({ user: data.user, session: data.session });
   },
@@ -73,10 +64,7 @@ export const useAuthStore = create<AuthState>((set) => ({
   signOut: async () => {
     const { error } = await supabase.auth.signOut();
     if (error) throw error;
-    
-    // Clear temp session flag
-    sessionStorage.removeItem('wadi_temp_session');
-    
+
     set({ user: null, session: null });
   },
 
@@ -84,7 +72,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     const { error } = await supabase.auth.resetPasswordForEmail(email, {
       redirectTo: `${window.location.origin}/reset-password`,
     });
-    
+
     if (error) throw error;
   },
 
@@ -92,7 +80,7 @@ export const useAuthStore = create<AuthState>((set) => ({
     try {
       // Get current session
       const { data: { session } } = await supabase.auth.getSession();
-      
+
       set({
         user: session?.user || null,
         session: session,

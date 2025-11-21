@@ -110,20 +110,15 @@ function isValidModel(model) {
 }
 /**
  * Generate AI response with streaming using OpenAI Chat Completion API
- * @param input User input text
+ * @param messages Array of message objects with role and content
  * @param model Optional model name (defaults to env var or gpt-3.5-turbo)
  * @returns AsyncGenerator yielding text chunks
  */
-async function* generateCompletionStream(input, model = DEFAULT_MODEL) {
+async function* generateCompletionStream(messages, model = DEFAULT_MODEL) {
     try {
         const stream = await openai.chat.completions.create({
             model: model,
-            messages: [
-                {
-                    role: "user",
-                    content: input,
-                },
-            ],
+            messages: messages,
             max_tokens: 1000,
             temperature: 0.7,
             stream: true,

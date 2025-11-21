@@ -5,9 +5,18 @@
     "moduleResolution": "Node",
     "esModuleInterop": true,
     "skipLibCheck": true,
-    "strict": false,
-    "outDir": "dist",
-    "types": ["node"]
+    "outDir": "./dist",
+    "rootDir": "./src",
+    "strict": true,
+    "types": [
+      "node"
+    ]
   },
-  "include": ["src"]
+  "include": [
+    "src"
+  ],
+  "exclude": [
+    "node_modules",
+    "src/_archived"
+  ]
 }

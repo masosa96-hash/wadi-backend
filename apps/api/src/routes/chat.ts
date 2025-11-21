@@ -4,6 +4,7 @@ import {
   getConversation,
   getConversations,
   deleteConversation,
+  getChatSummary,
 } from "../controllers/chatController";
 import { authMiddleware } from "../middleware/auth";
 
@@ -23,5 +24,8 @@ router.get("/:conversationId", getConversation);
 
 // DELETE /api/chat/:conversationId - Delete conversation
 router.delete("/:conversationId", deleteConversation);
+
+// GET /api/chat/summary - Get chat summary stats
+router.get("/summary", getChatSummary);
 
 export default router;

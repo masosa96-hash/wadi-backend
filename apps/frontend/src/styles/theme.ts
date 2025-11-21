@@ -1,79 +1,67 @@
 /**
- * WADI Design System - Y2K Banking Light Theme
- * Centralized design tokens for fintech-inspired UI with subtle Y2K nostalgia
+ * WADI Design System - AI Professional Theme
+ * Minimalist, clean, and high-performance aesthetic.
  */
 
 export const theme = {
-  // Color Palette - Banking Light Theme with Y2K touches
   colors: {
-    // Base Colors (Light Theme)
     background: {
-      primary: '#F3F6FB',     // Main background - soft bluish white
-      secondary: '#FFFFFF',   // Card backgrounds - pure white
-      tertiary: '#E8EEF7',    // Elevated elements, input fields
-      mobile: '#FAFBFD',      // Mobile container background
+      primary: '#FFFFFF',     // Pure white
+      secondary: '#FAFAFA',   // Very light gray for sidebars/panels
+      tertiary: '#F4F4F5',    // Inputs, hover states
+      overlay: 'rgba(0, 0, 0, 0.4)',
     },
-    
-    // Borders
+
     border: {
-      subtle: '#D6E1F2',      // Default borders - soft blue-gray
-      accent: '#C5D4EB',      // Hover borders
-      light: '#E8EEF7',       // Very light borders
+      subtle: '#E4E4E7',      // Zinc-200
+      default: '#D4D4D8',     // Zinc-300
+      hover: '#A1A1AA',       // Zinc-400
+      active: '#18181B',      // Zinc-900
     },
-    
-    // Text Colors
+
     text: {
-      primary: '#0F172A',     // Main text - deep blue-black
-      secondary: '#6B7280',   // Secondary text - medium gray
-      tertiary: '#9CA3AF',    // Metadata, timestamps - light gray
+      primary: '#18181B',     // Zinc-900
+      secondary: '#71717A',   // Zinc-500
+      tertiary: '#A1A1AA',    // Zinc-400
+      inverse: '#FFFFFF',
     },
-    
-    // Accent Colors - Y2K Blue gradient
+
     accent: {
-      primary: '#255FF5',     // Royal blue - primary actions
-      secondary: '#7B8CFF',   // Light purple-blue
-      y2k: '#C5B3FF',         // Lavender - Y2K accent
+      primary: '#18181B',     // Black (Monochrome primary)
+      secondary: '#52525B',   // Zinc-600
+      highlight: '#3B82F6',   // Blue-500 (Subtle functional accent)
     },
-    
-    // Semantic Colors
-    success: '#10B981',       // Confirmations
-    warning: '#F59E0B',       // Alerts
-    error: '#EF4444',         // Errors, destructive actions
+
+    status: {
+      success: '#10B981',
+      warning: '#F59E0B',
+      error: '#EF4444',
+      info: '#3B82F6',
+    },
   },
-  
-  // Typography
+
   typography: {
     fontFamily: {
-      primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif",
+      primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
       mono: "'JetBrains Mono', 'Fira Code', monospace",
     },
-    
     fontSize: {
-      display: '32px',        // Page titles
-      h1: '24px',            // Section titles
-      h2: '20px',            // Subsections
-      h3: '16px',            // Card titles
-      bodyLarge: '15px',     // Main content
-      body: '14px',          // Standard text
-      bodySmall: '13px',     // Secondary text
-      caption: '12px',       // Labels, metadata
+      xs: '12px',
+      sm: '13px',
+      base: '14px',
+      lg: '16px',
+      xl: '20px',
+      '2xl': '24px',
+      '3xl': '32px',
     },
-    
     fontWeight: {
       normal: 400,
       medium: 500,
       semibold: 600,
       bold: 700,
     },
-    
-    lineHeight: {
-      tight: 1.2,
-      normal: 1.6,
-      relaxed: 1.4,
-    },
   },
-  
-  // Spacing System (4px grid)
+
   spacing: {
     xs: '4px',
     sm: '8px',
@@ -84,109 +72,71 @@ export const theme = {
     '3xl': '48px',
     '4xl': '64px',
   },
-  
-  // Border Radius
+
   borderRadius: {
-    small: '8px',
-    medium: '12px',
-    large: '16px',
+    sm: '6px',
+    md: '8px',
+    lg: '12px',
+    full: '9999px',
   },
-  
-  // Shadows - Soft, banking-style depth
+
   shadows: {
-    subtle: '0 1px 3px rgba(15, 23, 42, 0.08)',
-    medium: '0 4px 12px rgba(15, 23, 42, 0.1)',
-    strong: '0 8px 24px rgba(15, 23, 42, 0.12)',
-    glow: '0 0 24px rgba(37, 95, 245, 0.15)',          // Blue glow
-    y2kGlow: '0 0 32px rgba(197, 179, 255, 0.25)',     // Y2K lavender glow
-    card: '0 2px 8px rgba(15, 23, 42, 0.06)',
-    mobileFrame: '0 8px 40px rgba(15, 23, 42, 0.1)',   // Desktop "phone" shadow
+    sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
+    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
+    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
+    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
+    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
   },
-  
-  // Transitions
+
   transitions: {
-    fast: '150ms ease-in-out',
-    medium: '250ms ease-in-out',
-    slow: '350ms ease-in-out',
+    default: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
+    slow: '300ms cubic-bezier(0.4, 0, 0.2, 1)',
   },
-  
-  // Layout
+
   layout: {
-    sidebarWidth: '240px',
-    maxContentWidth: '1200px',
-    headerHeight: '60px',
-    inputHeight: '80px',
-    mobileMaxWidth: '480px',      // Max width for mobile container on desktop
-    mobileMaxWidthLarge: '600px', // Larger mobile container option
+    sidebarWidth: '260px',
+    headerHeight: '56px',
+    maxWidth: '1200px',
   },
-  
-  // Gradients - Y2K Banking Style
+
+  // Compatibility Layer for Legacy Components
   gradients: {
-    primary: 'linear-gradient(135deg, #255FF5 0%, #7B8CFF 50%, #C5B3FF 100%)',  // Blue → Purple-blue → Lavender
-    hero: 'linear-gradient(135deg, #255FF5 0%, #7B8CFF 100%)',                  // Hero card gradient
-    subtle: 'linear-gradient(180deg, #FFFFFF 0%, #F8FAFD 100%)',                 // Subtle card gradient
-    button: 'linear-gradient(135deg, #255FF5 0%, #4A7BF7 100%)',                 // Button gradient
-    y2kAccent: 'linear-gradient(135deg, #7B8CFF 0%, #C5B3FF 100%)',             // Y2K accent gradient
+    primary: '#18181B', // Flat black for "primary"
+    hero: '#FAFAFA',    // Light gray for hero
+    subtle: '#FFFFFF',
+    button: '#18181B',  // Black button
+    y2kAccent: '#52525B',
   },
-  
-  // Glass Morphism Effects - Light theme with soft blur
+
   glass: {
-    // Light glass effect (for primary surfaces)
-    light: {
-      background: 'rgba(255, 255, 255, 0.7)',
-      backdropFilter: 'blur(16px) saturate(180%)',
-      border: '1px solid rgba(214, 225, 242, 0.5)',
-      boxShadow: '0 8px 32px rgba(15, 23, 42, 0.08)',
-    },
-    
-    // Medium glass effect (for cards, modals)
-    medium: {
-      background: 'rgba(255, 255, 255, 0.85)',
-      backdropFilter: 'blur(20px) saturate(180%)',
-      border: '1px solid rgba(214, 225, 242, 0.6)',
-      boxShadow: '0 12px 48px rgba(15, 23, 42, 0.1)',
-    },
-    
-    // Heavy glass effect (for overlays, modals)
-    heavy: {
-      background: 'rgba(255, 255, 255, 0.95)',
-      backdropFilter: 'blur(24px) saturate(200%)',
-      border: '1px solid rgba(214, 225, 242, 0.8)',
-      boxShadow: '0 16px 64px rgba(15, 23, 42, 0.12)',
-    },
-    
-    // Accent glass (with blue tint)
-    accent: {
-      background: 'rgba(37, 95, 245, 0.06)',
-      backdropFilter: 'blur(16px) saturate(180%)',
-      border: '1px solid rgba(37, 95, 245, 0.15)',
-      boxShadow: '0 8px 32px rgba(37, 95, 245, 0.1)',
-    },
-    
-    // Y2K accent glass (lavender tint)
-    y2k: {
-      background: 'rgba(197, 179, 255, 0.08)',
-      backdropFilter: 'blur(16px) saturate(180%)',
-      border: '1px solid rgba(197, 179, 255, 0.2)',
-      boxShadow: '0 8px 32px rgba(197, 179, 255, 0.15)',
-    },
-  },
-  
-  // Hover states for glass elements
-  glassHover: {
     light: {
       background: 'rgba(255, 255, 255, 0.8)',
-      border: '1px solid rgba(214, 225, 242, 0.7)',
+      backdropFilter: 'blur(12px)',
+      border: '1px solid #E4E4E7',
     },
     medium: {
       background: 'rgba(255, 255, 255, 0.9)',
-      border: '1px solid rgba(214, 225, 242, 0.8)',
+      backdropFilter: 'blur(16px)',
+      border: '1px solid #E4E4E7',
+    },
+    heavy: {
+      background: '#FFFFFF',
+      border: '1px solid #E4E4E7',
     },
     accent: {
-      background: 'rgba(37, 95, 245, 0.1)',
-      border: '1px solid rgba(37, 95, 245, 0.25)',
+      background: '#F4F4F5',
+      border: '1px solid #E4E4E7',
+    },
+    y2k: {
+      background: '#FAFAFA',
+      border: '1px solid #E4E4E7',
     },
   },
+  glassHover: {
+    light: { background: '#FAFAFA' },
+    medium: { background: '#FAFAFA' },
+    accent: { background: '#E4E4E7' },
+  }
 } as const;
 
 export type Theme = typeof theme;

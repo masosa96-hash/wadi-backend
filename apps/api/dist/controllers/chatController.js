@@ -1,11 +1,14 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sendMessage = sendMessage;
+exports.getChatSummary = getChatSummary;
 exports.getConversation = getConversation;
 exports.getConversations = getConversations;
 exports.deleteConversation = deleteConversation;
 const supabase_1 = require("../config/supabase");
 const openai_1 = require("../services/openai");
+const kivo_1 = require("../services/brain/kivo");
+const wadi_1 = require("../services/brain/wadi");
 /**
  * POST /api/chat
  * Send a message and get AI response
@@ -102,46 +105,118 @@ async function sendMessage(req, res) {
         console.log("[sendMessage] Calling OpenAI with", messages.length, "messages");
         // Generate AI response
         let aiResponse;
-        let aiError = null;
-        try {
-            aiResponse = await (0, openai_1.generateChatCompletion)(messages, process.env.OPENAI_DEFAULT_MODEL || "gpt-3.5-turbo");
-            console.log("[sendMessage] AI response generated:", aiResponse.substring(0, 50));
+        // 1. Brain Analysis (Kivo)
+        const thought = await (0, kivo_1.pensar)(message);
+        console.log("[sendMessage] Kivo thought:", thought);
+        let assistantResponseText = "";
+        // 2. Execution (Wadi)
+        if (thought.intent === "chat") {
+            // Standard chat flow
+            const messages = [
+                {
+                    role: "system",
+                    content: "Sos WADI, un asistente de IA amigable y útil. Hablás en español de forma cercana y natural.",
+                },
+                ...(history || []).map((msg) => ({
+                    role: msg.role,
+                    content: msg.content,
+                })),
+                {
+                    role: "user",
+                    content: message,
+                },
+            ];
+            assistantResponseText = await (0, openai_1.generateChatCompletion)(messages);
         }
-        catch (error) {
-            console.error("[sendMessage] OpenAI error:", error);
-            aiResponse = "Lo siento, tuve un problema al generar la respuesta. ¿Podés intentar de nuevo?";
-            aiError = error.message || "OpenAI API error";
+        else {
+            // Tool execution flow
+            const action = await (0, wadi_1.ejecutar)(thought);
+            console.log("[sendMessage] Wadi action:", action);
+            if (action.type === "tool_call") {
+                // Mock tool execution for now
+                assistantResponseText = `[Simulación] He ejecutado la acción: ${action.payload.tool}. (La lógica real se implementará en la Fase 3)`;
+            }
+            else {
+                assistantResponseText = action.payload.text || "No pude procesar tu solicitud.";
+            }
         }
-        // Save assistant message
-        const { data: assistantMessage, error: assistantMessageError } = await supabase_1.supabase
+        // 3. Save assistant message
+        const { data: assistantMessage, error: assistantError } = await supabase_1.supabase
             .from("messages")
             .insert({
             conversation_id: currentConversationId,
             role: "assistant",
-            content: aiResponse,
-            model: process.env.OPENAI_DEFAULT_MODEL || "gpt-3.5-turbo",
-            error: aiError,
+            content: assistantResponseText,
+            model: "gpt-3.5-turbo", // Or wadi-core
         })
             .select()
             .single();
-        if (assistantMessageError || !assistantMessage) {
-            console.error("[sendMessage] Error saving assistant message:", assistantMessageError);
-            res.status(500).json({ ok: false, error: "Failed to save AI response" });
+        if (assistantError || !assistantMessage) {
+            console.error("[sendMessage] Error saving assistant message:", assistantError);
+            res.status(500).json({ ok: false, error: "Failed to save response" });
             return;
         }
-        console.log("[sendMessage] Success - conversation:", currentConversationId);
         res.json({
             ok: true,
             data: {
                 conversationId: currentConversationId,
                 userMessage,
                 assistantMessage,
+                thought, // Return thought for debug/UI
             },
         });
     }
     catch (error) {
         console.error("[sendMessage] Exception:", error);
         res.status(500).json({ ok: false, error: "Internal server error" });
+    }
+}
+/**
+ * GET /api/chat/summary
+ * Get a summary of user's chat activity (total conversations, recent conversations)
+ */
+async function getChatSummary(req, res) {
+    try {
+        const userId = req.user_id;
+        if (!userId) {
+            console.error("[getChatSummary] Unauthorized: No user_id");
+            res.status(401).json({ ok: false, error: "Unauthorized" });
+            return;
+        }
+        // Get total conversations
+        const { count: totalConversations, error: countError } = await supabase_1.supabase
+            .from("conversations")
+            .select("*", { count: "exact", head: true })
+            .eq("user_id", userId);
+        if (countError) {
+            console.error("[getChatSummary] Error counting conversations:", countError);
+            throw countError;
+        }
+        // Get recent conversations
+        const { data: recentConversations, error: recentError } = await supabase_1.supabase
+            .from("conversations")
+            .select("*")
+            .eq("user_id", userId)
+            .order("updated_at", { ascending: false })
+            .limit(3);
+        if (recentError) {
+            console.error("[getChatSummary] Error fetching recent conversations:", recentError);
+            throw recentError;
+        }
+        // total_messages is not directly available from messages table by user_id.
+        // For now, we'll set it to 0 or implement a more complex query if needed.
+        const totalMessages = 0;
+        const summary = {
+            total_conversations: totalConversations || 0,
+            total_messages: totalMessages, // Set to 0 as direct count by user_id is not feasible with current schema
+            recent_conversations: recentConversations || [],
+        };
+        console.log("[getChatSummary] Success - summary for user:", userId);
+        res.json({ ok: true, data: summary });
+    }
+    catch (error) {
+        console.error("[getChatSummary] Exception:", error);
+        res.status(500).json({ ok: false, error: "Failed to get chat summary" });
     }
 }
 /**

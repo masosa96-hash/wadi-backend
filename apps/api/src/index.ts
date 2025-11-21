@@ -34,7 +34,7 @@ const PORT = process.env.PORT || 4000;
 
 // CORS Configuration
 app.use(cors({
-  origin: process.env.FRONTEND_URL.trim(),
+  origin: (process.env.FRONTEND_URL || "http://localhost:5173").trim(),
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization'],
@@ -44,16 +44,16 @@ app.use(helmet({
   contentSecurityPolicy: process.env.NODE_ENV === "production"
     ? false // ❗ Necesario en Railway, Vercel, etc.
     : {
-        directives: {
-          defaultSrc: ["'self'"],
-        },
+      directives: {
+        defaultSrc: ["'self'"],
       },
+    },
   hsts: process.env.NODE_ENV === "production"
     ? {
-        maxAge: 31536000,
-        includeSubDomains: true,
-        preload: true,
-      }
+      maxAge: 31536000,
+      includeSubDomains: true,
+      preload: true,
+    }
     : false
 }));
 

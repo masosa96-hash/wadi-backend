@@ -9,6 +9,7 @@
     "postinstall": "pnpm build"
   },
   "dependencies": {
+    "@wadi/chat-core": "workspace:*",
     "@supabase/supabase-js": "^2.83.0",
     "@types/archiver": "^7.0.0",
     "@types/ws": "^8.18.1",
