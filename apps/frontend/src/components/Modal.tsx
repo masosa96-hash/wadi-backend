@@ -1,70 +1,76 @@
-import { motion, AnimatePresence } from "framer-motion";
+import { ReactNode } from "react";
 import { theme } from "../styles/theme";
-import { modalVariants, modalBackdropVariants } from "../utils/animations";
 
 interface ModalProps {
   isOpen: boolean;
   onClose: () => void;
-  children: React.ReactNode;
-  title?: string;
+  title: string;
+  children: ReactNode;
 }
 
-export default function Modal({ isOpen, onClose, children, title }: ModalProps) {
+export default function Modal({ isOpen, onClose, title, children }: ModalProps) {
+  if (!isOpen) return null;
+
   return (
-    <AnimatePresence>
-      {isOpen && (
-        <>
-          {/* Overlay */}
-          <motion.div
+    <div
+      style={{
+        position: "fixed",
+        inset: 0,
+        background: "rgba(0, 0, 0, 0.5)",
+        display: "flex",
+        alignItems: "center",
+        justifyContent: "center",
+        zIndex: 1000,
+        padding: theme.spacing.lg,
+      }}
+      onClick={onClose}
+    >
+      <div
+        onClick={(e) => e.stopPropagation()}
+        style={{
+          background: theme.colors.background.secondary,
+          borderRadius: theme.borderRadius.lg,
+          padding: theme.spacing.xl,
+          width: "100%",
+          maxWidth: "500px",
+          maxHeight: "90vh",
+          overflowY: "auto",
+          boxShadow: "0 20px 60px rgba(0, 0, 0, 0.3)",
+        }}
+      >
+        {/* Header */}
+        <div style={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          marginBottom: theme.spacing.lg,
+        }}>
+          <h2 style={{
+            margin: 0,
+            fontSize: theme.typography.fontSize.xl,
+            fontWeight: theme.typography.fontWeight.semibold,
+            color: theme.colors.text.primary,
+          }}>
+            {title}
+          </h2>
+          <button
             onClick={onClose}
-            variants={modalBackdropVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            transition={{ duration: 0.2 }}
             style={{
-              position: 'fixed',
-              inset: 0,
-              ...theme.glass.heavy,
-              zIndex: 999,
-            }}
-          />
-          
-          {/* Modal */}
-          <motion.div
-            variants={modalVariants}
-            initial="hidden"
-            animate="visible"
-            exit="exit"
-            transition={{ duration: 0.2 }}
-            style={{
-              position: 'fixed',
-              top: '50%',
-              left: '50%',
-              transform: 'translate(-50%, -50%)',
-              ...theme.glass.heavy,
-              borderRadius: theme.borderRadius.large,
-              padding: theme.spacing['2xl'],
-              width: '90%',
-              maxWidth: '500px',
-              zIndex: 1000,
+              background: "transparent",
+              border: "none",
+              fontSize: "24px",
+              cursor: "pointer",
+              color: theme.colors.text.secondary,
+              padding: theme.spacing.xs,
             }}
           >
-            {title && (
-              <h2 style={{
-                margin: `0 0 ${theme.spacing.xl} 0`,
-                fontSize: theme.typography.fontSize.h2,
-                fontWeight: theme.typography.fontWeight.semibold,
-                color: theme.colors.text.primary,
-                fontFamily: theme.typography.fontFamily.primary,
-              }}>
-                {title}
-              </h2>
-            )}
-            {children}
-          </motion.div>
-        </>
-      )}
-    </AnimatePresence>
+            ×
+          </button>
+        </div>
+
+        {/* Content */}
+        {children}
+      </div>
+    </div>
   );
 }
