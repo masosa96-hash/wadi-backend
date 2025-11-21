@@ -17,6 +17,10 @@ import Search from "./pages/Search";
 import DebugPanel from "./pages/DebugPanel";
 import AdminPanel from "./pages/AdminPanel";
 import Onboarding from "./pages/Onboarding";
+import { Billing } from "./pages/Billing";
+import { WorkspaceSettings } from "./pages/WorkspaceSettings";
+import { AIFlows } from "./pages/AIFlows";
+import { Profile } from "./pages/Profile";
 import { theme } from "./styles/theme";
 
 
@@ -118,24 +122,38 @@ export const router = createBrowserRouter([
       </RootGuard>
     ),
   },
-  // Billing temporarily disabled
-  // {
-  //   path: "/billing",
-  //   element: (
-  //     <RootGuard requireAuth>
-  //       <Billing />
-  //     </RootGuard>
-  //   ),
-  // },
-  // Presets temporarily disabled
-  // {
-  //   path: "/presets",
-  //   element: (
-  //     <RootGuard requireAuth>
-  //       <Presets />
-  //     </RootGuard>
-  //   ),
-  // },
+  {
+    path: "/billing",
+    element: (
+      <RootGuard requireAuth>
+        <Billing />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/workspace/settings",
+    element: (
+      <RootGuard requireAuth>
+        <WorkspaceSettings />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/presets",
+    element: (
+      <RootGuard requireAuth>
+        <AIFlows />
+      </RootGuard>
+    ),
+  },
+  {
+    path: "/profile",
+    element: (
+      <RootGuard requireAuth>
+        <Profile />
+      </RootGuard>
+    ),
+  },
   {
     path: "/settings",
     element: (
