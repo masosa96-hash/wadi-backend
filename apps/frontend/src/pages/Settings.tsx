@@ -13,7 +13,7 @@ export default function Settings() {
 
   const handleLogout = async () => {
     if (isLoggingOut) return;
-    
+
     try {
       setIsLoggingOut(true);
       await signOut();
@@ -206,10 +206,10 @@ export default function Settings() {
                 >
                   {user?.created_at
                     ? new Date(user.created_at).toLocaleDateString("es-AR", {
-                        year: "numeric",
-                        month: "long",
-                        day: "numeric",
-                      })
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })
                     : "N/A"}
                 </div>
               </div>
@@ -277,7 +277,7 @@ export default function Settings() {
               fontSize: theme.typography.fontSize.body,
               fontWeight: theme.typography.fontWeight.semibold,
               cursor: isLoggingOut ? "not-allowed" : "pointer",
-              transition: theme.transitions.medium,
+              transition: theme.transitions.default,
               display: "flex",
               alignItems: "center",
               justifyContent: "center",

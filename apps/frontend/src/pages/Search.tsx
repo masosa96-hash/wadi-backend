@@ -72,7 +72,7 @@ export default function Search() {
     try {
       const token = localStorage.getItem("wadi_token");
       const params = new URLSearchParams({ q: query });
-      
+
       if (selectedWorkspace) {
         params.append("workspace_id", selectedWorkspace);
       }
@@ -230,11 +230,10 @@ export default function Search() {
                         ? theme.gradients.button
                         : "rgba(255, 255, 255, 0.7)",
                     backdropFilter: "blur(12px)",
-                    border: `1.5px solid ${
-                      dateFilter === filter.value
+                    border: `1.5px solid ${dateFilter === filter.value
                         ? theme.colors.accent.primary
                         : theme.colors.border.accent
-                    }`,
+                      }`,
                     borderRadius: "20px",
                     padding: `${theme.spacing.xs} ${theme.spacing.md}`,
                     fontSize: theme.typography.fontSize.bodySmall,
@@ -365,7 +364,7 @@ export default function Search() {
                 padding: theme.spacing.lg,
                 marginBottom: theme.spacing.md,
                 cursor: "pointer",
-                transition: theme.transitions.medium,
+                transition: theme.transitions.default,
                 position: "relative",
                 overflow: "hidden",
               }}

@@ -84,7 +84,7 @@ export default function SearchBar({ onClose, autoFocus = false }: SearchBarProps
           boxShadow: isOpen
             ? "0 8px 24px rgba(37, 95, 245, 0.18)"
             : "0 2px 8px rgba(15, 23, 42, 0.06)",
-          transition: theme.transitions.medium,
+          transition: theme.transitions.default,
         }}
       >
         {/* Search Icon */}

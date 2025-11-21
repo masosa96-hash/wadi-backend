@@ -1,7 +1,8 @@
 import { create } from "zustand";
 import { api } from "../config/api";
 import { supabase } from "../config/supabase";
-import { Message, Conversation, WebSocketMessage } from "chat-core";
+import type { Message, Conversation, WebSocketMessage } from "../types/chat";
+
 
 interface ChatState {
   // Current conversation

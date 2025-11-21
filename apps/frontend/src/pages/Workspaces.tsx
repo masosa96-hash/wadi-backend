@@ -9,7 +9,7 @@ import BottomNav from "../components/BottomNav";
 export default function WorkspacesPage() {
   const navigate = useNavigate();
   const { workspaces, fetchWorkspaces, createWorkspace, deleteWorkspace, loadingStates } = useWorkspacesStore();
-  
+
   const [showCreateModal, setShowCreateModal] = useState(false);
   const [newWorkspaceName, setNewWorkspaceName] = useState("");
   const [newWorkspaceDescription, setNewWorkspaceDescription] = useState("");
@@ -21,7 +21,7 @@ export default function WorkspacesPage() {
 
   const handleCreateWorkspace = async () => {
     if (!newWorkspaceName.trim()) return;
-    
+
     try {
       await createWorkspace(newWorkspaceName.trim(), newWorkspaceDescription.trim());
       setShowCreateModal(false);
@@ -36,7 +36,7 @@ export default function WorkspacesPage() {
     if (!confirm("¿Seguro que querés borrar este espacio? Esto no se puede deshacer.")) {
       return;
     }
-    
+
     try {
       await deleteWorkspace(workspaceId);
     } catch (error) {
@@ -183,8 +183,8 @@ export default function WorkspacesPage() {
               {filterMode === "all"
                 ? "WADI creará espacios automáticamente o podés crear uno vos"
                 : filterMode === "archived"
-                ? "Los espacios archivados aparecerán acá"
-                : "Tus espacios recientes aparecerán acá"}
+                  ? "Los espacios archivados aparecerán acá"
+                  : "Tus espacios recientes aparecerán acá"}
             </p>
             {filterMode === "all" && (
               <motion.button
@@ -224,7 +224,7 @@ export default function WorkspacesPage() {
                     borderRadius: theme.borderRadius.large,
                     padding: theme.spacing.lg,
                     cursor: "pointer",
-                    transition: theme.transitions.medium,
+                    transition: theme.transitions.default,
                     position: "relative",
                     overflow: "hidden",
                   }}

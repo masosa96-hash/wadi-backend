@@ -1,49 +1,43 @@
-/**
- * WADI Design System - AI Professional Theme
- * Minimalist, clean, and high-performance aesthetic.
- */
+// WADI Theme - AI Professional Design System
 
 export const theme = {
   colors: {
     background: {
-      primary: '#FFFFFF',     // Pure white
-      secondary: '#FAFAFA',   // Very light gray for sidebars/panels
-      tertiary: '#F4F4F5',    // Inputs, hover states
+      primary: '#FFFFFF',
+      secondary: '#FAFAFA',
+      tertiary: '#F4F4F5',
       overlay: 'rgba(0, 0, 0, 0.4)',
+      mobile: '#FFFFFF',
     },
-
     border: {
-      subtle: '#E4E4E7',      // Zinc-200
-      default: '#D4D4D8',     // Zinc-300
-      hover: '#A1A1AA',       // Zinc-400
-      active: '#18181B',      // Zinc-900
+      subtle: '#E4E4E7',
+      default: '#D4D4D8',
+      light: '#E4E4E7',
+      accent: '#D4D4D8',
+      hover: '#A1A1AA',
+      active: '#18181B',
     },
-
     text: {
-      primary: '#18181B',     // Zinc-900
-      secondary: '#71717A',   // Zinc-500
-      tertiary: '#A1A1AA',    // Zinc-400
+      primary: '#18181B',
+      secondary: '#71717A',
+      tertiary: '#A1A1AA',
       inverse: '#FFFFFF',
     },
-
     accent: {
-      primary: '#18181B',     // Black (Monochrome primary)
-      secondary: '#52525B',   // Zinc-600
-      highlight: '#3B82F6',   // Blue-500 (Subtle functional accent)
+      primary: '#18181B',
+      secondary: '#52525B',
+      highlight: '#3B82F6',
+      y2k: '#A1A1AA',
     },
-
-    status: {
-      success: '#10B981',
-      warning: '#F59E0B',
-      error: '#EF4444',
-      info: '#3B82F6',
-    },
+    success: '#22C55E',
+    warning: '#F59E0B',
+    error: '#EF4444',
   },
 
   typography: {
     fontFamily: {
-      primary: "'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif",
-      mono: "'JetBrains Mono', 'Fira Code', monospace",
+      primary: 'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
+      secondary: 'Inter, sans-serif',
     },
     fontSize: {
       xs: '12px',
@@ -53,12 +47,24 @@ export const theme = {
       xl: '20px',
       '2xl': '24px',
       '3xl': '32px',
+      caption: '12px',
+      bodySmall: '13px',
+      body: '14px',
+      bodyLarge: '16px',
+      h3: '20px',
+      h2: '24px',
+      h1: '32px',
     },
     fontWeight: {
       normal: 400,
       medium: 500,
       semibold: 600,
       bold: 700,
+    },
+    lineHeight: {
+      tight: 1.25,
+      normal: 1.5,
+      relaxed: 1.75,
     },
   },
 
@@ -78,6 +84,9 @@ export const theme = {
     md: '8px',
     lg: '12px',
     full: '9999px',
+    small: '6px',
+    medium: '8px',
+    large: '12px',
   },
 
   shadows: {
@@ -91,20 +100,23 @@ export const theme = {
   transitions: {
     default: '150ms cubic-bezier(0.4, 0, 0.2, 1)',
     slow: '300ms cubic-bezier(0.4, 0, 0.2, 1)',
+    fast: '100ms cubic-bezier(0.4, 0, 0.2, 1)',
+    medium: '200ms cubic-bezier(0.4, 0, 0.2, 1)',
   },
 
   layout: {
     sidebarWidth: '260px',
     headerHeight: '56px',
     maxWidth: '1200px',
+    maxContentWidth: '1200px',
+    mobileMaxWidth: '480px',
   },
 
-  // Compatibility Layer for Legacy Components
   gradients: {
-    primary: '#18181B', // Flat black for "primary"
-    hero: '#FAFAFA',    // Light gray for hero
+    primary: '#18181B',
+    hero: '#FAFAFA',
     subtle: '#FFFFFF',
-    button: '#18181B',  // Black button
+    button: '#18181B',
     y2kAccent: '#52525B',
   },
 
