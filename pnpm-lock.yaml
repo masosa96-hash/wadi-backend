@@ -72,6 +72,9 @@ importers:
       pdf-parse:
         specifier: ^2.4.5
         version: 2.4.5
+      readable-stream:
+        specifier: ^2.3.8
+        version: 2.3.8
       winston:
         specifier: ^3.18.3
         version: 3.18.3

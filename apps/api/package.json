@@ -23,6 +23,7 @@
     "jsonwebtoken": "^9.0.2",
     "openai": "^4.20.1",
     "pdf-parse": "^2.4.5",
+    "readable-stream": "^2.3.8",
     "winston": "^3.18.3",
     "ws": "^8.18.3"
   },
