@@ -120,7 +120,7 @@ export default function Home() {
                 letterSpacing: "1px",
                 marginTop: "2px",
               }}>
-                WALKING DISASTER
+                DEL CAOS AL PLAN
               </p>
             </div>
             <div style={{
