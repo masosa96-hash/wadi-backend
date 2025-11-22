@@ -2,7 +2,6 @@ import { useState } from "react";
 import { theme } from "../styles/theme";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
-import Input from "../components/Input";
 
 export default function Search() {
   const [query, setQuery] = useState("");

@@ -1,6 +1,6 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
-import { useOnboardingStore } from "./store/onboardingStore";
+// import { useOnboardingStore } from "./store/onboardingStore"; // TODO: Add onboarding flow
 import RootGuard from "./components/RootGuard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";

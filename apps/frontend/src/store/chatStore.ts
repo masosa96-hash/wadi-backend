@@ -1,5 +1,5 @@
 import { create } from "zustand";
-import { persist } from "zustand/middleware";
+// import { persist } from "zustand/middleware"; // Not used currently
 import { api } from "../config/api";
 import { supabase } from "../config/supabase";
 import type { Message, Conversation, WebSocketMessage } from "../types/chat";
