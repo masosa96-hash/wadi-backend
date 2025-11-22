@@ -7,6 +7,7 @@ import { useChatStore } from "../store/chatStore";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
 import { SkeletonList } from "../components/Skeleton";
+import { useLanguage } from "../store/LanguageContext";
 
 import { useProjectsStore } from "../store/projectsStore";
 import { useWorkspaceStore } from "../store/workspaceStore";
@@ -14,6 +15,7 @@ import { useWorkspaceStore } from "../store/workspaceStore";
 export default function Home() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
+  const { t } = useLanguage();
   const { conversations, loadConversations, loadingConversations } = useChatStore();
   const { projects, fetchProjects } = useProjectsStore();
   const { workspaces, loadWorkspaces } = useWorkspaceStore();
@@ -56,6 +58,38 @@ export default function Home() {
           pointerEvents: "none",
           zIndex: 0,
         }} />
+
+        {/* Floating background orbs (Depth) */}
+        <div
+          style={{
+            position: "absolute",
+            top: "-10%",
+            left: "-10%",
+            width: "400px",
+            height: "400px",
+            background: "radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%)",
+            borderRadius: "50%",
+            filter: "blur(80px)",
+            opacity: 0.6,
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
+        <div
+          style={{
+            position: "absolute",
+            bottom: "20%",
+            right: "-10%",
+            width: "350px",
+            height: "350px",
+            background: "radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%)",
+            borderRadius: "50%",
+            filter: "blur(70px)",
+            opacity: 0.5,
+            pointerEvents: "none",
+            zIndex: 0,
+          }}
+        />
 
         {/* Header */}
         <header style={{
@@ -118,14 +152,14 @@ export default function Home() {
             marginBottom: theme.spacing.sm,
             lineHeight: 1.1,
           }}>
-            Tu centro de comando <span style={{ color: theme.colors.text.secondary }}>inteligente.</span>
+            {t('home.welcome')}
           </h2>
           <p style={{
             fontSize: theme.typography.fontSize.body,
             color: theme.colors.text.secondary,
             marginBottom: theme.spacing.xl,
           }}>
-            Gestiona proyectos, chats y workspaces con el poder de la IA.
+            {t('home.tagline')}
           </p>
         </div>
 

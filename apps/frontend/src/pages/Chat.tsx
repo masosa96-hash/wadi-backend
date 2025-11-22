@@ -4,17 +4,21 @@ import { useAuthStore } from "../store/authStore";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
 import { theme } from "../styles/theme";
+import ChatInterface from "../components/ChatInterface";
+import { useLanguage } from "../store/LanguageContext";
+
+type ChatMode = 'ai' | 'mirror';
 
 export default function Chat() {
   const { user } = useAuthStore();
+  const { t } = useLanguage();
   const {
     messages,
-    currentConversationId,
     sendMessage,
-    loadConversation,
     sendingMessage,
   } = useChatStore();
 
+  const [mode, setMode] = useState<ChatMode>('ai');
   const [inputMessage, setInputMessage] = useState("");
   const [showActions, setShowActions] = useState(false);
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -25,7 +29,7 @@ export default function Chat() {
 
   useEffect(() => {
     scrollToBottom();
-  }, [messages]);
+  }, [messages, mode]);
 
   const handleSend = async () => {
     if (!inputMessage.trim() || sendingMessage) return;
@@ -73,198 +77,210 @@ export default function Chat() {
               fontSize: theme.typography.fontSize.xs,
               color: theme.colors.text.secondary,
             }}>
-              AI Assistant
+              {mode === 'ai' ? 'AI Assistant' : 'Efecto Espejo'}
             </p>
           </div>
-          <button
-            onClick={() => setShowActions(!showActions)}
-            style={{
-              padding: `${theme.spacing.xs} ${theme.spacing.md}`,
-              background: showActions ? theme.colors.accent.primary : "transparent",
-              color: showActions ? "#FFFFFF" : theme.colors.text.secondary,
-              border: `1px solid ${theme.colors.border.subtle}`,
-              borderRadius: theme.borderRadius.md,
-              fontSize: theme.typography.fontSize.sm,
-              cursor: "pointer",
-            }}
-          >
-            {showActions ? "Ocultar" : "Acciones"}
-          </button>
+
+          {/* Mode Toggle */}
+          <div style={{
+            display: 'flex',
+            background: theme.colors.background.tertiary,
+            borderRadius: theme.borderRadius.md,
+            padding: '2px',
+            border: `1px solid ${theme.colors.border.subtle}`,
+          }}>
+            <button
+              onClick={() => setMode('ai')}
+              style={{
+                padding: '4px 12px',
+                background: mode === 'ai' ? theme.colors.accent.primary : 'transparent',
+                color: mode === 'ai' ? '#FFFFFF' : theme.colors.text.secondary,
+                border: 'none',
+                borderRadius: theme.borderRadius.sm,
+                cursor: 'pointer',
+                fontSize: theme.typography.fontSize.xs,
+              }}
+            >
+              AI
+            </button>
+            <button
+              onClick={() => setMode('mirror')}
+              style={{
+                padding: '4px 12px',
+                background: mode === 'mirror' ? theme.colors.accent.primary : 'transparent',
+                color: mode === 'mirror' ? '#FFFFFF' : theme.colors.text.secondary,
+                border: 'none',
+                borderRadius: theme.borderRadius.sm,
+                cursor: 'pointer',
+                fontSize: theme.typography.fontSize.xs,
+              }}
+            >
+              Espejo
+            </button>
+          </div>
         </div>
 
-        {/* Messages */}
-        <div style={{
-          flex: 1,
-          overflowY: "auto",
-          padding: theme.spacing.lg,
-          display: "flex",
-          flexDirection: "column",
-          gap: theme.spacing.md,
-        }}>
-          {messages.length === 0 ? (
-            <div style={{
-              flex: 1,
-              display: "flex",
-              flexDirection: "column",
-              alignItems: "center",
-              justifyContent: "center",
-              textAlign: "center",
-              padding: theme.spacing['2xl'],
-            }}>
-              <div style={{ fontSize: "64px", marginBottom: theme.spacing.lg }}>
-                🤖
-              </div>
-              <h3 style={{
-                margin: `0 0 ${theme.spacing.sm} 0`,
-                fontSize: theme.typography.fontSize.xl,
-                fontWeight: theme.typography.fontWeight.semibold,
-                color: theme.colors.text.primary,
-              }}>
-                Hola, soy WADI
-              </h3>
-              <p style={{
-                margin: 0,
-                color: theme.colors.text.secondary,
-                fontSize: theme.typography.fontSize.base,
-              }}>
-                Tu asistente AI. ¿En qué puedo ayudarte hoy?
-              </p>
+        {/* Content */}
+        <div style={{ flex: 1, overflow: 'hidden', display: 'flex', flexDirection: 'column' }}>
+          {mode === 'mirror' ? (
+            <div style={{ flex: 1, padding: theme.spacing.md }}>
+              <ChatInterface currentUser={{ id: user?.id || 'guest', name: user?.user_metadata?.full_name || 'Usuario' }} />
             </div>
           ) : (
             <>
-              {messages.map((message) => (
-                <div
-                  key={message.id}
-                  style={{
-                    display: "flex",
-                    justifyContent: message.role === "user" ? "flex-end" : "flex-start",
-                  }}
-                >
+              {/* AI Chat Messages */}
+              <div style={{
+                flex: 1,
+                overflowY: "auto",
+                padding: theme.spacing.lg,
+                display: "flex",
+                flexDirection: "column",
+                gap: theme.spacing.md,
+              }}>
+                {messages.length === 0 ? (
                   <div style={{
-                    maxWidth: "75%",
-                    padding: theme.spacing.md,
-                    borderRadius: theme.borderRadius.md,
-                    background: message.role === "user"
-                      ? theme.colors.accent.primary
-                      : theme.colors.background.secondary,
-                    color: message.role === "user"
-                      ? "#FFFFFF"
-                      : theme.colors.text.primary,
-                    border: message.role === "assistant"
-                      ? `1px solid ${theme.colors.border.subtle}`
-                      : "none",
+                    flex: 1,
+                    display: "flex",
+                    flexDirection: "column",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    textAlign: "center",
+                    padding: theme.spacing['2xl'],
                   }}>
-                    {/* Message content */}
-                    <div style={{
-                      fontSize: theme.typography.fontSize.base,
-                      lineHeight: 1.5,
-                      whiteSpace: "pre-wrap",
-                      wordBreak: "break-word",
-                    }}>
-                      {message.content}
+                    <div style={{ fontSize: "64px", marginBottom: theme.spacing.lg }}>
+                      🤖
                     </div>
-
-                    {/* AI Actions (if any) */}
-                    {message.role === "assistant" && message.metadata?.action && showActions && (
-                      <div style={{
-                        marginTop: theme.spacing.sm,
-                        padding: theme.spacing.sm,
-                        background: "rgba(0, 0, 0, 0.05)",
-                        borderRadius: theme.borderRadius.sm,
-                        fontSize: theme.typography.fontSize.xs,
-                      }}>
-                        <div style={{ fontWeight: theme.typography.fontWeight.semibold, marginBottom: theme.spacing.xs }}>
-                          🔧 Acción: {message.metadata.action.type}
-                        </div>
-                        {message.metadata.action.result && (
-                          <div style={{ opacity: 0.8 }}>
-                            {JSON.stringify(message.metadata.action.result, null, 2)}
+                    <h3 style={{
+                      margin: `0 0 ${theme.spacing.sm} 0`,
+                      fontSize: theme.typography.fontSize.xl,
+                      fontWeight: theme.typography.fontWeight.semibold,
+                      color: theme.colors.text.primary,
+                    }}>
+                      Hola, soy WADI
+                    </h3>
+                    <p style={{
+                      margin: 0,
+                      color: theme.colors.text.secondary,
+                      fontSize: theme.typography.fontSize.base,
+                    }}>
+                      Tu asistente AI. ¿En qué puedo ayudarte hoy?
+                    </p>
+                  </div>
+                ) : (
+                  <>
+                    {messages.map((message) => (
+                      <div
+                        key={message.id}
+                        style={{
+                          display: "flex",
+                          justifyContent: message.role === "user" ? "flex-end" : "flex-start",
+                        }}
+                      >
+                        <div style={{
+                          maxWidth: "75%",
+                          padding: theme.spacing.md,
+                          borderRadius: theme.borderRadius.md,
+                          background: message.role === "user"
+                            ? theme.colors.accent.primary
+                            : theme.colors.background.secondary,
+                          color: message.role === "user"
+                            ? "#FFFFFF"
+                            : theme.colors.text.primary,
+                          border: message.role === "assistant"
+                            ? `1px solid ${theme.colors.border.subtle}`
+                            : "none",
+                        }}>
+                          <div style={{
+                            fontSize: theme.typography.fontSize.base,
+                            lineHeight: 1.5,
+                            whiteSpace: "pre-wrap",
+                            wordBreak: "break-word",
+                          }}>
+                            {message.content}
                           </div>
-                        )}
+                          <div style={{
+                            marginTop: theme.spacing.xs,
+                            fontSize: theme.typography.fontSize.xs,
+                            opacity: 0.6,
+                          }}>
+                            {new Date(message.created_at).toLocaleTimeString('es-AR', {
+                              hour: '2-digit',
+                              minute: '2-digit',
+                            })}
+                          </div>
+                        </div>
+                      </div>
+                    ))}
+                    {sendingMessage && (
+                      <div style={{
+                        display: "flex",
+                        justifyContent: "flex-start",
+                      }}>
+                        <div style={{
+                          padding: theme.spacing.md,
+                          borderRadius: theme.borderRadius.md,
+                          background: theme.colors.background.secondary,
+                          border: `1px solid ${theme.colors.border.subtle}`,
+                        }}>
+                          <div style={{ display: "flex", gap: theme.spacing.xs }}>
+                            <div className="typing-dot" />
+                            <div className="typing-dot" />
+                            <div className="typing-dot" />
+                          </div>
+                        </div>
                       </div>
                     )}
+                  </>
+                )}
+                <div ref={messagesEndRef} />
+              </div>
 
-                    {/* Timestamp */}
-                    <div style={{
-                      marginTop: theme.spacing.xs,
-                      fontSize: theme.typography.fontSize.xs,
-                      opacity: 0.6,
-                    }}>
-                      {new Date(message.created_at).toLocaleTimeString('es-AR', {
-                        hour: '2-digit',
-                        minute: '2-digit',
-                      })}
-                    </div>
-                  </div>
+              {/* AI Chat Input */}
+              <div style={{
+                padding: theme.spacing.lg,
+                borderTop: `1px solid ${theme.colors.border.subtle}`,
+                background: theme.colors.background.secondary,
+              }}>
+                <div style={{ display: "flex", gap: theme.spacing.sm }}>
+                  <input
+                    type="text"
+                    value={inputMessage}
+                    onChange={(e) => setInputMessage(e.target.value)}
+                    onKeyPress={handleKeyPress}
+                    placeholder="Escribe tu mensaje..."
+                    disabled={sendingMessage}
+                    style={{
+                      flex: 1,
+                      padding: theme.spacing.md,
+                      border: `1px solid ${theme.colors.border.default}`,
+                      borderRadius: theme.borderRadius.md,
+                      fontSize: theme.typography.fontSize.base,
+                      outline: "none",
+                      background: theme.colors.background.tertiary,
+                      color: theme.colors.text.primary,
+                    }}
+                  />
+                  <button
+                    onClick={handleSend}
+                    disabled={sendingMessage || !inputMessage.trim()}
+                    style={{
+                      padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+                      background: theme.colors.accent.primary,
+                      color: "#FFFFFF",
+                      border: "none",
+                      borderRadius: theme.borderRadius.md,
+                      fontSize: theme.typography.fontSize.base,
+                      fontWeight: theme.typography.fontWeight.medium,
+                      cursor: sendingMessage || !inputMessage.trim() ? "not-allowed" : "pointer",
+                      opacity: sendingMessage || !inputMessage.trim() ? 0.5 : 1,
+                    }}
+                  >
+                    {sendingMessage ? "..." : "Enviar"}
+                  </button>
                 </div>
-              ))}
-              {sendingMessage && (
-                <div style={{
-                  display: "flex",
-                  justifyContent: "flex-start",
-                }}>
-                  <div style={{
-                    padding: theme.spacing.md,
-                    borderRadius: theme.borderRadius.md,
-                    background: theme.colors.background.secondary,
-                    border: `1px solid ${theme.colors.border.subtle}`,
-                  }}>
-                    <div style={{ display: "flex", gap: theme.spacing.xs }}>
-                      <div className="typing-dot" />
-                      <div className="typing-dot" />
-                      <div className="typing-dot" />
-                    </div>
-                  </div>
-                </div>
-              )}
+              </div>
             </>
           )}
-          <div ref={messagesEndRef} />
-        </div>
-
-        {/* Input */}
-        <div style={{
-          padding: theme.spacing.lg,
-          borderTop: `1px solid ${theme.colors.border.subtle}`,
-          background: theme.colors.background.secondary,
-        }}>
-          <div style={{ display: "flex", gap: theme.spacing.sm }}>
-            <input
-              type="text"
-              value={inputMessage}
-              onChange={(e) => setInputMessage(e.target.value)}
-              onKeyPress={handleKeyPress}
-              placeholder="Escribe tu mensaje..."
-              disabled={sendingMessage}
-              style={{
-                flex: 1,
-                padding: theme.spacing.md,
-                border: `1px solid ${theme.colors.border.default}`,
-                borderRadius: theme.borderRadius.md,
-                fontSize: theme.typography.fontSize.base,
-                outline: "none",
-                background: theme.colors.background.tertiary,
-                color: theme.colors.text.primary,
-              }}
-            />
-            <button
-              onClick={handleSend}
-              disabled={sendingMessage || !inputMessage.trim()}
-              style={{
-                padding: `${theme.spacing.md} ${theme.spacing.lg}`,
-                background: theme.colors.accent.primary,
-                color: "#FFFFFF",
-                border: "none",
-                borderRadius: theme.borderRadius.md,
-                fontSize: theme.typography.fontSize.base,
-                fontWeight: theme.typography.fontWeight.medium,
-                cursor: sendingMessage || !inputMessage.trim() ? "not-allowed" : "pointer",
-                opacity: sendingMessage || !inputMessage.trim() ? 0.5 : 1,
-              }}
-            >
-              {sendingMessage ? "..." : "Enviar"}
-            </button>
-          </div>
         </div>
 
         <BottomNav />

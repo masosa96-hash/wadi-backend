@@ -2,6 +2,7 @@ import { createRoot } from 'react-dom/client';
 import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 import ErrorBoundary from './components/ErrorBoundary';
+import { LanguageProvider } from './store/LanguageContext';
 import './index.css';
 
 
@@ -10,7 +11,9 @@ function App() {
 
   return (
     <ErrorBoundary>
-      <RouterProvider router={router} />
+      <LanguageProvider>
+        <RouterProvider router={router} />
+      </LanguageProvider>
     </ErrorBoundary>
   );
 }
