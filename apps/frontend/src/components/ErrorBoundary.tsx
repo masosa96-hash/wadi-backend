@@ -1,5 +1,6 @@
 import { Component, ReactNode } from "react";
 import { theme } from "../styles/theme";
+import { errorHandler, AppError } from "../utils/errorHandler";
 
 interface Props {
     children: ReactNode;
@@ -8,7 +9,7 @@ interface Props {
 
 interface State {
     hasError: boolean;
-    error?: Error;
+    error?: AppError;
 }
 
 export default class ErrorBoundary extends Component<Props, State> {
@@ -18,19 +19,23 @@ export default class ErrorBoundary extends Component<Props, State> {
     }
 
     static getDerivedStateFromError(error: Error): State {
-        return { hasError: true, error };
+        return { hasError: true, error: error as AppError };
     }
 
     componentDidCatch(error: Error, errorInfo: any) {
-        console.error("ErrorBoundary caught:", error, errorInfo);
-        // TODO: Send to error tracking service (Sentry)
+        // Use centralized error handler
+        errorHandler.handleError(error, "ErrorBoundary");
+        console.error("React Error Info:", errorInfo);
     }
 
     render() {
-        if (this.state.hasError) {
+        if (this.state.hasError && this.state.error) {
             if (this.props.fallback) {
                 return this.props.fallback;
             }
+
+            const userMessage = errorHandler.getUserMessage(this.state.error);
+            const isRecoverable = this.state.error.isRecoverable;
 
             return (
                 <div style={{
@@ -44,7 +49,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                     textAlign: "center",
                 }}>
                     <div style={{ fontSize: "64px", marginBottom: theme.spacing.lg }}>
-                        ⚠️
+                        {isRecoverable ? "📡" : "⚠️"}
                     </div>
                     <h1 style={{
                         margin: `0 0 ${theme.spacing.sm} 0`,
@@ -52,7 +57,7 @@ export default class ErrorBoundary extends Component<Props, State> {
                         fontWeight: theme.typography.fontWeight.bold,
                         color: theme.colors.text.primary,
                     }}>
-                        Algo salió mal
+                        {isRecoverable ? "Problema de conexión" : "Algo salió mal"}
                     </h1>
                     <p style={{
                         margin: `0 0 ${theme.spacing.lg} 0`,
@@ -60,36 +65,58 @@ export default class ErrorBoundary extends Component<Props, State> {
                         color: theme.colors.text.secondary,
                         maxWidth: "400px",
                     }}>
-                        Lo sentimos, ocurrió un error inesperado. Por favor, recarga la página.
+                        {userMessage}
                     </p>
-                    <button
-                        onClick={() => window.location.reload()}
-                        style={{
-                            padding: `${theme.spacing.md} ${theme.spacing.xl}`,
-                            background: theme.colors.accent.primary,
-                            color: "#FFFFFF",
-                            border: "none",
-                            borderRadius: theme.borderRadius.md,
-                            fontSize: theme.typography.fontSize.base,
-                            fontWeight: theme.typography.fontWeight.medium,
-                            cursor: "pointer",
-                        }}
-                    >
-                        Recargar página
-                    </button>
-                    {this.state.error && (
+                    <div style={{ display: "flex", gap: theme.spacing.md }}>
+                        <button
+                            onClick={() => window.location.reload()}
+                            style={{
+                                padding: `${theme.spacing.md} ${theme.spacing.xl}`,
+                                background: theme.colors.text.primary,
+                                color: theme.colors.background.primary,
+                                border: "none",
+                                borderRadius: theme.borderRadius.md,
+                                fontSize: theme.typography.fontSize.base,
+                                fontWeight: theme.typography.fontWeight.medium,
+                                cursor: "pointer",
+                            }}
+                        >
+                            Recargar página
+                        </button>
+                        {isRecoverable && (
+                            <button
+                                onClick={() => this.setState({ hasError: false })}
+                                style={{
+                                    padding: `${theme.spacing.md} ${theme.spacing.xl}`,
+                                    background: "transparent",
+                                    border: `1px solid ${theme.colors.border.default}`,
+                                    color: theme.colors.text.primary,
+                                    borderRadius: theme.borderRadius.md,
+                                    fontSize: theme.typography.fontSize.base,
+                                    fontWeight: theme.typography.fontWeight.medium,
+                                    cursor: "pointer",
+                                }}
+                            >
+                                Reintentar
+                            </button>
+                        )}
+                    </div>
+
+                    {import.meta.env.DEV && this.state.error && (
                         <details style={{
                             marginTop: theme.spacing.xl,
                             padding: theme.spacing.md,
-                            background: theme.colors.background.secondary,
+                            background: theme.colors.background.surface || theme.colors.background.secondary,
                             borderRadius: theme.borderRadius.sm,
                             fontSize: theme.typography.fontSize.xs,
                             color: theme.colors.text.tertiary,
                             textAlign: "left",
                             maxWidth: "600px",
+                            width: "100%",
+                            overflow: "auto",
                         }}>
                             <summary style={{ cursor: "pointer", marginBottom: theme.spacing.sm }}>
-                                Detalles técnicos
+                                Detalles técnicos ({this.state.error.type})
                             </summary>
                             <pre style={{ margin: 0, whiteSpace: "pre-wrap", wordBreak: "break-word" }}>
                                 {this.state.error.message}

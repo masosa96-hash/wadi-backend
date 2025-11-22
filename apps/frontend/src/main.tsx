@@ -3,7 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import { router } from './router';
 import ErrorBoundary from './components/ErrorBoundary';
 import './index.css';
-import './index.css';
+
 
 function App() {
   console.log("[App] Mounting...");

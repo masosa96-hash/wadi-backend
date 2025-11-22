@@ -3,31 +3,32 @@
 export const theme = {
   colors: {
     background: {
-      primary: '#FFFFFF',
-      secondary: '#FAFAFA',
-      tertiary: '#F4F4F5',
-      overlay: 'rgba(0, 0, 0, 0.4)',
-      mobile: '#FFFFFF',
+      primary: '#09090B', // Deep matte black
+      secondary: '#18181B', // Zinc 900
+      tertiary: '#27272A', // Zinc 800
+      overlay: 'rgba(0, 0, 0, 0.7)',
+      mobile: '#09090B',
+      surface: '#121214', // Slightly lighter for cards
     },
     border: {
-      subtle: '#E4E4E7',
-      default: '#D4D4D8',
-      light: '#E4E4E7',
-      accent: '#D4D4D8',
+      subtle: '#27272A',
+      default: '#3F3F46',
+      light: '#52525B',
+      accent: '#71717A',
       hover: '#A1A1AA',
-      active: '#18181B',
+      active: '#E4E4E7',
     },
     text: {
-      primary: '#18181B',
-      secondary: '#71717A',
-      tertiary: '#A1A1AA',
-      inverse: '#FFFFFF',
+      primary: '#FAFAFA', // Zinc 50
+      secondary: '#A1A1AA', // Zinc 400
+      tertiary: '#71717A', // Zinc 500
+      inverse: '#09090B',
     },
     accent: {
-      primary: '#18181B',
-      secondary: '#52525B',
-      highlight: '#3B82F6',
-      y2k: '#A1A1AA',
+      primary: '#FAFAFA', // White accent
+      secondary: '#A1A1AA',
+      highlight: '#3B82F6', // Keep blue for critical actions
+      y2k: '#E4E4E7',
     },
     success: '#22C55E',
     warning: '#F59E0B',
@@ -48,6 +49,7 @@ export const theme = {
       xl: '20px',
       '2xl': '24px',
       '3xl': '32px',
+      display: '48px', // New display size
       caption: '12px',
       bodySmall: '13px',
       body: '14px',
@@ -81,21 +83,22 @@ export const theme = {
   },
 
   borderRadius: {
-    sm: '6px',
-    md: '8px',
-    lg: '12px',
+    sm: '4px', // Sharper corners for matte look
+    md: '6px',
+    lg: '8px',
     full: '9999px',
-    small: '6px',
-    medium: '8px',
-    large: '12px',
+    small: '4px',
+    medium: '6px',
+    large: '8px',
   },
 
   shadows: {
-    sm: '0 1px 2px 0 rgba(0, 0, 0, 0.05)',
-    md: '0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06)',
-    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05)',
-    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04)',
-    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.06)',
+    sm: '0 1px 2px 0 rgba(0, 0, 0, 0.3)',
+    md: '0 4px 6px -1px rgba(0, 0, 0, 0.3), 0 2px 4px -1px rgba(0, 0, 0, 0.15)',
+    lg: '0 10px 15px -3px rgba(0, 0, 0, 0.3), 0 4px 6px -2px rgba(0, 0, 0, 0.15)',
+    xl: '0 20px 25px -5px rgba(0, 0, 0, 0.3), 0 10px 10px -5px rgba(0, 0, 0, 0.15)',
+    inner: 'inset 0 2px 4px 0 rgba(0, 0, 0, 0.2)',
+    glow: '0 0 20px rgba(255, 255, 255, 0.1)', // Subtle glow
   },
 
   transitions: {
@@ -107,48 +110,45 @@ export const theme = {
 
   layout: {
     sidebarWidth: '260px',
-    headerHeight: '56px',
+    headerHeight: '64px',
     maxWidth: '1200px',
     maxContentWidth: '1200px',
     mobileMaxWidth: '480px',
   },
 
   gradients: {
-    primary: '#18181B',
-    hero: '#FAFAFA',
-    subtle: '#FFFFFF',
-    button: '#18181B',
-    y2kAccent: '#52525B',
+    primary: 'linear-gradient(135deg, #FAFAFA 0%, #A1A1AA 100%)', // Matte white/gray
+    hero: 'radial-gradient(circle at center, #27272A 0%, #09090B 100%)', // Deep depth
+    subtle: 'linear-gradient(to bottom, #18181B, #09090B)',
+    button: '#FAFAFA', // High contrast button
+    buttonHover: '#E4E4E7',
+    surface: 'linear-gradient(180deg, rgba(39, 39, 42, 0.5) 0%, rgba(24, 24, 27, 0.5) 100%)',
   },
 
   glass: {
     light: {
-      background: 'rgba(255, 255, 255, 0.8)',
+      background: 'rgba(24, 24, 27, 0.6)',
       backdropFilter: 'blur(12px)',
-      border: '1px solid #E4E4E7',
+      border: '1px solid rgba(63, 63, 70, 0.4)',
     },
     medium: {
-      background: 'rgba(255, 255, 255, 0.9)',
+      background: 'rgba(24, 24, 27, 0.8)',
       backdropFilter: 'blur(16px)',
-      border: '1px solid #E4E4E7',
+      border: '1px solid rgba(63, 63, 70, 0.5)',
     },
     heavy: {
-      background: '#FFFFFF',
-      border: '1px solid #E4E4E7',
+      background: '#18181B',
+      border: '1px solid #3F3F46',
     },
     accent: {
-      background: '#F4F4F5',
-      border: '1px solid #E4E4E7',
-    },
-    y2k: {
-      background: '#FAFAFA',
-      border: '1px solid #E4E4E7',
+      background: 'rgba(39, 39, 42, 0.5)',
+      border: '1px solid rgba(82, 82, 91, 0.5)',
     },
   },
   glassHover: {
-    light: { background: '#FAFAFA' },
-    medium: { background: '#FAFAFA' },
-    accent: { background: '#E4E4E7' },
+    light: { background: 'rgba(39, 39, 42, 0.6)' },
+    medium: { background: 'rgba(39, 39, 42, 0.8)' },
+    accent: { background: 'rgba(63, 63, 70, 0.5)' },
   }
 } as const;
 

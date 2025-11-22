@@ -9,7 +9,7 @@ interface AuthState {
   loading: boolean;
 
   // Actions
-  signIn: (email: string, password: string) => Promise<void>;
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signOut: () => Promise<void>;
   initialize: () => Promise<void>;
@@ -23,7 +23,7 @@ export const useAuthStore = create<AuthState>()(
       session: null,
       loading: true,
 
-      signIn: async (email: string, password: string) => {
+      signIn: async (email: string, password: string, rememberMe: boolean = true) => {
         // Clear any existing session first
         await supabase.auth.signOut();
 

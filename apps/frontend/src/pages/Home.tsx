@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { motion } from "framer-motion";
 import { theme } from "../styles/theme";
 import { useAuthStore } from "../store/authStore";
 import { useChatStore } from "../store/chatStore";
@@ -36,40 +37,102 @@ export default function Home() {
         minHeight: "100vh",
         background: theme.colors.background.primary,
         paddingBottom: "80px",
+        position: "relative",
+        overflow: "hidden",
       }}>
+        {/* Background Noise Texture */}
+        <div style={{
+          position: "absolute",
+          inset: 0,
+          opacity: 0.03,
+          backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+          pointerEvents: "none",
+          zIndex: 0,
+        }} />
+
         {/* Header */}
         <header style={{
           padding: theme.spacing.xl,
           borderBottom: `1px solid ${theme.colors.border.subtle}`,
-          background: theme.colors.background.secondary,
+          background: "rgba(9, 9, 11, 0.8)", // Transparent dark
+          backdropFilter: "blur(12px)",
+          position: "relative",
+          zIndex: 10,
         }}>
-          <h1 style={{
-            margin: 0,
-            fontSize: theme.typography.fontSize['3xl'],
+          <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+            <div>
+              <h1 style={{
+                margin: 0,
+                fontSize: theme.typography.fontSize['2xl'],
+                fontWeight: theme.typography.fontWeight.bold,
+                color: theme.colors.text.primary,
+                letterSpacing: "-0.5px",
+              }}>
+                WADI
+              </h1>
+              <p style={{
+                margin: 0,
+                fontSize: theme.typography.fontSize.xs,
+                color: theme.colors.text.tertiary,
+                textTransform: "uppercase",
+                letterSpacing: "1px",
+                marginTop: "2px",
+              }}>
+                WALKING DISASTER
+              </p>
+            </div>
+            <div style={{
+              width: "32px",
+              height: "32px",
+              borderRadius: "50%",
+              background: theme.colors.border.default,
+              display: "flex",
+              alignItems: "center",
+              justifyContent: "center",
+              fontSize: "14px",
+              color: theme.colors.text.primary,
+              fontWeight: "bold",
+            }}>
+              {user?.email?.[0].toUpperCase() || "U"}
+            </div>
+          </div>
+        </header>
+
+        {/* Hero Section */}
+        <div style={{
+          padding: theme.spacing.xl,
+          position: "relative",
+          zIndex: 1,
+        }}>
+          <h2 style={{
+            fontSize: theme.typography.fontSize.h1,
             fontWeight: theme.typography.fontWeight.bold,
             color: theme.colors.text.primary,
-            marginBottom: theme.spacing.xs,
+            marginBottom: theme.spacing.sm,
+            lineHeight: 1.1,
           }}>
-            WADI
-          </h1>
+            Tu centro de comando <span style={{ color: theme.colors.text.secondary }}>inteligente.</span>
+          </h2>
           <p style={{
-            margin: 0,
-            fontSize: theme.typography.fontSize.sm,
+            fontSize: theme.typography.fontSize.body,
             color: theme.colors.text.secondary,
+            marginBottom: theme.spacing.xl,
           }}>
-            Bienvenido, {user?.email || "Usuario"}
+            Gestiona proyectos, chats y workspaces con el poder de la IA.
           </p>
-        </header>
+        </div>
 
         {/* Stats Cards */}
         <div style={{
-          padding: theme.spacing.xl,
+          padding: `0 ${theme.spacing.xl}`,
           display: "grid",
           gridTemplateColumns: "repeat(3, 1fr)",
           gap: theme.spacing.md,
+          position: "relative",
+          zIndex: 1,
         }}>
           <StatCard
-            label="Conversaciones"
+            label="Chats"
             value={stats.totalConversations}
             icon="💬"
           />
@@ -79,93 +142,85 @@ export default function Home() {
             icon="📁"
           />
           <StatCard
-            label="Workspaces"
+            label="Espacios"
             value={stats.totalWorkspaces}
             icon="🏢"
           />
         </div>
 
         {/* Quick Actions */}
-        <section style={{ padding: `0 ${theme.spacing.xl} ${theme.spacing.xl}` }}>
-          <h2 style={{
-            margin: `0 0 ${theme.spacing.lg} 0`,
-            fontSize: theme.typography.fontSize.xl,
+        <section style={{ padding: theme.spacing.xl, position: "relative", zIndex: 1 }}>
+          <h3 style={{
+            margin: `0 0 ${theme.spacing.md} 0`,
+            fontSize: theme.typography.fontSize.lg,
             fontWeight: theme.typography.fontWeight.semibold,
             color: theme.colors.text.primary,
           }}>
             Accesos Rápidos
-          </h2>
+          </h3>
           <div style={{
             display: "grid",
             gridTemplateColumns: "repeat(2, 1fr)",
             gap: theme.spacing.md,
           }}>
             {quickActions.map((action) => (
-              <button
+              <motion.button
                 key={action.path}
+                whileHover={{ scale: 1.02, backgroundColor: theme.colors.border.subtle }}
+                whileTap={{ scale: 0.98 }}
                 onClick={() => navigate(action.path)}
                 style={{
                   padding: theme.spacing.lg,
-                  background: theme.colors.background.secondary,
+                  background: theme.colors.background.surface,
                   border: `1px solid ${theme.colors.border.subtle}`,
-                  borderRadius: theme.borderRadius.md,
+                  borderRadius: theme.borderRadius.lg,
                   cursor: "pointer",
-                  transition: `all ${theme.transitions.default}`,
                   textAlign: "left",
-                }}
-                onMouseEnter={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.border.active;
-                  e.currentTarget.style.transform = "translateY(-2px)";
-                }}
-                onMouseLeave={(e) => {
-                  e.currentTarget.style.borderColor = theme.colors.border.subtle;
-                  e.currentTarget.style.transform = "translateY(0)";
+                  display: "flex",
+                  flexDirection: "column",
+                  gap: theme.spacing.sm,
                 }}
               >
-                <div style={{ fontSize: "32px", marginBottom: theme.spacing.sm }}>
-                  {action.icon}
-                </div>
-                <div style={{
-                  fontSize: theme.typography.fontSize.base,
+                <span style={{ fontSize: "24px" }}>{action.icon}</span>
+                <span style={{
+                  fontSize: theme.typography.fontSize.body,
                   fontWeight: theme.typography.fontWeight.medium,
                   color: theme.colors.text.primary,
                 }}>
                   {action.label}
-                </div>
-              </button>
+                </span>
+              </motion.button>
             ))}
           </div>
         </section>
 
         {/* Recent Conversations */}
-        <section style={{ padding: `0 ${theme.spacing.xl} ${theme.spacing.xl}` }}>
+        <section style={{ padding: `0 ${theme.spacing.xl} ${theme.spacing.xl}`, position: "relative", zIndex: 1 }}>
           <div style={{
             display: "flex",
             justifyContent: "space-between",
             alignItems: "center",
-            marginBottom: theme.spacing.lg,
+            marginBottom: theme.spacing.md,
           }}>
-            <h2 style={{
+            <h3 style={{
               margin: 0,
-              fontSize: theme.typography.fontSize.xl,
+              fontSize: theme.typography.fontSize.lg,
               fontWeight: theme.typography.fontWeight.semibold,
               color: theme.colors.text.primary,
             }}>
-              Conversaciones Recientes
-            </h2>
+              Recientes
+            </h3>
             <button
               onClick={() => navigate("/chat")}
               style={{
-                padding: `${theme.spacing.sm} ${theme.spacing.md}`,
                 background: "transparent",
                 border: "none",
-                color: theme.colors.accent.primary,
+                color: theme.colors.text.secondary,
                 fontSize: theme.typography.fontSize.sm,
-                fontWeight: theme.typography.fontWeight.medium,
                 cursor: "pointer",
               }}
             >
-              Ver todas →
+              Ver todo
             </button>
           </div>
 
@@ -175,73 +230,63 @@ export default function Home() {
             <div style={{
               padding: theme.spacing.xl,
               textAlign: "center",
-              background: theme.colors.background.secondary,
-              borderRadius: theme.borderRadius.md,
+              background: theme.colors.background.surface,
+              borderRadius: theme.borderRadius.lg,
               border: `1px solid ${theme.colors.border.subtle}`,
             }}>
-              <div style={{ fontSize: "48px", marginBottom: theme.spacing.md }}>
-                💬
-              </div>
-              <p style={{
-                margin: 0,
-                color: theme.colors.text.secondary,
-                fontSize: theme.typography.fontSize.base,
-              }}>
-                No hay conversaciones aún
-              </p>
+              <p style={{ color: theme.colors.text.secondary }}>No hay actividad reciente</p>
               <button
                 onClick={() => navigate("/chat")}
                 style={{
-                  marginTop: theme.spacing.lg,
-                  padding: `${theme.spacing.md} ${theme.spacing.xl}`,
-                  background: theme.colors.accent.primary,
-                  color: "#FFFFFF",
+                  marginTop: theme.spacing.md,
+                  padding: `${theme.spacing.sm} ${theme.spacing.lg}`,
+                  background: theme.colors.text.primary,
+                  color: theme.colors.background.primary,
                   border: "none",
                   borderRadius: theme.borderRadius.md,
-                  fontSize: theme.typography.fontSize.base,
                   fontWeight: theme.typography.fontWeight.medium,
                   cursor: "pointer",
                 }}
               >
-                Iniciar Conversación
+                Comenzar
               </button>
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
-              {conversations.slice(0, 5).map((conv) => (
-                <div
+              {conversations.slice(0, 3).map((conv) => (
+                <motion.div
                   key={conv.id}
+                  whileHover={{ x: 4 }}
                   onClick={() => navigate(`/chat?conversation=${conv.id}`)}
                   style={{
                     padding: theme.spacing.md,
-                    background: theme.colors.background.secondary,
+                    background: theme.colors.background.surface,
                     border: `1px solid ${theme.colors.border.subtle}`,
                     borderRadius: theme.borderRadius.md,
                     cursor: "pointer",
-                    transition: `all ${theme.transitions.default}`,
-                  }}
-                  onMouseEnter={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.border.active;
-                  }}
-                  onMouseLeave={(e) => {
-                    e.currentTarget.style.borderColor = theme.colors.border.subtle;
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <div style={{
-                    fontSize: theme.typography.fontSize.base,
-                    fontWeight: theme.typography.fontWeight.medium,
+                  <span style={{
                     color: theme.colors.text.primary,
-                    marginBottom: theme.spacing.xs,
+                    fontSize: theme.typography.fontSize.body,
+                    fontWeight: theme.typography.fontWeight.medium,
+                    whiteSpace: "nowrap",
+                    overflow: "hidden",
+                    textOverflow: "ellipsis",
+                    maxWidth: "70%",
                   }}>
-                    {conv.title || "Sin título"}
-                  </div>
-                  <div style={{
-                    fontSize: theme.typography.fontSize.sm,
-                    color: theme.colors.text.secondary,
+                    {conv.title || "Nueva conversación"}
+                  </span>
+                  <span style={{
+                    color: theme.colors.text.tertiary,
+                    fontSize: theme.typography.fontSize.xs,
                   }}>
-                    {conv.message_count} mensajes
-                  </div>
-                </div>
+                    {new Date(conv.updated_at).toLocaleDateString()}
+                  </span>
+                </motion.div>
               ))}
             </div>
           )}
@@ -257,25 +302,25 @@ function StatCard({ label, value, icon }: { label: string; value: number; icon: 
   return (
     <div style={{
       padding: theme.spacing.md,
-      background: theme.colors.background.secondary,
+      background: theme.colors.background.surface,
       border: `1px solid ${theme.colors.border.subtle}`,
-      borderRadius: theme.borderRadius.md,
+      borderRadius: theme.borderRadius.lg,
       textAlign: "center",
     }}>
-      <div style={{ fontSize: "24px", marginBottom: theme.spacing.xs }}>
+      <div style={{ fontSize: "20px", marginBottom: theme.spacing.xs }}>
         {icon}
       </div>
       <div style={{
-        fontSize: theme.typography.fontSize['2xl'],
+        fontSize: theme.typography.fontSize.xl,
         fontWeight: theme.typography.fontWeight.bold,
         color: theme.colors.text.primary,
-        marginBottom: theme.spacing.xs,
       }}>
         {value}
       </div>
       <div style={{
         fontSize: theme.typography.fontSize.xs,
         color: theme.colors.text.secondary,
+        marginTop: "2px",
       }}>
         {label}
       </div>

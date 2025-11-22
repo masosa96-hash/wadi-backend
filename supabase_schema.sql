@@ -117,22 +117,42 @@ create policy "Members can view workspace" on public.workspaces for select using
 -- Trigger to create profile on signup
 create or replace function public.handle_new_user()
 returns trigger as $$
+declare
+  new_workspace_id uuid;
 begin
+  -- 1. Create Profile (Safe insert)
   insert into public.profiles (id, email, full_name)
-  values (new.id, new.email, new.raw_user_meta_data->>'full_name');
+  values (
+    new.id, 
+    new.email, 
+    coalesce(new.raw_user_meta_data->>'full_name', split_part(new.email, '@', 1))
+  );
   
-  -- Create default workspace
+  -- 2. Create Default Workspace (Capture ID)
   insert into public.workspaces (name, slug, owner_id)
-  values ('My Workspace', 'ws-' || substr(new.id::text, 1, 8), new.id);
+  values (
+    'Mi Espacio', 
+    'ws-' || substr(new.id::text, 1, 8), 
+    new.id
+  )
+  returning id into new_workspace_id;
   
-  -- Add as owner
+  -- 3. Add Member
   insert into public.workspace_members (workspace_id, user_id, role)
-  values ((select id from public.workspaces where owner_id = new.id limit 1), new.id, 'owner');
+  values (new_workspace_id, new.id, 'owner');
   
-  -- Init usage
+  -- 4. Init Usage
   insert into public.user_usage (user_id) values (new.id);
   
   return new;
+exception
+  when others then
+    -- Log the error details for debugging
+    raise log 'Error in handle_new_user: %', SQLERRM;
+    -- Re-raise to fail the transaction (so user knows signup failed)
+    return null; -- Returning null cancels the auth.users insert? No, for AFTER trigger it doesn't.
+    -- To block signup, we must raise exception.
+    raise exception 'Error initializing user account: %', SQLERRM;
 end;
 $$ language plpgsql security definer;
 

@@ -4,6 +4,8 @@ import { useOnboardingStore } from "./store/onboardingStore";
 import RootGuard from "./components/RootGuard";
 import Login from "./pages/Login";
 import Register from "./pages/Register";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import Home from "./pages/Home";
 import Chat from "./pages/Chat";
 import Projects from "./pages/Projects";
@@ -21,6 +23,7 @@ import { Billing } from "./pages/Billing";
 import { WorkspaceSettings } from "./pages/WorkspaceSettings";
 import { AIFlows } from "./pages/AIFlows";
 import { Profile } from "./pages/Profile";
+import NotFound from "./pages/NotFound";
 import { theme } from "./styles/theme";
 import RootLayout from "./layouts/RootLayout";
 
@@ -77,15 +80,22 @@ export const router = createBrowserRouter([
           </RootGuard>
         ),
       },
-      // Forgot password temporarily disabled
-      // {
-      //   path: "/forgot-password",
-      //   element: (
-      //     <RootGuard requireGuest>
-      //       <ForgotPassword />
-      //     </RootGuard>
-      //   ),
-      // },
+      {
+        path: "/forgot-password",
+        element: (
+          <RootGuard requireGuest>
+            <ForgotPassword />
+          </RootGuard>
+        ),
+      },
+      {
+        path: "/reset-password",
+        element: (
+          <RootGuard requireGuest>
+            <ResetPassword />
+          </RootGuard>
+        ),
+      },
       {
         path: "/home",
         element: (
@@ -221,6 +231,10 @@ export const router = createBrowserRouter([
             <Onboarding />
           </RootGuard>
         ),
+      },
+      {
+        path: "*",
+        element: <NotFound />,
       },
     ],
   },

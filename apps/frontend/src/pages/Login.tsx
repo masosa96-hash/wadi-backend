@@ -6,14 +6,16 @@ import { useAuthStore } from "../store/authStore";
 import { theme } from "../styles/theme";
 import Input from "../components/Input";
 import Button from "../components/Button";
+import SEO from "../components/SEO";
 
 export default function Login() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
-  
+
   const signIn = useAuthStore((state) => state.signIn);
   const navigate = useNavigate();
 
@@ -26,7 +28,7 @@ export default function Login() {
       await signIn(email, password, rememberMe);
       navigate("/home");
     } catch (err: any) {
-      setError(err.message || "Login failed");
+      setError(err.message || "Error al iniciar sesión");
     } finally {
       setLoading(false);
     }
@@ -38,13 +40,7 @@ export default function Login() {
         minHeight: "100vh",
         position: "relative",
         overflow: "hidden",
-        // Web3-style gradient background
-        background: `
-          radial-gradient(ellipse 80% 50% at 50% -20%, rgba(37, 95, 245, 0.1) 0%, transparent 50%),
-          radial-gradient(ellipse 60% 50% at 80% 50%, rgba(123, 140, 255, 0.08) 0%, transparent 50%),
-          radial-gradient(ellipse 60% 50% at 20% 80%, rgba(197, 179, 255, 0.1) 0%, transparent 50%),
-          ${theme.colors.background.primary}
-        `,
+        background: theme.colors.background.primary,
         display: "flex",
         alignItems: "center",
         justifyContent: "center",
@@ -52,6 +48,18 @@ export default function Login() {
         padding: theme.spacing.xl,
       }}
     >
+      <SEO title="Iniciar Sesión" />
+
+      {/* Background Noise Texture */}
+      <div style={{
+        position: "absolute",
+        inset: 0,
+        opacity: 0.03,
+        backgroundImage: `url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noiseFilter'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noiseFilter)'/%3E%3C/svg%3E")`,
+        pointerEvents: "none",
+        zIndex: 0,
+      }} />
+
       {/* Floating background orbs */}
       <div
         style={{
@@ -60,7 +68,7 @@ export default function Login() {
           left: "10%",
           width: "400px",
           height: "400px",
-          background: "radial-gradient(circle, rgba(37, 95, 245, 0.1) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(255, 255, 255, 0.03) 0%, transparent 70%)",
           borderRadius: "50%",
           filter: "blur(80px)",
           opacity: 0.6,
@@ -74,7 +82,7 @@ export default function Login() {
           right: "10%",
           width: "350px",
           height: "350px",
-          background: "radial-gradient(circle, rgba(197, 179, 255, 0.12) 0%, transparent 70%)",
+          background: "radial-gradient(circle, rgba(255, 255, 255, 0.02) 0%, transparent 70%)",
           borderRadius: "50%",
           filter: "blur(70px)",
           opacity: 0.5,
@@ -97,35 +105,16 @@ export default function Login() {
         {/* Glassmorphism card */}
         <div
           style={{
-            background: "rgba(255, 255, 255, 0.85)",
-            backdropFilter: "blur(24px) saturate(180%)",
-            border: "1px solid rgba(214, 225, 242, 0.6)",
+            background: theme.glass.medium.background,
+            backdropFilter: theme.glass.medium.backdropFilter,
+            border: theme.glass.medium.border,
             borderRadius: "32px",
             padding: theme.spacing['3xl'],
-            boxShadow: `
-              0 20px 60px rgba(15, 23, 42, 0.12),
-              0 0 0 1px rgba(255, 255, 255, 0.5) inset,
-              0 0 40px rgba(37, 95, 245, 0.08)
-            `,
+            boxShadow: theme.shadows.xl,
             position: "relative",
             overflow: "hidden",
           }}
         >
-          {/* Gradient border effect */}
-          <div
-            style={{
-              position: "absolute",
-              inset: 0,
-              borderRadius: "32px",
-              padding: "1px",
-              background: "linear-gradient(135deg, rgba(37, 95, 245, 0.15) 0%, rgba(197, 179, 255, 0.1) 100%)",
-              WebkitMask: "linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0)",
-              WebkitMaskComposite: "xor",
-              maskComposite: "exclude",
-              pointerEvents: "none",
-            }}
-          />
-
           {/* Content */}
           <div style={{ position: "relative", zIndex: 1 }}>
             {/* Header with WADI orb */}
@@ -134,9 +123,9 @@ export default function Login() {
               <motion.div
                 animate={{
                   boxShadow: [
-                    "0 0 20px rgba(37, 95, 245, 0.3), 0 0 40px rgba(123, 140, 255, 0.2)",
-                    "0 0 30px rgba(37, 95, 245, 0.4), 0 0 60px rgba(123, 140, 255, 0.3)",
-                    "0 0 20px rgba(37, 95, 245, 0.3), 0 0 40px rgba(123, 140, 255, 0.2)",
+                    "0 0 20px rgba(255, 255, 255, 0.05), 0 0 40px rgba(255, 255, 255, 0.02)",
+                    "0 0 30px rgba(255, 255, 255, 0.08), 0 0 60px rgba(255, 255, 255, 0.04)",
+                    "0 0 20px rgba(255, 255, 255, 0.05), 0 0 40px rgba(255, 255, 255, 0.02)",
                   ]
                 }}
                 transition={{ duration: 3, repeat: Infinity, ease: "easeInOut" }}
@@ -145,196 +134,220 @@ export default function Login() {
                   height: "80px",
                   margin: "0 auto 24px",
                   borderRadius: "50%",
-                  background: theme.gradients.primary,
+                  background: theme.colors.background.surface,
+                  border: `1px solid ${theme.colors.border.subtle}`,
                   display: "flex",
                   alignItems: "center",
                   justifyContent: "center",
                   fontSize: "32px",
                   fontWeight: theme.typography.fontWeight.bold,
-                  color: "#FFFFFF",
+                  color: theme.colors.text.primary,
                   position: "relative",
                 }}
               >
                 W
-                {/* Inner glow */}
-                <div
-                  style={{
-                    position: "absolute",
-                    inset: "10px",
-                    borderRadius: "50%",
-                    background: "radial-gradient(circle, rgba(255, 255, 255, 0.3) 0%, transparent 70%)",
-                    pointerEvents: "none",
-                  }}
-                />
               </motion.div>
 
               <h1 style={{
                 margin: 0,
                 fontSize: theme.typography.fontSize.display,
                 fontWeight: theme.typography.fontWeight.bold,
-                background: theme.gradients.primary,
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-                backgroundClip: "text",
+                color: theme.colors.text.primary,
                 marginBottom: theme.spacing.sm,
-                letterSpacing: "0.5px",
+                letterSpacing: "-1px",
               }}>
                 WADI
               </h1>
               <p style={{
                 margin: 0,
-                fontSize: theme.typography.fontSize.body,
                 color: theme.colors.text.secondary,
+                letterSpacing: "2px",
+                textTransform: "uppercase",
+                fontSize: "10px",
               }}>
-                Tu asistente de IA del futuro
+                WALKING DISASTER
               </p>
             </div>
 
-        <form onSubmit={handleSubmit}>
-          <Input
-            type="email"
-            value={email}
-            onChange={setEmail}
-            label="Email"
-            placeholder="your@email.com"
-            required
-          />
+            <form onSubmit={handleSubmit}>
+              <Input
+                type="email"
+                value={email}
+                onChange={setEmail}
+                label="Email"
+                placeholder="tu@email.com"
+                required
+              />
 
-          <Input
-            type="password"
-            value={password}
-            onChange={setPassword}
-            label="Password"
-            placeholder="Enter your password"
-            required
-          />
+              <div style={{ position: "relative" }}>
+                <Input
+                  type={showPassword ? "text" : "password"}
+                  value={password}
+                  onChange={setPassword}
+                  label="Contraseña"
+                  placeholder="Tu contraseña"
+                  required
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  style={{
+                    position: "absolute",
+                    right: "12px",
+                    top: "38px",
+                    background: "none",
+                    border: "none",
+                    color: theme.colors.text.tertiary,
+                    cursor: "pointer",
+                    fontSize: "12px",
+                  }}
+                >
+                  {showPassword ? "Ocultar" : "Mostrar"}
+                </button>
+              </div>
 
-          {/* Remember Me Checkbox */}
-          <div style={{
-            marginBottom: theme.spacing.lg,
-            display: 'flex',
-            alignItems: 'center',
-            gap: theme.spacing.sm,
-          }}>
-            <input
-              type="checkbox"
-              id="rememberMe"
-              checked={rememberMe}
-              onChange={(e) => setRememberMe(e.target.checked)}
-              style={{
-                width: '18px',
-                height: '18px',
-                cursor: 'pointer',
-                accentColor: theme.colors.accent.primary,
-              }}
-            />
-            <label
-              htmlFor="rememberMe"
-              style={{
-                fontSize: theme.typography.fontSize.body,
-                color: theme.colors.text.secondary,
-                cursor: 'pointer',
-                userSelect: 'none',
-              }}
-            >
-              Recordar sesión
-            </label>
-          </div>
-
-          {error && (
-            <motion.div
-              initial={{ opacity: 0, y: -10 }}
-              animate={{ opacity: 1, y: 0 }}
-              style={{
-                background: `${theme.colors.error}15`,
-                border: `1px solid ${theme.colors.error}40`,
-                borderRadius: theme.borderRadius.medium,
-                padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+              {/* Remember Me Checkbox */}
+              <div style={{
                 marginBottom: theme.spacing.lg,
-                color: theme.colors.error,
-                fontSize: theme.typography.fontSize.bodySmall,
                 display: 'flex',
                 alignItems: 'center',
                 gap: theme.spacing.sm,
-              }}
-            >
-              <span>⚠️</span>
-              <span>{error}</span>
-            </motion.div>
-          )}
+              }}>
+                <input
+                  type="checkbox"
+                  id="rememberMe"
+                  checked={rememberMe}
+                  onChange={(e) => setRememberMe(e.target.checked)}
+                  style={{
+                    width: '16px',
+                    height: '16px',
+                    cursor: 'pointer',
+                    accentColor: theme.colors.text.primary,
+                    background: theme.colors.background.tertiary,
+                    border: `1px solid ${theme.colors.border.default}`,
+                  }}
+                />
+                <label
+                  htmlFor="rememberMe"
+                  style={{
+                    fontSize: theme.typography.fontSize.bodySmall,
+                    color: theme.colors.text.secondary,
+                    cursor: 'pointer',
+                    userSelect: 'none',
+                  }}
+                >
+                  Recordar sesión
+                </label>
+              </div>
 
-          <motion.div
-            whileHover={{ scale: 1.02 }}
-            whileTap={{ scale: 0.98 }}
-          >
-            <Button
-              type="submit"
-              disabled={loading}
-              fullWidth
-              style={{ 
-                height: '52px', 
-                fontSize: theme.typography.fontSize.bodyLarge,
-                background: theme.gradients.button,
-                boxShadow: "0 0 24px rgba(37, 95, 245, 0.2)",
-                border: "none",
-              }}
-            >
-              {loading ? "Entrando..." : "Ingresar"}
-            </Button>
-          </motion.div>
+              {error && (
+                <motion.div
+                  initial={{ opacity: 0, y: -10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  style={{
+                    background: `${theme.colors.error}15`,
+                    border: `1px solid ${theme.colors.error}40`,
+                    borderRadius: theme.borderRadius.medium,
+                    padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+                    marginBottom: theme.spacing.lg,
+                    color: theme.colors.error,
+                    fontSize: theme.typography.fontSize.bodySmall,
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: theme.spacing.sm,
+                  }}
+                >
+                  <span>⚠️</span>
+                  <span>{error}</span>
+                </motion.div>
+              )}
 
-          {/* Forgot Password Link */}
-          <div style={{
-            marginTop: theme.spacing.md,
-            textAlign: 'right',
-          }}>
-            <Link
-              to="/forgot-password"
+              <motion.div
+                whileHover={{ scale: 1.02 }}
+                whileTap={{ scale: 0.98 }}
+              >
+                <Button
+                  type="submit"
+                  disabled={loading}
+                  fullWidth
+                  style={{
+                    height: '48px',
+                    fontSize: theme.typography.fontSize.body,
+                    background: theme.colors.text.primary,
+                    color: theme.colors.background.primary,
+                    border: "none",
+                    fontWeight: theme.typography.fontWeight.medium,
+                  }}
+                >
+                  {loading ? "Entrando..." : "Ingresar"}
+                </Button>
+              </motion.div>
+
+              {/* Forgot Password Link */}
+              <div style={{
+                marginTop: theme.spacing.md,
+                textAlign: 'center',
+              }}>
+                <Link
+                  to="/forgot-password"
+                  style={{
+                    color: theme.colors.text.secondary,
+                    textDecoration: "none",
+                    fontSize: theme.typography.fontSize.bodySmall,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.color = theme.colors.text.primary;
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.color = theme.colors.text.secondary;
+                  }}
+                >
+                  ¿Olvidaste tu contraseña?
+                </Link>
+              </div>
+            </form>
+
+            <div
               style={{
-                color: theme.colors.accent.primary,
-                textDecoration: "none",
+                marginTop: theme.spacing.xl,
+                textAlign: "center",
                 fontSize: theme.typography.fontSize.bodySmall,
-                fontWeight: theme.typography.fontWeight.medium,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.textDecoration = 'underline';
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.textDecoration = 'none';
+                color: theme.colors.text.tertiary,
               }}
             >
-              ¿Olvidaste tu contraseña?
-            </Link>
+              ¿No tenés cuenta?{" "}
+              <Link
+                to="/register"
+                style={{
+                  color: theme.colors.text.primary,
+                  textDecoration: "none",
+                  fontWeight: theme.typography.fontWeight.medium,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.textDecoration = 'underline';
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.textDecoration = 'none';
+                }}
+              >
+                Crear cuenta
+              </Link>
+            </div>
           </div>
-        </form>
-
-        <div
-          style={{
-            marginTop: theme.spacing.xl,
-            textAlign: "center",
-            fontSize: theme.typography.fontSize.body,
-            color: theme.colors.text.secondary,
-          }}
-        >
-          ¿No tenés cuenta?{" "}
-          <Link
-            to="/register"
-            style={{
-              color: theme.colors.accent.primary,
-              textDecoration: "none",
-              fontWeight: theme.typography.fontWeight.semibold,
-            }}
-            onMouseEnter={(e) => {
-              e.currentTarget.style.textDecoration = 'underline';
-            }}
-            onMouseLeave={(e) => {
-              e.currentTarget.style.textDecoration = 'none';
-            }}
-          >
-            Crear cuenta
-          </Link>
         </div>
-          </div>
+
+        {/* Footer Links */}
+        <div style={{
+          marginTop: theme.spacing.xl,
+          display: "flex",
+          justifyContent: "center",
+          gap: theme.spacing.lg,
+          fontSize: theme.typography.fontSize.xs,
+          color: theme.colors.text.tertiary,
+        }}>
+          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Términos</a>
+          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Privacidad</a>
+          <a href="#" style={{ color: "inherit", textDecoration: "none" }}>Soporte</a>
         </div>
       </motion.div>
     </div>
