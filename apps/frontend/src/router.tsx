@@ -1,4 +1,4 @@
-import { createBrowserRouter, Navigate, type LoaderFunction } from "react-router-dom";
+import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 import { useOnboardingStore } from "./store/onboardingStore";
 import RootGuard from "./components/RootGuard";

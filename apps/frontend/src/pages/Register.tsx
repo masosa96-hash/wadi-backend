@@ -8,7 +8,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import SEO from "../components/SEO";
 import AuthLayout from "../layouts/AuthLayout";
-import { useLanguage } from "../store/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 export default function Register() {
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ export default function Register() {
 
   const signUp = useAuthStore((state) => state.signUp);
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useTranslation('auth');
 
   const getPasswordStrength = (pass: string) => {
     if (pass.length === 0) return 0;
@@ -45,8 +45,9 @@ export default function Register() {
     try {
       await signUp(email, password, displayName);
       navigate("/home");
-    } catch (err: any) {
-      setError(err.message || t('common.error'));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : t('common.error');
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -54,17 +55,17 @@ export default function Register() {
 
   return (
     <AuthLayout
-      title={t('auth.register.title')}
-      subtitle={t('auth.register.subtitle')}
+      title={t('register.title')}
+      subtitle={t('register.subtitle')}
     >
-      <SEO title={t('auth.register.title')} />
+      <SEO title={t('register.title')} />
 
       <form onSubmit={handleSubmit}>
         <Input
           type="text"
           value={displayName}
           onChange={setDisplayName}
-          label={t('auth.register.full_name')}
+          label={t('register.full_name')}
           placeholder="Tu nombre"
           required
         />
@@ -73,7 +74,7 @@ export default function Register() {
           type="email"
           value={email}
           onChange={setEmail}
-          label={t('auth.login.email')}
+          label={t('login.email')}
           placeholder="tu@email.com"
           required
         />
@@ -83,7 +84,7 @@ export default function Register() {
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={setPassword}
-            label={t('auth.login.password')}
+            label={t('login.password')}
             placeholder="******"
             required
             minLength={6}
@@ -102,7 +103,7 @@ export default function Register() {
               fontSize: "12px",
             }}
           >
-            {showPassword ? t('auth.login.hide_password') : t('auth.login.show_password')}
+            {showPassword ? t('login.hide_password') : t('login.show_password')}
           </button>
 
           {/* Password Strength Indicator */}
@@ -169,7 +170,7 @@ export default function Register() {
               fontWeight: theme.typography.fontWeight.medium,
             }}
           >
-            {loading ? t('auth.register.submitting') : t('auth.register.submit')}
+            {loading ? t('register.submitting') : t('register.submit')}
           </Button>
         </motion.div>
       </form>
@@ -182,7 +183,7 @@ export default function Register() {
           color: theme.colors.text.tertiary,
         }}
       >
-        {t('auth.register.has_account')}{" "}
+        {t('register.has_account')}{" "}
         <Link
           to="/login"
           style={{
@@ -197,7 +198,7 @@ export default function Register() {
             e.currentTarget.style.textDecoration = 'none';
           }}
         >
-          {t('auth.register.login')}
+          {t('register.login')}
         </Link>
       </div>
     </AuthLayout>

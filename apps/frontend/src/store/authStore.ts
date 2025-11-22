@@ -9,11 +9,11 @@ interface AuthState {
   loading: boolean;
 
   // Actions
-  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
-  signUp: (email: string, password: string, displayName: string) => Promise<void>;
-  signOut: () => Promise<void>;
-  initialize: () => Promise<void>;
-  resetPassword: (email: string) => Promise<void>;
+  requestPasswordReset: (email: string) => Promise<void>,
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<void>,
+  signUp: (email: string, password: string, displayName: string) => Promise<void>,
+  signOut: () => Promise<void>,
+  initialize: () => Promise<void>,
 }
 
 export const useAuthStore = create<AuthState>()(
@@ -65,7 +65,7 @@ export const useAuthStore = create<AuthState>()(
         set({ user: null, session: null });
       },
 
-      resetPassword: async (email: string) => {
+      requestPasswordReset: async (email: string) => {
         const { error } = await supabase.auth.resetPasswordForEmail(email, {
           redirectTo: `${window.location.origin}/reset-password`,
         });

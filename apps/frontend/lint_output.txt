@@ -1,0 +1,247 @@
+
+> frontend@0.0.0 lint
+> eslint .
+
+
+E:\WADI\apps\frontend\src\_archived\App.tsx
+  32:14  error  'err' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\components\ChatInterface.tsx
+  4:10  error  'useTranslation' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\components\CommandPalette.tsx
+  56:9  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+E:\WADI\apps\frontend\src\components\ErrorBoundary.tsx
+  25:48  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\components\MarkdownRenderer.tsx
+   25:24  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+  104:21  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+  119:25  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+  135:22  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+  151:22  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+  164:22  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+  177:22  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+  190:30  error  'node' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\components\RenameRunModal.tsx
+  28:5  warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+
+E:\WADI\apps\frontend\src\components\ShareModal.tsx
+  34:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\components\WorkspaceDropdown.tsx
+  24:6  warning  React Hook useEffect has missing dependencies: 'fetchWorkspaces', 'loadingStates.fetchWorkspaces', and 'workspaces.length'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+
+E:\WADI\apps\frontend\src\config\api.ts
+  214:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\main.tsx
+  8:10  error  Fast refresh only works when a file has exports. Move your component(s) to a separate file  react-refresh/only-export-components
+
+E:\WADI\apps\frontend\src\pages\AdminPanel.tsx
+  10:13  error  'socket' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\pages\Billing.tsx
+  14:6  warning  React Hook useEffect has a missing dependency: 'loadUsage'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+E:\WADI\apps\frontend\src\pages\Chat.tsx
+  8:10  error  'useTranslation' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\pages\Favorites.tsx
+  15:6  warning  React Hook useEffect has a missing dependency: 'loadFavorites'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+E:\WADI\apps\frontend\src\pages\ForgotPassword.tsx
+  32:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\pages\Login.tsx
+  33:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\pages\Presets.tsx
+   28:56  error    Unexpected any. Specify a different type                                                                                               @typescript-eslint/no-explicit-any
+   43:6   warning  React Hook useEffect has missing dependencies: 'fetchPresets' and 'fetchProjects'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+  109:34  error    Unexpected any. Specify a different type                                                                                               @typescript-eslint/no-explicit-any
+  121:37  error    Unexpected any. Specify a different type                                                                                               @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\pages\Profile.tsx
+  10:26  error  'usage' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\pages\Projects.tsx
+  35:5  error  Error: Calling setState synchronously within an effect can trigger cascading renders
+
+Effects are intended to synchronize state between React and external systems such as manually updating the DOM, state management libraries, or other platform APIs. In general, the body of an effect should do one or both of the following:
+* Update external systems with the latest state from React.
+* Subscribe for updates from some external system, calling setState in a callback function when external state changes.
+
+Calling setState synchronously within an effect body causes cascading renders that can hurt performance, and is not recommended. (https://react.dev/learn/you-might-not-need-an-effect).
+
+E:\WADI\apps\frontend\src\pages\Projects.tsx:35:5
+  33 |
+  34 |   useEffect(() => {
+> 35 |     loadProjects();
+     |     ^^^^^^^^^^^^ Avoid calling setState() directly within an effect
+  36 |   }, []);
+  37 |
+  38 |   return (  react-hooks/set-state-in-effect
+
+E:\WADI\apps\frontend\src\pages\Register.tsx
+  48:19  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\pages\ResetPassword.tsx
+  44:23  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\pages\Search.tsx
+  5:8   error  'Input' is defined but never used         @typescript-eslint/no-unused-vars
+  9:42  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\pages\Templates.tsx
+  15:6  warning  React Hook useEffect has a missing dependency: 'loadTemplates'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+
+E:\WADI\apps\frontend\src\pages\WorkspaceDetail.tsx
+   53:6   warning  React Hook useEffect has missing dependencies: 'fetchWorkspaces', 'isDefaultWorkspace', and 'workspaces.length'. Either include them or remove the dependency array  react-hooks/exhaustive-deps
+   60:6   warning  React Hook useEffect has missing dependencies: 'fetchMembers' and 'isDefaultWorkspace'. Either include them or remove the dependency array                           react-hooks/exhaustive-deps
+   67:5   warning  Unused eslint-disable directive (no problems were reported from 'react-hooks/exhaustive-deps')
+  223:88  error    Unexpected any. Specify a different type                                                                                                                             @typescript-eslint/no-explicit-any
+  301:64  error    Unexpected any. Specify a different type                                                                                                                             @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\pages\WorkspaceSettings.tsx
+  9:68  error  'updateMemberRole' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\pages\Workspaces.tsx
+   20:6   warning  React Hook useEffect has a missing dependency: 'fetchWorkspaces'. Either include it or remove the dependency array  react-hooks/exhaustive-deps
+  129:58  error    Unexpected any. Specify a different type                                                                            @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\router.tsx
+   1:46  error  'LoaderFunction' is defined but never used                                                              @typescript-eslint/no-unused-vars
+   3:10  error  'useOnboardingStore' is defined but never used                                                          @typescript-eslint/no-unused-vars
+  32:10  error  Fast refresh only works when a file only exports components. Move your component(s) to a separate file  react-refresh/only-export-components
+
+E:\WADI\apps\frontend\src\store\authStore.ts
+  26:55  error  '_rememberMe' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\store\billingStore.ts
+  54:20  error  'e' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\store\chatStore.ts
+    2:10  error  'persist' is defined but never used                              @typescript-eslint/no-unused-vars
+  163:9   error  'targetConversationId' is never reassigned. Use 'const' instead  prefer-const
+  168:17  error  'data' is assigned a value but never used                        @typescript-eslint/no-unused-vars
+  168:62  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  249:21  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  276:21  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+  303:21  error  Unexpected any. Specify a different type                         @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\debugStore.ts
+   7:14  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   8:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  15:47  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  15:63  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  48:59  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  52:44  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  52:60  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:40  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  56:56  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:38  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  60:54  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\favoritesStore.ts
+   64:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   93:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\filesStore.ts
+   90:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  119:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  136:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  177:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\memoryStore.ts
+   11:28  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   63:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   87:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  106:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  123:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\organizationStore.ts
+  19:15  error  'get' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\store\presetsStore.ts
+   16:13  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   58:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  119:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  144:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  167:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  191:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  224:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\projectsStore.ts
+   89:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  118:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  141:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  164:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\runsStore.ts
+   97:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  126:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  149:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  178:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  202:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\sessionsStore.ts
+  100:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  114:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  140:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  171:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  196:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  223:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\tagsStore.ts
+   96:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  121:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  152:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  176:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  198:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  220:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  242:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  264:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\templatesStore.ts
+  49:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\store\workspaceStore.ts
+  62:26  error  'error' is defined but never used  @typescript-eslint/no-unused-vars
+  86:26  error  'error' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\frontend\src\store\workspacesStore.ts
+  121:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  149:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  172:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  196:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  222:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  248:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  273:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  296:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\types\billing.ts
+  42:16  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\utils\errorHandler.ts
+  16:21  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  21:37  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:34  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\utils\logger.ts
+   9:30  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  17:76  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  43:53  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  49:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  53:52  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  57:68  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\frontend\src\utils\retry.ts
+  91:11  error  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+Ô£û 130 problems (119 errors, 11 warnings)
+  1 error and 3 warnings potentially fixable with the `--fix` option.
+

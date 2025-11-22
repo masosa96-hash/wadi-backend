@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { theme } from '../styles/theme';
-import { useLanguage } from '../store/LanguageContext';
+// import { useTranslation } from "react-i18next";
 import Button from './Button';
 import Input from './Input';
 
@@ -18,7 +18,7 @@ interface ChatInterfaceProps {
 }
 
 export default function ChatInterface({ currentUser }: ChatInterfaceProps) {
-    // const { t } = useLanguage(); // Unused for now
+    // const { t } = useTranslation('auth'); // Unused for now
     const [messages, setMessages] = useState<Message[]>([]);
     const [inputText, setInputText] = useState('');
     const [isAnonymous, setIsAnonymous] = useState(false);

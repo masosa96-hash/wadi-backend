@@ -5,13 +5,13 @@ import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
 import { theme } from "../styles/theme";
 import ChatInterface from "../components/ChatInterface";
-import { useLanguage } from "../store/LanguageContext";
+// import { useTranslation } from "react-i18next";
 
 type ChatMode = 'ai' | 'mirror';
 
 export default function Chat() {
   const { user } = useAuthStore();
-  // const { t } = useLanguage(); // Unused for now
+  // const { t } = useTranslation('auth'); // Unused for now
   const {
     messages,
     sendMessage,

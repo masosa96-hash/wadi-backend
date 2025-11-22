@@ -7,7 +7,7 @@ import { useChatStore } from "../store/chatStore";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
 import { SkeletonList } from "../components/Skeleton";
-import { useLanguage } from "../store/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 import { useProjectsStore } from "../store/projectsStore";
 import { useWorkspaceStore } from "../store/workspaceStore";
@@ -15,7 +15,7 @@ import { useWorkspaceStore } from "../store/workspaceStore";
 export default function Home() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
-  const { t } = useLanguage();
+  const { t } = useTranslation('auth');
   const { conversations, loadConversations, loadingConversations } = useChatStore();
   const { projects, fetchProjects } = useProjectsStore();
   const { workspaces, loadWorkspaces } = useWorkspaceStore();

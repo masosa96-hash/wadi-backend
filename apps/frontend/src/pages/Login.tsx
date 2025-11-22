@@ -8,7 +8,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import SEO from "../components/SEO";
 import AuthLayout from "../layouts/AuthLayout";
-import { useLanguage } from "../store/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 export default function Login() {
   const [email, setEmail] = useState("");
@@ -20,7 +20,7 @@ export default function Login() {
 
   const signIn = useAuthStore((state) => state.signIn);
   const navigate = useNavigate();
-  const { t } = useLanguage();
+  const { t } = useTranslation('auth');
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -30,8 +30,9 @@ export default function Login() {
     try {
       await signIn(email, password, rememberMe);
       navigate("/home");
-    } catch (err: any) {
-      setError(err.message || t('common.error'));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : t('common.error');
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -39,17 +40,17 @@ export default function Login() {
 
   return (
     <AuthLayout
-      title={t('auth.login.title')}
-      subtitle={t('auth.login.subtitle')}
+      title={t('login.title')}
+      subtitle={t('login.subtitle')}
     >
-      <SEO title={t('auth.login.title')} />
+      <SEO title={t('login.title')} />
 
       <form onSubmit={handleSubmit}>
         <Input
           type="email"
           value={email}
           onChange={setEmail}
-          label={t('auth.login.email')}
+          label={t('login.email')}
           placeholder="tu@email.com"
           required
         />
@@ -59,7 +60,7 @@ export default function Login() {
             type={showPassword ? "text" : "password"}
             value={password}
             onChange={setPassword}
-            label={t('auth.login.password')}
+            label={t('login.password')}
             placeholder="******"
             required
           />
@@ -77,7 +78,7 @@ export default function Login() {
               fontSize: "12px",
             }}
           >
-            {showPassword ? t('auth.login.hide_password') : t('auth.login.show_password')}
+            {showPassword ? t('login.hide_password') : t('login.show_password')}
           </button>
         </div>
 
@@ -111,7 +112,7 @@ export default function Login() {
               userSelect: 'none',
             }}
           >
-            {t('auth.login.remember_me')}
+            {t('login.remember_me')}
           </label>
         </div>
 
@@ -154,7 +155,7 @@ export default function Login() {
               fontWeight: theme.typography.fontWeight.medium,
             }}
           >
-            {loading ? t('auth.login.submitting') : t('auth.login.submit')}
+            {loading ? t('login.submitting') : t('login.submit')}
           </Button>
         </motion.div>
 
@@ -177,7 +178,7 @@ export default function Login() {
               e.currentTarget.style.color = theme.colors.text.secondary;
             }}
           >
-            {t('auth.login.forgot_password')}
+            {t('login.forgot_password')}
           </Link>
         </div>
       </form>
@@ -190,7 +191,7 @@ export default function Login() {
           color: theme.colors.text.tertiary,
         }}
       >
-        {t('auth.login.no_account')}{" "}
+        {t('login.no_account')}{" "}
         <Link
           to="/register"
           style={{
@@ -205,7 +206,7 @@ export default function Login() {
             e.currentTarget.style.textDecoration = 'none';
           }}
         >
-          {t('auth.login.create_account')}
+          {t('login.create_account')}
         </Link>
       </div>
     </AuthLayout>

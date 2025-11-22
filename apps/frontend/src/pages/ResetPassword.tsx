@@ -7,7 +7,7 @@ import Input from "../components/Input";
 import Button from "../components/Button";
 import { supabase } from "../config/supabase";
 import AuthLayout from "../layouts/AuthLayout";
-import { useLanguage } from "../store/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 export default function ResetPassword() {
     const [password, setPassword] = useState("");
@@ -17,7 +17,7 @@ export default function ResetPassword() {
     const [success, setSuccess] = useState(false);
 
     const navigate = useNavigate();
-    const { t } = useLanguage();
+    const { t } = useTranslation('auth');
 
     const handleSubmit = async (e: FormEvent) => {
         e.preventDefault();
@@ -41,8 +41,9 @@ export default function ResetPassword() {
             if (error) throw error;
             setSuccess(true);
             setTimeout(() => navigate("/login"), 3000);
-        } catch (err: any) {
-            setError(err.message || t('common.error'));
+        } catch (err) {
+            const message = err instanceof Error ? err.message : t('common.error');
+            setError(message);
         } finally {
             setLoading(false);
         }
@@ -50,8 +51,8 @@ export default function ResetPassword() {
 
     return (
         <AuthLayout
-            title={t('auth.reset.title')}
-            subtitle={t('auth.reset.subtitle')}
+            title={t('reset.title')}
+            subtitle={t('reset.subtitle')}
         >
             {success ? (
                 <div style={{ textAlign: "center" }}>
@@ -62,7 +63,7 @@ export default function ResetPassword() {
                         borderRadius: theme.borderRadius.medium,
                         marginBottom: theme.spacing.lg
                     }}>
-                        {t('auth.reset.success_message')}
+                        {t('reset.success_message')}
                     </div>
                     <p style={{ color: theme.colors.text.secondary }}>
                         Redirigiendo al login...
@@ -74,7 +75,7 @@ export default function ResetPassword() {
                         type="password"
                         value={password}
                         onChange={setPassword}
-                        label={t('auth.login.password')}
+                        label={t('login.password')}
                         placeholder="******"
                         required
                         minLength={6}
@@ -128,7 +129,7 @@ export default function ResetPassword() {
                                 border: "none",
                             }}
                         >
-                            {loading ? t('auth.reset.submitting') : t('auth.reset.submit')}
+                            {loading ? t('reset.submitting') : t('reset.submit')}
                         </Button>
                     </motion.div>
                 </form>

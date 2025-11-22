@@ -2,19 +2,20 @@ import { useState } from "react";
 import type { FormEvent } from "react";
 import { Link } from "react-router-dom";
 import { motion } from "framer-motion";
-import { supabase } from "../config/supabase";
+import { useAuthStore } from "../store/authStore";
 import { theme } from "../styles/theme";
 import Input from "../components/Input";
 import Button from "../components/Button";
 import AuthLayout from "../layouts/AuthLayout";
-import { useLanguage } from "../store/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 export default function ForgotPassword() {
   const [email, setEmail] = useState("");
   const [error, setError] = useState("");
   const [success, setSuccess] = useState(false);
   const [loading, setLoading] = useState(false);
-  const { t } = useLanguage();
+  const { t } = useTranslation('auth');
+  const requestPasswordReset = useAuthStore((state) => state.requestPasswordReset);
 
   const handleSubmit = async (e: FormEvent) => {
     e.preventDefault();
@@ -22,15 +23,11 @@ export default function ForgotPassword() {
     setLoading(true);
 
     try {
-      const { error } = await supabase.auth.resetPasswordForEmail(email, {
-        redirectTo: `${window.location.origin}/reset-password`,
-      });
-
-      if (error) throw error;
-
+      await requestPasswordReset(email);
       setSuccess(true);
-    } catch (err: any) {
-      setError(err.message || t('common.error'));
+    } catch (err) {
+      const message = err instanceof Error ? err.message : t('common.error');
+      setError(message);
     } finally {
       setLoading(false);
     }
@@ -38,8 +35,8 @@ export default function ForgotPassword() {
 
   return (
     <AuthLayout
-      title={t('auth.forgot.title')}
-      subtitle={t('auth.forgot.subtitle')}
+      title={t('forgot.title')}
+      subtitle={t('forgot.subtitle')}
     >
       {success ? (
         // Success state
@@ -65,14 +62,14 @@ export default function ForgotPassword() {
               color: theme.colors.text.primary,
               marginBottom: theme.spacing.sm,
             }}>
-              {t('auth.forgot.success_message')}
+              {t('forgot.success_message')}
             </p>
             <p style={{
               margin: 0,
               fontSize: theme.typography.fontSize.bodySmall,
               color: theme.colors.text.secondary,
             }}>
-              {t('auth.forgot.spam_hint')}
+              {t('forgot.spam_hint')}
             </p>
           </motion.div>
 
@@ -88,7 +85,7 @@ export default function ForgotPassword() {
                 border: "none",
               }}
             >
-              {t('auth.forgot.back_to_login')}
+              {t('forgot.back_to_login')}
             </Button>
           </Link>
         </div>
@@ -99,7 +96,7 @@ export default function ForgotPassword() {
             type="email"
             value={email}
             onChange={setEmail}
-            label={t('auth.login.email')}
+            label={t('login.email')}
             placeholder="your@email.com"
             required
           />
@@ -142,7 +139,7 @@ export default function ForgotPassword() {
                 border: "none",
               }}
             >
-              {loading ? t('auth.forgot.submitting') : t('auth.forgot.submit')}
+              {loading ? t('forgot.submitting') : t('forgot.submit')}
             </Button>
           </motion.div>
         </form>
@@ -156,7 +153,7 @@ export default function ForgotPassword() {
           color: theme.colors.text.secondary,
         }}
       >
-        {t('auth.forgot.remembered')}{" "}
+        {t('forgot.remembered')}{" "}
         <Link
           to="/login"
           style={{
@@ -171,7 +168,7 @@ export default function ForgotPassword() {
             e.currentTarget.style.textDecoration = 'none';
           }}
         >
-          {t('auth.forgot.back_to_login')}
+          {t('forgot.back_to_login')}
         </Link>
       </div>
     </AuthLayout>

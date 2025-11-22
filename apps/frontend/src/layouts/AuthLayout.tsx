@@ -1,7 +1,7 @@
 import { ReactNode } from "react";
 import { motion } from "framer-motion";
 import { theme } from "../styles/theme";
-import { useLanguage } from "../store/LanguageContext";
+import { useTranslation } from "react-i18next";
 
 interface AuthLayoutProps {
     children: ReactNode;
@@ -10,7 +10,7 @@ interface AuthLayoutProps {
 }
 
 export default function AuthLayout({ children, title, subtitle }: AuthLayoutProps) {
-    const { language, setLanguage } = useLanguage();
+    const { i18n } = useTranslation();
 
     return (
         <div
@@ -34,8 +34,8 @@ export default function AuthLayout({ children, title, subtitle }: AuthLayoutProp
                 zIndex: 50,
             }}>
                 <select
-                    value={language}
-                    onChange={(e) => setLanguage(e.target.value as any)}
+                    value={i18n.language}
+                    onChange={(e) => i18n.changeLanguage(e.target.value)}
                     style={{
                         background: 'rgba(255, 255, 255, 0.05)',
                         border: `1px solid ${theme.colors.border.subtle}`,
