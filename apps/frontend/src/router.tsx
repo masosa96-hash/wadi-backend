@@ -91,7 +91,7 @@ export const router = createBrowserRouter([
       {
         path: "/reset-password",
         element: (
-          <RootGuard requireGuest>
+          <RootGuard requireAuth>
             <ResetPassword />
           </RootGuard>
         ),
