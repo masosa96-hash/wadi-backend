@@ -160,7 +160,7 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     // If no conversation, create one first via REST (or handle in WS if we want to support new convos via WS)
     // For now, let's assume we need a conversation ID to connect WS.
     // If currentConversationId is null, we might need to create it first.
-    let targetConversationId = currentConversationId;
+    const targetConversationId = currentConversationId;
 
     if (!targetConversationId) {
       try {

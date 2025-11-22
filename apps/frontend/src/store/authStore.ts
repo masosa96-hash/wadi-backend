@@ -13,7 +13,7 @@ interface AuthState {
   signIn: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signOut: () => Promise<void>;
-  /* eslint-disable-next-line */
+   
   initialize: () => Promise<void>;
 }
 

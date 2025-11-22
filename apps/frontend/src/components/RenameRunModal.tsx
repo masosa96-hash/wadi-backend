@@ -25,7 +25,7 @@ export default function RenameRunModal({
     if (isOpen) {
       setName(currentName);
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+     
   }, [isOpen, currentName]);
 
   const handleSubmit = async (e: React.FormEvent) => {
