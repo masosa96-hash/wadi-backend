@@ -88,7 +88,7 @@ export async function apiGet<T>(endpoint: string, retryOptions?: RetryOptions): 
 
 export async function apiPost<T>(
     endpoint: string,
-    body: any,
+    body: unknown,
     retryOptions?: RetryOptions
 ): Promise<T> {
     const token = localStorage.getItem("wadi_token");
