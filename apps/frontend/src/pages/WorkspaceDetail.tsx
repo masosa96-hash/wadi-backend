@@ -9,7 +9,7 @@ import Modal from "../components/Modal";
 export const WorkspaceDetail: React.FC = () => {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  
+
   const {
     workspaces,
     currentWorkspaceMembers,
@@ -64,6 +64,7 @@ export const WorkspaceDetail: React.FC = () => {
       setEditName(currentWorkspace.name);
       setEditDescription(currentWorkspace.description || "");
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [workspace, isDefaultWorkspace, currentWorkspace]);
 
   const handleDeleteWorkspace = async () => {

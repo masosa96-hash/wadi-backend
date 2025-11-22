@@ -23,7 +23,7 @@ export const useAuthStore = create<AuthState>()(
       session: null,
       loading: true,
 
-      signIn: async (email: string, password: string, rememberMe: boolean = true) => {
+      signIn: async (email: string, password: string, _rememberMe: boolean = true) => {
         // Clear any existing session first
         await supabase.auth.signOut();
 

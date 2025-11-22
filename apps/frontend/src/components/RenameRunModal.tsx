@@ -25,11 +25,12 @@ export default function RenameRunModal({
     if (isOpen) {
       setName(currentName);
     }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [isOpen, currentName]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    
+
     const trimmedName = name.trim();
     if (!trimmedName) {
       return;
@@ -56,7 +57,7 @@ export default function RenameRunModal({
           required
           autoFocus
         />
-        
+
         <div style={{
           display: "flex",
           gap: theme.spacing.md,
@@ -71,8 +72,8 @@ export default function RenameRunModal({
           >
             Cancel
           </Button>
-          <Button 
-            type="submit" 
+          <Button
+            type="submit"
             disabled={isLoading || !name.trim()}
           >
             {isLoading ? "Saving..." : "Save"}

@@ -10,14 +10,13 @@ interface LanguageContextType {
 const LanguageContext = createContext<LanguageContextType | undefined>(undefined);
 
 export function LanguageProvider({ children }: { children: ReactNode }) {
-    const [language, setLanguageState] = useState<Language>('es-MX');
-
-    useEffect(() => {
+    const [language, setLanguageState] = useState<Language>(() => {
         const savedLang = localStorage.getItem('wadi-language') as Language;
         if (savedLang && (savedLang === 'es-MX' || savedLang === 'en')) {
-            setLanguageState(savedLang);
+            return savedLang;
         }
-    }, []);
+        return 'es-MX';
+    });
 
     const setLanguage = (lang: Language) => {
         setLanguageState(lang);

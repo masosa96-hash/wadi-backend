@@ -53,6 +53,7 @@ export default function CommandPalette({ isOpen, onClose }: CommandPaletteProps)
             setQuery("");
             setSelectedIndex(0);
         }
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [isOpen]);
 
     useEffect(() => {

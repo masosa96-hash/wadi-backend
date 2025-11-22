@@ -20,10 +20,6 @@ export default function Projects() {
   const [projects, setProjects] = useState<Project[]>([]);
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    loadProjects();
-  }, []);
-
   const loadProjects = async () => {
     try {
       // TODO: Fetch from API
@@ -34,6 +30,10 @@ export default function Projects() {
       setLoading(false);
     }
   };
+
+  useEffect(() => {
+    loadProjects();
+  }, []);
 
   return (
     <PhoneShell>

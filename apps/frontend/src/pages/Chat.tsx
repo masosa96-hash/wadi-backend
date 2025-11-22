@@ -11,7 +11,7 @@ type ChatMode = 'ai' | 'mirror';
 
 export default function Chat() {
   const { user } = useAuthStore();
-  const { t } = useLanguage();
+  // const { t } = useLanguage(); // Unused for now
   const {
     messages,
     sendMessage,
@@ -20,7 +20,7 @@ export default function Chat() {
 
   const [mode, setMode] = useState<ChatMode>('ai');
   const [inputMessage, setInputMessage] = useState("");
-  const [showActions, setShowActions] = useState(false);
+  // const [showActions, setShowActions] = useState(false); // Unused for now
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
