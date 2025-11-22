@@ -10,6 +10,7 @@ export default defineConfig({
     },
   },
   build: {
+    chunkSizeWarningLimit: 1000,
     outDir: 'dist',
     sourcemap: false,
     rollupOptions: {
@@ -25,3 +26,4 @@ export default defineConfig({
     exclude: ['@wadi/chat-core'],
   },
 })
+
