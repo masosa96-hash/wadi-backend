@@ -40,7 +40,7 @@ export const Presets: React.FC = () => {
   useEffect(() => {
     fetchPresets();
     fetchProjects();
-  }, []);
+  }, [fetchPresets, fetchProjects]);
 
   const handleCreate = async () => {
     try {
@@ -188,10 +188,10 @@ export const Presets: React.FC = () => {
                         {preset.description}
                       </p>
                     )}
-                    <div style={{ 
-                      padding: "12px", 
-                      backgroundColor: "#f5f5f5", 
-                      borderRadius: "4px", 
+                    <div style={{
+                      padding: "12px",
+                      backgroundColor: "#f5f5f5",
+                      borderRadius: "4px",
                       fontSize: "13px",
                       fontFamily: "monospace",
                       marginBottom: "12px",
@@ -205,20 +205,20 @@ export const Presets: React.FC = () => {
                     </div>
                   </div>
                   <div style={{ display: "flex", gap: "8px" }}>
-                    <Button 
-                      onClick={() => openExecuteModal(preset)} 
+                    <Button
+                      onClick={() => openExecuteModal(preset)}
                       style={{ flex: 1, fontSize: "13px", padding: "8px 12px" }}
                     >
                       Execute
                     </Button>
-                    <Button 
-                      onClick={() => openEditModal(preset)} 
+                    <Button
+                      onClick={() => openEditModal(preset)}
                       style={{ flex: 1, fontSize: "13px", padding: "8px 12px", backgroundColor: "#6c757d" }}
                     >
                       Edit
                     </Button>
-                    <Button 
-                      onClick={() => handleDelete(preset.id)} 
+                    <Button
+                      onClick={() => handleDelete(preset.id)}
                       style={{ fontSize: "13px", padding: "8px 12px", backgroundColor: "#dc3545" }}
                       disabled={loadingStates.deletePreset}
                     >

@@ -17,7 +17,7 @@ export default function WorkspacesPage() {
 
   useEffect(() => {
     fetchWorkspaces();
-  }, []);
+  }, [fetchWorkspaces]);
 
   const handleCreateWorkspace = async () => {
     if (!newWorkspaceName.trim()) return;

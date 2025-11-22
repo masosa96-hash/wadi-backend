@@ -50,14 +50,14 @@ export const WorkspaceDetail: React.FC = () => {
     if (workspaces.length === 0 && !isDefaultWorkspace) {
       fetchWorkspaces();
     }
-  }, []);
+  }, [workspaces.length, isDefaultWorkspace, fetchWorkspaces]);
 
   useEffect(() => {
     // Skip fetching members for default workspace
     if (id && !isDefaultWorkspace) {
       fetchMembers(id);
     }
-  }, [id]);
+  }, [id, isDefaultWorkspace, fetchMembers]);
 
   useEffect(() => {
     if (currentWorkspace) {

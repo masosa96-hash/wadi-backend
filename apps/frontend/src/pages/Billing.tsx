@@ -11,7 +11,7 @@ export function Billing() {
 
   useEffect(() => {
     loadUsage();
-  }, []);
+  }, [loadUsage]);
 
   return (
     <PhoneShell>

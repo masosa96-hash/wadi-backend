@@ -22,7 +22,7 @@ export default class ErrorBoundary extends Component<Props, State> {
         return { hasError: true, error: error as AppError };
     }
 
-    componentDidCatch(error: Error, errorInfo: any) {
+    componentDidCatch(error: Error, errorInfo: unknown) {
         // Use centralized error handler
         errorHandler.handleError(error, "ErrorBoundary");
         console.error("React Error Info:", errorInfo);

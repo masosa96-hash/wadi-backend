@@ -21,7 +21,7 @@ export default function ShareModal({ isOpen, onClose, runId, sessionId }: ShareM
 
   const handleCreate = async () => {
     setIsCreating(true);
-    
+
     try {
       const response = await api.post<{ data: { token: string } }>("/api/shares", {
         run_id: runId || null,
@@ -31,7 +31,7 @@ export default function ShareModal({ isOpen, onClose, runId, sessionId }: ShareM
         max_views: maxViews ? parseInt(maxViews) : null,
       });
 
-      const token = (response as any).data.token;
+      const token = response.data.token;
       const url = `${window.location.origin}/share/${token}`;
       setShareLink(url);
     } catch (error) {
@@ -113,8 +113,8 @@ export default function ShareModal({ isOpen, onClose, runId, sessionId }: ShareM
             >
               Cancel
             </Button>
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               onClick={handleCreate}
               disabled={isCreating}
             >
@@ -159,8 +159,8 @@ export default function ShareModal({ isOpen, onClose, runId, sessionId }: ShareM
             >
               Close
             </Button>
-            <Button 
-              type="button" 
+            <Button
+              type="button"
               onClick={handleCopyLink}
             >
               Copy Link

@@ -7,12 +7,12 @@ interface WorkspaceDropdownProps {
 }
 
 export const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({ onWorkspaceSelect }) => {
-  const { 
-    workspaces, 
-    selectedWorkspaceId, 
-    setSelectedWorkspace, 
+  const {
+    workspaces,
+    selectedWorkspaceId,
+    setSelectedWorkspace,
     fetchWorkspaces,
-    loadingStates 
+    loadingStates
   } = useWorkspacesStore();
 
   const [isOpen, setIsOpen] = useState(false);
@@ -21,7 +21,7 @@ export const WorkspaceDropdown: React.FC<WorkspaceDropdownProps> = ({ onWorkspac
     if (workspaces.length === 0 && !loadingStates.fetchWorkspaces) {
       fetchWorkspaces();
     }
-  }, []);
+  }, [workspaces.length, loadingStates.fetchWorkspaces, fetchWorkspaces]);
 
   const selectedWorkspace = workspaces.find(w => w.id === selectedWorkspaceId);
 

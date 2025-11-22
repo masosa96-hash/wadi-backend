@@ -22,7 +22,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
         <ReactMarkdown
             remarkPlugins={[remarkGfm]}
             components={{
-                code({ node, inline, className, children, ...props }) {
+                code({ inline, className, children, ...props }: any) {
                     const match = /language-(\w+)/.exec(className || "");
                     const codeString = String(children).replace(/\n$/, "");
                     const currentIndex = codeBlockIndex++;
@@ -101,7 +101,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         </code>
                     );
                 },
-                a({ node, children, ...props }) {
+                a({ children, ...props }: any) {
                     return (
                         <a
                             {...props}
@@ -116,7 +116,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         </a>
                     );
                 },
-                table({ node, children, ...props }) {
+                table({ children, ...props }: any) {
                     return (
                         <div style={{ overflowX: "auto", marginBottom: theme.spacing.md }}>
                             <table
@@ -132,7 +132,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         </div>
                     );
                 },
-                th({ node, children, ...props }) {
+                th({ children, ...props }: any) {
                     return (
                         <th
                             {...props}
@@ -148,7 +148,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         </th>
                     );
                 },
-                td({ node, children, ...props }) {
+                td({ children, ...props }: any) {
                     return (
                         <td
                             {...props}
@@ -161,7 +161,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         </td>
                     );
                 },
-                ul({ node, children, ...props }) {
+                ul({ children, ...props }: any) {
                     return (
                         <ul
                             {...props}
@@ -174,7 +174,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         </ul>
                     );
                 },
-                ol({ node, children, ...props }) {
+                ol({ children, ...props }: any) {
                     return (
                         <ol
                             {...props}
@@ -187,7 +187,7 @@ export default function MarkdownRenderer({ content }: MarkdownRendererProps) {
                         </ol>
                     );
                 },
-                blockquote({ node, children, ...props }) {
+                blockquote({ children, ...props }: any) {
                     return (
                         <blockquote
                             {...props}

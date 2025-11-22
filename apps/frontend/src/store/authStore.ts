@@ -9,11 +9,12 @@ interface AuthState {
   loading: boolean;
 
   // Actions
-  requestPasswordReset: (email: string) => Promise<void>,
-  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<void>,
-  signUp: (email: string, password: string, displayName: string) => Promise<void>,
-  signOut: () => Promise<void>,
-  initialize: () => Promise<void>,
+  requestPasswordReset: (email: string) => Promise<void>;
+  signIn: (email: string, password: string, rememberMe?: boolean) => Promise<void>;
+  signUp: (email: string, password: string, displayName: string) => Promise<void>;
+  signOut: () => Promise<void>;
+  /* eslint-disable-next-line */
+  initialize: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(

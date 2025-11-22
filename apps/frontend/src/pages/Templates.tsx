@@ -12,7 +12,7 @@ export default function Templates() {
 
   useEffect(() => {
     loadTemplates();
-  }, []);
+  }, [loadTemplates]);
 
   const handleTemplateClick = (prompt: string) => {
     // Navigate to chat with the template prompt pre-filled

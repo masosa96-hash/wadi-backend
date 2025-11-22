@@ -12,7 +12,7 @@ export default function Favorites() {
 
   useEffect(() => {
     loadFavorites();
-  }, []);
+  }, [loadFavorites]);
 
   return (
     <PhoneShell>
@@ -171,7 +171,7 @@ export default function Favorites() {
                   >
                     ⭐
                   </div>
-                  
+
                   <div
                     style={{
                       fontSize: theme.typography.fontSize.body,
@@ -183,7 +183,7 @@ export default function Favorites() {
                   >
                     {favorite.messages?.content || "Mensaje sin contenido"}
                   </div>
-                  
+
                   <div
                     style={{
                       fontSize: theme.typography.fontSize.caption,
