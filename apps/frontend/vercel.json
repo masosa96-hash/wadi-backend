@@ -1,18 +1,13 @@
 {
   "framework": "vite",
-  "buildCommand": "cd apps/frontend && pnpm build",
-  "outputDirectory": "apps/frontend/dist",
-  "installCommand": "pnpm install --frozen-lockfile",
-  "devCommand": "cd apps/frontend && pnpm dev",
+  "buildCommand": "pnpm build",
+  "outputDirectory": "dist",
+  "installCommand": "pnpm install",
+  "devCommand": "pnpm dev",
   "rewrites": [
     {
       "source": "/(.*)",
-      "destination": "/"
+      "destination": "/index.html"
     }
-  ],
-  "env": {
-    "VITE_SUPABASE_URL": "@supabase_url",
-    "VITE_SUPABASE_ANON_KEY": "@supabase_anon_key",
-    "VITE_API_URL": "@api_url"
-  }
+  ]
 }
