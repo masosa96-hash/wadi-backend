@@ -8,20 +8,27 @@ import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
 import { SkeletonList } from "../components/Skeleton";
 
+import { useProjectsStore } from "../store/projectsStore";
+import { useWorkspaceStore } from "../store/workspaceStore";
+
 export default function Home() {
   const navigate = useNavigate();
   const { user } = useAuthStore();
   const { conversations, loadConversations, loadingConversations } = useChatStore();
+  const { projects, fetchProjects } = useProjectsStore();
+  const { workspaces, loadWorkspaces } = useWorkspaceStore();
 
   useEffect(() => {
     loadConversations();
+    fetchProjects();
+    loadWorkspaces();
   }, []);
 
 
   const stats = {
     totalConversations: conversations.length,
-    totalProjects: 0, // TODO: Get from projects store
-    totalWorkspaces: 1, // TODO: Get from workspaces store
+    totalProjects: projects.length,
+    totalWorkspaces: workspaces.length,
   };
 
   const quickActions = [
