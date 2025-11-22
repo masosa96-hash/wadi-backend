@@ -9,7 +9,8 @@
     "rootDir": "./src",
     "strict": true,
     "types": [
-      "node"
+      "node",
+      "cors"
     ]
   },
   "include": [
