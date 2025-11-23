@@ -31,6 +31,7 @@ import RootLayout from "./layouts/RootLayout";
 // Root redirect component - sends users to appropriate page based on auth state
 function RootRedirect() {
   const { user, loading } = useAuthStore();
+  const isGuestMode = import.meta.env.VITE_GUEST_MODE === 'true';
 
   if (loading) {
     return (
@@ -48,7 +49,12 @@ function RootRedirect() {
     );
   }
 
-  // Redirect authenticated users to /home, unauthenticated to /login
+  // In guest mode, send everyone to /chat
+  // In auth mode, send authenticated to /home, unauthenticated to /login
+  if (isGuestMode) {
+    return <Navigate to="/chat" replace />;
+  }
+
   return <Navigate to={user ? "/home" : "/login"} replace />;
 }
 
@@ -106,11 +112,7 @@ export const router = createBrowserRouter([
       },
       {
         path: "/chat",
-        element: (
-          <RootGuard requireAuth>
-            <Chat />
-          </RootGuard>
-        ),
+        element: <Chat />,
       },
       {
         path: "/projects",

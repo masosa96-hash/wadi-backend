@@ -22,10 +22,22 @@ export async function authMiddleware(
 ): Promise<void> {
   try {
     console.log("[Auth] Checking auth for:", req.method, req.path);
-    
+
+    // Check for Guest Mode
+    const isGuestMode = process.env.GUEST_MODE === "true";
+    const guestId = req.headers["x-guest-id"];
+
+    // Allow guest access for chat endpoint if GUEST_MODE is enabled
+    if (isGuestMode && guestId && req.path === "/" && req.baseUrl === "/api/chat" && req.method === "POST") {
+      console.log("[Auth] Guest access allowed for:", guestId);
+      // We don't set req.user_id, controller must handle missing user_id
+      next();
+      return;
+    }
+
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;
-    
+
     if (!authHeader || !authHeader.startsWith("Bearer ")) {
       console.error("[Auth] Missing or invalid authorization header");
       res.status(401).json({ ok: false, error: { code: "AUTH_MISSING", message: "Missing or invalid authorization header" } });
@@ -42,9 +54,9 @@ export async function authMiddleware(
       console.error("[Auth] Token verification failed:", error?.message);
       // Distinguish between expired and invalid tokens
       const isExpired = error?.message?.includes('expired') || error?.message?.includes('JWT expired');
-      res.status(401).json({ 
+      res.status(401).json({
         ok: false,
-        error: { 
+        error: {
           code: isExpired ? "AUTH_EXPIRED" : "AUTH_INVALID",
           message: isExpired ? "Token expired" : "Invalid token"
         },
@@ -56,7 +68,7 @@ export async function authMiddleware(
     // Attach user_id to request
     req.user_id = data.user.id;
     console.log("[Auth] Success: User authenticated:", data.user.id);
-    
+
     next();
   } catch (error) {
     console.error("[Auth] Exception:", error);

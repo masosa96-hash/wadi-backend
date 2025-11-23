@@ -1,9 +1,8 @@
 import { create } from "zustand";
-// import { persist } from "zustand/middleware"; // Not used currently
 import { api } from "../config/api";
 import { supabase } from "../config/supabase";
 import type { Message, Conversation, WebSocketMessage } from "../types/chat";
-
+import { useAuthStore } from "./authStore";
 
 interface ChatState {
   // Current conversation
@@ -52,6 +51,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
   // Connect to WebSocket
   connect: async (conversationId: string) => {
+    const { user } = useAuthStore.getState();
+    if (!user) return; // No WS for guests yet
+
     const { socket } = get();
     if (socket) {
       socket.close();
@@ -136,7 +138,8 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
   // Send a message
   sendMessage: async (message: string) => {
-    const { socket, currentConversationId, connect } = get();
+    const { socket, currentConversationId, connect, messages } = get();
+    const { user, guestId } = useAuthStore.getState();
 
     if (!message.trim()) return;
 
@@ -144,42 +147,61 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
     // Optimistic update for user message
     const tempId = "temp-user-" + Date.now();
+    const newUserMessage: Message = {
+      id: tempId,
+      conversation_id: currentConversationId || "guest-conv",
+      role: "user",
+      content: message,
+      created_at: new Date().toISOString(),
+    };
+
     set((state) => ({
-      messages: [
-        ...state.messages,
-        {
-          id: tempId,
-          conversation_id: currentConversationId || "",
-          role: "user",
-          content: message,
-          created_at: new Date().toISOString(),
-        },
-      ],
+      messages: [...state.messages, newUserMessage],
     }));
 
-    // If no conversation, create one first via REST (or handle in WS if we want to support new convos via WS)
-    // For now, let's assume we need a conversation ID to connect WS.
-    // If currentConversationId is null, we might need to create it first.
+    // --- GUEST MODE ---
+    if (!user) {
+      try {
+        const response = await api.post<{ ok: boolean, data: { reply: string, userMessage: Message, assistantMessage: Message } }>("/api/chat", {
+          message,
+          messages: messages, // Send history for context
+        }, {
+          headers: {
+            'x-guest-id': guestId || 'unknown-guest'
+          }
+        });
+
+        if (response.ok) {
+          const { assistantMessage } = response.data;
+
+          set((state) => {
+            const updatedMessages = [...state.messages, assistantMessage];
+
+            // Save to local storage
+            if (guestId) {
+              localStorage.setItem(`wadi_conv_${guestId}`, JSON.stringify(updatedMessages));
+            }
+
+            return {
+              messages: updatedMessages,
+              sendingMessage: false
+            };
+          });
+        }
+      } catch (error: any) {
+        console.error("Error sending guest message:", error);
+        set({ error: "Error al enviar mensaje", sendingMessage: false });
+      }
+      return;
+    }
+
+    // --- AUTH USER MODE ---
+
+    // If no conversation, create one first via REST
     const targetConversationId = currentConversationId;
 
     if (!targetConversationId) {
       try {
-        // Create conversation via API
-        const { data } = await api.post<{ ok: boolean, data: any }>("/api/chat", { message }); // This endpoint might need adjustment if we only want to create convo
-        // Actually, the current sendMessage endpoint does everything. 
-        // Let's stick to the plan: Use WS for streaming.
-        // But we need a conversation ID to connect to /ws/chat/:id
-
-        // So if no conversation, we call the API once to create it and get the first response (non-streaming or streaming if we change API).
-        // To keep it simple: If no conversation, call API. If conversation exists, use WS.
-
-        // Wait, the plan said "Adapt to handle conversationId".
-        // If we don't have an ID, we can't connect to the specific channel.
-
-        // Strategy:
-        // 1. If no conversationId, call API to create one and send first message.
-        // 2. Then connect WS for subsequent messages.
-
         const response = await api.post<{ ok: boolean, data: { conversationId: string, userMessage: Message, assistantMessage: Message } }>("/api/chat", {
           message,
         });
@@ -206,13 +228,23 @@ export const useChatStore = create<ChatState>()((set, get) => ({
     if (socket && socket.readyState === WebSocket.OPEN) {
       socket.send(JSON.stringify({ type: "message", content: message }));
     } else {
-      // Reconnect and send? Or fallback to API?
-      // Let's try to reconnect if we have an ID
-      if (targetConversationId) {
-        connect(targetConversationId);
-        // Wait a bit for connection? This is tricky without a queue.
-        // For now, let's show an error if not connected.
-        set({ error: "Connection lost. Please try again.", sendingMessage: false });
+      // Fallback to REST if WS not connected
+      try {
+        const response = await api.post<{ ok: boolean, data: { conversationId: string, userMessage: Message, assistantMessage: Message } }>("/api/chat", {
+          message,
+          conversationId: targetConversationId
+        });
+
+        if (response.ok) {
+          const { assistantMessage } = response.data;
+          set((state) => ({
+            messages: [...state.messages, assistantMessage],
+            sendingMessage: false
+          }));
+        }
+      } catch (error) {
+        console.error("Error sending message:", error);
+        set({ error: "Failed to send message", sendingMessage: false });
       }
     }
   },
@@ -220,6 +252,21 @@ export const useChatStore = create<ChatState>()((set, get) => ({
   // Load a specific conversation with all messages
   loadConversation: async (conversationId: string) => {
     set({ loadingMessages: true, error: null });
+    const { user, guestId } = useAuthStore.getState();
+
+    // Guest Mode
+    if (!user) {
+      const stored = localStorage.getItem(`wadi_conv_${guestId}`);
+      if (stored) {
+        set({
+          messages: JSON.parse(stored),
+          loadingMessages: false
+        });
+      } else {
+        set({ messages: [], loadingMessages: false });
+      }
+      return;
+    }
 
     try {
       const response = await api.get<{
@@ -257,6 +304,9 @@ export const useChatStore = create<ChatState>()((set, get) => ({
 
   // Load all conversations
   loadConversations: async () => {
+    const { user } = useAuthStore.getState();
+    if (!user) return; // Guests don't have conversation list yet
+
     set({ loadingConversations: true, error: null });
 
     try {

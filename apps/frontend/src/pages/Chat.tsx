@@ -3,6 +3,7 @@ import { useChatStore } from "../store/chatStore";
 import { useAuthStore } from "../store/authStore";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
+import GuestNicknameModal from "../components/GuestNicknameModal";
 import { theme } from "../styles/theme";
 import ChatInterface from "../components/ChatInterface";
 // import { useTranslation } from "react-i18next";
@@ -10,7 +11,7 @@ import ChatInterface from "../components/ChatInterface";
 type ChatMode = 'ai' | 'mirror';
 
 export default function Chat() {
-  const { user } = useAuthStore();
+  const { user, guestId, guestNick, setGuestNick } = useAuthStore();
   // const { t } = useTranslation('auth'); // Unused for now
   const {
     messages,
@@ -20,6 +21,7 @@ export default function Chat() {
 
   const [mode, setMode] = useState<ChatMode>('ai');
   const [inputMessage, setInputMessage] = useState("");
+  const [showNicknameModal, setShowNicknameModal] = useState(false);
   // const [showActions, setShowActions] = useState(false); // Unused for now
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
@@ -30,6 +32,33 @@ export default function Chat() {
   useEffect(() => {
     scrollToBottom();
   }, [messages, mode]);
+
+  // Check if guest needs to set nickname
+  useEffect(() => {
+    if (!user && !guestNick && import.meta.env.VITE_GUEST_MODE === 'true') {
+      setShowNicknameModal(true);
+    }
+  }, [user, guestNick]);
+
+  // Load guest history from localStorage
+  useEffect(() => {
+    if (!user && guestId && import.meta.env.VITE_GUEST_MODE === 'true') {
+      const stored = localStorage.getItem(`wadi_conv_${guestId}`);
+      if (stored) {
+        try {
+          const history = JSON.parse(stored);
+          useChatStore.setState({ messages: history });
+        } catch (e) {
+          console.error("Error loading guest history:", e);
+        }
+      }
+    }
+  }, [user, guestId]);
+
+  const handleNicknameSubmit = (nickname: string) => {
+    setGuestNick(nickname);
+    setShowNicknameModal(false);
+  };
 
   const handleSend = async () => {
     if (!inputMessage.trim() || sendingMessage) return;
@@ -48,6 +77,8 @@ export default function Chat() {
 
   return (
     <PhoneShell>
+      {showNicknameModal && <GuestNicknameModal onSubmit={handleNicknameSubmit} />}
+
       <div style={{
         display: "flex",
         flexDirection: "column",

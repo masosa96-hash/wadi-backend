@@ -7,6 +7,8 @@ interface AuthState {
   user: User | null;
   session: Session | null;
   loading: boolean;
+  guestId: string | null;
+  guestNick: string | null;
 
   // Actions
   requestPasswordReset: (email: string) => Promise<void>;
@@ -14,15 +16,20 @@ interface AuthState {
   signUp: (email: string, password: string, displayName: string) => Promise<void>;
   signOut: () => Promise<void>;
 
+  setGuestNick: (nick: string) => void;
   initialize: () => Promise<void>;
 }
 
 export const useAuthStore = create<AuthState>()(
   persist(
-    (set) => ({
+    (set, get) => ({
       user: null,
       session: null,
       loading: true,
+      guestId: null,
+      guestNick: null,
+
+      setGuestNick: (nick: string) => set({ guestNick: nick }),
 
       signIn: async (email: string, password: string) => {
         // Clear any existing session first
@@ -104,10 +111,17 @@ export const useAuthStore = create<AuthState>()(
           // Get current session
           const { data: { session } } = await supabase.auth.getSession();
 
+          // Generate guest ID if not exists
+          let currentGuestId = get().guestId;
+          if (!currentGuestId) {
+            currentGuestId = crypto.randomUUID();
+          }
+
           set({
             user: session?.user || null,
             session: session,
             loading: false,
+            guestId: currentGuestId,
           });
 
           // Listen for auth changes
@@ -128,6 +142,8 @@ export const useAuthStore = create<AuthState>()(
       partialize: (state) => ({
         user: state.user,
         session: state.session,
+        guestId: state.guestId,
+        guestNick: state.guestNick,
       }),
     }
   )

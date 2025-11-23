@@ -24,7 +24,7 @@ import { checkSupabaseConnection } from "./config/supabase";
 import { setupWebSocketServer } from "./services/websocket";
 import { generalApiLimiter } from "./middleware/rateLimit";
 import { errorHandler } from "./middleware/errorHandler";
-import "./services/ai-tools"; // Initialize AI tools
+// import "./services/ai-tools"; // Initialize AI tools - TEMPORARILY DISABLED (causes DOMMatrix error)
 
 // Validate environment variables before starting
 validateEnvironment();
@@ -63,7 +63,7 @@ app.use('/api', generalApiLimiter);
 app.use(express.json());
 
 // Health check endpoint
-app.get("/health", async (req, res) => {
+app.get(["/health", "/api/health"], async (req, res) => {
   const supabaseOk = await checkSupabaseConnection();
   res.json({
     status: "ok",
