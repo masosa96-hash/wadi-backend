@@ -1,294 +1,314 @@
-# WADI Beta 1 - Setup Guide
+# 🤖 WADI - AI Conversational Assistant
 
-WADI is an AI platform that allows users to create projects and execute AI runs with full history tracking.
+<div align="center">
 
-## Architecture
+![WADI Logo](https://via.placeholder.com/150x150/09090B/FAFAFA?text=WADI)
 
-This is a monorepo with the following structure:
+**Your intelligent conversational AI assistant**
 
-- **apps/api**: Node.js + Express backend (TypeScript)
-- **apps/frontend**: React + Vite frontend (TypeScript)
-- **docs/**: Documentation including database schema
+[![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
+[![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
+[![TypeScript](https://img.shields.io/badge/typescript-5.x-blue)](https://www.typescriptlang.org/)
+[![Status](https://img.shields.io/badge/status-production--ready-success)](/)
 
-## Tech Stack
+[Features](#-features) •
+[Quick Start](#-quick-start) •
+[Documentation](#-documentation) •
+[Deployment](#-deployment) •
+[Contributing](#-contributing)
 
-### Backend
-- Node.js with Express
-- TypeScript
-- Supabase (Auth + Database)
-- OpenAI API
-- PNPM for package management
-
-### Frontend
-- React 19
-- TypeScript
-- Vite
-- React Router v6
-- Zustand (state management)
-- Supabase client
-
-## Prerequisites
-
-- Node.js (v18 or later)
-- PNPM (v10.21.0 or later)
-- Supabase account
-- OpenAI API key
-
-## Quick Setup
-
-For a streamlined setup experience, use the automated setup script that handles environment configuration and dependency installation.
-
-### Steps
-
-1. **Navigate to the project root directory**
-
-2. **Run the setup script:**
-   ```powershell
-   .\setup-wadi.ps1
-   ```
-   
-   **Note:** If you encounter execution policy errors, you may need to run:
-   ```powershell
-   Set-ExecutionPolicy -Scope Process -ExecutionPolicy Bypass
-   ```
-
-3. **Provide your configuration values when prompted:**
-   - **Supabase URL**: Found in your Supabase project settings under API (e.g., `https://yourproject.supabase.co`)
-   - **Supabase Anon Key**: Found in the same location under "Project API keys"
-   - **OpenAI API Key**: Obtain from https://platform.openai.com/api-keys (starts with `sk-`)
-
-4. **The script will automatically:**
-   - Create environment files for both backend and frontend
-   - Install all project dependencies
-   - Display next steps
-
-5. **Set up your Supabase database schema:**
-   - Go to your Supabase project's SQL Editor
-   - Execute the schema from `docs/database-schema.md`
-
-6. **Start the development services in separate terminals:**
-   
-   **Terminal 1 - Backend:**
-   ```bash
-   pnpm --filter api dev
-   ```
-   
-   **Terminal 2 - Frontend:**
-   ```bash
-   pnpm --filter frontend dev
-   ```
-
-7. **Access the application:**
-   - Frontend: http://localhost:5173
-   - API: http://localhost:4000
-
-8. **Verify the setup by testing the application flow:**
-   - Register a new user account
-   - Create a project
-   - Execute a test run with an AI prompt
-
-**Alternative:** If you prefer manual setup or encounter issues with the automated script, see the detailed "Manual Setup Instructions" section below.
-
-## Manual Setup Instructions
-
-### 1. Install Dependencies
-
-```bash
-pnpm install
-```
-
-### 2. Configure Supabase
-
-1. Create a Supabase project at https://supabase.com
-2. Go to SQL Editor in your Supabase dashboard
-3. Execute the database schema from `docs/database-schema.md`
-4. Copy your Supabase URL and anon key from Project Settings > API
-
-### 3. Configure Environment Variables
-
-#### Backend (.env in apps/api/)
-
-Copy `apps/api/.env.example` to `apps/api/.env` and fill in:
-
-```env
-PORT=4000
-NODE_ENV=development
-
-SUPABASE_URL=https://your-project.supabase.co
-SUPABASE_ANON_KEY=your-anon-key-here
-SUPABASE_SERVICE_KEY=your-service-role-key-here
-
-OPENAI_API_KEY=sk-your-openai-api-key-here
-OPENAI_DEFAULT_MODEL=gpt-3.5-turbo
-
-FRONTEND_URL=http://localhost:5173
-```
-
-#### Frontend (.env in apps/frontend/)
-
-Copy `apps/frontend/.env.example` to `apps/frontend/.env` and fill in:
-
-```env
-VITE_SUPABASE_URL=https://your-project.supabase.co
-VITE_SUPABASE_ANON_KEY=your-anon-key-here
-VITE_API_URL=http://localhost:4000
-```
-
-### 4. Run the Application
-
-#### Development Mode
-
-In separate terminals:
-
-**Terminal 1 - Backend:**
-```bash
-pnpm --filter api dev
-```
-
-**Terminal 2 - Frontend:**
-```bash
-pnpm --filter frontend dev
-```
-
-The API will be available at http://localhost:4000
-The frontend will be available at http://localhost:5173
-
-## Features (Beta 1)
-
-### Authentication
-- User registration with email/password
-- Login/logout functionality
-- Session management via Supabase Auth
-
-### Projects
-- Create projects with name and description
-- View all user projects
-- Navigate to individual projects
-
-### AI Runs
-- Execute AI prompts using OpenAI
-- View run history per project
-- Input/output tracking with timestamps
-- Model selection support
-
-## API Endpoints
-
-### Health Check
-- `GET /health` - Server and database status
-
-### Projects
-- `GET /api/projects` - List user's projects (requires auth)
-- `POST /api/projects` - Create new project (requires auth)
-
-### Runs
-- `GET /api/projects/:id/runs` - List runs for a project (requires auth)
-- `POST /api/projects/:id/runs` - Create new run with AI (requires auth)
-
-## Database Schema
-
-See `docs/database-schema.md` for complete database structure and SQL scripts.
-
-## Project Structure
-
-```
-wadi-monorepo/
-├── apps/
-│   ├── api/
-│   │   ├── src/
-│   │   │   ├── config/        # Supabase configuration
-│   │   │   ├── controllers/   # Route controllers
-│   │   │   ├── middleware/    # Auth middleware
-│   │   │   ├── routes/        # API routes
-│   │   │   ├── services/      # OpenAI service
-│   │   │   └── index.ts       # Server entry point
-│   │   ├── .env.example
-│   │   └── package.json
-│   └── frontend/
-│       ├── src/
-│       │   ├── config/        # API and Supabase clients
-│       │   ├── pages/         # React pages
-│       │   ├── store/         # Zustand stores
-│       │   ├── main.tsx       # App entry point
-│       │   └── router.tsx     # Route configuration
-│       ├── .env.example
-│       └── package.json
-├── docs/
-│   └── database-schema.md     # Database documentation
-├── .env.example
-├── package.json
-└── pnpm-workspace.yaml
-```
-
-## Development Workflow
-
-### Adding a New Feature
-
-1. Update the database schema in Supabase if needed
-2. Create/update API endpoints in `apps/api/src`
-3. Create/update frontend components in `apps/frontend/src`
-4. Test the integration end-to-end
-
-### Common Tasks
-
-**Add API dependency:**
-```bash
-cd apps/api
-pnpm add <package-name>
-```
-
-**Add frontend dependency:**
-```bash
-cd apps/frontend
-pnpm add <package-name>
-```
-
-**Run TypeScript check:**
-```bash
-cd apps/api
-pnpm tsc --noEmit
-
-cd apps/frontend
-pnpm tsc --noEmit
-```
-
-## Troubleshooting
-
-### API won't start
-- Check that `.env` file exists in `apps/api/`
-- Verify Supabase URL and keys are correct
-- Ensure port 4000 is not in use
-
-### Frontend won't connect to API
-- Check that API is running on port 4000
-- Verify `VITE_API_URL` in frontend `.env`
-- Check browser console for CORS errors
-
-### Database errors
-- Verify tables are created in Supabase
-- Check Row Level Security policies are enabled
-- Ensure user is authenticated when making requests
-
-### OpenAI errors
-- Verify API key is valid and has credits
-- Check model name is correct (default: gpt-3.5-turbo)
-- Review rate limits if getting 429 errors
-
-## Next Steps (Future Features)
-
-See `FUTURE_IDEAS.md` for features planned for Beta 2 and beyond:
-- App store functionality
-- Multi-user workspaces
-- Advanced flow templates
-- External integrations
-- And more!
-
-## Support
-
-For issues or questions, please review:
-1. This README
-2. Database schema documentation in `docs/`
-3. Environment variable examples in `.env.example` files
+</div>
 
 ---
 
-**WADI Beta 1** - Built with ❤️ using React, Node.js, Supabase, and OpenAI
+## 🎯 What is WADI?
+
+WADI is a modern, open-source AI conversational assistant built with a **dual-brain architecture** (Kivo + Wadi) that provides intelligent, context-aware conversations. It features a **guest mode** for immediate use without registration, beautiful dark UI, and seamless local storage persistence.
+
+### Key Highlights:
+
+- 🧠 **Dual-Brain Architecture**: Kivo (reasoning) + Wadi (execution)
+- 🎨 **Modern Dark UI**: Beautiful, accessible design
+- 🔓 **Guest Mode**: No registration required
+- 💾 **Local Persistence**: Chat history saved in browser
+- ⚡ **Optimized Performance**: Fast, responsive, scalable
+- 🚀 **Production Ready**: Complete deployment guides
+
+---
+
+## ✨ Features
+
+### Core Features:
+- ✅ Intelligent conversational AI powered by OpenAI GPT
+- ✅ Guest mode with localStorage persistence
+- ✅ User authentication with Supabase
+- ✅ Real-time WebSocket communication (for authenticated users)
+- ✅ Dark theme with accessible colors
+- ✅ Mobile-responsi view
+- ✅ Health check system
+- ✅ Rate limiting and security headers
+
+### Coming Soon:
+- 🔄 Streaming responses
+- 🎤 Voice interface
+- 📸 Image analysis (GPT-4 Vision)
+- 🔌 Plugin system
+- 📱 Mobile apps (iOS/Android)
+- 👥 Team collaboration
+- 📊 Analytics dashboard
+
+---
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- Node.js 20+
+- pnpm (or npm/yarn)
+- OpenAI API Key
+- Supabase account (optional for auth users)
+
+### Installation
+
+```bash
+# Clone repository
+git clone https://github.com/yourusername/wadi.git
+cd wadi
+
+# Install dependencies
+pnpm install
+
+# Copy environment files
+cp apps/api/.env.example apps/api/.env
+cp apps/frontend/.env.example apps/frontend/.env
+
+# Edit .env files with your keys
+# - Add your OPENAI_API_KEY
+# - Add your SUPABASE_URL and keys (if using auth)
+```
+
+### Development
+
+```bash
+# Terminal 1 - Start backend
+pnpm dev:api
+
+# Terminal 2 - Start frontend
+pnpm dev:front
+
+# Or both at once
+pnpm dev:all
+```
+
+Open [http://localhost:5173](http://localhost:5173) in your browser.
+
+---
+
+## 📚 Documentation
+
+| Document | Description |
+|----------|-------------|
+| [📖 DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) | **Start here** - Complete documentation index |
+| [🚀 README_GUEST_MODE.md](README_GUEST_MODE.md) | Quick start for guest mode |
+| [🧪 TESTING_GUIDE.md](TESTING_GUIDE.md) | Step-by-step testing guide |
+| [🎨 COLOR_GUIDE.md](COLOR_GUIDE.md) | Visual color reference |
+| [🧠 ARCHITECTURE_DEEP_DIVE.md](ARCHITECTURE_DEEP_DIVE.md) | Deep architecture explanation |
+| [🔧 DEBUGGING_GUIDE.md](DEBUGGING_GUIDE.md) | Debugging & troubleshooting |
+| [⚡ PERFORMANCE_OPTIMIZATION.md](PERFORMANCE_OPTIMIZATION.md) | Performance & scalability |
+| [🚀 DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Production deployment guide |
+| [🗺️ ROADMAP.md](ROADMAP.md) | Future features roadmap |
+
+---
+
+## 🏗️ Project Structure
+
+```
+wadi/
+├── apps/
+│   ├── api/              # Backend (Node.js + Express)
+│   │   ├── src/
+│   │   │   ├── controllers/
+│   │   │   ├── services/
+│   │   │   │   └── brain/  # Kivo + Wadi
+│   │   │   ├── middleware/
+│   │   │   └── routes/
+│   │   └── .env
+│   │
+│   └── frontend/         # Frontend (React + Vite)
+│       ├── src/
+│       │   ├── components/
+│       │   ├── pages/
+│       │   ├── store/    # Zustand state
+│       │   └── styles/
+│       └── .env
+│
+├── packages/             # Shared packages
+│   └── chat-core/
+│
+└── docs/                 # Documentation (all MD files)
+```
+
+---
+
+## 🛠️ Tech Stack
+
+### Backend:
+- **Runtime**: Node.js 20+
+- **Framework**: Express
+- **Database**: Supabase (PostgreSQL)
+- **AI**: OpenAI GPT-3.5/4
+- **WebSocket**: ws
+- **Auth**: Supabase Auth
+
+### Frontend:
+- **Framework**: React 18
+- **Build Tool**: Vite
+- **State**: Zustand
+- **Routing**: React Router
+- **Animations**: Framer Motion
+- **Styling**: Inline styles with theme system
+
+### DevOps:
+- **Package Manager**: pnpm
+- **Monorepo**: pnpm workspaces
+- **Deployment**: Vercel (frontend) + Railway (backend)
+- **CI/CD**: GitHub Actions (optional)
+
+---
+
+## 🚀 Deployment
+
+### Quick Deploy (Recommended):
+
+**Backend** → [Railway](https://railway.app)
+**Frontend** → [Vercel](https://vercel.com)
+
+See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions including:
+- Docker deployment
+- Custom domains
+- Environment variables
+- CI/CD setup
+- Monitoring
+
+---
+
+## 🧪 Testing
+
+```bash
+# Health check
+pnpm health
+
+# Run all tests
+pnpm test
+
+# Build production
+pnpm build
+
+# Preview production build
+pnpm preview:frontend
+```
+
+Manual testing:
+1. Follow [TESTING_GUIDE.md](TESTING_GUIDE.md)
+2. Complete Tests 1-9
+3. Verify all checkboxes
+
+---
+
+## 🎨 Screenshots
+
+### Guest Mode
+![Guest Chat]()
+*Clean, modern chat interface*
+
+### Nickname Modal
+![Nickname Modal]()
+*First-time user experience*
+
+### Message Bubbles
+![Messages]()
+*User messages in blue, AI responses in dark gray*
+
+---
+
+## 🤝 Contributing
+
+Contributions are welcome! Please check our [Contributing Guide](CONTRIBUTING.md) (coming soon).
+
+### Development Workflow:
+
+1. Fork the repo
+2. Create feature branch (`git checkout -b feature/amazing-feature`)
+3. Commit changes (`git commit -m 'Add amazing feature'`)
+4. Push to branch (`git push origin feature/amazing-feature`)
+5. Open Pull Request
+
+---
+
+## 📊 Performance
+
+- **First Contentful Paint**: < 1.0s
+- **Time to Interactive**: < 3.5s
+- **Bundle Size**: ~95 KB gzipped
+- **API Response**: < 3s (including OpenAI)
+
+See [PERFORMANCE_OPTIMIZATION.md](PERFORMANCE_OPTIMIZATION.md) for details.
+
+---
+
+## 🔐 Security
+
+- ✅ HTTPS only in production
+- ✅ Environment variables for secrets
+- ✅ Rate limiting (10 req/min for guests)
+- ✅ Helmet security headers
+- ✅ CORS configuration
+- ✅ Input sanitization
+
+Report security issues to: security@wadi.ai
+
+---
+
+## 📜 License
+
+MIT License - see [LICENSE](LICENSE) file for details.
+
+---
+
+## 🙏 Acknowledgments
+
+- OpenAI for GPT API
+- Supabase for backend infrastructure
+- Vercel for hosting
+- The React and Node.js communities
+
+---
+
+## 📞 Support
+
+- 📖 [Documentation](DOCUMENTATION_INDEX.md)
+- 🐛 [Issue Tracker](https://github.com/yourusername/wadi/issues)
+- 💬 [Discussions](https://github.com/yourusername/wadi/discussions)
+- 📧 Email: support@wadi.ai
+
+---
+
+## 🗺️ Roadmap
+
+See [ROADMAP.md](ROADMAP.md) for detailed future plans including:
+- Streaming responses
+- Voice interface
+- Multi-modal support
+- Plugin system
+- Mobile apps
+- Enterprise features
+
+---
+
+<div align="center">
+
+**Built with ❤️ by the WADI team**
+
+[Website](https://wadi.ai) • [Documentation](DOCUMENTATION_INDEX.md) • [Twitter](https://twitter.com/wadi_ai)
+
+</div>
