@@ -1,4 +1,5 @@
 {
+  "name": "frontend",
   "engines": {
     "node": ">=20"
   },
