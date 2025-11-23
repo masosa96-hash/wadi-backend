@@ -25,6 +25,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
 
     console.log("[sendMessage] Request from:", userId ? `User ${userId}` : `Guest ${guestId}`, { message: message?.substring(0, 50), conversationId });
 
+    // If neither user nor guest ID is present, reject the request.
     if (!userId && !guestId) {
       console.error("[sendMessage] Unauthorized: No user_id or guest_id");
       res.status(401).json({ ok: false, error: "Unauthorized" });
