@@ -1,17 +1,23 @@
 import { useNavigate, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import { theme } from "../styles/theme";
+import { useAuthStore } from "../store/authStore";
 
 export default function BottomNav() {
   const navigate = useNavigate();
   const location = useLocation();
+  const { user } = useAuthStore();
+  const isGuestMode = import.meta.env.VITE_GUEST_MODE === 'true' && !user;
 
-  const navItems = [
-    { icon: "🏠", label: "Inicio", path: "/home" },
-    { icon: "💬", label: "Chat", path: "/chat" },
-    { icon: "📜", label: "Historial", path: "/projects" },
-    { icon: "👤", label: "Perfil", path: "/settings" },
-  ];
+  // Guest mode: only show chat
+  const navItems = isGuestMode
+    ? [{ icon: "💬", label: "Chat", path: "/chat" }]
+    : [
+      { icon: "🏠", label: "Inicio", path: "/home" },
+      { icon: "💬", label: "Chat", path: "/chat" },
+      { icon: "📜", label: "Historial", path: "/projects" },
+      { icon: "👤", label: "Perfil", path: "/settings" },
+    ];
 
   return (
     <nav
