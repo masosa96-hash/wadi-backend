@@ -20,7 +20,7 @@ import { ejecutar } from "../services/brain/wadi";
 export async function sendMessage(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user_id;
-    const guestId = req.headers["x-guest-id"] as string;
+    const guestId = (req as any).guest_id as string;
     const { message, conversationId, messages: historyMessages } = req.body; // historyMessages from client for guest
 
     console.log("[sendMessage] Request from:", userId ? `User ${userId}` : `Guest ${guestId}`, { message: message?.substring(0, 50), conversationId });

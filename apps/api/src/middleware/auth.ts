@@ -31,6 +31,8 @@ export async function authMiddleware(
     // If guest mode is enabled and a guest ID header is present, bypass auth.
     if (isGuestMode && guestId) {
       console.log('[Auth] Guest access allowed for:', guestId);
+      // Attach guest_id to request for downstream handlers
+      (req as any).guest_id = guestId;
       // No user_id is set; controller will handle missing user_id.
       return next();
     }
