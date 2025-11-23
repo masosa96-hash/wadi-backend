@@ -27,3 +27,12 @@ export const shareLinkLimiter = rateLimit({
   max: 10,
   message: "Too many share link requests",
 });
+
+// Límite para chat de invitados (guests)
+export const guestChatLimiter = rateLimit({
+  windowMs: 60 * 1000, // 1 minuto
+  max: 20, // 20 mensajes por minuto
+  message: "Demasiadas solicitudes. Por favor, esperá un momento antes de enviar más mensajes.",
+  standardHeaders: true,
+  legacyHeaders: false,
+});

@@ -60,6 +60,35 @@ export default function GuestNicknameModal({ onSubmit }: GuestNicknameModalProps
                     ¿Cómo te gustaría que te llame?
                 </p>
 
+                <div style={{
+                    padding: theme.spacing.md,
+                    background: 'rgba(59, 130, 246, 0.1)',
+                    border: `1px solid rgba(59, 130, 246, 0.3)`,
+                    borderRadius: theme.borderRadius.md,
+                    marginBottom: theme.spacing.lg,
+                }}>
+                    <p style={{
+                        fontSize: theme.typography.fontSize.sm,
+                        color: theme.colors.text.secondary,
+                        margin: 0,
+                        lineHeight: 1.5,
+                    }}>
+                        <span style={{ fontSize: '16px', marginRight: '6px' }}>💡</span>
+                        <strong>Modo invitado:</strong> Tus conversaciones se guardan solo en este navegador. 
+                        Para acceder desde otros dispositivos,{' '}
+                        <a 
+                            href="/register" 
+                            style={{ 
+                                color: theme.colors.accent.highlight,
+                                textDecoration: 'none',
+                                fontWeight: theme.typography.fontWeight.medium,
+                            }}
+                        >
+                            creá una cuenta
+                        </a>.
+                    </p>
+                </div>
+
                 <form onSubmit={handleSubmit}>
                     <input
                         type="text"

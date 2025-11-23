@@ -173,3 +173,18 @@ export async function* generateCompletionStream(
     throw new Error("Failed to generate AI response");
   }
 }
+
+/**
+ * Check if OpenAI API is accessible and healthy
+ * @returns Promise<boolean> True if OpenAI API is accessible
+ */
+export async function checkOpenAIHealth(): Promise<boolean> {
+  try {
+    // Quick test: list models (lightweight API call)
+    await openai.models.list();
+    return true;
+  } catch (error) {
+    console.error("OpenAI health check failed:", error);
+    return false;
+  }
+}

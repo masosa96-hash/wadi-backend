@@ -7,14 +7,16 @@ import {
   getChatSummary,
 } from "../controllers/chatController";
 import { authMiddleware } from "../middleware/auth";
+import { guestChatLimiter } from "../middleware/rateLimit";
 
 const router = Router();
 
-// All chat routes require authentication
+// All chat routes require authentication (or guest mode)
 router.use(authMiddleware);
 
 // POST /api/chat - Send a message and get AI response
-router.post("/", sendMessage);
+// Apply rate limiting for guest users
+router.post("/", guestChatLimiter, sendMessage);
 
 // GET /api/chat - Get all conversations
 router.get("/", getConversations);

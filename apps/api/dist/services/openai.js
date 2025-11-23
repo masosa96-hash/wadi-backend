@@ -7,6 +7,7 @@ exports.generateChatCompletion = generateChatCompletion;
 exports.generateCompletion = generateCompletion;
 exports.isValidModel = isValidModel;
 exports.generateCompletionStream = generateCompletionStream;
+exports.checkOpenAIHealth = checkOpenAIHealth;
 const openai_1 = __importDefault(require("openai"));
 const apiKey = process.env.OPENAI_API_KEY;
 if (!apiKey) {
@@ -144,5 +145,20 @@ async function* generateCompletionStream(messages, model = DEFAULT_MODEL) {
         }
         console.error("OpenAI service error:", error);
         throw new Error("Failed to generate AI response");
+    }
+}
+/**
+ * Check if OpenAI API is accessible and healthy
+ * @returns Promise<boolean> True if OpenAI API is accessible
+ */
+async function checkOpenAIHealth() {
+    try {
+        // Quick test: list models (lightweight API call)
+        await openai.models.list();
+        return true;
+    }
+    catch (error) {
+        console.error("OpenAI health check failed:", error);
+        return false;
     }
 }

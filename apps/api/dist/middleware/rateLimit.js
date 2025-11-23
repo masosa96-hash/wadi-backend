@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.shareLinkLimiter = exports.sessionCreationLimiter = exports.runCreationLimiter = exports.generalApiLimiter = void 0;
+exports.guestChatLimiter = exports.shareLinkLimiter = exports.sessionCreationLimiter = exports.runCreationLimiter = exports.generalApiLimiter = void 0;
 const express_rate_limit_1 = require("express-rate-limit");
 // Límite general
 exports.generalApiLimiter = (0, express_rate_limit_1.rateLimit)({
@@ -25,4 +25,12 @@ exports.shareLinkLimiter = (0, express_rate_limit_1.rateLimit)({
     windowMs: 30 * 1000,
     max: 10,
     message: "Too many share link requests",
+});
+// Límite para chat de invitados (guests)
+exports.guestChatLimiter = (0, express_rate_limit_1.rateLimit)({
+    windowMs: 60 * 1000, // 1 minuto
+    max: 20, // 20 mensajes por minuto
+    message: "Demasiadas solicitudes. Por favor, esperá un momento antes de enviar más mensajes.",
+    standardHeaders: true,
+    legacyHeaders: false,
 });

@@ -10,6 +10,20 @@ const supabase_1 = require("../config/supabase");
 async function authMiddleware(req, res, next) {
     try {
         console.log("[Auth] Checking auth for:", req.method, req.path);
+        // Check for Guest Mode
+        const isGuestMode = process.env.GUEST_MODE === "true";
+        // Normalize guestId (may be string, string[] or undefined)
+        const rawGuestId = req.headers["x-guest-id"];
+        const guestId = Array.isArray(rawGuestId) ? rawGuestId[0] : rawGuestId;
+        // ---- GUEST MODE -------------------------------------------------
+        // If guest mode is enabled and a guest ID header is present, bypass auth.
+        if (isGuestMode && guestId) {
+            console.log('[Auth] Guest access allowed for:', guestId);
+            // Attach guest_id to request for downstream handlers
+            req.guest_id = guestId;
+            // No user_id is set; controller will handle missing user_id.
+            return next();
+        }
         // Extract token from Authorization header
         const authHeader = req.headers.authorization;
         if (!authHeader || !authHeader.startsWith("Bearer ")) {

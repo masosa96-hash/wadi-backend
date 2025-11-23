@@ -21,6 +21,7 @@ import favoritesRouter from "./routes/favorites";
 import templatesRouter from "./routes/templates";
 import searchRouter from "./routes/search";
 import { checkSupabaseConnection } from "./config/supabase";
+import { checkOpenAIHealth } from "./services/openai";
 import { setupWebSocketServer } from "./services/websocket";
 import { generalApiLimiter } from "./middleware/rateLimit";
 import { errorHandler } from "./middleware/errorHandler";
@@ -65,9 +66,16 @@ app.use(express.json());
 // Health check endpoint
 app.get(["/health", "/api/health"], async (req, res) => {
   const supabaseOk = await checkSupabaseConnection();
-  res.json({
-    status: "ok",
+  const openaiOk = await checkOpenAIHealth();
+  
+  const allHealthy = supabaseOk && openaiOk;
+  const status = allHealthy ? "ok" : "degraded";
+  
+  res.status(allHealthy ? 200 : 503).json({
+    status,
     supabase: supabaseOk ? "connected" : "disconnected",
+    openai: openaiOk ? "connected" : "disconnected",
+    timestamp: new Date().toISOString(),
   });
 });
 

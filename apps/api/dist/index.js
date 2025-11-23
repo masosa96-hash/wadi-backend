@@ -26,10 +26,11 @@ const favorites_1 = __importDefault(require("./routes/favorites"));
 const templates_1 = __importDefault(require("./routes/templates"));
 const search_1 = __importDefault(require("./routes/search"));
 const supabase_1 = require("./config/supabase");
+const openai_1 = require("./services/openai");
 const websocket_1 = require("./services/websocket");
 const rateLimit_1 = require("./middleware/rateLimit");
 const errorHandler_1 = require("./middleware/errorHandler");
-require("./services/ai-tools"); // Initialize AI tools
+// import "./services/ai-tools"; // Initialize AI tools - TEMPORARILY DISABLED (causes DOMMatrix error)
 // Validate environment variables before starting
 (0, env_validator_1.validateEnvironment)();
 const app = (0, express_1.default)();
@@ -39,7 +40,7 @@ app.use((0, cors_1.default)({
     origin: (process.env.FRONTEND_URL || "http://localhost:5173").trim(),
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-    allowedHeaders: ['Content-Type', 'Authorization'],
+    allowedHeaders: ['Content-Type', 'Authorization', 'x-guest-id'],
 }));
 app.use((0, helmet_1.default)({
     contentSecurityPolicy: process.env.NODE_ENV === "production"
@@ -61,11 +62,16 @@ app.use((0, helmet_1.default)({
 app.use('/api', rateLimit_1.generalApiLimiter);
 app.use(express_1.default.json());
 // Health check endpoint
-app.get("/health", async (req, res) => {
+app.get(["/health", "/api/health"], async (req, res) => {
     const supabaseOk = await (0, supabase_1.checkSupabaseConnection)();
-    res.json({
-        status: "ok",
+    const openaiOk = await (0, openai_1.checkOpenAIHealth)();
+    const allHealthy = supabaseOk && openaiOk;
+    const status = allHealthy ? "ok" : "degraded";
+    res.status(allHealthy ? 200 : 503).json({
+        status,
         supabase: supabaseOk ? "connected" : "disconnected",
+        openai: openaiOk ? "connected" : "disconnected",
+        timestamp: new Date().toISOString(),
     });
 });
 // API Routes

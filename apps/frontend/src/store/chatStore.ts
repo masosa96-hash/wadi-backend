@@ -190,7 +190,21 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         }
       } catch (error: any) {
         console.error("Error sending guest message:", error);
-        set({ error: "Error al enviar mensaje", sendingMessage: false });
+        
+        // Friendly error messages based on error type
+        let friendlyMessage = "No pude enviar el mensaje. Verificá tu conexión.";
+        
+        if (error.response?.status === 429) {
+          friendlyMessage = "Estás enviando mensajes muy rápido. Esperá un momento antes de continuar.";
+        } else if (error.response?.status === 503 || error.response?.status === 502) {
+          friendlyMessage = "WADI está ocupado ahora. Intentá de nuevo en unos segundos.";
+        } else if (error.code === 'ERR_NETWORK' || !navigator.onLine) {
+          friendlyMessage = "Sin conexión a internet. Verificá tu red y volé a intentar.";
+        } else if (error.response?.status === 500) {
+          friendlyMessage = "Hubo un error en el servidor. Ya estamos trabajando en solucionarlo.";
+        }
+        
+        set({ error: friendlyMessage, sendingMessage: false });
       }
       return;
     }
@@ -219,7 +233,19 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         }
       } catch (error) {
         console.error("Error creating conversation:", error);
-        set({ error: "Failed to start conversation", sendingMessage: false });
+        
+        let friendlyMessage = "No pude iniciar la conversación.";
+        const err = error as any;
+        
+        if (err.response?.status === 429) {
+          friendlyMessage = "Estás enviando mensajes muy rápido. Esperá un momento.";
+        } else if (err.response?.status === 503) {
+          friendlyMessage = "El servicio está ocupado. Intentá de nuevo en unos segundos.";
+        } else if (err.code === 'ERR_NETWORK') {
+          friendlyMessage = "Sin conexión a internet. Verificá tu red.";
+        }
+        
+        set({ error: friendlyMessage, sendingMessage: false });
         return;
       }
     }
@@ -244,7 +270,19 @@ export const useChatStore = create<ChatState>()((set, get) => ({
         }
       } catch (error) {
         console.error("Error sending message:", error);
-        set({ error: "Failed to send message", sendingMessage: false });
+        
+        let friendlyMessage = "No pude enviar el mensaje.";
+        const err = error as any;
+        
+        if (err.response?.status === 429) {
+          friendlyMessage = "Estás enviando mensajes muy rápido. Esperá un momento.";
+        } else if (err.response?.status === 503) {
+          friendlyMessage = "El servicio está ocupado. Intentá de nuevo en unos segundos.";
+        } else if (err.code === 'ERR_NETWORK') {
+          friendlyMessage = "Sin conexión a internet. Verificá tu red.";
+        }
+        
+        set({ error: friendlyMessage, sendingMessage: false });
       }
     }
   },

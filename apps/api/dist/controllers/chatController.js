@@ -25,10 +25,12 @@ const wadi_1 = require("../services/brain/wadi");
 async function sendMessage(req, res) {
     try {
         const userId = req.user_id;
-        const { message, conversationId } = req.body;
-        console.log("[sendMessage] Request from user:", userId, { message: message?.substring(0, 50), conversationId });
-        if (!userId) {
-            console.error("[sendMessage] Unauthorized: No user_id");
+        const guestId = req.guest_id;
+        const { message, conversationId, messages: historyMessages } = req.body; // historyMessages from client for guest
+        console.log("[sendMessage] Request from:", userId ? `User ${userId}` : `Guest ${guestId}`, { message: message?.substring(0, 50), conversationId });
+        // If neither user nor guest ID is present, reject the request.
+        if (!userId && !guestId) {
+            console.error("[sendMessage] Unauthorized: No user_id or guest_id");
             res.status(401).json({ ok: false, error: "Unauthorized" });
             return;
         }
@@ -38,58 +40,72 @@ async function sendMessage(req, res) {
             return;
         }
         let currentConversationId = conversationId;
-        // If no conversation ID provided, get or create default conversation
-        if (!currentConversationId) {
-            const { data: conversationData, error: conversationError } = await supabase_1.supabase
-                .rpc("get_or_create_default_conversation", { p_user_id: userId });
-            if (conversationError) {
-                console.error("[sendMessage] Error getting/creating conversation:", conversationError);
-                res.status(500).json({ ok: false, error: "Failed to create conversation" });
+        let history = [];
+        let userMessage = null;
+        if (userId) {
+            // --- AUTHENTICATED USER FLOW (SUPABASE) ---
+            // If no conversation ID provided, get or create default conversation
+            if (!currentConversationId) {
+                const { data: conversationData, error: conversationError } = await supabase_1.supabase
+                    .rpc("get_or_create_default_conversation", { p_user_id: userId });
+                if (conversationError) {
+                    console.error("[sendMessage] Error getting/creating conversation:", conversationError);
+                    res.status(500).json({ ok: false, error: "Failed to create conversation" });
+                    return;
+                }
+                currentConversationId = conversationData;
+                console.log("[sendMessage] Created/retrieved conversation:", currentConversationId);
+            }
+            else {
+                // Verify conversation belongs to user
+                const { data: conversation, error: verifyError } = await supabase_1.supabase
+                    .from("conversations")
+                    .select("id")
+                    .eq("id", currentConversationId)
+                    .eq("user_id", userId)
+                    .single();
+                if (verifyError || !conversation) {
+                    console.error("[sendMessage] Conversation not found or unauthorized");
+                    res.status(404).json({ ok: false, error: "Conversation not found" });
+                    return;
+                }
+            }
+            // Save user message
+            const { data: savedUserMsg, error: userMessageError } = await supabase_1.supabase
+                .from("messages")
+                .insert({
+                conversation_id: currentConversationId,
+                role: "user",
+                content: message.trim(),
+            })
+                .select()
+                .single();
+            if (userMessageError || !savedUserMsg) {
+                console.error("[sendMessage] Error saving user message:", userMessageError);
+                res.status(500).json({ ok: false, error: "Failed to save message" });
                 return;
             }
-            currentConversationId = conversationData;
-            console.log("[sendMessage] Created/retrieved conversation:", currentConversationId);
+            userMessage = savedUserMsg;
+            console.log("[sendMessage] User message saved:", userMessage.id);
+            // Get conversation history (last 10 messages for context)
+            const { data: dbHistory, error: historyError } = await supabase_1.supabase
+                .from("messages")
+                .select("role, content")
+                .eq("conversation_id", currentConversationId)
+                .order("created_at", { ascending: true })
+                .limit(10);
+            if (historyError) {
+                console.error("[sendMessage] Error fetching history:", historyError);
+            }
+            else {
+                history = dbHistory;
+            }
         }
         else {
-            // Verify conversation belongs to user
-            const { data: conversation, error: verifyError } = await supabase_1.supabase
-                .from("conversations")
-                .select("id")
-                .eq("id", currentConversationId)
-                .eq("user_id", userId)
-                .single();
-            if (verifyError || !conversation) {
-                console.error("[sendMessage] Conversation not found or unauthorized");
-                res.status(404).json({ ok: false, error: "Conversation not found" });
-                return;
-            }
-        }
-        // Save user message
-        const { data: userMessage, error: userMessageError } = await supabase_1.supabase
-            .from("messages")
-            .insert({
-            conversation_id: currentConversationId,
-            role: "user",
-            content: message.trim(),
-        })
-            .select()
-            .single();
-        if (userMessageError || !userMessage) {
-            console.error("[sendMessage] Error saving user message:", userMessageError);
-            res.status(500).json({ ok: false, error: "Failed to save message" });
-            return;
-        }
-        console.log("[sendMessage] User message saved:", userMessage.id);
-        // Get conversation history (last 10 messages for context)
-        const { data: history, error: historyError } = await supabase_1.supabase
-            .from("messages")
-            .select("role, content")
-            .eq("conversation_id", currentConversationId)
-            .order("created_at", { ascending: true })
-            .limit(10);
-        if (historyError) {
-            console.error("[sendMessage] Error fetching history:", historyError);
-            // Continue without history
+            // --- GUEST FLOW (NO DB) ---
+            console.log("[sendMessage] Guest mode: Using client-provided history");
+            history = historyMessages || [];
+            // We don't save to DB in guest mode
         }
         // Prepare messages for OpenAI
         const messages = [
@@ -101,7 +117,25 @@ async function sendMessage(req, res) {
                 role: msg.role,
                 content: msg.content,
             })),
+            // If guest, the current message is NOT in history yet (unlike DB flow where we just inserted it)
+            // Wait, in DB flow we fetch history including the new message? 
+            // No, usually we fetch previous messages.
+            // Let's check the original code:
+            // It inserted the message, THEN fetched history. So history INCLUDED the new message.
+            // For guest, 'historyMessages' from client should be previous messages.
+            // We need to add the current message to the prompt.
         ];
+        // If using DB flow, history likely included the new message because we inserted it before fetching.
+        // Let's verify:
+        // Original: insert message -> fetch messages limit 10 order by created_at. 
+        // Yes, it includes the new message.
+        // So for guest, we append the current message manually.
+        if (!userId) {
+            messages.push({
+                role: "user",
+                content: message
+            });
+        }
         console.log("[sendMessage] Calling OpenAI with", messages.length, "messages");
         // Generate AI response
         let aiResponse;
@@ -112,20 +146,8 @@ async function sendMessage(req, res) {
         // 2. Execution (Wadi)
         if (thought.intent === "chat") {
             // Standard chat flow
-            const messages = [
-                {
-                    role: "system",
-                    content: "Sos WADI, un asistente de IA amigable y útil. Hablás en español de forma cercana y natural.",
-                },
-                ...(history || []).map((msg) => ({
-                    role: msg.role,
-                    content: msg.content,
-                })),
-                {
-                    role: "user",
-                    content: message,
-                },
-            ];
+            // We already prepared 'messages' above, but 'generateChatCompletion' takes the full array
+            // The original code re-constructed the array inside the 'if'. Let's reuse 'messages'.
             assistantResponseText = await (0, openai_1.generateChatCompletion)(messages);
         }
         else {
@@ -140,29 +162,36 @@ async function sendMessage(req, res) {
                 assistantResponseText = action.payload.text || "No pude procesar tu solicitud.";
             }
         }
-        // 3. Save assistant message
-        const { data: assistantMessage, error: assistantError } = await supabase_1.supabase
-            .from("messages")
-            .insert({
-            conversation_id: currentConversationId,
-            role: "assistant",
-            content: assistantResponseText,
-            model: "gpt-3.5-turbo", // Or wadi-core
-        })
-            .select()
-            .single();
-        if (assistantError || !assistantMessage) {
-            console.error("[sendMessage] Error saving assistant message:", assistantError);
-            res.status(500).json({ ok: false, error: "Failed to save response" });
-            return;
+        // 3. Save assistant message (ONLY FOR AUTH USERS)
+        let assistantMessage = null;
+        if (userId) {
+            const { data: savedMsg, error: assistantError } = await supabase_1.supabase
+                .from("messages")
+                .insert({
+                conversation_id: currentConversationId,
+                role: "assistant",
+                content: assistantResponseText,
+                model: "gpt-3.5-turbo",
+            })
+                .select()
+                .single();
+            if (assistantError) {
+                console.error("[sendMessage] Error saving assistant message:", assistantError);
+                // Don't fail the request, just log it
+            }
+            else {
+                assistantMessage = savedMsg;
+            }
         }
         res.json({
             ok: true,
             data: {
                 conversationId: currentConversationId,
-                userMessage,
-                assistantMessage,
-                thought, // Return thought for debug/UI
+                // For guest, we mock the message objects
+                userMessage: userId ? null : { role: 'user', content: message, created_at: new Date().toISOString() },
+                assistantMessage: userId ? assistantMessage : { role: 'assistant', content: assistantResponseText, created_at: new Date().toISOString() },
+                reply: assistantResponseText, // Explicitly return reply for guest convenience
+                thought,
             },
         });
     }
