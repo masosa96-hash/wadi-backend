@@ -212,10 +212,10 @@ export default function Chat() {
                           padding: theme.spacing.md,
                           borderRadius: theme.borderRadius.md,
                           background: message.role === "user"
-                            ? theme.colors.accent.primary
+                            ? theme.colors.accent.highlight // Blue for user messages
                             : theme.colors.background.secondary,
                           color: message.role === "user"
-                            ? "#FFFFFF"
+                            ? "#FFFFFF" // White text on blue
                             : theme.colors.text.primary,
                           border: message.role === "assistant"
                             ? `1px solid ${theme.colors.border.subtle}`
@@ -232,7 +232,7 @@ export default function Chat() {
                           <div style={{
                             marginTop: theme.spacing.xs,
                             fontSize: theme.typography.fontSize.xs,
-                            opacity: 0.6,
+                            opacity: 0.7,
                           }}>
                             {new Date(message.created_at).toLocaleTimeString('es-AR', {
                               hour: '2-digit',
@@ -296,14 +296,16 @@ export default function Chat() {
                     disabled={sendingMessage || !inputMessage.trim()}
                     style={{
                       padding: `${theme.spacing.md} ${theme.spacing.lg}`,
-                      background: theme.colors.accent.primary,
+                      background: sendingMessage || !inputMessage.trim()
+                        ? theme.colors.border.default
+                        : theme.colors.accent.highlight, // Blue for action button
                       color: "#FFFFFF",
                       border: "none",
                       borderRadius: theme.borderRadius.md,
                       fontSize: theme.typography.fontSize.base,
                       fontWeight: theme.typography.fontWeight.medium,
                       cursor: sendingMessage || !inputMessage.trim() ? "not-allowed" : "pointer",
-                      opacity: sendingMessage || !inputMessage.trim() ? 0.5 : 1,
+                      transition: theme.transitions.default,
                     }}
                   >
                     {sendingMessage ? "..." : "Enviar"}
