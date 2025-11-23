@@ -27,12 +27,12 @@ export async function authMiddleware(
     const isGuestMode = process.env.GUEST_MODE === "true";
     const guestId = req.headers["x-guest-id"];
 
-    // Allow guest access for chat endpoint if GUEST_MODE is enabled
-    if (isGuestMode && guestId && req.baseUrl.startsWith('/api/chat') && req.method === 'POST') {
+    // ---- GUEST MODE -------------------------------------------------
+    // If guest mode is enabled and a guest ID header is present, bypass auth.
+    if (isGuestMode && guestId) {
       console.log('[Auth] Guest access allowed for:', guestId);
-      // No user_id set for guests; controller will handle missing user_id
-      next();
-      return;
+      // No user_id is set; controller will handle missing user_id.
+      return next();
     }
 
     // Extract token from Authorization header
