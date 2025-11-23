@@ -152,7 +152,8 @@ export default function Login() {
               background: theme.colors.text.primary, // High contrast
               color: theme.colors.background.primary, // Inverse text
               border: "none",
-              fontWeight: theme.typography.fontWeight.medium,
+              fontWeight: theme.typography.fontWeight.bold,
+              cursor: 'pointer',
             }}
           >
             {loading ? t('login.submitting') : t('login.submit')}

@@ -55,7 +55,32 @@ export const useAuthStore = create<AuthState>()(
         if (!data.user) throw new Error("User creation failed");
 
         // Profile creation is handled by the database trigger 'handle_new_user'
-        // We just update the local state
+        // However, we also attempt a manual insert as a fallback/redundancy
+        // to ensure the profile exists immediately for the user.
+        try {
+          const { error: profileError } = await supabase
+            .from('profiles')
+            .insert([
+              {
+                id: data.user.id,
+                full_name: displayName,
+                email: email,
+                created_at: new Date().toISOString(),
+                updated_at: new Date().toISOString(),
+              }
+            ])
+            .select()
+            .single();
+
+          if (profileError) {
+            // If it fails, it might be because the trigger already created it (duplicate key)
+            // We can ignore this specific error or log it.
+            console.log("Manual profile creation note:", profileError.message);
+          }
+        } catch (e) {
+          console.error("Error attempting manual profile creation:", e);
+        }
+
         set({ user: data.user, session: data.session });
       },
 

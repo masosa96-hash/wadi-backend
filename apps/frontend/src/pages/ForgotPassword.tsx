@@ -83,6 +83,8 @@ export default function ForgotPassword() {
                 background: theme.colors.text.primary,
                 color: theme.colors.background.primary,
                 border: "none",
+                fontWeight: theme.typography.fontWeight.bold,
+                cursor: 'pointer',
               }}
             >
               {t('forgot.back_to_login')}
@@ -137,6 +139,8 @@ export default function ForgotPassword() {
                 background: theme.colors.text.primary,
                 color: theme.colors.background.primary,
                 border: "none",
+                fontWeight: theme.typography.fontWeight.bold,
+                cursor: 'pointer',
               }}
             >
               {loading ? t('forgot.submitting') : t('forgot.submit')}
