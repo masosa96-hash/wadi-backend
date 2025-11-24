@@ -1,0 +1,23 @@
+{
+  "$schema": "https://schema.railpack.com",
+  "steps": {
+    "install": {
+      "commands": [
+        "npm i -g corepack@latest",
+        "corepack enable",
+        "corepack prepare pnpm@10.21.0 --activate",
+        "pnpm install --frozen-lockfile"
+      ]
+    },
+    "build": {
+      "commands": [
+        "pnpm build"
+      ]
+    },
+    "deploy": {
+      "commands": [
+        "node dist/index.js"
+      ]
+    }
+  }
+}
