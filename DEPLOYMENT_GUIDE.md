@@ -80,9 +80,22 @@
    - Output Directory: `dist`
    - Install Command: `pnpm install`
 
-5. **Deploy**
+5. **Deploy desde CLI (OPCIÓN 1 - Recomendada)**
+   ```bash
+   # Deployar desde la raíz del monorepo
+   cd E:\WADI
+   vercel --prod
+   ```
+   ⚠️ **IMPORTANTE**: Con Root Directory = `apps/frontend` en Vercel, siempre deployá desde `E:\WADI`, NO desde `E:\WADI\apps\frontend`
+
+6. **Deploy desde Dashboard (OPCIÓN 2)**
    - Click "Deploy"
    - Obtendrás URL tipo: `https://wadi.vercel.app`
+
+**Alternativa**: Si preferís deployar desde `apps/frontend`:
+   - Ir a Vercel → Settings → General → Root Directory
+   - Cambiar a `.` (vacío)
+   - Redeploy el proyecto
 
 ---
 

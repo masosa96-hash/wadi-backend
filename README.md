@@ -180,10 +180,25 @@ wadi/
 
 ### Quick Deploy (Recommended):
 
-**Backend** → [Railway](https://railway.app)
+**Backend** → [Railway](https://railway.app)  
 **Frontend** → [Vercel](https://vercel.com)
 
-See [DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) for detailed instructions including:
+**Quick deployment commands:**
+```powershell
+# Deploy frontend to Vercel (from repo root)
+cd E:\WADI
+vercel --prod
+
+# Or use the automated script
+.\deploy-vercel.ps1
+```
+
+See deployment guides:
+- [🚀 DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Complete deployment guide
+- [⚡ QUICK_DEPLOY.md](QUICK_DEPLOY.md) - Fast 3-step deployment
+- [🔧 VERCEL_DEPLOYMENT_FIX.md](VERCEL_DEPLOYMENT_FIX.md) - Vercel troubleshooting
+
+Includes:
 - Docker deployment
 - Custom domains
 - Environment variables

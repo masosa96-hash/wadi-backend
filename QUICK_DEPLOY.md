@@ -38,8 +38,8 @@ railway status
 ### STEP 2: Deploy Frontend (Vercel)
 
 ```powershell
-# Navigate to frontend
-cd apps/frontend
+# Navigate to REPO ROOT (not apps/frontend)
+cd E:\WADI
 
 # Login
 vercel login
@@ -54,9 +54,11 @@ vercel env add VITE_SUPABASE_ANON_KEY production
 vercel env add VITE_API_URL production
 # Paste: [RAILWAY_URL_FROM_STEP_1]
 
-# Deploy
+# Deploy from ROOT (Vercel Root Directory = apps/frontend)
 vercel --prod
 ```
+
+⚠️ **IMPORTANTE**: Con `Root Directory = apps/frontend` en Vercel, siempre deployá desde `E:\WADI`
 
 **→ Copy the Vercel URL (e.g., `https://wadi.vercel.app`)**
 
