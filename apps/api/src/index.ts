@@ -32,7 +32,7 @@ validateEnvironment();
 
 const app = express();
 app.set("trust proxy", 1);
-const PORT = process.env.PORT || 4000;
+const PORT = Number(process.env.PORT) || 8080;
 
 // CORS Configuration
 app.use(cors({
@@ -108,10 +108,8 @@ const server = createServer(app);
 const wss = setupWebSocketServer(server);
 
 // Start server
-server.listen(PORT, () => {
-  console.log(`🚀 WADI API running on http://localhost:${PORT}`);
-  console.log(`📊 Health check: http://localhost:${PORT}/health`);
-  console.log(`🔌 WebSocket: ws://localhost:${PORT}/ws`);
+server.listen(PORT, "0.0.0.0", () => {
+  console.log(`API on ${PORT}`);
 });
 
 // trigger rebuild 2025-11-23T22:37:55
