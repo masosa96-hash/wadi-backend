@@ -34,13 +34,39 @@ const app = express();
 app.set("trust proxy", 1);
 const PORT = Number(process.env.PORT) || 8080;
 
-// CORS Configuration
+// CORS Configuration - Allowlist for local + production + Vercel previews
+const allowlist = [
+  process.env.FRONTEND_URL, // Production frontend URL
+  "http://localhost:5173",   // Vite dev server (default)
+  "http://localhost:5174",   // Vite dev server (alternative port)
+].filter(Boolean);
+
 app.use(cors({
-  origin: (process.env.FRONTEND_URL || "http://localhost:5173").trim(),
+  origin: (origin, cb) => {
+    // Allow requests with no origin (mobile apps, curl, Postman)
+    if (!origin) return cb(null, true);
+    
+    // Check if origin is in allowlist
+    if (allowlist.includes(origin)) return cb(null, true);
+    
+    // Allow all Vercel preview deployments
+    if (origin.endsWith(".vercel.app")) return cb(null, true);
+    
+    // Reject all other origins
+    return cb(new Error("Not allowed by CORS"));
+  },
   credentials: true,
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
   allowedHeaders: ['Content-Type', 'Authorization', 'x-guest-id'],
 }));
+
+// Handle preflight requests for all routes
+app.use((req, res, next) => {
+  if (req.method === 'OPTIONS') {
+    return cors()(req, res, next);
+  }
+  next();
+});
 
 app.use(helmet({
   contentSecurityPolicy: process.env.NODE_ENV === "production"

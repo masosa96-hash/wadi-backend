@@ -67,3 +67,4 @@ apps/desktop/dist/
 # Backup files
 *.bak
 *.backup
+.env
