@@ -31,6 +31,7 @@ import { errorHandler } from "./middleware/errorHandler";
 validateEnvironment();
 
 const app = express();
+app.set("trust proxy", 1);
 const PORT = process.env.PORT || 4000;
 
 // CORS Configuration
@@ -67,10 +68,10 @@ app.use(express.json());
 app.get(["/health", "/api/health"], async (req, res) => {
   const supabaseOk = await checkSupabaseConnection();
   const openaiOk = await checkOpenAIHealth();
-  
+
   const allHealthy = supabaseOk && openaiOk;
   const status = allHealthy ? "ok" : "degraded";
-  
+
   res.status(allHealthy ? 200 : 503).json({
     status,
     supabase: supabaseOk ? "connected" : "disconnected",
