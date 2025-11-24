@@ -4,6 +4,8 @@ import ErrorBoundary from './components/ErrorBoundary';
 import { useTranslation } from 'react-i18next';
 import { useEffect, useState } from 'react';
 import { api } from './config/api';
+import { SpeedInsights } from '@vercel/speed-insights/react';
+import { Analytics } from '@vercel/analytics/react';
 
 export default function App() {
     // Initialize translation hook to ensure i18n is ready
@@ -63,6 +65,8 @@ export default function App() {
     return (
         <ErrorBoundary>
             <RouterProvider router={router} />
+            <SpeedInsights />
+            <Analytics />
         </ErrorBoundary>
     );
 }
