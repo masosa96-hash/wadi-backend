@@ -53,7 +53,7 @@ export function validateEnvironment(): void {
     SUPABASE_URL: process.env.SUPABASE_URL,
     SUPABASE_ANON_KEY: process.env.SUPABASE_ANON_KEY,
     SUPABASE_SERVICE_KEY: process.env.SUPABASE_SERVICE_KEY,
-    OPENAI_API_KEY: process.env.OPENAI_API_KEY,
+    GROQ_API_KEY: process.env.GROQ_API_KEY,
   };
 
   // Optional variables with defaults
@@ -61,6 +61,8 @@ export function validateEnvironment(): void {
     PORT: process.env.PORT || '4000',
     FRONTEND_URL: process.env.FRONTEND_URL || 'http://localhost:5173',
     NODE_ENV: process.env.NODE_ENV || 'development',
+    GROQ_DEFAULT_MODEL: process.env.GROQ_DEFAULT_MODEL || 'llama-3.1-8b-instant',
+    OPENAI_API_KEY: process.env.OPENAI_API_KEY, // Optional fallback
     OPENAI_DEFAULT_MODEL: process.env.OPENAI_DEFAULT_MODEL || 'gpt-3.5-turbo',
   };
 
@@ -103,16 +105,16 @@ export function validateEnvironment(): void {
     });
   }
 
-  // Validate OPENAI_API_KEY
-  if (!required.OPENAI_API_KEY) {
+  // Validate GROQ_API_KEY
+  if (!required.GROQ_API_KEY) {
     errors.push({
-      variable: 'OPENAI_API_KEY',
+      variable: 'GROQ_API_KEY',
       message: 'Missing required environment variable',
     });
-  } else if (!required.OPENAI_API_KEY.startsWith('sk-')) {
+  } else if (required.GROQ_API_KEY.length < 20) {
     errors.push({
-      variable: 'OPENAI_API_KEY',
-      message: 'Invalid format, must start with "sk-"',
+      variable: 'GROQ_API_KEY',
+      message: 'Invalid format, key appears too short',
     });
   }
 
@@ -169,7 +171,9 @@ export function validateEnvironment(): void {
   console.log(`  SUPABASE_URL: ${required.SUPABASE_URL}`);
   console.log(`  SUPABASE_ANON_KEY: ${maskValue(required.SUPABASE_ANON_KEY || '')}`);
   console.log(`  SUPABASE_SERVICE_KEY: ${maskValue(required.SUPABASE_SERVICE_KEY || '')}`);
-  console.log(`  OPENAI_API_KEY: ${maskValue(required.OPENAI_API_KEY || '')}`);
+  console.log(`  GROQ_API_KEY: ${maskValue(required.GROQ_API_KEY || '')}`);
+  console.log(`  GROQ_DEFAULT_MODEL: ${optional.GROQ_DEFAULT_MODEL}`);
+  console.log(`  OPENAI_API_KEY: ${optional.OPENAI_API_KEY ? maskValue(optional.OPENAI_API_KEY) : '(not set - optional)'}`);
   console.log(`  OPENAI_DEFAULT_MODEL: ${optional.OPENAI_DEFAULT_MODEL}`);
   console.log(`  FRONTEND_URL: ${optional.FRONTEND_URL}\n`);
 }

@@ -93,7 +93,7 @@ app.use(express.json());
 // Health check endpoint
 app.get(["/health", "/api/health"], async (req, res) => {
   const supabaseOk = await checkSupabaseConnection();
-  const openaiOk = await checkOpenAIHealth();
+  const openaiOk = await checkOpenAIHealth(); // Now checks Groq
 
   const allHealthy = supabaseOk && openaiOk;
   const status = allHealthy ? "ok" : "degraded";
@@ -101,7 +101,7 @@ app.get(["/health", "/api/health"], async (req, res) => {
   res.status(allHealthy ? 200 : 503).json({
     status,
     supabase: supabaseOk ? "connected" : "disconnected",
-    openai: openaiOk ? "connected" : "disconnected",
+    openai: openaiOk ? "connected" : "disconnected", // Legacy key name for frontend compatibility
     timestamp: new Date().toISOString(),
   });
 });

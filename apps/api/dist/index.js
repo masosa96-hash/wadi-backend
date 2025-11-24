@@ -34,14 +34,39 @@ const errorHandler_1 = require("./middleware/errorHandler");
 // Validate environment variables before starting
 (0, env_validator_1.validateEnvironment)();
 const app = (0, express_1.default)();
-const PORT = process.env.PORT || 4000;
-// CORS Configuration
+app.set("trust proxy", 1);
+const PORT = Number(process.env.PORT) || 8080;
+// CORS Configuration - Allowlist for local + production + Vercel previews
+const allowlist = [
+    process.env.FRONTEND_URL, // Production frontend URL
+    "http://localhost:5173", // Vite dev server (default)
+    "http://localhost:5174", // Vite dev server (alternative port)
+].filter(Boolean);
 app.use((0, cors_1.default)({
-    origin: (process.env.FRONTEND_URL || "http://localhost:5173").trim(),
+    origin: (origin, cb) => {
+        // Allow requests with no origin (mobile apps, curl, Postman)
+        if (!origin)
+            return cb(null, true);
+        // Check if origin is in allowlist
+        if (allowlist.includes(origin))
+            return cb(null, true);
+        // Allow all Vercel preview deployments
+        if (origin.endsWith(".vercel.app"))
+            return cb(null, true);
+        // Reject all other origins
+        return cb(new Error("Not allowed by CORS"));
+    },
     credentials: true,
     methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
     allowedHeaders: ['Content-Type', 'Authorization', 'x-guest-id'],
 }));
+// Handle preflight requests for all routes
+app.use((req, res, next) => {
+    if (req.method === 'OPTIONS') {
+        return (0, cors_1.default)()(req, res, next);
+    }
+    next();
+});
 app.use((0, helmet_1.default)({
     contentSecurityPolicy: process.env.NODE_ENV === "production"
         ? false // ❗ Necesario en Railway, Vercel, etc.
@@ -98,8 +123,7 @@ const server = (0, http_1.createServer)(app);
 // Setup WebSocket server
 const wss = (0, websocket_1.setupWebSocketServer)(server);
 // Start server
-server.listen(PORT, () => {
-    console.log(`🚀 WADI API running on http://localhost:${PORT}`);
-    console.log(`📊 Health check: http://localhost:${PORT}/health`);
-    console.log(`🔌 WebSocket: ws://localhost:${PORT}/ws`);
+server.listen(PORT, "0.0.0.0", () => {
+    console.log(`API on ${PORT}`);
 });
+// trigger rebuild 2025-11-23T22:37:55

@@ -1,9 +1,10 @@
 import { supabase } from "../config/supabase";
-import OpenAI from "openai";
+import { openaiClient } from "./openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+// Use OpenAI for embeddings (Groq doesn't support embeddings yet)
+if (!openaiClient) {
+  console.warn("OpenAI client not available. Embeddings will not work without OPENAI_API_KEY.");
+}
 
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const SIMILARITY_THRESHOLD = 0.7;
@@ -38,7 +39,11 @@ export class VectorMemoryService {
    */
   async generateEmbedding(text: string): Promise<number[]> {
     try {
-      const response = await openai.embeddings.create({
+      if (!openaiClient) {
+        throw new Error("OpenAI client not available. OPENAI_API_KEY is required for embeddings.");
+      }
+
+      const response = await openaiClient.embeddings.create({
         model: EMBEDDING_MODEL,
         input: text,
       });

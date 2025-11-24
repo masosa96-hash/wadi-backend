@@ -1,9 +1,9 @@
 import { AITool, ToolParameter, ToolExecutionContext, ToolExecutionResult } from "./framework";
-import OpenAI from "openai";
+import { openaiClient } from "../openai";
 
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+if (!openaiClient) {
+  console.warn("OpenAI client not available. Image analysis requires OPENAI_API_KEY.");
+}
 
 export class ImageAnalysisTool extends AITool {
   readonly id = "image_analyzer";
@@ -43,10 +43,14 @@ export class ImageAnalysisTool extends AITool {
       return this.createErrorResult("image_url parameter is required");
     }
 
+    if (!openaiClient) {
+      return this.createErrorResult("OpenAI client not available. OPENAI_API_KEY is required for image analysis.");
+    }
+
     try {
       const prompt = this.getPromptForAnalysisType(analysis_type);
 
-      const response = await openai.chat.completions.create({
+      const response = await openaiClient.chat.completions.create({
         model: "gpt-4o",
         messages: [
           {
