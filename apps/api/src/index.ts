@@ -112,3 +112,5 @@ server.listen(PORT, () => {
   console.log(`📊 Health check: http://localhost:${PORT}/health`);
   console.log(`🔌 WebSocket: ws://localhost:${PORT}/ws`);
 });
+
+// trigger rebuild 2025-11-23T22:37:55
