@@ -24,7 +24,8 @@
     "health": "curl http://localhost:4000/health",
     "health-check": "node scripts/health-check.js",
     "verify-build": "node scripts/verify-build.js",
-    "quick-test": "node scripts/quick-test.js"
+    "quick-test": "node scripts/quick-test.js",
+    "offline": "node scripts/toggle-offline.js"
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.7",
