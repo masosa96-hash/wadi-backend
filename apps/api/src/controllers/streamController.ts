@@ -1,10 +1,6 @@
 import { Request, Response } from "express";
 import { supabase } from "../config/supabase";
-import OpenAI from "openai";
-
-const openai = new OpenAI({
-  apiKey: process.env.OPENAI_API_KEY,
-});
+import { llmClient } from "../services/openai";
 
 export async function streamRun(req: Request, res: Response): Promise<void> {
   try {
@@ -67,10 +63,10 @@ export async function streamRun(req: Request, res: Response): Promise<void> {
     res.setHeader("Connection", "keep-alive");
 
     let fullOutput = "";
-    const selectedModel = model || "gpt-3.5-turbo";
+    const selectedModel = model || process.env.GROQ_DEFAULT_MODEL || "llama-3.1-8b-instant";
 
     try {
-      const stream = await openai.chat.completions.create({
+      const stream = await llmClient.chat.completions.create({
         model: selectedModel,
         messages: [
           { role: "system", content: "You are a helpful AI assistant." },
