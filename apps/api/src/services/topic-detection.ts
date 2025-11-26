@@ -57,7 +57,7 @@ Respondé SOLO en formato JSON con esta estructura exacta:
   "reasoning": "Por qué sí o no cambió el tema"
 }`;
 
-    const response = await generateChatCompletion(
+    const { response } = await generateChatCompletion(
       [
         {
           role: "system",
@@ -108,7 +108,7 @@ export async function generateWorkspaceName(messages: Message[]): Promise<string
       .join(" ")
       .substring(0, 500);
 
-    const response = await generateChatCompletion(
+    const { response } = await generateChatCompletion(
       [
         {
           role: "system",
@@ -141,7 +141,7 @@ export async function extractConversationTopics(messages: Message[]): Promise<st
       .join(" ")
       .substring(0, 1000);
 
-    const response = await generateChatCompletion(
+    const { response } = await generateChatCompletion(
       [
         {
           role: "system",

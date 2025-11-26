@@ -1,14 +1,12 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.vectorMemory = exports.VectorMemoryService = void 0;
 const supabase_1 = require("../config/supabase");
-const openai_1 = __importDefault(require("openai"));
-const openai = new openai_1.default({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const openai_1 = require("./openai");
+// Use OpenAI for embeddings (Groq doesn't support embeddings yet)
+if (!openai_1.openaiClient) {
+    console.warn("OpenAI client not available. Embeddings will not work without OPENAI_API_KEY.");
+}
 const EMBEDDING_MODEL = "text-embedding-3-small";
 const SIMILARITY_THRESHOLD = 0.7;
 const MAX_MEMORIES_PER_PROJECT = 1000;
@@ -22,7 +20,10 @@ class VectorMemoryService {
      */
     async generateEmbedding(text) {
         try {
-            const response = await openai.embeddings.create({
+            if (!openai_1.openaiClient) {
+                throw new Error("OpenAI client not available. OPENAI_API_KEY is required for embeddings.");
+            }
+            const response = await openai_1.openaiClient.embeddings.create({
                 model: EMBEDDING_MODEL,
                 input: text,
             });

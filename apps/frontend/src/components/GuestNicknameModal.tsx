@@ -1,4 +1,5 @@
 import { useState } from "react";
+import { motion } from "framer-motion";
 import { theme } from "../styles/theme";
 
 interface GuestNicknameModalProps {
@@ -16,7 +17,10 @@ export default function GuestNicknameModal({ onSubmit }: GuestNicknameModalProps
     };
 
     return (
-        <div style={{
+        <motion.div 
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            style={{
             position: "fixed",
             inset: 0,
             background: "rgba(0, 0, 0, 0.7)",
@@ -24,8 +28,13 @@ export default function GuestNicknameModal({ onSubmit }: GuestNicknameModalProps
             alignItems: "center",
             justifyContent: "center",
             zIndex: 1000,
+            backdropFilter: "blur(4px)",
         }}>
-            <div style={{
+            <motion.div 
+                initial={{ scale: 0.9, opacity: 0 }}
+                animate={{ scale: 1, opacity: 1 }}
+                transition={{ delay: 0.1 }}
+                style={{
                 background: theme.colors.background.secondary,
                 borderRadius: theme.borderRadius.lg,
                 padding: theme.spacing["2xl"],
@@ -129,7 +138,7 @@ export default function GuestNicknameModal({ onSubmit }: GuestNicknameModalProps
                         Comenzar
                     </button>
                 </form>
-            </div>
-        </div>
+            </motion.div>
+        </motion.div>
     );
 }

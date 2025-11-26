@@ -1,14 +1,8 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.streamRun = streamRun;
 const supabase_1 = require("../config/supabase");
-const openai_1 = __importDefault(require("openai"));
-const openai = new openai_1.default({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const openai_1 = require("../services/openai");
 async function streamRun(req, res) {
     try {
         const userId = req.user_id;
@@ -61,9 +55,9 @@ async function streamRun(req, res) {
         res.setHeader("Cache-Control", "no-cache");
         res.setHeader("Connection", "keep-alive");
         let fullOutput = "";
-        const selectedModel = model || "gpt-3.5-turbo";
+        const selectedModel = model || process.env.GROQ_DEFAULT_MODEL || "llama-3.1-8b-instant";
         try {
-            const stream = await openai.chat.completions.create({
+            const stream = await openai_1.llmClient.chat.completions.create({
                 model: selectedModel,
                 messages: [
                     { role: "system", content: "You are a helpful AI assistant." },

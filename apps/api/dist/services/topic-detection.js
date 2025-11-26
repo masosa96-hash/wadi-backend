@@ -42,7 +42,7 @@ Respondé SOLO en formato JSON con esta estructura exacta:
   "confidence": 0.0 a 1.0,
   "reasoning": "Por qué sí o no cambió el tema"
 }`;
-        const response = await (0, openai_1.generateChatCompletion)([
+        const { response } = await (0, openai_1.generateChatCompletion)([
             {
                 role: "system",
                 content: "Sos un analizador de conversaciones. Respondés SOLO en formato JSON válido, sin texto adicional.",
@@ -85,7 +85,7 @@ async function generateWorkspaceName(messages) {
             .map((msg) => msg.content)
             .join(" ")
             .substring(0, 500);
-        const response = await (0, openai_1.generateChatCompletion)([
+        const { response } = await (0, openai_1.generateChatCompletion)([
             {
                 role: "system",
                 content: "Generá un nombre corto y descriptivo (máximo 4 palabras) para un workspace basado en la conversación. Respondé SOLO el nombre, sin comillas ni puntuación adicional.",
@@ -112,7 +112,7 @@ async function extractConversationTopics(messages) {
             .map((msg) => msg.content)
             .join(" ")
             .substring(0, 1000);
-        const response = await (0, openai_1.generateChatCompletion)([
+        const { response } = await (0, openai_1.generateChatCompletion)([
             {
                 role: "system",
                 content: 'Extraé los 3-5 temas principales de esta conversación. Respondé SOLO en formato JSON: {"topics": ["tema1", "tema2", ...]}',

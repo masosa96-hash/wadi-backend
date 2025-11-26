@@ -30,15 +30,34 @@ if (process.env.OPENAI_API_KEY) {
  * Generate AI response using Groq Chat Completion API with conversation history
  * @param messages Array of message objects with role and content
  * @param model Optional model name (defaults to env var or llama-3.1-8b-instant)
- * @returns AI-generated response text
+ * @returns Object with AI response text and actual model used
  */
 export async function generateChatCompletion(
   messages: Array<{ role: string; content: string }>,
   model: string = DEFAULT_MODEL
-): Promise<string> {
+): Promise<{ response: string; model: string }> {
+  // OFFLINE MODE: Return mock response for development without internet
+  if (process.env.OFFLINE_MODE === 'true') {
+    console.log('[OFFLINE MODE] Returning mock AI response');
+    const userMessage = messages[messages.length - 1]?.content || '';
+    
+    // Simulate processing delay
+    await new Promise(resolve => setTimeout(resolve, 800));
+    
+    return {
+      response: `[Modo Offline] Recibí tu mensaje: "${userMessage.substring(0, 100)}${userMessage.length > 100 ? '...' : ''}". Esta es una respuesta simulada para desarrollo sin conexión a internet. Para obtener respuestas reales de IA, desactivá OFFLINE_MODE en el archivo .env`,
+      model: 'offline-mock'
+    };
+  }
+  
   try {
+    // Map OpenAI models to Groq equivalents
+    const groqModel = mapToGroqModel(model);
+    console.log(`[Chat Service] Generating completion with model: ${model} -> ${groqModel}`);
+    console.log(`[Chat Service] Message count: ${messages.length}`);
+    
     const completion = await llmClient.chat.completions.create({
-      model: model,
+      model: groqModel,
       messages: messages as any,
       max_tokens: 1000,
       temperature: 0.7,
@@ -47,28 +66,53 @@ export async function generateChatCompletion(
     const response = completion.choices[0]?.message?.content;
 
     if (!response) {
+      console.error("[Chat Service] No response generated from LLM");
       throw new Error("No response generated from LLM");
     }
 
-    return response;
+    console.log(`[Chat Service] Response generated successfully, length: ${response.length} chars`);
+    return { response, model: groqModel };
   } catch (error: any) {
-    // Handle API errors
-    if (error.response) {
-      console.error("LLM API error:", error.response.status, error.response.data);
+    // Detailed error logging
+    console.error("[Chat Service] Error details:", {
+      message: error.message,
+      status: error.status,
+      type: error.type,
+      code: error.code,
+    });
 
-      if (error.response.status === 429) {
-        throw new Error("Rate limit exceeded. Please try again later.");
-      }
-
-      if (error.response.status === 401) {
-        throw new Error("Invalid LLM API key");
-      }
-
-      throw new Error(`LLM API error: ${error.response.data?.error?.message || "Unknown error"}`);
+    // Handle specific API errors
+    if (error.status === 429) {
+      throw new Error("Rate limit exceeded. Please try again later.");
     }
 
-    console.error("LLM service error:", error);
-    throw new Error("Failed to generate AI response");
+    if (error.status === 401 || error.status === 403) {
+      throw new Error("LLM API authentication failed. Please check GROQ_API_KEY configuration.");
+    }
+
+    if (error.status === 400) {
+      const errorMessage = error.message || "Invalid request to LLM API";
+      console.error("[Chat Service] Bad request:", errorMessage);
+      throw new Error(`LLM API error: ${errorMessage}`);
+    }
+
+    if (error.status === 404) {
+      throw new Error(`Model '${model}' not found. Please check model name or use a supported model.`);
+    }
+
+    if (error.status >= 500) {
+      throw new Error("LLM service is temporarily unavailable. Please try again later.");
+    }
+
+    // Handle network errors
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      throw new Error("Cannot connect to LLM service. Please check your network connection.");
+    }
+
+    // Generic error with as much detail as possible
+    const errorMsg = error.message || "Unknown error occurred";
+    console.error("[Chat Service] Unexpected error:", error);
+    throw new Error(`Failed to generate AI response: ${errorMsg}`);
   }
 }
 
@@ -261,3 +305,4 @@ export async function checkOpenAIHealth(): Promise<boolean> {
  */
 export { llmClient };
 export { openaiClient }; // For embeddings and other OpenAI-specific features
+export { DEFAULT_MODEL }; // Export default model name

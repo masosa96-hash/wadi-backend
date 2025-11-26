@@ -4,6 +4,7 @@ import { useAuthStore } from "../store/authStore";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
 import GuestNicknameModal from "../components/GuestNicknameModal";
+import ConnectionIndicator from "../components/ConnectionIndicator";
 import { theme } from "../styles/theme";
 import ChatInterface from "../components/ChatInterface";
 // import { useTranslation } from "react-i18next";
@@ -22,11 +23,32 @@ export default function Chat() {
   const [mode, setMode] = useState<ChatMode>('ai');
   const [inputMessage, setInputMessage] = useState("");
   const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const MAX_MESSAGE_LENGTH = 2000;
   // const [showActions, setShowActions] = useState(false); // Unused for now
   const messagesEndRef = useRef<HTMLDivElement>(null);
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
+  };
+
+  // Simple markdown formatter for messages
+  const formatMessage = (text: string) => {
+    return text
+      .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>') // **bold**
+      .replace(/\*(.+?)\*/g, '<em>$1</em>') // *italic*
+      .replace(/`(.+?)`/g, '<code style="background: rgba(255,255,255,0.1); padding: 2px 6px; border-radius: 4px; font-family: monospace;">$1</code>') // `code`
+      .replace(/\n/g, '<br/>'); // line breaks
+  };
+
+  // Copy message to clipboard
+  const copyToClipboard = async (text: string) => {
+    try {
+      await navigator.clipboard.writeText(text);
+      // You could show a toast here
+      console.log('Mensaje copiado al portapapeles');
+    } catch (err) {
+      console.error('Error al copiar:', err);
+    }
   };
 
   useEffect(() => {
@@ -73,11 +95,22 @@ export default function Chat() {
       e.preventDefault();
       handleSend();
     }
+    // Ctrl+K para limpiar el chat (dev feature)
+    if (e.ctrlKey && e.key === "k") {
+      e.preventDefault();
+      if (confirm("¿Limpiar toda la conversación?")) {
+        useChatStore.setState({ messages: [] });
+        if (guestId) {
+          localStorage.removeItem(`wadi_conv_${guestId}`);
+        }
+      }
+    }
   };
 
   return (
     <PhoneShell>
       {showNicknameModal && <GuestNicknameModal onSubmit={handleNicknameSubmit} />}
+      <ConnectionIndicator />
 
       <div style={{
         display: "flex",
@@ -205,9 +238,11 @@ export default function Chat() {
                         style={{
                           display: "flex",
                           justifyContent: message.role === "user" ? "flex-end" : "flex-start",
+                          position: "relative",
                         }}
                       >
-                        <div style={{
+                        <div 
+                          style={{
                           maxWidth: "75%",
                           padding: theme.spacing.md,
                           borderRadius: theme.borderRadius.md,
@@ -220,15 +255,37 @@ export default function Chat() {
                           border: message.role === "assistant"
                             ? `1px solid ${theme.colors.border.subtle}`
                             : "none",
+                          position: "relative",
                         }}>
+                          {/* Copy button */}
+                          <button
+                            onClick={() => copyToClipboard(message.content)}
+                            style={{
+                              position: "absolute",
+                              top: "8px",
+                              right: "8px",
+                              background: "rgba(0,0,0,0.3)",
+                              border: "none",
+                              borderRadius: "4px",
+                              padding: "4px 8px",
+                              cursor: "pointer",
+                              fontSize: "12px",
+                              opacity: 0.6,
+                              transition: "opacity 0.2s",
+                            }}
+                            onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
+                            onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
+                            title="Copiar mensaje"
+                          >
+                            📋
+                          </button>
                           <div style={{
                             fontSize: theme.typography.fontSize.base,
                             lineHeight: 1.5,
-                            whiteSpace: "pre-wrap",
                             wordBreak: "break-word",
-                          }}>
-                            {message.content}
-                          </div>
+                          }}
+                          dangerouslySetInnerHTML={{ __html: formatMessage(message.content) }}
+                          />
                           <div style={{
                             marginTop: theme.spacing.xs,
                             fontSize: theme.typography.fontSize.xs,
@@ -272,44 +329,76 @@ export default function Chat() {
                 borderTop: `1px solid ${theme.colors.border.subtle}`,
                 background: theme.colors.background.secondary,
               }}>
-                <div style={{ display: "flex", gap: theme.spacing.sm }}>
-                  <input
-                    type="text"
-                    value={inputMessage}
-                    onChange={(e) => setInputMessage(e.target.value)}
-                    onKeyPress={handleKeyPress}
-                    placeholder="Escribe tu mensaje..."
-                    disabled={sendingMessage}
-                    style={{
-                      flex: 1,
-                      padding: theme.spacing.md,
-                      border: `1px solid ${theme.colors.border.default}`,
-                      borderRadius: theme.borderRadius.md,
-                      fontSize: theme.typography.fontSize.base,
-                      outline: "none",
-                      background: theme.colors.background.tertiary,
-                      color: theme.colors.text.primary,
-                    }}
-                  />
-                  <button
-                    onClick={handleSend}
-                    disabled={sendingMessage || !inputMessage.trim()}
-                    style={{
-                      padding: `${theme.spacing.md} ${theme.spacing.lg}`,
-                      background: sendingMessage || !inputMessage.trim()
-                        ? theme.colors.border.default
-                        : theme.colors.accent.highlight, // Blue for action button
-                      color: "#FFFFFF",
-                      border: "none",
-                      borderRadius: theme.borderRadius.md,
-                      fontSize: theme.typography.fontSize.base,
-                      fontWeight: theme.typography.fontWeight.medium,
-                      cursor: sendingMessage || !inputMessage.trim() ? "not-allowed" : "pointer",
-                      transition: theme.transitions.default,
-                    }}
-                  >
-                    {sendingMessage ? "..." : "Enviar"}
-                  </button>
+                <div style={{ display: "flex", gap: theme.spacing.sm, flexDirection: "column" }}>
+                  <div style={{ display: "flex", gap: theme.spacing.sm }}>
+                    <textarea
+                      value={inputMessage}
+                      onChange={(e) => {
+                        if (e.target.value.length <= MAX_MESSAGE_LENGTH) {
+                          setInputMessage(e.target.value);
+                        }
+                      }}
+                      onKeyDown={handleKeyPress}
+                      placeholder="Escribe tu mensaje... (Shift+Enter para nueva línea)"
+                      disabled={sendingMessage}
+                      rows={1}
+                      style={{
+                        flex: 1,
+                        padding: theme.spacing.md,
+                        border: `1px solid ${theme.colors.border.default}`,
+                        borderRadius: theme.borderRadius.md,
+                        fontSize: theme.typography.fontSize.base,
+                        outline: "none",
+                        background: theme.colors.background.tertiary,
+                        color: theme.colors.text.primary,
+                        resize: "vertical",
+                        minHeight: "44px",
+                        maxHeight: "120px",
+                        fontFamily: theme.typography.fontFamily.primary,
+                      }}
+                    />
+                    <button
+                      onClick={handleSend}
+                      disabled={sendingMessage || !inputMessage.trim()}
+                      style={{
+                        padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+                        background: sendingMessage || !inputMessage.trim()
+                          ? theme.colors.border.default
+                          : theme.colors.accent.highlight, // Blue for action button
+                        color: "#FFFFFF",
+                        border: "none",
+                        borderRadius: theme.borderRadius.md,
+                        fontSize: theme.typography.fontSize.base,
+                        fontWeight: theme.typography.fontWeight.medium,
+                        cursor: sendingMessage || !inputMessage.trim() ? "not-allowed" : "pointer",
+                        transition: theme.transitions.default,
+                        minWidth: "80px",
+                        height: "44px",
+                      }}
+                    >
+                      {sendingMessage ? "..." : "➤"}
+                    </button>
+                  </div>
+                  
+                  {/* Character counter */}
+                  <div style={{
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
+                    fontSize: theme.typography.fontSize.xs,
+                    color: inputMessage.length > MAX_MESSAGE_LENGTH * 0.9 
+                      ? theme.colors.error 
+                      : theme.colors.text.tertiary,
+                  }}>
+                    <span>
+                      {inputMessage.length > 0 && (
+                        <>{inputMessage.length} / {MAX_MESSAGE_LENGTH} caracteres</>
+                      )}
+                    </span>
+                    <span style={{ color: theme.colors.text.tertiary }}>
+                      Tip: Ctrl+K para limpiar chat
+                    </span>
+                  </div>
                 </div>
               </div>
             </>

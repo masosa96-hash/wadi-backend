@@ -136,19 +136,20 @@ async function sendMessage(req, res) {
                 content: message
             });
         }
-        console.log("[sendMessage] Calling OpenAI with", messages.length, "messages");
+        console.log("[sendMessage] Calling AI service with", messages.length, "messages");
         // Generate AI response
-        let aiResponse;
+        let assistantResponseText = "";
+        let modelUsed = openai_1.DEFAULT_MODEL;
         // 1. Brain Analysis (Kivo)
         const thought = await (0, kivo_1.pensar)(message);
         console.log("[sendMessage] Kivo thought:", thought);
-        let assistantResponseText = "";
         // 2. Execution (Wadi)
         if (thought.intent === "chat") {
             // Standard chat flow
-            // We already prepared 'messages' above, but 'generateChatCompletion' takes the full array
-            // The original code re-constructed the array inside the 'if'. Let's reuse 'messages'.
-            assistantResponseText = await (0, openai_1.generateChatCompletion)(messages);
+            const { response, model } = await (0, openai_1.generateChatCompletion)(messages);
+            assistantResponseText = response;
+            modelUsed = model;
+            console.log(`[sendMessage] AI response generated with model: ${modelUsed}`);
         }
         else {
             // Tool execution flow
@@ -171,7 +172,7 @@ async function sendMessage(req, res) {
                 conversation_id: currentConversationId,
                 role: "assistant",
                 content: assistantResponseText,
-                model: "gpt-3.5-turbo",
+                model: modelUsed,
             })
                 .select()
                 .single();
@@ -189,15 +190,51 @@ async function sendMessage(req, res) {
                 conversationId: currentConversationId,
                 // For guest, we mock the message objects
                 userMessage: userId ? null : { role: 'user', content: message, created_at: new Date().toISOString() },
-                assistantMessage: userId ? assistantMessage : { role: 'assistant', content: assistantResponseText, created_at: new Date().toISOString() },
+                assistantMessage: userId ? assistantMessage : { role: 'assistant', content: assistantResponseText, model: modelUsed, created_at: new Date().toISOString() },
                 reply: assistantResponseText, // Explicitly return reply for guest convenience
+                model: modelUsed, // Return the model used
                 thought,
             },
         });
     }
     catch (error) {
         console.error("[sendMessage] Exception:", error);
-        res.status(500).json({ ok: false, error: "Internal server error" });
+        // Determine error type and provide more specific error messages
+        let errorMessage = "Internal server error";
+        let errorCode = "INTERNAL_ERROR";
+        let statusCode = 500;
+        if (error.message) {
+            // Check for specific error types
+            if (error.message.includes("Rate limit")) {
+                errorCode = "RATE_LIMIT";
+                errorMessage = error.message;
+                statusCode = 429;
+            }
+            else if (error.message.includes("authentication") || error.message.includes("API key")) {
+                errorCode = "AUTH_ERROR";
+                errorMessage = "AI service authentication failed. Please check server configuration.";
+                statusCode = 503;
+            }
+            else if (error.message.includes("Model") && error.message.includes("not found")) {
+                errorCode = "MODEL_ERROR";
+                errorMessage = error.message;
+                statusCode = 400;
+            }
+            else if (error.message.includes("temporarily unavailable") || error.message.includes("network")) {
+                errorCode = "SERVICE_UNAVAILABLE";
+                errorMessage = error.message;
+                statusCode = 503;
+            }
+            else {
+                errorMessage = error.message || "Internal server error";
+            }
+        }
+        res.status(statusCode).json({
+            ok: false,
+            error: true,
+            code: errorCode,
+            message: errorMessage
+        });
     }
 }
 /**

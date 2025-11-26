@@ -1,14 +1,11 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
-};
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.ImageAnalysisTool = void 0;
 const framework_1 = require("./framework");
-const openai_1 = __importDefault(require("openai"));
-const openai = new openai_1.default({
-    apiKey: process.env.OPENAI_API_KEY,
-});
+const openai_1 = require("../openai");
+if (!openai_1.openaiClient) {
+    console.warn("OpenAI client not available. Image analysis requires OPENAI_API_KEY.");
+}
 class ImageAnalysisTool extends framework_1.AITool {
     constructor() {
         super(...arguments);
@@ -46,9 +43,12 @@ class ImageAnalysisTool extends framework_1.AITool {
         if (!image_url) {
             return this.createErrorResult("image_url parameter is required");
         }
+        if (!openai_1.openaiClient) {
+            return this.createErrorResult("OpenAI client not available. OPENAI_API_KEY is required for image analysis.");
+        }
         try {
             const prompt = this.getPromptForAnalysisType(analysis_type);
-            const response = await openai.chat.completions.create({
+            const response = await openai_1.openaiClient.chat.completions.create({
                 model: "gpt-4o",
                 messages: [
                     {
