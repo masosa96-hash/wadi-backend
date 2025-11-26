@@ -83,8 +83,13 @@ export async function generateCompletion(
   model: string = DEFAULT_MODEL
 ): Promise<string> {
   try {
+    // Map OpenAI models to Groq equivalents
+    const groqModel = mapToGroqModel(model);
+    console.log(`[OpenAI Service] Generating completion with model: ${model} -> ${groqModel}`);
+    console.log(`[OpenAI Service] Input length: ${input.length} chars`);
+    
     const completion = await llmClient.chat.completions.create({
-      model: model,
+      model: groqModel,
       messages: [
         {
           role: "user",
@@ -98,33 +103,59 @@ export async function generateCompletion(
     const response = completion.choices[0]?.message?.content;
 
     if (!response) {
+      console.error("[OpenAI Service] No response generated from LLM");
       throw new Error("No response generated from LLM");
     }
 
+    console.log(`[OpenAI Service] Response generated successfully, length: ${response.length} chars`);
     return response;
   } catch (error: any) {
-    // Handle API errors
-    if (error.response) {
-      console.error("LLM API error:", error.response.status, error.response.data);
+    // Detailed error logging
+    console.error("[OpenAI Service] Error details:", {
+      message: error.message,
+      status: error.status,
+      type: error.type,
+      code: error.code,
+    });
 
-      if (error.response.status === 429) {
-        throw new Error("Rate limit exceeded. Please try again later.");
-      }
-
-      if (error.response.status === 401) {
-        throw new Error("Invalid LLM API key");
-      }
-
-      throw new Error(`LLM API error: ${error.response.data?.error?.message || "Unknown error"}`);
+    // Handle specific API errors
+    if (error.status === 429) {
+      throw new Error("Rate limit exceeded. Please try again later.");
     }
 
-    console.error("LLM service error:", error);
-    throw new Error("Failed to generate AI response");
+    if (error.status === 401 || error.status === 403) {
+      throw new Error("LLM API authentication failed. Please check API key configuration.");
+    }
+
+    if (error.status === 400) {
+      const errorMessage = error.message || "Invalid request to LLM API";
+      console.error("[OpenAI Service] Bad request:", errorMessage);
+      throw new Error(`LLM API error: ${errorMessage}`);
+    }
+
+    if (error.status === 404) {
+      throw new Error(`Model '${model}' not found. Please check model name or use a supported model.`);
+    }
+
+    if (error.status >= 500) {
+      throw new Error("LLM service is temporarily unavailable. Please try again later.");
+    }
+
+    // Handle network errors
+    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+      throw new Error("Cannot connect to LLM service. Please check your network connection.");
+    }
+
+    // Generic error with as much detail as possible
+    const errorMsg = error.message || "Unknown error occurred";
+    console.error("[OpenAI Service] Unexpected error:", error);
+    throw new Error(`Failed to generate AI response: ${errorMsg}`);
   }
 }
 
 /**
  * Validate if a model name is supported by Groq
+ * Also maps legacy OpenAI model names to equivalent Groq models
  * @param model Model name to validate
  * @returns True if model is valid
  */
@@ -134,15 +165,34 @@ export function isValidModel(model: string): boolean {
     "llama-3.3-70b-versatile",
     "mixtral-8x7b-32768",
     "gemma-7b-it",
-    // Legacy OpenAI models for backward compatibility
+    // Legacy OpenAI models - accepted for backward compatibility
     "gpt-3.5-turbo",
     "gpt-4",
     "gpt-4-turbo",
     "gpt-4o",
     "gpt-4o-mini",
+    "gpt-4.1-mini",
   ];
 
   return validModels.includes(model);
+}
+
+/**
+ * Map OpenAI model names to Groq equivalents
+ * @param model Model name (potentially OpenAI)
+ * @returns Groq-compatible model name
+ */
+export function mapToGroqModel(model: string): string {
+  const modelMap: Record<string, string> = {
+    "gpt-3.5-turbo": "llama-3.1-8b-instant",
+    "gpt-4o-mini": "llama-3.1-8b-instant",
+    "gpt-4.1-mini": "llama-3.1-8b-instant",
+    "gpt-4": "llama-3.3-70b-versatile",
+    "gpt-4-turbo": "llama-3.3-70b-versatile",
+    "gpt-4o": "llama-3.3-70b-versatile",
+  };
+
+  return modelMap[model] || model;
 }
 
 /**

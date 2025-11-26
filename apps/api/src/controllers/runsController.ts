@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { supabase } from "../config/supabase";
-import { generateCompletion, isValidModel } from "../services/openai";
+import { generateCompletion, isValidModel, mapToGroqModel } from "../services/openai";
 
 /**
  * GET /api/projects/:id/runs
@@ -91,9 +91,12 @@ export async function createRun(req: Request, res: Response): Promise<void> {
     }
 
     // Validate model if provided
-    const selectedModel = model || "gpt-3.5-turbo";
+    const selectedModel = model || process.env.GROQ_DEFAULT_MODEL || "llama-3.1-8b-instant";
+    console.log(`[createRun] Using model: ${selectedModel}`);
+    
     if (model && !isValidModel(model)) {
-      res.status(400).json({ error: "Invalid model name" });
+      console.error(`[createRun] Invalid model requested: ${model}`);
+      res.status(400).json({ error: `Invalid model name: ${model}` });
       return;
     }
 
@@ -153,17 +156,36 @@ export async function createRun(req: Request, res: Response): Promise<void> {
     // Generate AI response
     let output: string;
     try {
+      console.log(`[createRun] Generating AI response for project ${projectId}`);
       output = await generateCompletion(input.trim(), selectedModel);
+      console.log(`[createRun] AI response generated successfully`);
     } catch (aiError: any) {
-      console.error("AI generation error:", aiError);
+      console.error("[createRun] AI generation error:", {
+        message: aiError.message,
+        stack: aiError.stack,
+        model: selectedModel,
+        inputLength: input.length,
+      });
+      
       // Refund credits on AI failure
+      console.log(`[createRun] Refunding ${creditCost} credits to user ${userId}`);
       await supabase.rpc("add_credits", {
         p_user_id: userId,
         p_amount: creditCost,
         p_reason: "AI generation failed - refund",
-        p_metadata: { model: selectedModel, project_id: projectId },
+        p_metadata: { model: selectedModel, project_id: projectId, error: aiError.message },
       });
-      res.status(500).json({ error: aiError.message || "Failed to generate AI response" });
+      
+      // Return specific error message
+      const errorMessage = aiError.message || "Failed to generate AI response";
+      res.status(500).json({ 
+        error: errorMessage,
+        code: "AI_GENERATION_ERROR",
+        details: {
+          model: selectedModel,
+          timestamp: new Date().toISOString(),
+        }
+      });
       return;
     }
 
