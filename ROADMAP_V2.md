@@ -3,10 +3,10 @@
 Based on your valuable feedback, we have structured the next phase of development.
 
 ## 1. Interface & Design 🎨
-- [ ] **Read Aloud (Text-to-Speech):** Add a button to listen to AI responses. (High Priority)
-- [ ] **Theme Customization:** Allow users to pick accent colors beyond just Light/Dark mode.
-- [ ] **Accessibility:** Add "Skip to content" links and improve keyboard navigation.
+- [x] **Read Aloud (Text-to-Speech):** Add a button to listen to AI responses. ✅ COMPLETADO
+- [x] **Theme Customization:** Allow users to pick accent colors beyond just Light/Dark mode. ✅ COMPLETADO
 - [x] **Rich Text:** Markdown support (Bold, Italic, Code) is already implemented.
+- [ ] **Accessibility:** Add "Skip to content" links and improve keyboard navigation.
 - [ ] **Visuals:** Generate images/icons for responses (Requires AI image generation integration).
 
 ## 2. Accessibility ♿
