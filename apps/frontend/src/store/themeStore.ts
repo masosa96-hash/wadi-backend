@@ -1,79 +1,30 @@
-import { create } from "zustand";
-import { persist } from "zustand/middleware";
+import { create } from 'zustand';
+import { persist } from 'zustand/middleware';
 
-type ThemeMode = "light" | "dark" | "auto";
+export type AccentColor = 'blue' | 'green' | 'purple' | 'orange' | 'pink' | 'teal';
 
 interface ThemeState {
-    mode: ThemeMode;
-    effectiveTheme: "light" | "dark";
-
-    setMode: (mode: ThemeMode) => void;
-    toggleTheme: () => void;
+    accentColor: AccentColor;
+    setAccentColor: (color: AccentColor) => void;
 }
 
-// Detect system preference
-function getSystemPreference(): "light" | "dark" {
-    if (typeof window === "undefined") return "light";
-    return window.matchMedia("(prefers-color-scheme: dark)").matches ? "dark" : "light";
-}
-
-// Calculate effective theme based on mode
-function getEffectiveTheme(mode: ThemeMode): "light" | "dark" {
-    if (mode === "auto") {
-        return getSystemPreference();
-    }
-    return mode;
-}
-
-// Apply theme to document
-function applyTheme(theme: "light" | "dark") {
-    if (typeof document === "undefined") return;
-
-    document.documentElement.classList.remove("light", "dark");
-    document.documentElement.classList.add(theme);
-    document.documentElement.setAttribute("data-theme", theme);
-}
+export const accentColors: Record<AccentColor, string> = {
+    blue: '#3B82F6',
+    green: '#10B981',
+    purple: '#8B5CF6',
+    orange: '#F59E0B',
+    pink: '#EC4899',
+    teal: '#14B8A6',
+};
 
 export const useThemeStore = create<ThemeState>()(
     persist(
-        (set, get) => {
-            // Listen for system preference changes
-            if (typeof window !== "undefined") {
-                window.matchMedia("(prefers-color-scheme: dark)").addEventListener("change", (e) => {
-                    const { mode } = get();
-                    if (mode === "auto") {
-                        const newTheme = e.matches ? "dark" : "light";
-                        set({ effectiveTheme: newTheme });
-                        applyTheme(newTheme);
-                    }
-                });
-            }
-
-            const initialMode: ThemeMode = "auto";
-            const initialTheme = getEffectiveTheme(initialMode);
-            applyTheme(initialTheme);
-
-            return {
-                mode: initialMode,
-                effectiveTheme: initialTheme,
-
-                setMode: (mode) => {
-                    const effectiveTheme = getEffectiveTheme(mode);
-                    set({ mode, effectiveTheme });
-                    applyTheme(effectiveTheme);
-                },
-
-                toggleTheme: () => {
-                    const { effectiveTheme } = get();
-                    const newMode = effectiveTheme === "light" ? "dark" : "light";
-                    set({ mode: newMode, effectiveTheme: newMode });
-                    applyTheme(newMode);
-                },
-            };
-        },
+        (set) => ({
+            accentColor: 'blue',
+            setAccentColor: (color) => set({ accentColor: color }),
+        }),
         {
-            name: "wadi-theme-storage",
-            partialize: (state) => ({ mode: state.mode }),
+            name: 'wadi-theme-storage',
         }
     )
 );

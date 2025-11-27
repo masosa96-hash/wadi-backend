@@ -6,6 +6,7 @@ import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
 import Button from "../components/Button";
 import Input from "../components/Input";
+import ThemeCustomizer from "../components/ThemeCustomizer";
 
 export default function Settings() {
   const navigate = useNavigate();
@@ -80,6 +81,20 @@ export default function Settings() {
               Guardar Cambios
             </Button>
           </div>
+        </section>
+
+        {/* Theme Customization Section */}
+        <section style={{ padding: `0 ${theme.spacing.xl} ${theme.spacing.xl}` }}>
+          <h2 style={{
+            margin: `0 0 ${theme.spacing.lg} 0`,
+            fontSize: theme.typography.fontSize.xl,
+            fontWeight: theme.typography.fontWeight.semibold,
+            color: theme.colors.text.primary,
+          }}>
+            Personalización
+          </h2>
+
+          <ThemeCustomizer />
         </section>
 
         {/* Preferences Section */}
