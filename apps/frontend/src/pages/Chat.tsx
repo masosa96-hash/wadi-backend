@@ -7,6 +7,7 @@ import GuestNicknameModal from "../components/GuestNicknameModal";
 import ConnectionIndicator from "../components/ConnectionIndicator";
 import { theme } from "../styles/theme";
 import ChatInterface from "../components/ChatInterface";
+import MessageBubble from "../components/MessageBubble";
 // import { useTranslation } from "react-i18next";
 
 type ChatMode = 'ai' | 'mirror';
@@ -233,71 +234,13 @@ export default function Chat() {
                 ) : (
                   <>
                     {messages.map((message) => (
-                      <div
+                      <MessageBubble
                         key={message.id}
-                        style={{
-                          display: "flex",
-                          justifyContent: message.role === "user" ? "flex-end" : "flex-start",
-                          position: "relative",
-                        }}
-                      >
-                        <div 
-                          style={{
-                          maxWidth: "75%",
-                          padding: theme.spacing.md,
-                          borderRadius: theme.borderRadius.md,
-                          background: message.role === "user"
-                            ? theme.colors.accent.highlight // Blue for user messages
-                            : theme.colors.background.secondary,
-                          color: message.role === "user"
-                            ? "#FFFFFF" // White text on blue
-                            : theme.colors.text.primary,
-                          border: message.role === "assistant"
-                            ? `1px solid ${theme.colors.border.subtle}`
-                            : "none",
-                          position: "relative",
-                        }}>
-                          {/* Copy button */}
-                          <button
-                            onClick={() => copyToClipboard(message.content)}
-                            style={{
-                              position: "absolute",
-                              top: "8px",
-                              right: "8px",
-                              background: "rgba(0,0,0,0.3)",
-                              border: "none",
-                              borderRadius: "4px",
-                              padding: "4px 8px",
-                              cursor: "pointer",
-                              fontSize: "12px",
-                              opacity: 0.6,
-                              transition: "opacity 0.2s",
-                            }}
-                            onMouseEnter={(e) => e.currentTarget.style.opacity = "1"}
-                            onMouseLeave={(e) => e.currentTarget.style.opacity = "0.6"}
-                            title="Copiar mensaje"
-                          >
-                            📋
-                          </button>
-                          <div style={{
-                            fontSize: theme.typography.fontSize.base,
-                            lineHeight: 1.5,
-                            wordBreak: "break-word",
-                          }}
-                          dangerouslySetInnerHTML={{ __html: formatMessage(message.content) }}
-                          />
-                          <div style={{
-                            marginTop: theme.spacing.xs,
-                            fontSize: theme.typography.fontSize.xs,
-                            opacity: 0.7,
-                          }}>
-                            {new Date(message.created_at).toLocaleTimeString('es-AR', {
-                              hour: '2-digit',
-                              minute: '2-digit',
-                            })}
-                          </div>
-                        </div>
-                      </div>
+                        type={message.role === "user" ? "user" : "ai"}
+                        content={message.content}
+                        timestamp={message.created_at}
+                        model={message.role === "assistant" ? "WADI Brain" : undefined}
+                      />
                     ))}
                     {sendingMessage && (
                       <div style={{
@@ -379,15 +322,15 @@ export default function Chat() {
                       {sendingMessage ? "..." : "➤"}
                     </button>
                   </div>
-                  
+
                   {/* Character counter */}
                   <div style={{
                     display: "flex",
                     justifyContent: "space-between",
                     alignItems: "center",
                     fontSize: theme.typography.fontSize.xs,
-                    color: inputMessage.length > MAX_MESSAGE_LENGTH * 0.9 
-                      ? theme.colors.error 
+                    color: inputMessage.length > MAX_MESSAGE_LENGTH * 0.9
+                      ? theme.colors.error
                       : theme.colors.text.tertiary,
                   }}>
                     <span>

@@ -132,28 +132,37 @@ export default function MessageBubble({
           </ReactMarkdown>
 
           {/* TTS Button (Only for AI messages) */}
-          {!isUser && (
-            <button
-              onClick={handleSpeak}
-              title={isSpeaking ? "Detener lectura" : "Leer en voz alta"}
-              style={{
-                position: 'absolute',
-                bottom: '-24px',
-                right: '0',
-                background: 'transparent',
-                border: 'none',
-                color: isSpeaking ? theme.colors.accent.primary : theme.colors.text.tertiary,
-                cursor: 'pointer',
-                fontSize: '14px',
-                opacity: 1, // Always visible
-                display: 'flex',
-                alignItems: 'center',
-                gap: '4px',
-                padding: '4px',
-              }}
-            >
-              {isSpeaking ? '⏹️' : '🔊'}
-            </button>
+          {type === 'ai' && (
+            <div style={{
+              display: 'flex',
+              justifyContent: 'flex-end',
+              marginTop: '8px',
+              borderTop: `1px solid ${theme.colors.border.subtle}`,
+              paddingTop: '8px',
+              width: '100%'
+            }}>
+              <button
+                onClick={(e) => {
+                  e.stopPropagation();
+                  handleSpeak();
+                }}
+                style={{
+                  background: 'transparent',
+                  border: 'none',
+                  color: isSpeaking ? theme.colors.accent.primary : theme.colors.text.tertiary,
+                  cursor: 'pointer',
+                  fontSize: '12px',
+                  display: 'flex',
+                  alignItems: 'center',
+                  gap: '6px',
+                  padding: '4px 8px',
+                  borderRadius: '4px',
+                }}
+              >
+                <span>{isSpeaking ? '⏹️' : '🔊'}</span>
+                <span>{isSpeaking ? 'Detener' : 'Escuchar'}</span>
+              </button>
+            </div>
           )}
         </div>
         {/* Action buttons (visible on hover) */}
