@@ -20,6 +20,7 @@ import chatRouter from "./routes/chat";
 import favoritesRouter from "./routes/favorites";
 import templatesRouter from "./routes/templates";
 import searchRouter from "./routes/search";
+import userRouter from "./routes/user";
 import { checkSupabaseConnection } from "./config/supabase";
 import { checkOpenAIHealth } from "./services/openai";
 import { setupWebSocketServer } from "./services/websocket";
@@ -45,13 +46,13 @@ app.use(cors({
   origin: (origin, cb) => {
     // Allow requests with no origin (mobile apps, curl, Postman)
     if (!origin) return cb(null, true);
-    
+
     // Check if origin is in allowlist
     if (allowlist.includes(origin)) return cb(null, true);
-    
+
     // Allow all Vercel preview deployments
     if (origin.endsWith(".vercel.app")) return cb(null, true);
-    
+
     // Reject all other origins
     return cb(new Error("Not allowed by CORS"));
   },
@@ -123,6 +124,7 @@ app.use("/api/chat", chatRouter);
 app.use("/api/favorites", favoritesRouter);
 app.use("/api/templates", templatesRouter);
 app.use("/api/search", searchRouter);
+app.use("/api/user", userRouter);
 
 // Error handling middleware (must be last)
 app.use(errorHandler);
