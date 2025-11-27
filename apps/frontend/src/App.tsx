@@ -6,6 +6,7 @@ import { useEffect, useState } from 'react';
 import { api } from './config/api';
 import { SpeedInsights } from '@vercel/speed-insights/react';
 import { Analytics } from '@vercel/analytics/react';
+import './utils/debug'; // Load debug utilities in dev mode
 
 export default function App() {
     // Initialize translation hook to ensure i18n is ready
