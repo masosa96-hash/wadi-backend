@@ -25,6 +25,7 @@ const chat_1 = __importDefault(require("./routes/chat"));
 const favorites_1 = __importDefault(require("./routes/favorites"));
 const templates_1 = __importDefault(require("./routes/templates"));
 const search_1 = __importDefault(require("./routes/search"));
+const user_1 = __importDefault(require("./routes/user"));
 const supabase_1 = require("./config/supabase");
 const openai_1 = require("./services/openai");
 const websocket_1 = require("./services/websocket");
@@ -116,6 +117,7 @@ app.use("/api/chat", chat_1.default);
 app.use("/api/favorites", favorites_1.default);
 app.use("/api/templates", templates_1.default);
 app.use("/api/search", search_1.default);
+app.use("/api/user", user_1.default);
 // Error handling middleware (must be last)
 app.use(errorHandler_1.errorHandler);
 // Create HTTP server

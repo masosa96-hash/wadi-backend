@@ -18,6 +18,10 @@ export default defineConfig({
         manualChunks: {
           'react-vendor': ['react', 'react-dom', 'react-router-dom'],
           'state-vendor': ['zustand'],
+          'ui-vendor': ['framer-motion'],
+          'supabase-vendor': ['@supabase/supabase-js'],
+          'markdown-vendor': ['react-markdown', 'remark-gfm', 'rehype-highlight', 'react-syntax-highlighter'],
+          'i18n-vendor': ['i18next', 'react-i18next'],
         },
       },
     },

@@ -1,22 +1,104 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
 import { theme } from "../styles/theme";
 import PhoneShell from "../components/PhoneShell";
 import BottomNav from "../components/BottomNav";
+import { useChatStore } from "../store/chatStore";
+import { useAuthStore } from "../store/authStore";
+
+interface SearchResult {
+  id: string;
+  type: 'conversation' | 'message';
+  title: string;
+  preview: string;
+  timestamp: number;
+}
 
 export default function Search() {
   const [query, setQuery] = useState("");
-  const [results, setResults] = useState<any[]>([]);
+  const [results, setResults] = useState<SearchResult[]>([]);
   const [isSearching, setIsSearching] = useState(false);
+  const navigate = useNavigate();
+  
+  const { messages } = useChatStore();
+  const { guestId } = useAuthStore();
+
+  // Auto-search when query changes (debounced)
+  useEffect(() => {
+    const timeoutId = setTimeout(() => {
+      if (query.trim()) {
+        handleSearch();
+      } else {
+        setResults([]);
+      }
+    }, 300); // Debounce 300ms
+
+    return () => clearTimeout(timeoutId);
+  }, [query]);
 
   const handleSearch = async () => {
-    if (!query.trim()) return;
+    if (!query.trim()) {
+      setResults([]);
+      return;
+    }
 
     setIsSearching(true);
-    // TODO: Implement actual search
-    setTimeout(() => {
+    
+    try {
+      // Search in current chat messages
+      const searchTerm = query.toLowerCase();
+      const foundResults: SearchResult[] = [];
+      
+      // Search through messages
+      messages.forEach((msg) => {
+        if (msg.content.toLowerCase().includes(searchTerm)) {
+          foundResults.push({
+            id: msg.id,
+            type: 'message',
+            title: msg.role === 'user' ? 'Tú' : 'WADI',
+            preview: msg.content.substring(0, 100) + (msg.content.length > 100 ? '...' : ''),
+            timestamp: new Date(msg.created_at).getTime(),
+          });
+        }
+      });
+      
+      // Search in localStorage for guest conversations
+      if (guestId) {
+        const convKey = `wadi_conv_${guestId}`;
+        const stored = localStorage.getItem(convKey);
+        if (stored) {
+          try {
+            const history = JSON.parse(stored);
+            history.forEach((msg: any) => {
+              if (msg.content?.toLowerCase().includes(searchTerm)) {
+                // Avoid duplicates
+                if (!foundResults.find(r => r.id === msg.id)) {
+                  foundResults.push({
+                    id: msg.id,
+                    type: 'message',
+                    title: msg.role === 'user' ? 'Tú (historial)' : 'WADI (historial)',
+                    preview: msg.content.substring(0, 100) + (msg.content.length > 100 ? '...' : ''),
+                    timestamp: new Date(msg.created_at || Date.now()).getTime(),
+                  });
+                }
+              }
+            });
+          } catch (e) {
+            console.error('Error searching history:', e);
+          }
+        }
+      }
+      
+      // Sort by timestamp (most recent first)
+      foundResults.sort((a, b) => b.timestamp - a.timestamp);
+      
+      setResults(foundResults);
+    } catch (error) {
+      console.error('Search error:', error);
       setResults([]);
+    } finally {
       setIsSearching(false);
-    }, 500);
+    }
   };
 
   return (
@@ -124,23 +206,53 @@ export default function Search() {
             </div>
           ) : (
             <div style={{ display: "flex", flexDirection: "column", gap: theme.spacing.sm }}>
-              {results.map((result, index) => (
+              {results.map((result) => (
                 <div
-                  key={index}
+                  key={result.id}
+                  onClick={() => navigate('/chat')}
                   style={{
                     padding: theme.spacing.md,
                     background: theme.colors.background.secondary,
                     border: `1px solid ${theme.colors.border.subtle}`,
                     borderRadius: theme.borderRadius.md,
                     cursor: "pointer",
+                    transition: theme.transitions.medium,
+                  }}
+                  onMouseEnter={(e) => {
+                    e.currentTarget.style.borderColor = theme.colors.accent.primary;
+                    e.currentTarget.style.transform = 'translateY(-2px)';
+                  }}
+                  onMouseLeave={(e) => {
+                    e.currentTarget.style.borderColor = theme.colors.border.subtle;
+                    e.currentTarget.style.transform = 'translateY(0)';
                   }}
                 >
                   <div style={{
-                    fontSize: theme.typography.fontSize.base,
-                    fontWeight: theme.typography.fontWeight.medium,
-                    color: theme.colors.text.primary,
+                    display: 'flex',
+                    justifyContent: 'space-between',
+                    alignItems: 'flex-start',
+                    marginBottom: theme.spacing.xs,
                   }}>
-                    {result.title}
+                    <div style={{
+                      fontSize: theme.typography.fontSize.sm,
+                      fontWeight: theme.typography.fontWeight.semibold,
+                      color: theme.colors.accent.primary,
+                    }}>
+                      {result.title}
+                    </div>
+                    <div style={{
+                      fontSize: theme.typography.fontSize.caption,
+                      color: theme.colors.text.tertiary,
+                    }}>
+                      {new Date(result.timestamp).toLocaleDateString()}
+                    </div>
+                  </div>
+                  <div style={{
+                    fontSize: theme.typography.fontSize.sm,
+                    color: theme.colors.text.secondary,
+                    lineHeight: 1.5,
+                  }}>
+                    {result.preview}
                   </div>
                 </div>
               ))}
