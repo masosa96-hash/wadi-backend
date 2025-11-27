@@ -24,6 +24,7 @@ import { WorkspaceSettings } from "./pages/WorkspaceSettings";
 import { AIFlows } from "./pages/AIFlows";
 import { Profile } from "./pages/Profile";
 import NotFound from "./pages/NotFound";
+import SharedConversation from "./pages/SharedConversation";
 import { theme } from "./styles/theme";
 import RootLayout from "./layouts/RootLayout";
 
@@ -109,6 +110,10 @@ export const router = createBrowserRouter([
             <Home />
           </RootGuard>
         ),
+      },
+      {
+        path: "/shared/:token",
+        element: <SharedConversation />,
       },
       {
         path: "/chat",

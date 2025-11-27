@@ -8,6 +8,7 @@ import ConnectionIndicator from "../components/ConnectionIndicator";
 import { theme } from "../styles/theme";
 import ChatInterface from "../components/ChatInterface";
 import MessageBubble from "../components/MessageBubble";
+import ShareModal from "../components/ShareModal";
 // import { useTranslation } from "react-i18next";
 
 type ChatMode = 'ai' | 'mirror';
@@ -24,6 +25,7 @@ export default function Chat() {
   const [mode, setMode] = useState<ChatMode>('ai');
   const [inputMessage, setInputMessage] = useState("");
   const [showNicknameModal, setShowNicknameModal] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   const MAX_MESSAGE_LENGTH = 2000;
   // const [showActions, setShowActions] = useState(false); // Unused for now
   const messagesEndRef = useRef<HTMLDivElement>(null);
@@ -111,6 +113,12 @@ export default function Chat() {
   return (
     <PhoneShell>
       {showNicknameModal && <GuestNicknameModal onSubmit={handleNicknameSubmit} />}
+      {showShareModal && (
+        <ShareModal
+          conversationId="current" // TODO: Use actual conversation ID
+          onClose={() => setShowShareModal(false)}
+        />
+      )}
       <ConnectionIndicator />
 
       <div style={{
@@ -183,6 +191,28 @@ export default function Chat() {
               Espejo
             </button>
           </div>
+
+          {/* Share Button */}
+          {messages.length > 0 && (
+            <button
+              onClick={() => setShowShareModal(true)}
+              style={{
+                padding: `${theme.spacing.sm} ${theme.spacing.md}`,
+                background: 'transparent',
+                border: `1px solid ${theme.colors.border.default}`,
+                borderRadius: theme.borderRadius.md,
+                color: theme.colors.text.secondary,
+                cursor: 'pointer',
+                fontSize: theme.typography.fontSize.sm,
+                display: 'flex',
+                alignItems: 'center',
+                gap: theme.spacing.xs,
+              }}
+              title="Compartir conversación"
+            >
+              🔗 Compartir
+            </button>
+          )}
         </div>
 
         {/* Content */}
