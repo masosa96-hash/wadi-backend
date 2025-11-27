@@ -14,6 +14,7 @@
   },
   "dependencies": {
     "@supabase/supabase-js": "^2.39.0",
+    "@types/react-syntax-highlighter": "^15.5.13",
     "@vercel/analytics": "^1.5.0",
     "@vercel/speed-insights": "^1.2.0",
     "@wadi/chat-core": "workspace:*",
@@ -25,6 +26,7 @@
     "react-i18next": "^16.3.5",
     "react-markdown": "^10.1.0",
     "react-router-dom": "^6.20.1",
+    "react-syntax-highlighter": "^16.1.0",
     "rehype-highlight": "^7.0.2",
     "remark-gfm": "^4.0.1",
     "zustand": "^4.5.7"

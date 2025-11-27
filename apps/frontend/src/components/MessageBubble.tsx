@@ -1,5 +1,8 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
+import ReactMarkdown from "react-markdown";
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 import { theme } from "../styles/theme";
 import type { Tag } from "../store/tagsStore";
 import TagChip from "./TagChip";
@@ -19,12 +22,12 @@ interface MessageBubbleProps {
   runId?: string;
 }
 
-export default function MessageBubble({ 
-  type, 
-  content, 
-  timestamp, 
-  model, 
-  customName, 
+export default function MessageBubble({
+  type,
+  content,
+  timestamp,
+  model,
+  customName,
   onRename,
   tags = [],
   onTagRemove,
@@ -33,6 +36,30 @@ export default function MessageBubble({
 }: MessageBubbleProps) {
   const isUser = type === "user";
   const [isHovered, setIsHovered] = useState(false);
+  const [isSpeaking, setIsSpeaking] = useState(false);
+
+  const handleSpeak = () => {
+    if (isSpeaking) {
+      window.speechSynthesis.cancel();
+      setIsSpeaking(false);
+      return;
+    }
+
+    const utterance = new SpeechSynthesisUtterance(content);
+    utterance.lang = 'es-MX'; // Default to Spanish MX
+    utterance.onend = () => setIsSpeaking(false);
+    utterance.onerror = () => setIsSpeaking(false);
+
+    setIsSpeaking(true);
+    window.speechSynthesis.speak(utterance);
+  };
+
+  // Stop speaking when component unmounts
+  useEffect(() => {
+    return () => {
+      window.speechSynthesis.cancel();
+    };
+  }, []);
 
   return (
     <motion.div
@@ -45,30 +72,90 @@ export default function MessageBubble({
         display: 'flex',
         flexDirection: 'column',
         alignItems: isUser ? 'flex-end' : 'flex-start',
-        marginBottom: theme.spacing.xl,
+        marginBottom: theme.spacing.lg,
+        maxWidth: '100%',
       }}
     >
-      <motion.div
-        whileHover={{ scale: 1.01 }}
-        transition={{ duration: 0.15 }}
-        style={{
-          maxWidth: isUser ? '65%' : '75%',
-          ...(isUser ? theme.glass.light : theme.glass.accent),
-          borderRadius: isUser 
-            ? '16px 16px 4px 16px' 
-            : '16px 16px 16px 4px',
-          padding: `${theme.spacing.lg} ${theme.spacing.xl}`,
-          color: theme.colors.text.primary,
+      <div style={{
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: isUser ? 'flex-end' : 'flex-start',
+        maxWidth: '85%',
+        position: 'relative',
+      }}>
+        {/* Message Content */}
+        <div style={{
+          padding: `${theme.spacing.md} ${theme.spacing.lg}`,
+          borderRadius: isUser
+            ? `${theme.borderRadius.lg} ${theme.borderRadius.lg} 0 ${theme.borderRadius.lg}`
+            : `${theme.borderRadius.lg} ${theme.borderRadius.lg} ${theme.borderRadius.lg} 0`,
+          background: isUser
+            ? theme.colors.accent.primary
+            : theme.colors.background.surface,
+          color: isUser
+            ? '#FFFFFF'
+            : theme.colors.text.primary,
+          border: isUser
+            ? 'none'
+            : `1px solid ${theme.colors.border.subtle}`,
+          boxShadow: theme.shadows.sm,
           fontSize: theme.typography.fontSize.body,
-          fontFamily: theme.typography.fontFamily.primary,
-          lineHeight: theme.typography.lineHeight.normal,
-          whiteSpace: 'pre-wrap',
-          wordBreak: 'break-word',
+          lineHeight: 1.6,
           position: 'relative',
-        }}
-      >
-        {content}
-        
+        }}>
+          <ReactMarkdown
+            components={{
+              code({ node, inline, className, children, ...props }: any) {
+                const match = /language-(\w+)/.exec(className || '')
+                return !inline && match ? (
+                  <SyntaxHighlighter
+                    {...props}
+                    style={vscDarkPlus}
+                    language={match[1]}
+                    PreTag="div"
+                  >
+                    {String(children).replace(/\n$/, '')}
+                  </SyntaxHighlighter>
+                ) : (
+                  <code {...props} className={className} style={{
+                    background: 'rgba(0,0,0,0.2)',
+                    padding: '2px 4px',
+                    borderRadius: '4px',
+                  }}>
+                    {children}
+                  </code>
+                )
+              }
+            }}
+          >
+            {content}
+          </ReactMarkdown>
+
+          {/* TTS Button (Only for AI messages) */}
+          {!isUser && (
+            <button
+              onClick={handleSpeak}
+              title={isSpeaking ? "Detener lectura" : "Leer en voz alta"}
+              style={{
+                position: 'absolute',
+                bottom: '-24px',
+                right: '0',
+                background: 'transparent',
+                border: 'none',
+                color: isSpeaking ? theme.colors.accent.primary : theme.colors.text.tertiary,
+                cursor: 'pointer',
+                fontSize: '14px',
+                opacity: 1, // Always visible
+                display: 'flex',
+                alignItems: 'center',
+                gap: '4px',
+                padding: '4px',
+              }}
+            >
+              {isSpeaking ? '⏹️' : '🔊'}
+            </button>
+          )}
+        </div>
         {/* Action buttons (visible on hover) */}
         {isHovered && (
           <motion.div
@@ -110,58 +197,60 @@ export default function MessageBubble({
             )}
           </motion.div>
         )}
-      </motion.div>
-      
+      </div>
+
       {/* Tags section */}
-      {tags.length > 0 && (
-        <div style={{
-          display: 'flex',
-          gap: theme.spacing.xs,
-          marginTop: theme.spacing.sm,
-          flexWrap: 'wrap',
-          maxWidth: isUser ? '65%' : '75%',
-        }}>
-          {tags.map((tag) => (
-            <TagChip
-              key={tag.id}
-              tag={tag}
-              size="small"
-              onRemove={onTagRemove ? () => onTagRemove(tag.id) : undefined}
-            />
-          ))}
-          {onTagAdd && (
-            <button
-              onClick={onTagAdd}
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                height: '20px',
-                padding: `2px ${theme.spacing.sm}`,
-                borderRadius: theme.borderRadius.small,
-                background: 'transparent',
-                border: `1px dashed ${theme.colors.border.accent}`,
-                color: theme.colors.text.tertiary,
-                fontSize: theme.typography.fontSize.caption,
-                cursor: 'pointer',
-                transition: theme.transitions.fast,
-              }}
-              onMouseEnter={(e) => {
-                e.currentTarget.style.borderColor = theme.colors.accent.primary;
-                e.currentTarget.style.color = theme.colors.accent.primary;
-              }}
-              onMouseLeave={(e) => {
-                e.currentTarget.style.borderColor = theme.colors.border.accent;
-                e.currentTarget.style.color = theme.colors.text.tertiary;
-              }}
-              title="Add tag"
-            >
-              + Tag
-            </button>
-          )}
-        </div>
-      )}
-      
-      
+      {
+        tags.length > 0 && (
+          <div style={{
+            display: 'flex',
+            gap: theme.spacing.xs,
+            marginTop: theme.spacing.sm,
+            flexWrap: 'wrap',
+            maxWidth: isUser ? '65%' : '75%',
+          }}>
+            {tags.map((tag) => (
+              <TagChip
+                key={tag.id}
+                tag={tag}
+                size="small"
+                onRemove={onTagRemove ? () => onTagRemove(tag.id) : undefined}
+              />
+            ))}
+            {onTagAdd && (
+              <button
+                onClick={onTagAdd}
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  height: '20px',
+                  padding: `2px ${theme.spacing.sm}`,
+                  borderRadius: theme.borderRadius.small,
+                  background: 'transparent',
+                  border: `1px dashed ${theme.colors.border.accent}`,
+                  color: theme.colors.text.tertiary,
+                  fontSize: theme.typography.fontSize.caption,
+                  cursor: 'pointer',
+                  transition: theme.transitions.fast,
+                }}
+                onMouseEnter={(e) => {
+                  e.currentTarget.style.borderColor = theme.colors.accent.primary;
+                  e.currentTarget.style.color = theme.colors.accent.primary;
+                }}
+                onMouseLeave={(e) => {
+                  e.currentTarget.style.borderColor = theme.colors.border.accent;
+                  e.currentTarget.style.color = theme.colors.text.tertiary;
+                }}
+                title="Add tag"
+              >
+                + Tag
+              </button>
+            )}
+          </div>
+        )
+      }
+
+
       <div style={{
         display: 'flex',
         gap: theme.spacing.md,
@@ -212,6 +301,6 @@ export default function MessageBubble({
           </>
         )}
       </div>
-    </motion.div>
+    </motion.div >
   );
 }
