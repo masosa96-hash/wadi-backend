@@ -24,6 +24,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     const { message, conversationId, messages: historyMessages } = req.body; // historyMessages from client for guest
 
     console.log("[sendMessage] Request from:", userId ? `User ${userId}` : `Guest ${guestId}`, { message: message?.substring(0, 50), conversationId });
+    console.log("[DEBUG] userId:", userId, "type:", typeof userId);
 
     // If neither user nor guest ID is present, reject the request.
     if (!userId && !guestId) {
@@ -42,7 +43,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     let history = [];
     let userMessage = null;
 
-    if (userId) {
+    if (userId && userId !== "undefined") {
       // --- AUTHENTICATED USER FLOW (SUPABASE) ---
 
       // If no conversation ID provided, get or create default conversation

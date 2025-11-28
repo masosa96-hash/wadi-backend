@@ -42,7 +42,7 @@ async function sendMessage(req, res) {
         let currentConversationId = conversationId;
         let history = [];
         let userMessage = null;
-        if (userId) {
+        if (userId && userId !== "undefined") {
             // --- AUTHENTICATED USER FLOW (SUPABASE) ---
             // If no conversation ID provided, get or create default conversation
             if (!currentConversationId) {
