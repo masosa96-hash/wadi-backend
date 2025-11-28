@@ -42,6 +42,7 @@ const allowlist = [
     process.env.FRONTEND_URL, // Production frontend URL
     "http://localhost:5173", // Vite dev server (default)
     "http://localhost:5174", // Vite dev server (alternative port)
+    "http://192.168.0.108:5173", // LAN access
 ].filter(Boolean);
 app.use((0, cors_1.default)({
     origin: (origin, cb) => {
