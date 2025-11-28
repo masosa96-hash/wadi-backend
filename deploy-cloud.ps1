@@ -115,13 +115,13 @@ Write-Host "2. Deploy backend to Render" -ForegroundColor White
 Write-Host "3. Deploy frontend to Vercel" -ForegroundColor White
 Write-Host "4. Configure environment variables in both platforms" -ForegroundColor White
 Write-Host ""
-Write-Host "Refer to CLOUD_DEPLOYMENT_GUIDE.md for detailed instructions" -ForegroundColor Cyan
+Write-Host "Refer to COMPLETE_DEPLOYMENT_GUIDE.md for detailed instructions" -ForegroundColor Cyan
 Write-Host ""
 
 $openGuide = Read-Host "Open deployment guide? (y/N)"
 if ($openGuide -eq 'y' -or $openGuide -eq 'Y') {
-    Write-Host "Opening CLOUD_DEPLOYMENT_GUIDE.md..." -ForegroundColor Yellow
-    Invoke-Item "CLOUD_DEPLOYMENT_GUIDE.md"
+    Write-Host "Opening COMPLETE_DEPLOYMENT_GUIDE.md..." -ForegroundColor Yellow
+    Invoke-Item "COMPLETE_DEPLOYMENT_GUIDE.md"
 }
 
 Write-Host "🎉 Ready for deployment!" -ForegroundColor Green
