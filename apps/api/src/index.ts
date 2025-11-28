@@ -36,10 +36,10 @@ app.set("trust proxy", 1);
 const PORT = Number(process.env.PORT) || 8080;
 
 // CORS Configuration - Allowlist for local + production + Vercel previews
-const allowlist = [
-  process.env.FRONTEND_URL, // Production frontend URL
+process.env.FRONTEND_URL, // Production frontend URL
   "http://localhost:5173",   // Vite dev server (default)
   "http://localhost:5174",   // Vite dev server (alternative port)
+  "http://192.168.0.108:5173", // LAN access
 ].filter(Boolean);
 
 app.use(cors({
