@@ -8,7 +8,7 @@ Before starting, you'll need to create accounts with the following services:
 
 1. **GitHub** - For version control and connecting to deployment platforms
 2. **Vercel** - For frontend deployment (free tier available)
-3. **Render** - For backend deployment (free tier available)
+3. **Render OR Railway** - For backend deployment (free tier available)
 4. **Supabase** - For database and authentication (free tier available)
 5. **Groq** - Primary AI provider (free tier with generous credits)
 6. **Node.js** >= 20.19 (required for Vite)
@@ -28,11 +28,15 @@ Before starting, you'll need to create accounts with the following services:
 ```
 VITE_SUPABASE_URL=your-project-url.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key-here
-VITE_API_URL=https://your-backend-url.onrender.com
+VITE_API_URL=https://your-backend-url.[onrender.com OR railway.app]
 VITE_GUEST_MODE=true
 ```
 
-### Backend (Render)
+### Backend Options
+
+You can deploy the backend to either Render or Railway:
+
+#### Option A: Backend (Render)
 
 **Service Configuration:**
 - Service Type: Web Service
@@ -54,6 +58,33 @@ JWT_SECRET=auto-generated-by-render
 PNPM_VERSION=10.21.0
 ```
 
+#### Option B: Backend (Railway)
+
+**Service Configuration:**
+- Service Type: Web Service
+- Build Command: Uses `railway.json` configuration
+- Start Command: Uses `railway.json` configuration
+- Region: Automatically detected
+- Plan: Free (or choose a paid plan for production)
+
+**Required Environment Variables (set in Variables tab):**
+```
+SUPABASE_URL=your-project-url.supabase.co
+SUPABASE_ANON_KEY=your-anon-key-here
+SUPABASE_SERVICE_KEY=your-service-role-key-here
+GROQ_API_KEY=your-groq-api-key-here
+OPENAI_DEFAULT_MODEL=gpt-3.5-turbo
+NODE_ENV=production
+FRONTEND_URL=https://your-frontend-url.vercel.app
+```
+
+**Required Secrets (set in Variables/Secrets UI):**
+```
+JWT_SECRET=your-supabase-jwt-secret
+```
+
+**Important Railway Note**: Railway's Railpack expects secrets to be mounted as files in the `/secrets` directory. You must create a secret named `JWT_SECRET` in the Railway "Variables/Secrets" UI with the correct value (the Supabase JWT secret from your Supabase project settings).
+
 ### Database (Supabase)
 
 **Keys Distribution:**
@@ -70,11 +101,11 @@ PNPM_VERSION=10.21.0
 
 **Primary (Groq):**
 - Variable: `GROQ_API_KEY`
-- Location: Backend environment variables in Render
+- Location: Backend environment variables
 
 **Fallback (OpenAI):**
 - Variable: `OPENAI_API_KEY`
-- Location: Backend environment variables in Render (optional)
+- Location: Backend environment variables (optional)
 
 ## Step-by-Step Deployment Guide
 
@@ -90,6 +121,7 @@ PNPM_VERSION=10.21.0
    - **Project URL** - This is your `SUPABASE_URL`
    - **anon public** - This is your `SUPABASE_ANON_KEY`
    - **service_role_secret** - This is your `SUPABASE_SERVICE_KEY`
+   - **JWT secret** - This is your `JWT_SECRET` (needed for Railway deployment)
 
 ### Step 2: Set up AI Provider (Groq)
 
@@ -116,7 +148,9 @@ PNPM_VERSION=10.21.0
 6. Click "Deploy" and wait for the build to complete
 7. Note the deployed URL (e.g., `https://your-project.vercel.app`)
 
-### Step 4: Deploy the Backend on Render
+### Step 4: Deploy the Backend (Choose Render OR Railway)
+
+#### Option A: Deploy Backend on Render
 
 1. Go to [render.com](https://render.com) and create an account
 2. Click "New Web Service"
@@ -150,6 +184,38 @@ PNPM_VERSION=10.21.0
 7. Click "Create Web Service" and wait for deployment to complete
 8. Note the deployed URL (e.g., `https://wadi-api.onrender.com`)
 
+#### Option B: Deploy Backend on Railway
+
+1. Go to [railway.app](https://railway.app) and create an account
+2. Click "New Project"
+3. Select "Deploy from GitHub repo"
+4. Connect your GitHub repository
+5. Select the repository
+6. Configure service settings:
+   - **Service name**: wadi-api (or any name you prefer)
+   - **Root directory**: Leave empty (monorepo detected automatically)
+   - **Build command**: Uses `railway.json` configuration
+   - **Start command**: Uses `railway.json` configuration
+7. Set environment variables in the Variables tab:
+   - Add the following variables:
+     ```
+     SUPABASE_URL= (your Supabase project URL)
+     SUPABASE_ANON_KEY= (your Supabase anon key)
+     SUPABASE_SERVICE_KEY= (your Supabase service role key)
+     GROQ_API_KEY= (your Groq API key)
+     OPENAI_DEFAULT_MODEL=gpt-3.5-turbo
+     NODE_ENV=production
+     FRONTEND_URL= (leave empty for now, update after frontend deployment)
+     ```
+8. **IMPORTANT RAILWAY STEP**: Create a secret named `JWT_SECRET` in the Variables/Secrets UI:
+   - Scroll down to the "Secrets" section in the Variables tab
+   - Click "New Variable"
+   - Set Name: `JWT_SECRET`
+   - Set Value: Your Supabase JWT secret (found in Supabase project settings → API)
+   - Click "Add Variable"
+9. Railway will auto-deploy on push, or click "Deploy" manually
+10. Note the deployment URL (e.g., `https://wadi-api-production.railway.app`)
+
 ### Step 5: Wire Everything Together
 
 1. **Update Frontend Environment Variables in Vercel:**
@@ -159,17 +225,26 @@ PNPM_VERSION=10.21.0
      ```
      VITE_SUPABASE_URL= (your Supabase project URL)
      VITE_SUPABASE_ANON_KEY= (your Supabase anon key)
-     VITE_API_URL= (your Render backend URL, e.g., https://wadi-api.onrender.com)
+     VITE_API_URL= (your backend URL, e.g., https://wadi-api.[onrender.com OR railway.app])
      VITE_GUEST_MODE=true
      ```
    - Click "Save"
 
-2. **Update Backend Environment Variables in Render:**
+2. **Update Backend Environment Variables:**
+   
+   **If using Render:**
    - Go to your Render service dashboard
    - Click "Environment" in the left sidebar
    - Edit the `FRONTEND_URL` variable
    - Set it to your Vercel frontend URL (e.g., `https://your-project.vercel.app`)
    - Click "Save Changes" to redeploy the backend
+   
+   **If using Railway:**
+   - Go to your Railway project
+   - Navigate to Variables tab
+   - Update the `FRONTEND_URL` variable
+   - Set it to your Vercel frontend URL (e.g., `https://your-project.vercel.app`)
+   - Railway will auto-redeploy
 
 3. **Redeploy Frontend:**
    - Go to your Vercel project dashboard
@@ -208,7 +283,7 @@ PNPM_VERSION=10.21.0
 
 1. Test the health endpoint:
    ```bash
-   curl https://your-backend-url.onrender.com/health
+   curl https://your-backend-url.[onrender.com OR railway.app]/health
    ```
 2. You should receive a JSON response similar to:
    ```json
@@ -233,21 +308,30 @@ PNPM_VERSION=10.21.0
    - Click "Logs" in the left sidebar
    - Check for any errors during builds or runtime
 
-2. **Render Logs:**
+2. **Backend Logs:**
+   
+   **If using Render:**
    - Go to your Render service dashboard
+   - Click "Logs" in the left sidebar
+   - Check for any errors during builds or runtime
+   
+   **If using Railway:**
+   - Go to your Railway project dashboard
    - Click "Logs" in the left sidebar
    - Check for any errors during builds or runtime
 
 ## TL;DR Checklist
 
-- [ ] Create Supabase project → Get URL, anon key, service key
+- [ ] Create Supabase project → Get URL, anon key, service key, JWT secret
 - [ ] Create Groq account → Get API key
 - [ ] Create Vercel project → Connect repo → Set env vars:
   - `VITE_SUPABASE_URL` = Supabase URL
   - `VITE_SUPABASE_ANON_KEY` = Supabase anon key
-  - `VITE_API_URL` = Render backend URL
+  - `VITE_API_URL` = Backend URL
   - `VITE_GUEST_MODE` = true
-- [ ] Create Render service → Connect repo → Set env vars:
+- [ ] Create backend service (Render OR Railway) → Connect repo → Set env vars:
+  
+  **If using Render:**
   - `NODE_ENV` = production
   - `PORT` = 10000
   - `FRONTEND_URL` = Vercel frontend URL
@@ -257,8 +341,20 @@ PNPM_VERSION=10.21.0
   - `GROQ_API_KEY` = Groq API key
   - `JWT_SECRET` = (auto-generated)
   - `PNPM_VERSION` = 10.21.0
+  
+  **If using Railway:**
+  - Variables tab:
+    - `SUPABASE_URL` = Supabase URL
+    - `SUPABASE_ANON_KEY` = Supabase anon key
+    - `SUPABASE_SERVICE_KEY` = Supabase service key
+    - `GROQ_API_KEY` = Groq API key
+    - `OPENAI_DEFAULT_MODEL` = gpt-3.5-turbo
+    - `NODE_ENV` = production
+    - `FRONTEND_URL` = Vercel frontend URL
+  - Secrets UI:
+    - `JWT_SECRET` = Supabase JWT secret
 - [ ] Update frontend config with backend URL in Vercel
-- [ ] Update backend config with frontend URL in Render
+- [ ] Update backend config with frontend URL
 - [ ] Redeploy both services
 - [ ] Run Supabase database migrations
 - [ ] Open URL, run smoke tests
@@ -292,10 +388,17 @@ PNPM_VERSION=10.21.0
 2. Check that backend is running (health endpoint)
 3. Verify Supabase configuration
 
+### Railway-Specific Issues
+
+1. **JWT_SECRET Error**
+   - Ensure you've created a secret named `JWT_SECRET` in Railway Variables/Secrets UI
+   - The value should be your Supabase JWT secret (found in Supabase project settings)
+   - Railway mounts secrets as files in `/secrets/JWT_SECRET` during build
+
 ## Cost Considerations
 
 1. **Vercel**: Free tier includes generous limits for most applications
-2. **Render**: Free tier has some limitations (sleeps after inactivity)
+2. **Render/Railway**: Free tier has limitations (sleeps after inactivity)
 3. **Supabase**: Free tier includes 500MB database, 5GB bandwidth
 4. **Groq**: Free tier includes generous API credits
 
