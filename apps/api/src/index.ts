@@ -30,35 +30,22 @@ import { errorHandler } from "./middleware/errorHandler";
 
 // Validate environment variables before starting
 validateEnvironment();
+origin: (origin, cb) => {
+  // Allow requests with no origin (mobile apps, curl, Postman)
+  if (!origin) return cb(null, true);
 
-const app = express();
-app.set("trust proxy", 1);
-const PORT = Number(process.env.PORT) || 8080;
+  // Check if origin is in allowlist
+  if (allowlist.includes(origin)) return cb(null, true);
 
-// CORS Configuration - Allowlist for local + production + Vercel previews
-process.env.FRONTEND_URL, // Production frontend URL
-  "http://localhost:5173",   // Vite dev server (default)
-  "http://localhost:5174",   // Vite dev server (alternative port)
-  "http://192.168.0.108:5173", // LAN access
-].filter(Boolean);
+  // Allow all Vercel preview deployments
+  if (origin.endsWith(".vercel.app")) return cb(null, true);
 
-app.use(cors({
-  origin: (origin, cb) => {
-    // Allow requests with no origin (mobile apps, curl, Postman)
-    if (!origin) return cb(null, true);
-
-    // Check if origin is in allowlist
-    if (allowlist.includes(origin)) return cb(null, true);
-
-    // Allow all Vercel preview deployments
-    if (origin.endsWith(".vercel.app")) return cb(null, true);
-
-    // Reject all other origins
-    return cb(new Error("Not allowed by CORS"));
-  },
+  // Reject all other origins
+  return cb(new Error("Not allowed by CORS"));
+},
   credentials: true,
-  methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
-  allowedHeaders: ['Content-Type', 'Authorization', 'x-guest-id'],
+    methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization', 'x-guest-id'],
 }));
 
 // Handle preflight requests for all routes
