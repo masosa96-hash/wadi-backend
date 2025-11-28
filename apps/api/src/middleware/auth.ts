@@ -25,19 +25,24 @@ export async function authMiddleware(
 
     // Check for Guest Mode
     const isGuestMode = process.env.GUEST_MODE === "true";
+    console.log("[Auth] GUEST_MODE env:", process.env.GUEST_MODE, "| isGuestMode:", isGuestMode);
+    
     // Normalize guestId (may be string, string[] or undefined)
     const rawGuestId = req.headers["x-guest-id"];
     const guestId = Array.isArray(rawGuestId) ? rawGuestId[0] : rawGuestId;
+    console.log("[Auth] x-guest-id header:", rawGuestId, "| normalized guestId:", guestId);
 
     // ---- GUEST MODE -------------------------------------------------
     // If guest mode is enabled and a guest ID header is present, bypass auth.
     if (isGuestMode && guestId) {
-      console.log('[Auth] Guest access allowed for:', guestId);
+      console.log('[Auth] ✅ Guest access allowed for:', guestId);
       // Attach guest_id to request for downstream handlers
       (req as any).guest_id = guestId;
       // No user_id is set; controller will handle missing user_id.
       return next();
     }
+    
+    console.log("[Auth] Guest mode check failed. isGuestMode:", isGuestMode, "guestId:", guestId);
 
     // Extract token from Authorization header
     const authHeader = req.headers.authorization;

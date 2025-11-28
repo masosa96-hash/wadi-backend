@@ -153,7 +153,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     // Generate AI response
     let assistantResponseText = "";
     let modelUsed = DEFAULT_MODEL;
-    
+
     // 1. Brain Analysis (Kivo)
     const thought = await pensar(message);
     console.log("[sendMessage] Kivo thought:", thought);
@@ -214,7 +214,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     });
   } catch (error: any) {
     console.error("[sendMessage] Exception:", error);
-    
+
     // Determine error type and provide more specific error messages
     let errorMessage = "Internal server error";
     let errorCode = "INTERNAL_ERROR";
@@ -243,11 +243,11 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
       }
     }
 
-    res.status(statusCode).json({ 
-      ok: false, 
+    res.status(statusCode).json({
+      ok: false,
       error: true,
       code: errorCode,
-      message: errorMessage 
+      message: errorMessage
     });
   }
 }
