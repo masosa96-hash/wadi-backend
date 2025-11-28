@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { theme } from '../styles/theme';
 import { useShareStore } from '../store/shareStore';
@@ -11,20 +11,20 @@ export default function SharedConversation() {
     const { getShareByToken, loading, error } = useShareStore();
     const [conversation, setConversation] = useState<any>(null);
 
-    useEffect(() => {
-        if (token) {
-            loadSharedConversation();
-        }
-    }, [token]);
-
-    const loadSharedConversation = async () => {
+    const loadSharedConversation = useCallback(async () => {
         try {
             const data = await getShareByToken(token!);
             setConversation(data);
         } catch (err) {
             console.error('Error loading shared conversation:', err);
         }
-    };
+    }, [getShareByToken, token]);
+
+    useEffect(() => {
+        if (token) {
+            loadSharedConversation();
+        }
+    }, [token, loadSharedConversation]);
 
     if (loading) {
         return (

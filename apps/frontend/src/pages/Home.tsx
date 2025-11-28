@@ -24,7 +24,6 @@ export default function Home() {
     loadConversations();
     fetchProjects();
     loadWorkspaces();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
 
