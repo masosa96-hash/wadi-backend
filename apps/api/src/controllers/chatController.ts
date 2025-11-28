@@ -24,8 +24,6 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     const { message, conversationId, messages: historyMessages } = req.body; // historyMessages from client for guest
 
     console.log("[sendMessage] Request from:", userId ? `User ${userId}` : `Guest ${guestId}`, { message: message?.substring(0, 50), conversationId });
-    console.log("[sendMessage] Request from:", userId ? `User ${userId}` : `Guest ${guestId}`, { message: message?.substring(0, 50), conversationId });
-    require('fs').appendFileSync('debug.log', `[${new Date().toISOString()}] userId: ${userId} (${typeof userId})\n`);
 
     // If neither user nor guest ID is present, reject the request.
     if (!userId && !guestId) {
