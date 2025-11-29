@@ -1,0 +1,13 @@
+
+> wadi-monorepo@ lint E:\WADI
+> pnpm -r run lint
+
+Scope: 3 of 4 workspace projects
+packages/chat-core lint$ eslint .
+packages/chat-core lint: "eslint" no se reconoce como un comando interno o externo,
+packages/chat-core lint: programa o archivo por lotes ejecutable.
+packages/chat-core lint: Failed
+E:\WADI\packages\chat-core:
+ÔÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILÔÇë @wadi/chat-core@0.0.0 lint: `eslint .`
+Exit status 1
+ÔÇëELIFECYCLEÔÇë Command failed with exit code 1.
