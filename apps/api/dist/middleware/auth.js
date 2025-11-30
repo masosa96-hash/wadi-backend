@@ -16,6 +16,7 @@ async function authMiddleware(req, res, next) {
         // Normalize guestId (may be string, string[] or undefined)
         const rawGuestId = req.headers["x-guest-id"];
         const guestId = Array.isArray(rawGuestId) ? rawGuestId[0] : rawGuestId;
+        require('fs').appendFileSync('debug_auth.log', `[${new Date().toISOString()}] Path: ${req.path} | GUEST_MODE: ${isGuestMode} | guestId: ${guestId} | AuthHeader: ${req.headers.authorization ? 'YES' : 'NO'}\n`);
         // ---- GUEST MODE -------------------------------------------------
         // If guest mode is enabled and a guest ID header is present, bypass auth.
         if (isGuestMode && guestId) {
