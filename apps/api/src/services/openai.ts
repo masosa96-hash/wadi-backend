@@ -4,8 +4,8 @@ import OpenAI from "openai";
 const apiKey = process.env.GROQ_API_KEY;
 
 if (!apiKey) {
-  throw new Error(
-    "Missing Groq API key. Please check GROQ_API_KEY in .env"
+  console.warn(
+    "Missing Groq API key. App running in SAFE MODE. AI features will fail."
   );
 }
 
@@ -40,22 +40,22 @@ export async function generateChatCompletion(
   if (process.env.OFFLINE_MODE === 'true') {
     console.log('[OFFLINE MODE] Returning mock AI response');
     const userMessage = messages[messages.length - 1]?.content || '';
-    
+
     // Simulate processing delay
     await new Promise(resolve => setTimeout(resolve, 800));
-    
+
     return {
       response: `[Modo Offline] Recibí tu mensaje: "${userMessage.substring(0, 100)}${userMessage.length > 100 ? '...' : ''}". Esta es una respuesta simulada para desarrollo sin conexión a internet. Para obtener respuestas reales de IA, desactivá OFFLINE_MODE en el archivo .env`,
       model: 'offline-mock'
     };
   }
-  
+
   try {
     // Map OpenAI models to Groq equivalents
     const groqModel = mapToGroqModel(model);
     console.log(`[Chat Service] Generating completion with model: ${model} -> ${groqModel}`);
     console.log(`[Chat Service] Message count: ${messages.length}`);
-    
+
     const completion = await llmClient.chat.completions.create({
       model: groqModel,
       messages: messages as any,
@@ -131,7 +131,7 @@ export async function generateCompletion(
     const groqModel = mapToGroqModel(model);
     console.log(`[OpenAI Service] Generating completion with model: ${model} -> ${groqModel}`);
     console.log(`[OpenAI Service] Input length: ${input.length} chars`);
-    
+
     const completion = await llmClient.chat.completions.create({
       model: groqModel,
       messages: [

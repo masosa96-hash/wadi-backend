@@ -151,7 +151,7 @@ export function validateEnvironment(): void {
       console.error(`  - ${variable}: ${message}`);
     });
     console.error('\nPlease check your .env file and try again.\n');
-    process.exit(1);
+    // process.exit(1); // DISABLED FOR SAFE MODE DEBUGGING
   }
 
   // Report warnings
