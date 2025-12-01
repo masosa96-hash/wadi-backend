@@ -1,0 +1,32 @@
+
+> wadi-monorepo@ health-check E:\WADI
+> node scripts/health-check.js
+
+[34m
+­ƒÅÑ WADI Health Check
+[0m
+[36mÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+[0m
+[33m­ƒôü Checking Project Structure...[0m
+[32m[32mÔ£ô[0m apps/api exists[0m
+[32m[32mÔ£ô[0m apps/frontend exists[0m
+[32m[32mÔ£ô[0m packages exists[0m
+[0m[0m
+[33mÔÜÖ´©Å  Checking Backend Configuration...[0m
+[32m[32mÔ£ô[0m apps/api/.env has all required variables[0m
+[0m[0m
+[33mÔÜÖ´©Å  Checking Frontend Configuration...[0m
+[32m[32mÔ£ô[0m apps/frontend/.env has all required variables[0m
+[0m[0m
+[33m­ƒîÉ Checking Services...[0m
+[0mWaiting 2 seconds for services to be ready...[0m
+[31m[31mÔ£ù[0m http://localhost:4000/health not reachable[0m
+[0m[0m
+[36mÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉÔòÉ
+[0m
+[31mÔØî Some health checks failed![0m
+[33m
+Please fix the issues above.[0m
+[0mSee DOCUMENTATION_INDEX.md for help.
+[0m
+ÔÇëELIFECYCLEÔÇë Command failed with exit code 1.

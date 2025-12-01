@@ -4,6 +4,7 @@ exports.PDFAnalysisTool = void 0;
 const framework_1 = require("./framework");
 const fs_1 = require("fs");
 // pdf-parse is a CommonJS module
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const pdfParse = require("pdf-parse");
 class PDFAnalysisTool extends framework_1.AITool {
     constructor() {
@@ -62,7 +63,7 @@ class PDFAnalysisTool extends framework_1.AITool {
             // Parse PDF
             const pdfData = await pdfParse(pdfBuffer);
             // Extract based on mode
-            let result = {};
+            const result = {};
             if (extraction_mode === "text" || extraction_mode === "full") {
                 result.text = pdfData.text;
                 result.numPages = pdfData.numpages;

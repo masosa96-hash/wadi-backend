@@ -3,6 +3,7 @@ import { supabase } from "../config/supabase";
 
 // Extend Express Request type to include user_id
 declare global {
+  // eslint-disable-next-line @typescript-eslint/no-namespace
   namespace Express {
     interface Request {
       user_id?: string;

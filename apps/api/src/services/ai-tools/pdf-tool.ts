@@ -3,6 +3,7 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 // pdf-parse is a CommonJS module
+// eslint-disable-next-line @typescript-eslint/no-require-imports
 const pdfParse = require("pdf-parse");
 
 export class PDFAnalysisTool extends AITool {
@@ -45,7 +46,7 @@ export class PDFAnalysisTool extends AITool {
     try {
       // Handle base64 encoded PDF or file path
       let pdfBuffer: Buffer;
-      
+
       if (file_path.startsWith("data:application/pdf;base64,")) {
         // Base64 encoded PDF
         const base64Data = file_path.replace("data:application/pdf;base64,", "");
@@ -64,12 +65,12 @@ export class PDFAnalysisTool extends AITool {
       const pdfData = await pdfParse(pdfBuffer);
 
       // Extract based on mode
-      let result: any = {};
+      const result: any = {};
 
       if (extraction_mode === "text" || extraction_mode === "full") {
         result.text = pdfData.text;
         result.numPages = pdfData.numpages;
-        
+
         // Handle page range if specified
         if (page_range !== "all") {
           const [start, end] = page_range.split("-").map(Number);
