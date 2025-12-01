@@ -2,7 +2,6 @@
   "name": "wadi-monorepo",
   "private": true,
   "packageManager": "pnpm@10.21.0",
-  "packageManager": "pnpm@10.21.0",
   "scripts": {
     "dev": "pnpm -r run dev",
     "dev:api": "pnpm --filter api run dev",
@@ -10,7 +9,6 @@
     "dev:all": "concurrently \"pnpm dev:api\" \"pnpm dev:front\"",
     "build": "pnpm --filter frontend build && pnpm --filter api build",
     "build:frontend": "pnpm --filter frontend build",
-    "build:api": "pnpm --filter api build",
     "build:api": "pnpm --filter api build",
     "deploy:frontend": "cd apps/frontend && vercel --prod",
     "deploy:api": "cd apps/api && render deploy",
@@ -29,7 +27,6 @@
   },
   "devDependencies": {
     "@types/file-saver": "^2.0.7",
-    "concurrently": "^9.2.1",
     "concurrently": "^9.2.1"
   },
   "dependencies": {
