@@ -1,0 +1,196 @@
+
+> api@1.0.0 lint E:\WADI\apps\api
+> eslint .
+
+
+E:\WADI\apps\api\check-schema.js
+  1:26  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  2:14  error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+  3:1   error  A `require()` style import is forbidden  @typescript-eslint/no-require-imports
+
+E:\WADI\apps\api\src\_archived\brain\memory.ts
+  16:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\config\logger.ts
+  23:19  warning  '_' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\controllers\billingController.ts
+   22:13  warning  Unexpected any. Specify a different type   @typescript-eslint/no-explicit-any
+  190:13  warning  'data' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\controllers\chatController.ts
+    3:49  warning  'mapToGroqModel' is defined but never used  @typescript-eslint/no-unused-vars
+   23:29  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  124:36  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  215:19  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\favoritesController.ts
+   10:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   36:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   47:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   84:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   95:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  115:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  126:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  143:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\filesController.ts
+    3:8   warning  'fs' is defined but never used                @typescript-eslint/no-unused-vars
+    4:8   warning  'path' is defined but never used              @typescript-eslint/no-unused-vars
+    5:8   warning  'crypto' is defined but never used            @typescript-eslint/no-unused-vars
+  292:10  warning  'detectFileType' is defined but never used    @typescript-eslint/no-unused-vars
+  308:10  warning  'sanitizeFilename' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\controllers\memoryController.ts
+  141:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  142:32  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  157:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  166:26  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\presetsController.ts
+   15:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  245:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\runsController.ts
+    3:44  warning  'mapToGroqModel' is defined but never used  @typescript-eslint/no-unused-vars
+  162:23  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+  280:20  warning  Unexpected any. Specify a different type    @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\sessionsController.ts
+  178:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\shareLinksController.ts
+  101:28  warning  '_' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\controllers\streamController.ts
+  104:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\tagsController.ts
+  122:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\tasksController.ts
+   57:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  119:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  152:20  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  175:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  218:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  249:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\templatesController.ts
+   85:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  105:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\controllers\workspacesController.ts
+  215:20  warning  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+  432:42  warning  'existingError' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  577:36  warning  'ownersError' is assigned a value but never used    @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\index.ts
+  138:7  warning  'wss' is assigned a value but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\middleware\auth.ts
+   6:3   error    ES2015 module syntax is preferred over namespaces  @typescript-eslint/no-namespace
+  39:15  warning  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\middleware\errorHandler.ts
+  82:3  warning  'next' is defined but never used  @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\middleware\limit-check.ts
+  191:38  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\ai-tools\code-tool.ts
+   34:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   34:30  warning  'context' is defined but never used       @typescript-eslint/no-unused-vars
+   46:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   72:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   77:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  102:61  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  103:22  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  140:49  warning  'language' is defined but never used      @typescript-eslint/no-unused-vars
+  140:68  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  166:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\ai-tools\framework.ts
+   28:10  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   30:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   40:28  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   67:78  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   68:34  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   90:39  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   90:70  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  134:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  140:13  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  154:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  171:15  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  175:12  warning  'error' is defined but never used         @typescript-eslint/no-unused-vars
+
+E:\WADI\apps\api\src\services\ai-tools\image-tool.ts
+  39:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  39:30  warning  'context' is defined but never used       @typescript-eslint/no-unused-vars
+  85:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\ai-tools\pdf-tool.ts
+    3:10  warning  'join' is defined but never used                   @typescript-eslint/no-unused-vars
+    6:18  error    A `require()` style import is forbidden            @typescript-eslint/no-require-imports
+   38:25  warning  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+   38:30  warning  'context' is defined but never used                @typescript-eslint/no-unused-vars
+   67:11  error    'result' is never reassigned. Use 'const' instead  prefer-const
+   67:19  warning  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+   75:18  warning  'start' is assigned a value but never used         @typescript-eslint/no-unused-vars
+   75:25  warning  'end' is assigned a value but never used           @typescript-eslint/no-unused-vars
+  102:21  warning  Unexpected any. Specify a different type           @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\ai-tools\zip-tool.ts
+   35:25  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   35:30  warning  'context' is defined but never used       @typescript-eslint/no-unused-vars
+  100:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  105:44  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\brain\kivo.ts
+  7:45  warning  '_context' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  7:55  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\brain\types.ts
+  64:14  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\brain\wadi.ts
+  7:54  warning  '_context' is assigned a value but never used  @typescript-eslint/no-unused-vars
+  7:64  warning  Unexpected any. Specify a different type       @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\openai.ts
+   61:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   75:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  156:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  255:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  267:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\topic-detection.ts
+  88:19  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\vector-memory.ts
+   19:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   27:29  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   52:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+   91:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  157:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  185:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  205:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+  225:21  warning  Unexpected any. Specify a different type  @typescript-eslint/no-explicit-any
+
+E:\WADI\apps\api\src\services\websocket.ts
+    3:8   warning  'jwt' is defined but never used                     @typescript-eslint/no-unused-vars
+    6:10  warning  'generateChatCompletion' is defined but never used  @typescript-eslint/no-unused-vars
+    7:10  warning  'WebSocketMessage' is defined but never used        @typescript-eslint/no-unused-vars
+    7:28  warning  'WebSocketMessageType' is defined but never used    @typescript-eslint/no-unused-vars
+  111:19  warning  'userMessage' is assigned a value but never used    @typescript-eslint/no-unused-vars
+  136:36  warning  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+  164:19  warning  Unexpected any. Specify a different type            @typescript-eslint/no-explicit-any
+  170:48  warning  'runId' is defined but never used                   @typescript-eslint/no-unused-vars
+
+Ô£û 119 problems (6 errors, 113 warnings)
+  1 error and 0 warnings potentially fixable with the `--fix` option.
+
+E:\WADI\apps\api:
+ÔÇëERR_PNPM_RECURSIVE_RUN_FIRST_FAILÔÇë api@1.0.0 lint: `eslint .`
+Exit status 1
