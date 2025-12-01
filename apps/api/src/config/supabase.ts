@@ -9,7 +9,7 @@ if (!supabaseUrl || !supabaseKey) {
   );
 }
 
-export const supabase = createClient(supabaseUrl, supabaseKey);
+export const supabase = createClient(supabaseUrl || "", supabaseKey || "");
 
 // Health check function to verify Supabase connection
 export async function checkSupabaseConnection(): Promise<boolean> {
