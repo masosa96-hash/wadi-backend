@@ -4,6 +4,7 @@
   "packageManager": "pnpm@10.21.0",
   "scripts": {
     "dev": "pnpm -r run dev",
+    "start": "node apps/api/dist/index.js",
     "dev:api": "pnpm --filter api run dev",
     "dev:front": "pnpm --filter frontend run dev",
     "dev:all": "concurrently \"pnpm dev:api\" \"pnpm dev:front\"",
