@@ -14,7 +14,7 @@ const openai_1 = __importDefault(require("openai"));
 // Groq API configuration (primary LLM provider)
 const apiKey = process.env.GROQ_API_KEY;
 if (!apiKey) {
-    throw new Error("Missing Groq API key. Please check GROQ_API_KEY in .env");
+    console.warn("Missing Groq API key. App running in SAFE MODE. AI features will fail.");
 }
 // Create OpenAI-compatible client pointing to Groq
 const llmClient = new openai_1.default({

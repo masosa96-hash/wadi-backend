@@ -6,9 +6,9 @@ const supabase_js_1 = require("@supabase/supabase-js");
 const supabaseUrl = process.env.SUPABASE_URL;
 const supabaseKey = process.env.SUPABASE_ANON_KEY;
 if (!supabaseUrl || !supabaseKey) {
-    throw new Error("Missing Supabase environment variables. Please check SUPABASE_URL and SUPABASE_ANON_KEY in the .env file at monorepo root (E:\\WADI intento mil\\.env)");
+    console.warn("Missing Supabase environment variables. App running in SAFE MODE. Supabase features will fail.");
 }
-exports.supabase = (0, supabase_js_1.createClient)(supabaseUrl, supabaseKey);
+exports.supabase = (0, supabase_js_1.createClient)(supabaseUrl || "", supabaseKey || "");
 // Health check function to verify Supabase connection
 async function checkSupabaseConnection() {
     try {
