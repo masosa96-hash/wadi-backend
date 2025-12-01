@@ -30,8 +30,8 @@
 - `FRONTEND_URL` = `http://localhost:5173` (por ahora, después lo cambiamos a Vercel)
 - `PNPM_VERSION` = `10.21.0`
 
-4. Guardás todo y hacés **Deploy / Redeploy** en Railway.
-5. Cuando termine, copiá la **URL pública del backend** (ej: `https://loquesea.up.railway.app`).
+1. Guardás todo y hacés **Deploy / Redeploy** en Railway.
+2. Cuando termine, copiá la **URL pública del backend** (ej: `https://loquesea.up.railway.app`).
 
 ---
 
@@ -46,8 +46,8 @@
 - `VITE_API_URL` = `<URL del backend de Railway>` (la que copiaste en el paso anterior)
 - `VITE_GUEST_MODE` = `true`
 
-4. Guardás y hacés **Deploy** en Vercel.
-5. Copiás la **URL pública de Vercel** (ej: `https://wadi-frontend.vercel.app`).
+1. Guardás y hacés **Deploy** en Vercel.
+2. Copiás la **URL pública de Vercel** (ej: `https://wadi-frontend.vercel.app`).
 
 ---
 
