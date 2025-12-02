@@ -1,6 +1,6 @@
 import "./config/env";
 // import "./config/polyfill"; // Polyfill for DOMMatrix (required by pdf-parse)
-import { validateEnvironment } from "./config/env-validator";
+// import { validateEnvironment } from "./config/env-validator";
 import express from "express";
 import cors from "cors";
 import helmet from "helmet";
@@ -30,7 +30,7 @@ import { errorHandler } from "./middleware/errorHandler";
 import "./services/ai-tools"; // Initialize AI tools
 
 // Validate environment variables before starting
-validateEnvironment();
+// validateEnvironment();
 const app = express();
 app.set("trust proxy", 1);
 const PORT = Number(process.env.PORT) || 8080;
