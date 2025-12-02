@@ -20,7 +20,7 @@ const consoleFormat = winston.format.combine(
     if (Object.keys(meta).length > 0) {
       // Filter out empty objects and null values
       const filteredMeta = Object.entries(meta)
-        .filter(([_, value]) => value !== null && value !== undefined && value !== "")
+        .filter(([, value]) => value !== null && value !== undefined && value !== "")
         .reduce((acc, [key, value]) => ({ ...acc, [key]: value }), {});
       
       if (Object.keys(filteredMeta).length > 0) {

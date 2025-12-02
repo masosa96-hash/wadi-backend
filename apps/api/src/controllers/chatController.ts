@@ -1,6 +1,6 @@
 import type { Request, Response } from "express";
 import { supabase } from "../config/supabase";
-import { generateChatCompletion, DEFAULT_MODEL, mapToGroqModel } from "../services/openai";
+import { generateChatCompletion, DEFAULT_MODEL } from "../services/openai";
 import { pensar } from "../services/brain/kivo";
 import { ejecutar } from "../services/brain/wadi";
 
@@ -20,7 +20,7 @@ import { ejecutar } from "../services/brain/wadi";
 export async function sendMessage(req: Request, res: Response): Promise<void> {
   try {
     const userId = req.user_id;
-    const guestId = (req as any).guest_id as string;
+    const guestId = (req as unknown as Record<string, unknown>).guest_id as string;
     const { message, conversationId, messages: historyMessages } = req.body; // historyMessages from client for guest
 
     console.log("[sendMessage] Request from:", userId ? `User ${userId}` : `Guest ${guestId}`, { message: message?.substring(0, 50), conversationId });
@@ -121,7 +121,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
         role: "system",
         content: "Sos WADI, un asistente de IA amigable y útil. Hablás en español de forma cercana y natural, como si fueras un amigo que ayuda con cualquier tarea. Respondés de manera clara, concisa y práctica.",
       },
-      ...(history || []).map((msg: any) => ({
+      ...(history || []).map((msg: { role: string; content: string }) => ({
         role: msg.role,
         content: msg.content,
       })),
@@ -212,7 +212,7 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
         thought,
       },
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[sendMessage] Exception:", error);
 
     // Determine error type and provide more specific error messages
@@ -220,26 +220,28 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     let errorCode = "INTERNAL_ERROR";
     let statusCode = 500;
 
-    if (error.message) {
+    const err = error as { message?: string };
+
+    if (err.message) {
       // Check for specific error types
-      if (error.message.includes("Rate limit")) {
+      if (err.message.includes("Rate limit")) {
         errorCode = "RATE_LIMIT";
-        errorMessage = error.message;
+        errorMessage = err.message;
         statusCode = 429;
-      } else if (error.message.includes("authentication") || error.message.includes("API key")) {
+      } else if (err.message.includes("authentication") || err.message.includes("API key")) {
         errorCode = "AUTH_ERROR";
         errorMessage = "AI service authentication failed. Please check server configuration.";
         statusCode = 503;
-      } else if (error.message.includes("Model") && error.message.includes("not found")) {
+      } else if (err.message.includes("Model") && err.message.includes("not found")) {
         errorCode = "MODEL_ERROR";
-        errorMessage = error.message;
+        errorMessage = err.message;
         statusCode = 400;
-      } else if (error.message.includes("temporarily unavailable") || error.message.includes("network")) {
+      } else if (err.message.includes("temporarily unavailable") || err.message.includes("network")) {
         errorCode = "SERVICE_UNAVAILABLE";
-        errorMessage = error.message;
+        errorMessage = err.message;
         statusCode = 503;
       } else {
-        errorMessage = error.message || "Internal server error";
+        errorMessage = err.message || "Internal server error";
       }
     }
 
