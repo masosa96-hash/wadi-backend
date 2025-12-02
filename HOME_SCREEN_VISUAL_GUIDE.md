@@ -48,16 +48,19 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ## 📐 Especificaciones de Diseño
 
 ### Header
+
 ```
 ┌─────────────────────────────────────┐
 │ WADI                      🔔(•) 👤 │
 │ ─────────────────────────────────── │
 ```
+
 - **Logo**: "WADI" en azul (#255FF5), 20px, bold, uppercase
 - **Notificación**: Badge rojo si hay notificaciones nuevas
 - **Avatar**: Círculo con gradiente azul-lila, letra inicial
 
 ### Hero Card
+
 ```
 ╔═══════════════════════════════════════╗
 ║  ┌─── Gradiente #255FF5 → #7B8CFF ──┐║
@@ -74,12 +77,14 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ║  └───────────────────────────────────┘║
 ╚═══════════════════════════════════════╝
 ```
+
 - **Background**: Gradiente azul→lila
 - **Texto**: Blanco, 24px, bold, centrado
 - **Input**: Fondo blanco semi-transparente (95%), backdrop blur
 - **Botón**: Círculo 40px, gradiente, con glow en hover
 
 ### Workspace Grid
+
 ```
 ┌───────────────┐  ┌───────────────┐
 │  ┌─────────┐  │  │  ┌─────────┐  │
@@ -95,23 +100,27 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 │     Ideas     │  │   Finanzas    │
 └───────────────┘  └───────────────┘
 ```
+
 - **Grid**: 2 columnas en >380px, 1 columna en mobile pequeño
 - **Cards**: Fondo blanco, borde sutil, sombra ligera
 - **Iconos**: Círculo con color del workspace (50% opacity)
 - **Hover**: Borde azul, sombra elevada, scale 1.02
 
 ### Quick Actions
+
 ```
 ┌────────────┐ ┌────────────┐ ┌──────────────────┐
 │ Historial  │ │ Favoritos  │ │ Plantillas rápid │
 └────────────┘ └────────────┘ └──────────────────┘
 ```
+
 - **Estilo**: Pills/chips con borde
 - **Inactive**: Borde #C5D4EB, texto gris
 - **Hover**: Borde azul #255FF5, texto azul
 - **Active**: Fondo azul, texto blanco
 
 ### Bottom Navigation
+
 ```
 ┌─────────────────────────────────────┐
 │  🏠      💼       📜       👤       │
@@ -119,9 +128,10 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 │  •                                  │
 └─────────────────────────────────────┘
 ```
+
 - **Background**: Blanco con backdrop blur
 - **Border Top**: Línea sutil #E8EEF7
-- **Active**: 
+- **Active**:
   - Icono con glow azul
   - Texto azul bold
   - Dot indicator abajo
@@ -132,12 +142,14 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ## 🎨 Colores por Componente
 
 ### Header
+
 - Logo: `#255FF5` (Azul primario)
 - Fondo: `#FFFFFF`
 - Borde inferior: `#E8EEF7`
 - Avatar gradiente: `#255FF5 → #4A7BF7`
 
 ### Hero Card
+
 - Gradiente: `#255FF5 → #7B8CFF`
 - Texto título: `#FFFFFF`
 - Input fondo: `rgba(255, 255, 255, 0.95)`
@@ -146,6 +158,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 - Orbs: `rgba(197, 179, 255, 0.15)` con blur
 
 ### Workspace Cards
+
 - Fondo: `#FFFFFF`
 - Borde normal: `#D6E1F2`
 - Borde hover: `rgba(37, 95, 245, 0.3)`
@@ -153,6 +166,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 - Texto: `#0F172A`
 
 ### Quick Actions Chips
+
 - Borde inactive: `#C5D4EB`
 - Texto inactive: `#6B7280`
 - Borde hover: `#255FF5`
@@ -161,6 +175,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 - Texto active: `#FFFFFF`
 
 ### Bottom Nav
+
 - Fondo: `#FFFFFF`
 - Border top: `#E8EEF7`
 - Icono active: `#255FF5` + glow
@@ -174,6 +189,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ## 📱 Responsive Breakpoints
 
 ### Mobile Small (< 380px)
+
 ```css
 .workspace-grid {
   grid-template-columns: 1fr; /* Una columna */
@@ -181,6 +197,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ```
 
 ### Mobile (380px - 767px)
+
 ```css
 .workspace-grid {
   grid-template-columns: repeat(2, 1fr); /* Dos columnas */
@@ -192,6 +209,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ```
 
 ### Tablet (768px - 1023px)
+
 ```css
 .wadi-mobile-frame {
   border-radius: 32px; /* Bordes redondeados */
@@ -200,6 +218,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ```
 
 ### Desktop (≥ 1024px)
+
 ```css
 .wadi-desktop-container {
   padding: 2rem;
@@ -213,7 +232,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
   max-width: 480px;
   max-height: 844px;
   border-radius: 36px;
-  box-shadow: 
+  box-shadow:
     0 8px 40px rgba(15, 23, 42, 0.1),
     0 0 0 1px rgba(15, 23, 42, 0.05),
     inset 0 0 0 1px rgba(255, 255, 255, 0.1);
@@ -225,7 +244,9 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
 ## ✨ Animaciones
 
 ### Page Load Sequence
+
 1. **Mobile Frame** (0ms):
+
    ```
    opacity: 0 → 1
    scale: 0.95 → 1.0
@@ -233,6 +254,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
    ```
 
 2. **Hero Card** (100ms delay):
+
    ```
    opacity: 0 → 1
    y: 20px → 0
@@ -240,6 +262,7 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
    ```
 
 3. **Workspace Section** (200ms delay):
+
    ```
    opacity: 0 → 1
    y: 20px → 0
@@ -247,12 +270,13 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
    ```
 
 4. **Workspace Cards** (300ms + stagger):
+
    ```
    Card 1: delay 300ms
    Card 2: delay 350ms
    Card 3: delay 400ms
    Card 4: delay 450ms
-   
+
    opacity: 0 → 1
    scale: 0.9 → 1.0
    duration: 300ms each
@@ -266,16 +290,23 @@ La pantalla Home de WADI presenta un diseño fintech premium con toques Y2K suti
    ```
 
 ### Continuous Animations
+
 ```css
 /* Y2K Orbs Pulse */
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.15 }
-  50%      { opacity: 0.25 }
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.25;
+  }
 }
 animation: pulse-glow 4s ease-in-out infinite;
 ```
 
 ### Hover Effects
+
 ```css
 /* Submit Button */
 .wadi-hero-submit:hover {
@@ -292,8 +323,8 @@ animation: pulse-glow 4s ease-in-out infinite;
 
 /* Quick Action Chip */
 chip:hover {
-  border-color: #255FF5;
-  color: #255FF5;
+  border-color: #255ff5;
+  color: #255ff5;
 }
 ```
 
@@ -302,6 +333,7 @@ chip:hover {
 ## 🔧 Espaciado y Tipografía
 
 ### Spacing System (4px grid)
+
 - xs: `4px`
 - sm: `8px`
 - md: `12px`
@@ -312,6 +344,7 @@ chip:hover {
 - 4xl: `64px`
 
 ### Typography Scale
+
 - Display: `32px` (Títulos de página)
 - H1: `24px` (Hero card título)
 - H2: `20px` ("Mis Workspaces")
@@ -322,6 +355,7 @@ chip:hover {
 - Caption: `12px` (Bottom nav labels)
 
 ### Font Weights
+
 - Normal: `400`
 - Medium: `500`
 - Semibold: `600`
@@ -332,18 +366,19 @@ chip:hover {
 ## 🎯 Elementos Y2K (Sutiles)
 
 ### 1. Gradientes
+
 - **Principal**: `#255FF5 → #7B8CFF → #C5B3FF`
 - **Hero**: `#255FF5 → #7B8CFF`
 - **Botón**: `#255FF5 → #4A7BF7`
 - **Y2K Accent**: `#7B8CFF → #C5B3FF`
 
 ### 2. Orbs Holográficos
+
 - **Top Right Orb**:
   - Size: 200px
   - Gradient: Y2K accent
   - Blur: 60px
   - Opacity: 0.15 (pulse to 0.25)
-  
 - **Hero Bottom Left Orb**:
   - Size: 160px
   - Radial gradient: white center
@@ -351,11 +386,13 @@ chip:hover {
   - Static opacity: 0.2
 
 ### 3. Glow Effects
+
 - **Submit Button**: `0 0 24px rgba(37, 95, 245, 0.3)`
 - **Active Nav Icon**: `drop-shadow(0 0 8px #255FF5)`
 - **Hero Card**: `0 0 24px rgba(37, 95, 245, 0.15)`
 
 ### 4. Glassmorphism
+
 - **Bottom Nav**: `backdrop-filter: blur(10px)`
 - **Input Field**: `backdrop-filter: blur(10px)`
 
@@ -364,15 +401,18 @@ chip:hover {
 ## 📊 Performance
 
 ### Bundle Size
+
 - CSS: `2.60 kB` (gzipped: 1.11 kB)
 - JS: `645.95 kB` (gzipped: 186.95 kB)
 
 ### Build Time
+
 - TypeScript compilation: ~1s
 - Vite build: ~2s
 - Total: **~2-3 segundos**
 
 ### Lighthouse Scores (estimados)
+
 - Performance: 95+
 - Accessibility: 90+
 - Best Practices: 95+
@@ -383,21 +423,25 @@ chip:hover {
 ## 🚀 Estados de Interacción
 
 ### Workspace Card
+
 - **Normal**: Borde sutil, sombra ligera
 - **Hover**: Borde azul, sombra elevada, scale 1.02
 - **Active/Tap**: Scale 0.98
 - **Transition**: 150ms ease-in-out
 
 ### Quick Action Chip
+
 - **Inactive**: Borde gris, texto gris
 - **Hover**: Borde azul, texto azul
 - **Active**: Fondo azul, texto blanco, borde azul
 
 ### Bottom Nav Item
+
 - **Inactive**: Icono gris, texto gris
 - **Active**: Icono azul + glow, texto azul bold, dot indicator
 
 ### Submit Button
+
 - **Normal**: Gradiente, glow suave
 - **Hover**: Scale 1.05, glow intenso
 - **Active/Press**: Scale 0.95

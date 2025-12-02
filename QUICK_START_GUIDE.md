@@ -56,6 +56,7 @@ pnpm run dev
 ## 🎯 What's New & Ready to Use
 
 ### 1. **Sessions (Organize Your Conversations)**
+
 - ✅ Auto-create sessions for new runs
 - ✅ Group runs by session
 - ✅ Rename and delete sessions
@@ -63,33 +64,39 @@ pnpm run dev
 - ✅ Active session indicator
 
 **How to use:**
+
 - Sessions auto-create when you start chatting
 - Click session name to rename
 - Click collapse icon to hide/show runs
 
 ### 2. **Tags (Categorize Everything)**
+
 - ✅ Create colored tags
 - ✅ Assign tags to runs
 - ✅ Beautiful animated tag chips
 - ✅ Tag removal
 
 **How to use:**
+
 - Create tags in your project settings
 - Click "Add Tag" on any run
 - Remove tags by clicking the × icon
 
 ### 3. **Export (Share Your Work)**
+
 - ✅ Markdown format (.md)
 - ✅ JSON format (.json)
 - ✅ PDF format (.pdf)
 - ✅ HTML format (.html)
 
 **How to use:**
+
 - Click Export button on any run
 - Select your preferred format
 - File downloads automatically
 
 ### 4. **Share Links (Public Sharing)**
+
 - ✅ Share runs or entire sessions
 - ✅ Password protection
 - ✅ Expiration dates
@@ -97,22 +104,26 @@ pnpm run dev
 - ✅ Public access (no login required)
 
 **How to use:**
+
 - Click Share button
 - Configure password/expiration (optional)
 - Copy link and share!
 
 ### 5. **Project Memory (AI Summarization)**
+
 - ✅ Auto-summarize conversations
 - ✅ Extract key points
 - ✅ Identify topics
 - ✅ Provide context for future chats
 
 **How to use:**
+
 - Click "Generate Memory" in project settings
 - AI analyzes last 20 runs
 - Summary appears in project context
 
 ### 6. **Visual Enhancements**
+
 - ✅ Glass morphism UI
 - ✅ Smooth animations throughout
 - ✅ Hover effects and micro-interactions
@@ -123,6 +134,7 @@ pnpm run dev
 ## 📦 New Components You Can Use
 
 ### Frontend Components:
+
 ```typescript
 // Modals
 import ExportModal from "./components/ExportModal";
@@ -144,6 +156,7 @@ import { pageVariants, modalVariants } from "./utils/animations";
 ```
 
 ### Backend Endpoints:
+
 ```typescript
 // Sessions
 GET    /api/sessions
@@ -179,23 +192,25 @@ DELETE /api/projects/:id/memory
 ## 🎨 Design System Updates
 
 ### Glass Effects (theme.glass):
+
 ```typescript
 import { theme } from "./styles/theme";
 
 // Available glass effects:
-theme.glass.light    // Light glass for primary surfaces
-theme.glass.medium   // Medium glass for cards/modals
-theme.glass.heavy    // Heavy glass for overlays
-theme.glass.accent   // Accent glass (mint tint)
-theme.glass.purple   // Purple accent glass
+theme.glass.light; // Light glass for primary surfaces
+theme.glass.medium; // Medium glass for cards/modals
+theme.glass.heavy; // Heavy glass for overlays
+theme.glass.accent; // Accent glass (mint tint)
+theme.glass.purple; // Purple accent glass
 
 // Hover states:
-theme.glassHover.light
-theme.glassHover.medium
-theme.glassHover.accent
+theme.glassHover.light;
+theme.glassHover.medium;
+theme.glassHover.accent;
 ```
 
 ### Animations (animations.ts):
+
 ```typescript
 import { pageVariants, modalVariants, fadeVariants } from "./utils/animations";
 
@@ -219,6 +234,7 @@ import { pageVariants, modalVariants, fadeVariants } from "./utils/animations";
 Run through these scenarios to verify everything works:
 
 ### Sessions:
+
 - [ ] Create a new project
 - [ ] Add multiple runs (session auto-creates)
 - [ ] Rename a session
@@ -227,6 +243,7 @@ Run through these scenarios to verify everything works:
 - [ ] Verify active session badge shows
 
 ### Tags:
+
 - [ ] Create a tag with custom color
 - [ ] Assign tag to a run
 - [ ] Remove tag from a run
@@ -234,6 +251,7 @@ Run through these scenarios to verify everything works:
 - [ ] Delete a tag (removes from all runs)
 
 ### Export:
+
 - [ ] Export as Markdown → verify formatting
 - [ ] Export as JSON → verify structure
 - [ ] Export as PDF → verify readable
@@ -241,6 +259,7 @@ Run through these scenarios to verify everything works:
 - [ ] Verify all exports include metadata
 
 ### Share Links:
+
 - [ ] Create share link with no options
 - [ ] Create share link with password
 - [ ] Create share link with expiration (1 day)
@@ -250,6 +269,7 @@ Run through these scenarios to verify everything works:
 - [ ] Delete a share link
 
 ### Memory:
+
 - [ ] Generate memory for a project
 - [ ] Verify summary is accurate
 - [ ] Verify key points extracted
@@ -257,6 +277,7 @@ Run through these scenarios to verify everything works:
 - [ ] Delete memory
 
 ### UI/UX:
+
 - [ ] Verify all modals animate in/out
 - [ ] Verify hover effects on buttons
 - [ ] Verify glass effects on modals
@@ -268,6 +289,7 @@ Run through these scenarios to verify everything works:
 ## 📋 Database Schema Overview
 
 ### Tables Created:
+
 1. **sessions** - Organize runs into sessions
 2. **tags** - Custom categorization tags
 3. **project_tags** - Tags assigned to projects
@@ -276,6 +298,7 @@ Run through these scenarios to verify everything works:
 6. **project_memory** - AI-generated summaries
 
 ### Key Features:
+
 - Row Level Security (RLS) on all tables
 - Auto-calculated fields (run_count, updated_at)
 - Unique constraints prevent duplicates
@@ -287,21 +310,27 @@ Run through these scenarios to verify everything works:
 ## 🐛 Troubleshooting
 
 ### Issue: "Migrations failed"
+
 **Solution:** Run migrations one at a time, check for errors
 
 ### Issue: "Tags not showing"
+
 **Solution:** Verify run_tags table created, check RLS policies
 
 ### Issue: "Export downloads empty file"
+
 **Solution:** Check browser allows downloads, verify run has content
 
 ### Issue: "Share link 404"
+
 **Solution:** Verify token correct, check link hasn't expired
 
 ### Issue: "Memory generation fails"
+
 **Solution:** Ensure OPENAI_API_KEY set, check project has runs
 
 ### Issue: "Animations not working"
+
 **Solution:** Verify framer-motion installed, check browser supports animations
 
 ---
@@ -339,10 +368,10 @@ Run through these scenarios to verify everything works:
 All core features are implemented and tested. Execute the migrations, start the servers, and enjoy your upgraded WADI platform!
 
 **Questions or Issues?**
+
 - Check console for errors
 - Review database migration logs
 - Verify environment variables
 - Test with a fresh project
 
 **Enjoy your new features! 🚀**
-

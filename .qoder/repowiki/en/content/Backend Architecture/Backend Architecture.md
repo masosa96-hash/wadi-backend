@@ -15,6 +15,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
 3. [Core Components](#core-components)
@@ -26,6 +27,7 @@
 9. [Conclusion](#conclusion)
 
 ## Introduction
+
 The backend architecture of the WADI application is built on Express.js and follows a modular, service-oriented design pattern. It provides RESTful APIs for managing user interactions, AI-powered chat functionality, data storage via Supabase, and real-time communication through WebSockets. The system integrates with external LLM providers (primarily Groq with OpenAI compatibility) and implements robust security, logging, error handling, and rate-limiting mechanisms. This document details the high-level design, component interactions, technical decisions, and operational considerations for the backend layer.
 
 ## Project Structure
@@ -56,6 +58,7 @@ G --> G3[websocket.ts]
 ```
 
 **Diagram sources**
+
 - [env.ts](file://apps/api/src/config/env.ts)
 - [logger.ts](file://apps/api/src/config/logger.ts)
 - [supabase.ts](file://apps/api/src/config/supabase.ts)
@@ -66,6 +69,7 @@ G --> G3[websocket.ts]
 - [websocket.ts](file://apps/api/src/services/websocket.ts)
 
 **Section sources**
+
 - [env.ts](file://apps/api/src/config/env.ts)
 - [logger.ts](file://apps/api/src/config/logger.ts)
 - [supabase.ts](file://apps/api/src/config/supabase.ts)
@@ -75,6 +79,7 @@ G --> G3[websocket.ts]
 The backend consists of several core components that work together to deliver functionality: configuration management, authentication, logging, error handling, API routing, service integration, and real-time communication. These components are designed to be loosely coupled and independently maintainable, enabling scalability and ease of development.
 
 **Section sources**
+
 - [index.ts](file://apps/api/src/index.ts)
 - [env.ts](file://apps/api/src/config/env.ts)
 - [logger.ts](file://apps/api/src/config/logger.ts)
@@ -106,6 +111,7 @@ WS --> |Stream| LLM
 ```
 
 **Diagram sources**
+
 - [index.ts](file://apps/api/src/index.ts)
 - [supabase.ts](file://apps/api/src/config/supabase.ts)
 - [openai.ts](file://apps/api/src/services/openai.ts)
@@ -114,9 +120,11 @@ WS --> |Stream| LLM
 ## Detailed Component Analysis
 
 ### Configuration Management
+
 Handles environment variables, logging setup, and external service configuration.
 
 #### Configuration Loader
+
 ```mermaid
 flowchart TD
 Start([Application Start]) --> LoadEnv["Load .env from monorepo root"]
@@ -128,14 +136,17 @@ HealthCheck --> Ready["Application Ready"]
 ```
 
 **Diagram sources**
+
 - [env.ts](file://apps/api/src/config/env.ts)
 - [logger.ts](file://apps/api/src/config/logger.ts)
 - [supabase.ts](file://apps/api/src/config/supabase.ts)
 
 ### Authentication and Authorization
+
 Implements JWT-based authentication using Supabase with support for guest mode.
 
 #### Authentication Flow
+
 ```mermaid
 sequenceDiagram
 participant Client
@@ -158,13 +169,16 @@ end
 ```
 
 **Diagram sources**
+
 - [auth.ts](file://apps/api/src/middleware/auth.ts)
 - [supabase.ts](file://apps/api/src/config/supabase.ts)
 
 ### Error Handling
+
 Provides centralized error handling with standardized response formats and logging.
 
 #### Error Handling Pipeline
+
 ```mermaid
 flowchart TD
 A[Error Thrown] --> B{Error Type}
@@ -180,12 +194,15 @@ G --> H[Response Sent]
 ```
 
 **Diagram sources**
+
 - [errorHandler.ts](file://apps/api/src/middleware/errorHandler.ts)
 
 ### Service Layer Organization
+
 Encapsulates business logic and external service integrations in dedicated service modules.
 
 #### Service Architecture
+
 ```mermaid
 classDiagram
 class OpenAIService {
@@ -215,14 +232,17 @@ WebSocketService --> "uses" Supabase
 ```
 
 **Diagram sources**
+
 - [openai.ts](file://apps/api/src/services/openai.ts)
 - [vector-memory.ts](file://apps/api/src/services/vector-memory.ts)
 - [websocket.ts](file://apps/api/src/services/websocket.ts)
 
 ### REST API Structure
+
 Organized around resource-based endpoints with consistent patterns across controllers.
 
 #### API Endpoint Structure
+
 ```mermaid
 flowchart TD
 A[HTTP Request] --> B[Rate Limiting]
@@ -236,6 +256,7 @@ H --> I[Response Sent]
 ```
 
 **Diagram sources**
+
 - [chat.ts](file://apps/api/src/routes/chat.ts)
 - [auth.ts](file://apps/api/src/middleware/auth.ts)
 - [errorHandler.ts](file://apps/api/src/middleware/errorHandler.ts)
@@ -266,16 +287,19 @@ external --> Supabase
 ```
 
 **Diagram sources**
+
 - [index.ts](file://apps/api/src/index.ts)
 - [package.json](file://apps/api/package.json)
 
 **Section sources**
+
 - [index.ts](file://apps/api/src/index.ts)
 - [package.json](file://apps/api/package.json)
 
 ## Performance Considerations
 
 The architecture includes several performance optimizations:
+
 - Rate limiting to prevent abuse
 - Connection pooling through Supabase client reuse
 - Efficient memory management in vector search
@@ -290,26 +314,31 @@ The system is designed to scale horizontally, with stateless API instances that 
 Common issues and their solutions:
 
 **Section sources**
+
 - [errorHandler.ts](file://apps/api/src/middleware/errorHandler.ts)
 - [logger.ts](file://apps/api/src/config/logger.ts)
 - [supabase.ts](file://apps/api/src/config/supabase.ts)
 
 ### Authentication Failures
+
 - Verify `SUPABASE_URL` and `SUPABASE_ANON_KEY` are correctly set
 - Check JWT token validity and expiration
 - Ensure Supabase authentication service is operational
 
 ### LLM Integration Issues
+
 - Confirm `GROQ_API_KEY` is properly configured
 - Check network connectivity to Groq API endpoint
 - Verify model names are supported and correctly mapped
 
 ### Database Connection Problems
+
 - Validate Supabase project URL and credentials
 - Check database schema and table permissions
 - Monitor connection limits and performance
 
 ### WebSocket Connectivity
+
 - Ensure proper CORS configuration for WebSocket connections
 - Verify authentication token is sent during WebSocket handshake
 - Check server resource usage under high connection loads

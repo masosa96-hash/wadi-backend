@@ -11,7 +11,8 @@ Se completó exitosamente la humanización de la experiencia WADI con copy en to
 ### 1. ✅ Copy Global - Tono WADI Cercano
 
 #### Cambios Implementados:
-- **Home (Inicio)**: 
+
+- **Home (Inicio)**:
   - Título hero: "Hola, soy WADI. ¿Qué hacemos hoy?"
   - Placeholder input: "Contame qué necesitás…"
   - Sección: "Lo que venimos trabajando"
@@ -44,6 +45,7 @@ Se completó exitosamente la humanización de la experiencia WADI con copy en to
   - 👤 Perfil
 
 #### ❌ Términos Eliminados:
+
 - "prompt" → "Contame qué necesitás"
 - "workspace" → "espacio" o contexto específico
 - "projects" → "historial" / "proyectos"
@@ -54,9 +56,11 @@ Se completó exitosamente la humanización de la experiencia WADI con copy en to
 ### 2. ✅ Notificaciones Funcionales
 
 #### Implementación:
+
 **Archivo**: `apps/frontend/src/pages/Home.tsx`
 
 **Características**:
+
 - ✅ Panel glassmorphism que abre al tocar campanita
 - ✅ Estado vacío con mensaje humano: "Pronto vas a ver tus recordatorios y alertas acá."
 - ✅ Botón de cerrar funcional
@@ -65,22 +69,25 @@ Se completó exitosamente la humanización de la experiencia WADI con copy en to
 - ✅ Integrado dentro de PhoneShell
 
 **Código Clave**:
+
 ```tsx
-{showNotifications && (
-  <motion.div
-    initial={{ opacity: 0, y: -10 }}
-    animate={{ opacity: 1, y: 0 }}
-    exit={{ opacity: 0, y: -10 }}
-    style={{
-      background: "rgba(255, 255, 255, 0.9)",
-      backdropFilter: "blur(20px) saturate(180%)",
-      // ... glassmorphism styling
-    }}
-  >
-    <h3>Notificaciones</h3>
-    <p>Pronto vas a ver tus recordatorios y alertas acá.</p>
-  </motion.div>
-)}
+{
+  showNotifications && (
+    <motion.div
+      initial={{ opacity: 0, y: -10 }}
+      animate={{ opacity: 1, y: 0 }}
+      exit={{ opacity: 0, y: -10 }}
+      style={{
+        background: "rgba(255, 255, 255, 0.9)",
+        backdropFilter: "blur(20px) saturate(180%)",
+        // ... glassmorphism styling
+      }}
+    >
+      <h3>Notificaciones</h3>
+      <p>Pronto vas a ver tus recordatorios y alertas acá.</p>
+    </motion.div>
+  );
+}
 ```
 
 ---
@@ -88,9 +95,11 @@ Se completó exitosamente la humanización de la experiencia WADI con copy en to
 ### 3. ✅ Settings Reales Mínimos
 
 #### Implementación:
+
 **Archivo**: `apps/frontend/src/pages/Settings.tsx`
 
 **Características**:
+
 - ✅ **Perfil Básico**:
   - Avatar con inicial del usuario
   - Nombre de usuario (display_name)
@@ -108,6 +117,7 @@ Se completó exitosamente la humanización de la experiencia WADI con copy en to
   - Animaciones hover/tap
 
 **Código Clave**:
+
 ```tsx
 const handleLogout = async () => {
   try {
@@ -128,6 +138,7 @@ const handleLogout = async () => {
 #### Componente Nuevo: `BottomNav.tsx`
 
 **Características**:
+
 - ✅ Navegación consistente en Home, Chat, Settings
 - ✅ Active state dinámico usando `useLocation()`
 - ✅ Indicador activo con glow y gradiente
@@ -136,11 +147,13 @@ const handleLogout = async () => {
 - ✅ Transiciones suaves con Framer Motion
 
 **Estados Visuales**:
+
 - **Hover**: Escala 110%, cursor pointer
 - **Active**: Drop shadow azul, texto bold con color primario, indicador inferior con glow
 - **Press**: Escala 95% (feedback táctil)
 
 #### Mejoras Globales:
+
 1. **Cards y Botones**:
    - Hover: boxShadow aumentado
    - Tap: scale reducido
@@ -166,9 +179,11 @@ const handleLogout = async () => {
 ## 📁 Archivos Modificados
 
 ### Nuevos Archivos:
+
 1. `apps/frontend/src/components/BottomNav.tsx` - Navegación inferior reutilizable
 
 ### Archivos Actualizados:
+
 1. `apps/frontend/src/pages/Home.tsx`
    - Copy actualizado
    - BottomNav integrado
@@ -200,19 +215,22 @@ const handleLogout = async () => {
 ## 🎨 Estilo Consistente
 
 ### Glassmorphism Aplicado:
+
 ```css
 background: rgba(255, 255, 255, 0.7);
-backdropFilter: blur(16px) saturate(180%);
+backdropfilter: blur(16px) saturate(180%);
 border: 1px solid rgba(214, 225, 242, 0.5);
-boxShadow: 0 8px 32px rgba(15, 23, 42, 0.08);
+boxshadow: 0 8px 32px rgba(15, 23, 42, 0.08);
 ```
 
 ### Gradientes WADI:
+
 - **Primary**: `linear-gradient(135deg, #255FF5 0%, #7B8CFF 50%, #C5B3FF 100%)`
 - **Button**: Mismo gradient con hover glow
 - **Active States**: Drop shadow con color primario
 
 ### Animaciones Framer Motion:
+
 ```tsx
 whileHover={{ scale: 1.05 }}
 whileTap={{ scale: 0.95 }}
@@ -224,6 +242,7 @@ transition={{ duration: 0.3 }}
 ## ✅ Testing y Validación
 
 ### Build Status:
+
 ```bash
 ✓ TypeScript compilation successful
 ✓ Vite build completed (684.95 kB)
@@ -231,6 +250,7 @@ transition={{ duration: 0.3 }}
 ```
 
 ### Verificaciones:
+
 - ✅ No errores de TypeScript
 - ✅ Imports correctos
 - ✅ Build production exitoso
@@ -243,12 +263,14 @@ transition={{ duration: 0.3 }}
 ## 🚀 Resultado Final
 
 ### WADI Ahora Se Siente:
+
 1. **Más Humano**: Copy natural en español rioplatense
 2. **Más Vivo**: Notificaciones y settings reales
 3. **Más Premium**: Micro-interacciones suaves y consistentes
 4. **Más Coherente**: Navegación unified con BottomNav
 
 ### Experiencia Usuario:
+
 - ✅ Campanita → Panel notificaciones vacío con mensaje amigable
 - ✅ Avatar/Perfil → Settings completo con logout funcional
 - ✅ Navegación → Bottom nav consistente en todas las pantallas
@@ -284,18 +306,21 @@ transition={{ duration: 0.3 }}
 ## 📝 Notas Técnicas
 
 ### Compatibilidad:
+
 - ✅ React 18+
 - ✅ TypeScript strict mode
 - ✅ Vite 7.2.2
 - ✅ Framer Motion animaciones
 
 ### Accesibilidad:
+
 - Botones con cursor pointer
 - Estados disabled claros
 - Contraste de colores adecuado
 - Tamaños táctiles >44px
 
 ### Mobile-First:
+
 - PhoneShell responsivo
 - Bottom nav sticky
 - Touch-friendly interactions

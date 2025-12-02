@@ -19,12 +19,14 @@ Before starting, you'll need to create accounts with the following services:
 ### Frontend (Vercel)
 
 **Build Settings:**
+
 - Build Command: `pnpm build`
 - Output Directory: `dist`
 - Install Command: `pnpm install`
 - Framework: Vite
 
 **Required Environment Variables:**
+
 ```
 VITE_SUPABASE_URL=your-project-url.supabase.co
 VITE_SUPABASE_ANON_KEY=your-anon-key-here
@@ -39,6 +41,7 @@ You can deploy the backend to either Render or Railway:
 #### Option A: Backend (Render)
 
 **Service Configuration:**
+
 - Service Type: Web Service
 - Build Command: `cd apps/api && pnpm install --frozen-lockfile && pnpm build`
 - Start Command: `cd apps/api && pnpm start`
@@ -46,6 +49,7 @@ You can deploy the backend to either Render or Railway:
 - Plan: Free (or choose a paid plan for production)
 
 **Required Environment Variables:**
+
 ```
 NODE_ENV=production
 PORT=10000
@@ -61,6 +65,7 @@ PNPM_VERSION=10.21.0
 #### Option B: Backend (Railway)
 
 **Service Configuration:**
+
 - Service Type: Web Service
 - Build Command: Uses `railway.json` configuration
 - Start Command: Uses `railway.json` configuration
@@ -68,6 +73,7 @@ PNPM_VERSION=10.21.0
 - Plan: Free (or choose a paid plan for production)
 
 **Required Environment Variables (set in Variables tab):**
+
 ```
 SUPABASE_URL=your-project-url.supabase.co
 SUPABASE_ANON_KEY=your-anon-key-here
@@ -79,6 +85,7 @@ FRONTEND_URL=https://your-frontend-url.vercel.app
 ```
 
 **Required Secrets (set in Variables/Secrets UI):**
+
 ```
 JWT_SECRET=your-supabase-jwt-secret
 ```
@@ -88,11 +95,12 @@ JWT_SECRET=your-supabase-jwt-secret
 ### Database (Supabase)
 
 **Keys Distribution:**
-- **Frontend (.env variables with VITE_ prefix):**
+
+- **Frontend (.env variables with VITE\_ prefix):**
   - `VITE_SUPABASE_URL`
   - `VITE_SUPABASE_ANON_KEY`
 
-- **Backend (.env variables without VITE_ prefix):**
+- **Backend (.env variables without VITE\_ prefix):**
   - `SUPABASE_URL`
   - `SUPABASE_ANON_KEY`
   - `SUPABASE_SERVICE_KEY`
@@ -100,10 +108,12 @@ JWT_SECRET=your-supabase-jwt-secret
 ### AI Providers
 
 **Primary (Groq):**
+
 - Variable: `GROQ_API_KEY`
 - Location: Backend environment variables
 
 **Fallback (OpenAI):**
+
 - Variable: `OPENAI_API_KEY`
 - Location: Backend environment variables (optional)
 
@@ -231,14 +241,14 @@ JWT_SECRET=your-supabase-jwt-secret
    - Click "Save"
 
 2. **Update Backend Environment Variables:**
-   
+
    **If using Render:**
    - Go to your Render service dashboard
    - Click "Environment" in the left sidebar
    - Edit the `FRONTEND_URL` variable
    - Set it to your Vercel frontend URL (e.g., `https://your-project.vercel.app`)
    - Click "Save Changes" to redeploy the backend
-   
+
    **If using Railway:**
    - Go to your Railway project
    - Navigate to Variables tab
@@ -309,12 +319,12 @@ JWT_SECRET=your-supabase-jwt-secret
    - Check for any errors during builds or runtime
 
 2. **Backend Logs:**
-   
+
    **If using Render:**
    - Go to your Render service dashboard
    - Click "Logs" in the left sidebar
    - Check for any errors during builds or runtime
-   
+
    **If using Railway:**
    - Go to your Railway project dashboard
    - Click "Logs" in the left sidebar
@@ -330,7 +340,7 @@ JWT_SECRET=your-supabase-jwt-secret
   - `VITE_API_URL` = Backend URL
   - `VITE_GUEST_MODE` = true
 - [ ] Create backend service (Render OR Railway) → Connect repo → Set env vars:
-  
+
   **If using Render:**
   - `NODE_ENV` = production
   - `PORT` = 10000
@@ -341,7 +351,7 @@ JWT_SECRET=your-supabase-jwt-secret
   - `GROQ_API_KEY` = Groq API key
   - `JWT_SECRET` = (auto-generated)
   - `PNPM_VERSION` = 10.21.0
-  
+
   **If using Railway:**
   - Variables tab:
     - `SUPABASE_URL` = Supabase URL
@@ -353,6 +363,7 @@ JWT_SECRET=your-supabase-jwt-secret
     - `FRONTEND_URL` = Vercel frontend URL
   - Secrets UI:
     - `JWT_SECRET` = Supabase JWT secret
+
 - [ ] Update frontend config with backend URL in Vercel
 - [ ] Update backend config with frontend URL
 - [ ] Redeploy both services
@@ -380,7 +391,7 @@ JWT_SECRET=your-supabase-jwt-secret
 
 1. Verify all required variables are set in both platforms
 2. Check for typos in variable names
-3. Remember VITE_ prefix is required for frontend variables
+3. Remember VITE\_ prefix is required for frontend variables
 
 ### API Connection Issues
 

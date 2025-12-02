@@ -18,6 +18,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Core Entity Relationships](#core-entity-relationships)
 3. [Entity Definitions and Field Specifications](#entity-definitions-and-field-specifications)
@@ -34,6 +35,7 @@
 The WADI application employs a comprehensive PostgreSQL database schema hosted on Supabase, designed to support a sophisticated AI-powered workspace platform. The data model centers around user collaboration, project management, AI interactions, and usage analytics. The schema implements Row Level Security (RLS) to ensure data isolation between users and workspaces, with a focus on scalability and performance for AI-driven features like file processing, user memory, and global search. The database structure has evolved through a series of migrations, reflecting the phased development of the application from core user and workspace management to advanced features like monetization, global search, and session-based organization of AI runs.
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L1-L162)
 - [LEGAL.md](file://LEGAL.md#L13-L20)
 
@@ -83,6 +85,7 @@ share_links }|--|| sessions : "references"
 ```
 
 **Diagram sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L1-L162)
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L1-L200)
 - [apps/api/migrations/002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L1-L180)
@@ -97,276 +100,300 @@ share_links }|--|| sessions : "references"
 ## Entity Definitions and Field Specifications
 
 ### profiles
+
 The `profiles` table extends the Supabase `auth.users` table to store user-specific information. It serves as the central identity for all user-related data.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | uuid | PK, FK to auth.users(id) | Primary key, references the auth.users table |
-| email | text | | User's email address |
-| full_name | text | | User's full name |
-| avatar_url | text | | URL to the user's profile picture |
-| plan_id | text | DEFAULT 'free' | Current subscription plan identifier |
-| stripe_customer_id | text | | Stripe customer ID for billing |
-| created_at | timestamp with time zone | DEFAULT now() | Timestamp of profile creation |
-| updated_at | timestamp with time zone | DEFAULT now() | Timestamp of last update |
-| onboarding_completed | boolean | DEFAULT false | Whether the user has completed onboarding |
-| onboarding_step | integer | DEFAULT 0 | Current step in the onboarding process |
-| first_login_at | timestamptz | | Timestamp of the user's first login |
-| last_login_at | timestamptz | | Timestamp of the user's last login |
-| login_count | integer | DEFAULT 0 | Total number of times the user has logged in |
+| Field                | Type                     | Constraints              | Description                                  |
+| :------------------- | :----------------------- | :----------------------- | :------------------------------------------- |
+| id                   | uuid                     | PK, FK to auth.users(id) | Primary key, references the auth.users table |
+| email                | text                     |                          | User's email address                         |
+| full_name            | text                     |                          | User's full name                             |
+| avatar_url           | text                     |                          | URL to the user's profile picture            |
+| plan_id              | text                     | DEFAULT 'free'           | Current subscription plan identifier         |
+| stripe_customer_id   | text                     |                          | Stripe customer ID for billing               |
+| created_at           | timestamp with time zone | DEFAULT now()            | Timestamp of profile creation                |
+| updated_at           | timestamp with time zone | DEFAULT now()            | Timestamp of last update                     |
+| onboarding_completed | boolean                  | DEFAULT false            | Whether the user has completed onboarding    |
+| onboarding_step      | integer                  | DEFAULT 0                | Current step in the onboarding process       |
+| first_login_at       | timestamptz              |                          | Timestamp of the user's first login          |
+| last_login_at        | timestamptz              |                          | Timestamp of the user's last login           |
+| login_count          | integer                  | DEFAULT 0                | Total number of times the user has logged in |
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L8-L17)
 - [apps/api/migrations/004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L8-L14)
 
 ### workspaces
+
 The `workspaces` table represents the primary organizational unit for user activities. Each workspace is owned by a single user but can have multiple members.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | uuid | PK, DEFAULT uuid_generate_v4() | Primary key |
-| name | text | NOT NULL | Name of the workspace |
-| slug | text | NOT NULL, UNIQUE | URL-friendly identifier for the workspace |
-| owner_id | uuid | NOT NULL, FK to profiles(id) | ID of the user who owns the workspace |
-| settings | jsonb | DEFAULT '{}'::jsonb | JSON object for storing workspace-specific settings |
-| created_at | timestamp with time zone | DEFAULT now() | Timestamp of workspace creation |
-| updated_at | timestamp with time zone | DEFAULT now() | Timestamp of last update |
-| is_auto_created | boolean | DEFAULT false | True if the workspace was created automatically by topic detection |
-| detected_topic | text | | AI-detected topic that triggered auto-creation |
-| message_count | integer | DEFAULT 0 | Cached count of messages in this workspace |
-| last_message_at | timestamptz | | Timestamp of the last message in the workspace |
-| is_archived | boolean | DEFAULT false | Whether the workspace is archived |
-| archived_at | timestamptz | | Timestamp when the workspace was archived |
+| Field           | Type                     | Constraints                    | Description                                                        |
+| :-------------- | :----------------------- | :----------------------------- | :----------------------------------------------------------------- |
+| id              | uuid                     | PK, DEFAULT uuid_generate_v4() | Primary key                                                        |
+| name            | text                     | NOT NULL                       | Name of the workspace                                              |
+| slug            | text                     | NOT NULL, UNIQUE               | URL-friendly identifier for the workspace                          |
+| owner_id        | uuid                     | NOT NULL, FK to profiles(id)   | ID of the user who owns the workspace                              |
+| settings        | jsonb                    | DEFAULT '{}'::jsonb            | JSON object for storing workspace-specific settings                |
+| created_at      | timestamp with time zone | DEFAULT now()                  | Timestamp of workspace creation                                    |
+| updated_at      | timestamp with time zone | DEFAULT now()                  | Timestamp of last update                                           |
+| is_auto_created | boolean                  | DEFAULT false                  | True if the workspace was created automatically by topic detection |
+| detected_topic  | text                     |                                | AI-detected topic that triggered auto-creation                     |
+| message_count   | integer                  | DEFAULT 0                      | Cached count of messages in this workspace                         |
+| last_message_at | timestamptz              |                                | Timestamp of the last message in the workspace                     |
+| is_archived     | boolean                  | DEFAULT false                  | Whether the workspace is archived                                  |
+| archived_at     | timestamptz              |                                | Timestamp when the workspace was archived                          |
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L20-L28)
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L8-L14)
 
 ### workspace_members
+
 The `workspace_members` table manages the many-to-many relationship between users and workspaces, defining their roles within each workspace.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| workspace_id | uuid | NOT NULL, FK to workspaces(id), ON DELETE CASCADE | ID of the workspace |
-| user_id | uuid | NOT NULL, FK to profiles(id), ON DELETE CASCADE | ID of the user |
-| role | text | CHECK (role in ('owner', 'admin', 'member', 'viewer')), DEFAULT 'member' | User's role in the workspace |
-| joined_at | timestamp with time zone | DEFAULT now() | Timestamp when the user joined the workspace |
-| (workspace_id, user_id) | | PRIMARY KEY | Composite primary key |
+| Field                   | Type                     | Constraints                                                              | Description                                  |
+| :---------------------- | :----------------------- | :----------------------------------------------------------------------- | :------------------------------------------- |
+| workspace_id            | uuid                     | NOT NULL, FK to workspaces(id), ON DELETE CASCADE                        | ID of the workspace                          |
+| user_id                 | uuid                     | NOT NULL, FK to profiles(id), ON DELETE CASCADE                          | ID of the user                               |
+| role                    | text                     | CHECK (role in ('owner', 'admin', 'member', 'viewer')), DEFAULT 'member' | User's role in the workspace                 |
+| joined_at               | timestamp with time zone | DEFAULT now()                                                            | Timestamp when the user joined the workspace |
+| (workspace_id, user_id) |                          | PRIMARY KEY                                                              | Composite primary key                        |
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L31-L37)
 
 ### projects
+
 The `projects` table represents individual projects within a workspace, which can be organized into folders and tagged for categorization.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | uuid | PK, DEFAULT uuid_generate_v4() | Primary key |
-| name | text | NOT NULL | Name of the project |
-| description | text | | Description of the project |
-| workspace_id | uuid | NOT NULL, FK to workspaces(id), ON DELETE CASCADE | ID of the workspace this project belongs to |
-| folder_id | uuid | FK to folders(id), ON DELETE SET NULL | ID of the folder this project is in |
-| status | text | DEFAULT 'active' | Status of the project (e.g., active, completed) |
-| priority | text | DEFAULT 'medium' | Priority level of the project |
-| settings | jsonb | DEFAULT '{}'::jsonb | JSON object for storing project-specific settings |
-| created_at | timestamp with time zone | DEFAULT now() | Timestamp of project creation |
-| updated_at | timestamp with time zone | DEFAULT now() | Timestamp of last update |
+| Field        | Type                     | Constraints                                       | Description                                       |
+| :----------- | :----------------------- | :------------------------------------------------ | :------------------------------------------------ |
+| id           | uuid                     | PK, DEFAULT uuid_generate_v4()                    | Primary key                                       |
+| name         | text                     | NOT NULL                                          | Name of the project                               |
+| description  | text                     |                                                   | Description of the project                        |
+| workspace_id | uuid                     | NOT NULL, FK to workspaces(id), ON DELETE CASCADE | ID of the workspace this project belongs to       |
+| folder_id    | uuid                     | FK to folders(id), ON DELETE SET NULL             | ID of the folder this project is in               |
+| status       | text                     | DEFAULT 'active'                                  | Status of the project (e.g., active, completed)   |
+| priority     | text                     | DEFAULT 'medium'                                  | Priority level of the project                     |
+| settings     | jsonb                    | DEFAULT '{}'::jsonb                               | JSON object for storing project-specific settings |
+| created_at   | timestamp with time zone | DEFAULT now()                                     | Timestamp of project creation                     |
+| updated_at   | timestamp with time zone | DEFAULT now()                                     | Timestamp of last update                          |
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L49-L60)
 
 ### files
+
 The `files` table stores metadata and processing results for user-uploaded files, which can be attached to messages or conversations.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT uuid_generate_v4() | Primary key |
-| user_id | UUID | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE | ID of the user who uploaded the file |
-| conversation_id | UUID | REFERENCES conversations(id) ON DELETE CASCADE | ID of the conversation this file is associated with |
-| message_id | UUID | REFERENCES messages(id) ON DELETE SET NULL | ID of the message this file is attached to |
-| filename | TEXT | NOT NULL | Sanitized filename for storage |
-| original_filename | TEXT | NOT NULL | Original name from the user |
-| file_type | TEXT | NOT NULL, CHECK (file_type IN ('pdf', 'image', 'text', 'docx', 'other')) | Type of the file |
-| file_size | INTEGER | NOT NULL | Size of the file in bytes |
-| mime_type | TEXT | NOT NULL | MIME type of the file |
-| storage_path | TEXT | NOT NULL | Path in the storage bucket where the file is stored |
-| storage_provider | TEXT | DEFAULT 'supabase', CHECK (storage_provider IN ('supabase', 's3')) | Storage provider used |
-| storage_bucket | TEXT | DEFAULT 'user-files' | Name of the storage bucket |
-| extracted_text | TEXT | | Full text content extracted from the file |
-| summary | TEXT | | AI-generated summary of the file content |
-| key_points | JSONB | | Array of key points extracted from the file |
-| metadata | JSONB | DEFAULT '{}' | Additional metadata (page count, dimensions, etc.) |
-| processing_status | TEXT | DEFAULT 'pending', CHECK (processing_status IN ('pending', 'processing', 'completed', 'failed')) | Current status of file processing |
-| processing_error | TEXT | | Error message if processing failed |
-| processed_at | TIMESTAMPTZ | | Timestamp when processing was completed |
-| created_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of file upload |
-| updated_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of last update |
+| Field             | Type        | Constraints                                                                                      | Description                                         |
+| :---------------- | :---------- | :----------------------------------------------------------------------------------------------- | :-------------------------------------------------- |
+| id                | UUID        | PRIMARY KEY, DEFAULT uuid_generate_v4()                                                          | Primary key                                         |
+| user_id           | UUID        | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE                                         | ID of the user who uploaded the file                |
+| conversation_id   | UUID        | REFERENCES conversations(id) ON DELETE CASCADE                                                   | ID of the conversation this file is associated with |
+| message_id        | UUID        | REFERENCES messages(id) ON DELETE SET NULL                                                       | ID of the message this file is attached to          |
+| filename          | TEXT        | NOT NULL                                                                                         | Sanitized filename for storage                      |
+| original_filename | TEXT        | NOT NULL                                                                                         | Original name from the user                         |
+| file_type         | TEXT        | NOT NULL, CHECK (file_type IN ('pdf', 'image', 'text', 'docx', 'other'))                         | Type of the file                                    |
+| file_size         | INTEGER     | NOT NULL                                                                                         | Size of the file in bytes                           |
+| mime_type         | TEXT        | NOT NULL                                                                                         | MIME type of the file                               |
+| storage_path      | TEXT        | NOT NULL                                                                                         | Path in the storage bucket where the file is stored |
+| storage_provider  | TEXT        | DEFAULT 'supabase', CHECK (storage_provider IN ('supabase', 's3'))                               | Storage provider used                               |
+| storage_bucket    | TEXT        | DEFAULT 'user-files'                                                                             | Name of the storage bucket                          |
+| extracted_text    | TEXT        |                                                                                                  | Full text content extracted from the file           |
+| summary           | TEXT        |                                                                                                  | AI-generated summary of the file content            |
+| key_points        | JSONB       |                                                                                                  | Array of key points extracted from the file         |
+| metadata          | JSONB       | DEFAULT '{}'                                                                                     | Additional metadata (page count, dimensions, etc.)  |
+| processing_status | TEXT        | DEFAULT 'pending', CHECK (processing_status IN ('pending', 'processing', 'completed', 'failed')) | Current status of file processing                   |
+| processing_error  | TEXT        |                                                                                                  | Error message if processing failed                  |
+| processed_at      | TIMESTAMPTZ |                                                                                                  | Timestamp when processing was completed             |
+| created_at        | TIMESTAMPTZ | DEFAULT now()                                                                                    | Timestamp of file upload                            |
+| updated_at        | TIMESTAMPTZ | DEFAULT now()                                                                                    | Timestamp of last update                            |
 
 **Section sources**
+
 - [apps/api/migrations/002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L8-L40)
 
 ### user_memory
+
 The `user_memory` table stores learned preferences, facts, and context about users to personalize their interactions with the AI.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT uuid_generate_v4() | Primary key |
-| user_id | UUID | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE | ID of the user this memory belongs to |
-| memory_type | TEXT | NOT NULL, CHECK (memory_type IN ('preference', 'fact', 'style', 'context', 'skill', 'goal')) | Type of memory |
-| category | TEXT | | Category of the memory (e.g., 'tone', 'format') |
-| key | TEXT | NOT NULL | Unique identifier for this memory |
-| value | TEXT | NOT NULL | The actual content of the memory |
-| metadata | JSONB | DEFAULT '{}' | Additional structured data |
-| source | TEXT | DEFAULT 'explicit', CHECK (source IN ('explicit', 'inferred', 'feedback', 'system')) | How this memory was acquired |
-| confidence | FLOAT | DEFAULT 1.0, CHECK (confidence >= 0 AND confidence <= 1) | Confidence level in the accuracy of this memory |
-| derived_from_conversation_id | UUID | REFERENCES conversations(id) | ID of the conversation that led to this memory |
-| examples | JSONB | | Array of example interactions that support this memory |
-| times_referenced | INTEGER | DEFAULT 0 | Number of times this memory has been used |
-| last_used_at | TIMESTAMPTZ | | Timestamp of last usage |
-| is_active | BOOLEAN | DEFAULT true | Whether this memory is currently active |
-| expires_at | TIMESTAMPTZ | | Optional expiration date for temporary context |
-| created_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of memory creation |
-| updated_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of last update |
-| (user_id, key) | | UNIQUE | Ensures unique keys per user |
+| Field                        | Type        | Constraints                                                                                  | Description                                            |
+| :--------------------------- | :---------- | :------------------------------------------------------------------------------------------- | :----------------------------------------------------- |
+| id                           | UUID        | PRIMARY KEY, DEFAULT uuid_generate_v4()                                                      | Primary key                                            |
+| user_id                      | UUID        | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE                                     | ID of the user this memory belongs to                  |
+| memory_type                  | TEXT        | NOT NULL, CHECK (memory_type IN ('preference', 'fact', 'style', 'context', 'skill', 'goal')) | Type of memory                                         |
+| category                     | TEXT        |                                                                                              | Category of the memory (e.g., 'tone', 'format')        |
+| key                          | TEXT        | NOT NULL                                                                                     | Unique identifier for this memory                      |
+| value                        | TEXT        | NOT NULL                                                                                     | The actual content of the memory                       |
+| metadata                     | JSONB       | DEFAULT '{}'                                                                                 | Additional structured data                             |
+| source                       | TEXT        | DEFAULT 'explicit', CHECK (source IN ('explicit', 'inferred', 'feedback', 'system'))         | How this memory was acquired                           |
+| confidence                   | FLOAT       | DEFAULT 1.0, CHECK (confidence >= 0 AND confidence <= 1)                                     | Confidence level in the accuracy of this memory        |
+| derived_from_conversation_id | UUID        | REFERENCES conversations(id)                                                                 | ID of the conversation that led to this memory         |
+| examples                     | JSONB       |                                                                                              | Array of example interactions that support this memory |
+| times_referenced             | INTEGER     | DEFAULT 0                                                                                    | Number of times this memory has been used              |
+| last_used_at                 | TIMESTAMPTZ |                                                                                              | Timestamp of last usage                                |
+| is_active                    | BOOLEAN     | DEFAULT true                                                                                 | Whether this memory is currently active                |
+| expires_at                   | TIMESTAMPTZ |                                                                                              | Optional expiration date for temporary context         |
+| created_at                   | TIMESTAMPTZ | DEFAULT now()                                                                                | Timestamp of memory creation                           |
+| updated_at                   | TIMESTAMPTZ | DEFAULT now()                                                                                | Timestamp of last update                               |
+| (user_id, key)               |             | UNIQUE                                                                                       | Ensures unique keys per user                           |
 
 **Section sources**
+
 - [apps/api/migrations/003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L8-L46)
 
 ### subscription_plans
+
 The `subscription_plans` table defines the available subscription tiers, including their features and limits.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT uuid_generate_v4() | Primary key |
-| plan_key | TEXT | UNIQUE, NOT NULL | Unique identifier for the plan (e.g., 'free', 'pro') |
-| display_name | TEXT | NOT NULL | Human-readable name of the plan |
-| description | TEXT | | Detailed description of the plan |
-| max_messages_per_month | INTEGER | | Maximum number of messages allowed per month (-1 for unlimited) |
-| max_file_uploads_per_month | INTEGER | | Maximum number of file uploads allowed per month (-1 for unlimited) |
-| max_file_size_mb | INTEGER | | Maximum size of a single file upload in MB |
-| max_workspaces | INTEGER | | Maximum number of workspaces a user can create (-1 for unlimited) |
-| max_storage_mb | INTEGER | | Maximum total storage allowed in MB (-1 for unlimited) |
-| voice_input_enabled | BOOLEAN | DEFAULT false | Whether voice input is enabled for this plan |
-| priority_support | BOOLEAN | DEFAULT false | Whether priority support is included |
-| advanced_ai_models | BOOLEAN | DEFAULT false | Whether access to advanced AI models is included |
-| api_access | BOOLEAN | DEFAULT false | Whether API access is included |
-| custom_branding | BOOLEAN | DEFAULT false | Whether custom branding is allowed |
-| features | JSONB | DEFAULT '[]' | Array of feature descriptions |
-| price_monthly | DECIMAL(10,2) | | Monthly price of the plan |
-| price_yearly | DECIMAL(10,2) | | Yearly price of the plan |
-| currency | TEXT | DEFAULT 'USD' | Currency for pricing |
-| stripe_price_id_monthly | TEXT | | Stripe price ID for monthly subscription |
-| stripe_price_id_yearly | TEXT | | Stripe price ID for yearly subscription |
-| stripe_product_id | TEXT | | Stripe product ID |
-| is_active | BOOLEAN | DEFAULT true | Whether the plan is currently available |
-| is_default | BOOLEAN | DEFAULT false | Whether this is the default plan for new users |
-| display_order | INTEGER | DEFAULT 0 | Order in which the plan should be displayed |
-| created_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of plan creation |
-| updated_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of last update |
+| Field                      | Type          | Constraints                             | Description                                                         |
+| :------------------------- | :------------ | :-------------------------------------- | :------------------------------------------------------------------ |
+| id                         | UUID          | PRIMARY KEY, DEFAULT uuid_generate_v4() | Primary key                                                         |
+| plan_key                   | TEXT          | UNIQUE, NOT NULL                        | Unique identifier for the plan (e.g., 'free', 'pro')                |
+| display_name               | TEXT          | NOT NULL                                | Human-readable name of the plan                                     |
+| description                | TEXT          |                                         | Detailed description of the plan                                    |
+| max_messages_per_month     | INTEGER       |                                         | Maximum number of messages allowed per month (-1 for unlimited)     |
+| max_file_uploads_per_month | INTEGER       |                                         | Maximum number of file uploads allowed per month (-1 for unlimited) |
+| max_file_size_mb           | INTEGER       |                                         | Maximum size of a single file upload in MB                          |
+| max_workspaces             | INTEGER       |                                         | Maximum number of workspaces a user can create (-1 for unlimited)   |
+| max_storage_mb             | INTEGER       |                                         | Maximum total storage allowed in MB (-1 for unlimited)              |
+| voice_input_enabled        | BOOLEAN       | DEFAULT false                           | Whether voice input is enabled for this plan                        |
+| priority_support           | BOOLEAN       | DEFAULT false                           | Whether priority support is included                                |
+| advanced_ai_models         | BOOLEAN       | DEFAULT false                           | Whether access to advanced AI models is included                    |
+| api_access                 | BOOLEAN       | DEFAULT false                           | Whether API access is included                                      |
+| custom_branding            | BOOLEAN       | DEFAULT false                           | Whether custom branding is allowed                                  |
+| features                   | JSONB         | DEFAULT '[]'                            | Array of feature descriptions                                       |
+| price_monthly              | DECIMAL(10,2) |                                         | Monthly price of the plan                                           |
+| price_yearly               | DECIMAL(10,2) |                                         | Yearly price of the plan                                            |
+| currency                   | TEXT          | DEFAULT 'USD'                           | Currency for pricing                                                |
+| stripe_price_id_monthly    | TEXT          |                                         | Stripe price ID for monthly subscription                            |
+| stripe_price_id_yearly     | TEXT          |                                         | Stripe price ID for yearly subscription                             |
+| stripe_product_id          | TEXT          |                                         | Stripe product ID                                                   |
+| is_active                  | BOOLEAN       | DEFAULT true                            | Whether the plan is currently available                             |
+| is_default                 | BOOLEAN       | DEFAULT false                           | Whether this is the default plan for new users                      |
+| display_order              | INTEGER       | DEFAULT 0                               | Order in which the plan should be displayed                         |
+| created_at                 | TIMESTAMPTZ   | DEFAULT now()                           | Timestamp of plan creation                                          |
+| updated_at                 | TIMESTAMPTZ   | DEFAULT now()                           | Timestamp of last update                                            |
 
 **Section sources**
+
 - [apps/api/migrations/005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L8-L49)
 
 ### user_subscriptions
+
 The `user_subscriptions` table tracks the current subscription status of each user.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT uuid_generate_v4() | Primary key |
-| user_id | UUID | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE | ID of the user |
-| plan_id | UUID | NOT NULL, REFERENCES subscription_plans(id) | ID of the subscription plan |
-| status | TEXT | DEFAULT 'active', CHECK (status IN ('active', 'cancelled', 'expired', 'past_due', 'trialing')) | Current status of the subscription |
-| started_at | TIMESTAMPTZ | DEFAULT now() | Timestamp when the subscription started |
-| current_period_start | TIMESTAMPTZ | DEFAULT now() | Start of the current billing period |
-| current_period_end | TIMESTAMPTZ | | End of the current billing period |
-| trial_ends_at | TIMESTAMPTZ | | Timestamp when the trial period ends |
-| cancelled_at | TIMESTAMPTZ | | Timestamp when the subscription was cancelled |
-| expires_at | TIMESTAMPTZ | | Timestamp when the subscription expires |
-| stripe_subscription_id | TEXT | | Stripe subscription ID |
-| stripe_customer_id | TEXT | | Stripe customer ID |
-| payment_method | TEXT | | Payment method used (e.g., 'stripe', 'paypal') |
-| metadata | JSONB | DEFAULT '{}' | Additional metadata |
-| created_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of subscription creation |
-| updated_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of last update |
+| Field                  | Type        | Constraints                                                                                    | Description                                    |
+| :--------------------- | :---------- | :--------------------------------------------------------------------------------------------- | :--------------------------------------------- |
+| id                     | UUID        | PRIMARY KEY, DEFAULT uuid_generate_v4()                                                        | Primary key                                    |
+| user_id                | UUID        | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE                                       | ID of the user                                 |
+| plan_id                | UUID        | NOT NULL, REFERENCES subscription_plans(id)                                                    | ID of the subscription plan                    |
+| status                 | TEXT        | DEFAULT 'active', CHECK (status IN ('active', 'cancelled', 'expired', 'past_due', 'trialing')) | Current status of the subscription             |
+| started_at             | TIMESTAMPTZ | DEFAULT now()                                                                                  | Timestamp when the subscription started        |
+| current_period_start   | TIMESTAMPTZ | DEFAULT now()                                                                                  | Start of the current billing period            |
+| current_period_end     | TIMESTAMPTZ |                                                                                                | End of the current billing period              |
+| trial_ends_at          | TIMESTAMPTZ |                                                                                                | Timestamp when the trial period ends           |
+| cancelled_at           | TIMESTAMPTZ |                                                                                                | Timestamp when the subscription was cancelled  |
+| expires_at             | TIMESTAMPTZ |                                                                                                | Timestamp when the subscription expires        |
+| stripe_subscription_id | TEXT        |                                                                                                | Stripe subscription ID                         |
+| stripe_customer_id     | TEXT        |                                                                                                | Stripe customer ID                             |
+| payment_method         | TEXT        |                                                                                                | Payment method used (e.g., 'stripe', 'paypal') |
+| metadata               | JSONB       | DEFAULT '{}'                                                                                   | Additional metadata                            |
+| created_at             | TIMESTAMPTZ | DEFAULT now()                                                                                  | Timestamp of subscription creation             |
+| updated_at             | TIMESTAMPTZ | DEFAULT now()                                                                                  | Timestamp of last update                       |
 
 **Section sources**
+
 - [apps/api/migrations/005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L133-L161)
 
 ### usage_metrics
+
 The `usage_metrics` table aggregates usage data for each user on a monthly basis.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT uuid_generate_v4() | Primary key |
-| user_id | UUID | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE | ID of the user |
-| period_start | DATE | NOT NULL | Start date of the usage period |
-| period_end | DATE | NOT NULL | End date of the usage period |
-| messages_sent | INTEGER | DEFAULT 0 | Number of messages sent during the period |
-| tokens_used | INTEGER | DEFAULT 0 | Estimated number of OpenAI tokens used |
-| files_uploaded | INTEGER | DEFAULT 0 | Number of files uploaded during the period |
-| total_file_size_mb | DECIMAL(10,2) | DEFAULT 0 | Total size of uploaded files in MB |
-| workspaces_created | INTEGER | DEFAULT 0 | Number of workspaces created during the period |
-| active_workspaces | INTEGER | DEFAULT 0 | Number of active workspaces at the end of the period |
-| voice_inputs_used | INTEGER | DEFAULT 0 | Number of voice inputs used during the period |
-| api_calls_made | INTEGER | DEFAULT 0 | Number of API calls made during the period |
-| model_usage | JSONB | DEFAULT '{}' | JSON object with breakdown of model usage (e.g., {"gpt-3.5-turbo": 45, "gpt-4": 5}) |
-| created_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of record creation |
-| updated_at | TIMESTAMPTZ | DEFAULT now() | Timestamp of last update |
-| (user_id, period_start) | | UNIQUE | Ensures one record per user per period |
+| Field                   | Type          | Constraints                                              | Description                                                                         |
+| :---------------------- | :------------ | :------------------------------------------------------- | :---------------------------------------------------------------------------------- |
+| id                      | UUID          | PRIMARY KEY, DEFAULT uuid_generate_v4()                  | Primary key                                                                         |
+| user_id                 | UUID          | NOT NULL, REFERENCES profiles(user_id) ON DELETE CASCADE | ID of the user                                                                      |
+| period_start            | DATE          | NOT NULL                                                 | Start date of the usage period                                                      |
+| period_end              | DATE          | NOT NULL                                                 | End date of the usage period                                                        |
+| messages_sent           | INTEGER       | DEFAULT 0                                                | Number of messages sent during the period                                           |
+| tokens_used             | INTEGER       | DEFAULT 0                                                | Estimated number of OpenAI tokens used                                              |
+| files_uploaded          | INTEGER       | DEFAULT 0                                                | Number of files uploaded during the period                                          |
+| total_file_size_mb      | DECIMAL(10,2) | DEFAULT 0                                                | Total size of uploaded files in MB                                                  |
+| workspaces_created      | INTEGER       | DEFAULT 0                                                | Number of workspaces created during the period                                      |
+| active_workspaces       | INTEGER       | DEFAULT 0                                                | Number of active workspaces at the end of the period                                |
+| voice_inputs_used       | INTEGER       | DEFAULT 0                                                | Number of voice inputs used during the period                                       |
+| api_calls_made          | INTEGER       | DEFAULT 0                                                | Number of API calls made during the period                                          |
+| model_usage             | JSONB         | DEFAULT '{}'                                             | JSON object with breakdown of model usage (e.g., {"gpt-3.5-turbo": 45, "gpt-4": 5}) |
+| created_at              | TIMESTAMPTZ   | DEFAULT now()                                            | Timestamp of record creation                                                        |
+| updated_at              | TIMESTAMPTZ   | DEFAULT now()                                            | Timestamp of last update                                                            |
+| (user_id, period_start) |               | UNIQUE                                                   | Ensures one record per user per period                                              |
 
 **Section sources**
+
 - [apps/api/migrations/005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L171-L203)
 
 ### sessions
+
 The `sessions` table organizes runs into conversational sessions within projects.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT gen_random_uuid() | Primary key |
-| project_id | UUID | NOT NULL, REFERENCES projects(id) ON DELETE CASCADE | ID of the project this session belongs to |
-| user_id | UUID | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | ID of the user who created the session |
-| name | TEXT | | User-defined name for the session |
-| description | TEXT | | Optional description of the session |
-| created_at | TIMESTAMPTZ | NOT NULL, DEFAULT NOW() | Timestamp of session creation |
-| updated_at | TIMESTAMPTZ | NOT NULL, DEFAULT NOW() | Timestamp of last update |
-| run_count | INTEGER | NOT NULL, DEFAULT 0 | Auto-calculated count of runs in this session |
-| is_active | BOOLEAN | NOT NULL, DEFAULT false | Indicates if this is the currently active session for the project |
+| Field       | Type        | Constraints                                           | Description                                                       |
+| :---------- | :---------- | :---------------------------------------------------- | :---------------------------------------------------------------- |
+| id          | UUID        | PRIMARY KEY, DEFAULT gen_random_uuid()                | Primary key                                                       |
+| project_id  | UUID        | NOT NULL, REFERENCES projects(id) ON DELETE CASCADE   | ID of the project this session belongs to                         |
+| user_id     | UUID        | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | ID of the user who created the session                            |
+| name        | TEXT        |                                                       | User-defined name for the session                                 |
+| description | TEXT        |                                                       | Optional description of the session                               |
+| created_at  | TIMESTAMPTZ | NOT NULL, DEFAULT NOW()                               | Timestamp of session creation                                     |
+| updated_at  | TIMESTAMPTZ | NOT NULL, DEFAULT NOW()                               | Timestamp of last update                                          |
+| run_count   | INTEGER     | NOT NULL, DEFAULT 0                                   | Auto-calculated count of runs in this session                     |
+| is_active   | BOOLEAN     | NOT NULL, DEFAULT false                               | Indicates if this is the currently active session for the project |
 
 **Section sources**
+
 - [docs/database-schema-sessions.sql](file://docs/database-schema-sessions.sql#L8-L18)
 
 ### runs
+
 The `runs` table represents individual AI interactions within a session or project.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT gen_random_uuid() | Primary key |
-| session_id | UUID | REFERENCES sessions(id) ON DELETE SET NULL | ID of the session this run belongs to |
-| custom_name | TEXT | | User-defined custom name for the run |
-| (additional fields not fully defined in provided context) | | | |
+| Field                                                     | Type | Constraints                                | Description                           |
+| :-------------------------------------------------------- | :--- | :----------------------------------------- | :------------------------------------ |
+| id                                                        | UUID | PRIMARY KEY, DEFAULT gen_random_uuid()     | Primary key                           |
+| session_id                                                | UUID | REFERENCES sessions(id) ON DELETE SET NULL | ID of the session this run belongs to |
+| custom_name                                               | TEXT |                                            | User-defined custom name for the run  |
+| (additional fields not fully defined in provided context) |      |                                            |                                       |
 
 **Section sources**
+
 - [docs/database-schema-sessions.sql](file://docs/database-schema-sessions.sql#L24-L32)
 
 ### share_links
+
 The `share_links` table enables public sharing of individual runs or entire sessions.
 
-| Field | Type | Constraints | Description |
-| :--- | :--- | :--- | :--- |
-| id | UUID | PRIMARY KEY, DEFAULT gen_random_uuid() | Primary key |
-| user_id | UUID | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | ID of the user who created the share link |
-| run_id | UUID | REFERENCES runs(id) ON DELETE CASCADE | ID of the run being shared (mutually exclusive with session_id) |
-| session_id | UUID | REFERENCES sessions(id) ON DELETE CASCADE | ID of the session being shared (mutually exclusive with run_id) |
-| token | TEXT | NOT NULL, UNIQUE | Unique URL-safe token for accessing the share |
-| expires_at | TIMESTAMPTZ | | When the share link expires (NULL for never) |
-| password_hash | TEXT | | Optional bcrypt password hash for protected shares |
-| view_count | INTEGER | NOT NULL, DEFAULT 0 | Number of times the share link has been accessed |
-| max_views | INTEGER | | Maximum number of views allowed (NULL for unlimited) |
-| created_at | TIMESTAMPTZ | NOT NULL, DEFAULT NOW() | Timestamp of share link creation |
-| last_accessed_at | TIMESTAMPTZ | | Timestamp of last access |
-| (run_id, session_id) | | CHECK constraint | Ensures exactly one of run_id or session_id is set |
+| Field                | Type        | Constraints                                           | Description                                                     |
+| :------------------- | :---------- | :---------------------------------------------------- | :-------------------------------------------------------------- |
+| id                   | UUID        | PRIMARY KEY, DEFAULT gen_random_uuid()                | Primary key                                                     |
+| user_id              | UUID        | NOT NULL, REFERENCES auth.users(id) ON DELETE CASCADE | ID of the user who created the share link                       |
+| run_id               | UUID        | REFERENCES runs(id) ON DELETE CASCADE                 | ID of the run being shared (mutually exclusive with session_id) |
+| session_id           | UUID        | REFERENCES sessions(id) ON DELETE CASCADE             | ID of the session being shared (mutually exclusive with run_id) |
+| token                | TEXT        | NOT NULL, UNIQUE                                      | Unique URL-safe token for accessing the share                   |
+| expires_at           | TIMESTAMPTZ |                                                       | When the share link expires (NULL for never)                    |
+| password_hash        | TEXT        |                                                       | Optional bcrypt password hash for protected shares              |
+| view_count           | INTEGER     | NOT NULL, DEFAULT 0                                   | Number of times the share link has been accessed                |
+| max_views            | INTEGER     |                                                       | Maximum number of views allowed (NULL for unlimited)            |
+| created_at           | TIMESTAMPTZ | NOT NULL, DEFAULT NOW()                               | Timestamp of share link creation                                |
+| last_accessed_at     | TIMESTAMPTZ |                                                       | Timestamp of last access                                        |
+| (run_id, session_id) |             | CHECK constraint                                      | Ensures exactly one of run_id or session_id is set              |
 
 **Section sources**
+
 - [docs/database-schema-share-links.sql](file://docs/database-schema-share-links.sql#L5-L29)
 
 ## Database Schema Diagram
@@ -415,6 +442,7 @@ share_links }|--|| sessions : "references"
 ```
 
 **Diagram sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L1-L162)
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L1-L200)
 - [apps/api/migrations/002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L1-L180)
@@ -441,6 +469,7 @@ The WADI database schema implements a comprehensive set of data validation rules
 **Business Logic**: The monetization system includes sophisticated business rules for tracking usage and enforcing limits. The `check_usage_limit()` function determines whether a user is within their plan's limits for messages, files, or workspaces. This function considers the user's active subscription and the current usage metrics, returning a boolean indicating whether the action is allowed. The `track_usage_event()` function logs detailed usage events and updates the aggregated metrics in the `usage_metrics` table, providing a complete audit trail of resource consumption.
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L118-L157)
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L66-L87)
 - [apps/api/migrations/005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L309-L368)
@@ -464,6 +493,7 @@ Row Level Security (RLS) is a fundamental component of the WADI data model, ensu
 **Share Links Table**: The `share_links` table has policies that allow users to manage their own share links. The SELECT policy allows a user to view their share links, while the INSERT, UPDATE, and DELETE policies restrict modifications to the link's creator. Notably, the `getSharedContent` endpoint in the `shareLinksController.ts` file bypasses RLS to allow public access to shared content, verifying access through the token, password, and expiration checks instead.
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L103-L115)
 - [security_hardening.sql](file://security_hardening.sql#L4-L38)
 - [apps/api/migrations/003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L24-L46)
@@ -486,6 +516,7 @@ The WADI database schema is designed with performance in mind, incorporating ind
 **Query Optimization**: The schema includes several features to optimize query performance. The `get_conversation_file_context()` function returns a formatted string of the most recent files in a conversation, which can be used to provide context to the AI without requiring multiple queries. The `get_message_context()` function returns a target message along with surrounding messages, enabling the UI to display a conversation thread efficiently.
 
 **Section sources**
+
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L17-L19)
 - [apps/api/migrations/002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L49-L50)
 - [apps/api/migrations/006_global_search.sql](file://apps/api/migrations/006_global_search.sql#L44-L82)
@@ -506,6 +537,7 @@ The WADI application implements a structured approach to data lifecycle manageme
 **Data Deletion**: When a user deletes their account, the `ON DELETE CASCADE` constraints ensure that all their data is automatically removed. For example, deleting a profile will cascade to delete all their workspaces, projects, files, and other associated data. This maintains referential integrity and prevents orphaned records.
 
 **Section sources**
+
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L13-L14)
 - [apps/api/migrations/002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L32-L34)
 - [apps/api/migrations/005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L144-L149)
@@ -527,6 +559,7 @@ The WADI application uses a structured migration strategy to evolve its database
 **Index Management**: Migrations add indexes to support new query patterns. For example, the `006_global_search.sql` migration creates multiple indexes on the `search_index` materialized view to optimize search performance. The migrations also include comments to document the purpose of each index.
 
 **Section sources**
+
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql)
 - [apps/api/migrations/002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql)
 - [apps/api/migrations/003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql)
@@ -551,6 +584,7 @@ The WADI data model supports a variety of usage patterns, from simple AI convers
 **Session Management**: A user working on a project creates a new `sessions` record. They then perform multiple AI `runs` within that session. The `run_count` in the session is automatically incremented by the `update_session_run_count()` trigger. The user can later rename a run using the `custom_name` field.
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L118-L157)
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L167-L198)
 - [apps/api/migrations/005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L429-L447)

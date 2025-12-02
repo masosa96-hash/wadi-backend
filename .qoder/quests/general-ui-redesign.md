@@ -15,6 +15,7 @@ This design document outlines the comprehensive improvements to WADI Beta 1, foc
 ## Current State Analysis
 
 ### Working Components
+
 - User registration and authentication via Supabase
 - Project creation and listing functionality
 - Basic UI structure with dark theme
@@ -24,28 +25,34 @@ This design document outlines the comprehensive improvements to WADI Beta 1, foc
 ### Identified Issues
 
 #### Issue 1: Runs Not Appearing After Creation
+
 **Problem**: After submitting a new run via the "Send" button, the Run History remains empty showing "No runs yet" message.
 
 **Root Cause Analysis**:
 The backend controller (runsController.ts) and routes (runs.ts) appear properly configured. The frontend store (runsStore.ts) correctly adds new runs to state. The issue likely stems from one of the following:
+
 - API URL configuration mismatch between frontend and backend
 - Silent error handling masking actual failures
 - Timing issues with state updates after creation
 
 #### Issue 2: Routing Behavior
+
 **Problem**: The root path "/" redirects to "/auth" for all users, regardless of authentication status.
 
 **Current Behavior**:
+
 - "/" → redirects to "/auth" (hardcoded)
 - "/auth" → shows Login page
 - Both authenticated and unauthenticated users land on login
 
 **Desired Behavior**:
+
 - Unauthenticated: "/" → "/login"
 - Authenticated: "/" → "/projects"
 - "/auth" → alias that redirects to "/login"
 
 #### Issue 3: UI Inconsistency
+
 **Problem**: Current UI lacks a cohesive design system. Styles are inline and scattered across components with no centralized theme management.
 
 ## Design Solutions
@@ -53,12 +60,15 @@ The backend controller (runsController.ts) and routes (runs.ts) appear properly 
 ## 1. Runs Flow Correction
 
 ### Objective
+
 Ensure that runs are successfully created via OpenAI, saved to Supabase, and immediately reflected in the UI with proper error handling.
 
 ### Strategy
 
 #### Backend Verification
+
 The backend implementation (runsController.ts) already contains proper logic:
+
 - Authentication check via middleware
 - Project ownership verification
 - Input validation (required, max 5000 chars)
@@ -72,12 +82,14 @@ No backend changes are required unless API connectivity issues are discovered du
 
 **Error State Visibility**:
 Currently, the runsStore sets an error state but the UI doesn't display it. The store needs to:
+
 - Expose error messages to components
 - Differentiate between loading, success, and error states
 - Maintain error state until explicitly cleared
 
 **Optimistic Update Refinement**:
 The store already prepends new runs to the array, which is correct. However, error recovery should:
+
 - Remove optimistically added runs if creation fails
 - Re-fetch from server on successful creation to ensure data consistency
 
@@ -85,6 +97,7 @@ The store already prepends new runs to the array, which is correct. However, err
 
 **Error Display**:
 Add visual error feedback when run creation fails:
+
 - Display error banner/toast with specific error message
 - Show different messages for different failure types:
   - Network errors: "Unable to connect to server"
@@ -94,12 +107,14 @@ Add visual error feedback when run creation fails:
 
 **Loading States**:
 Enhance loading feedback during run creation:
+
 - Disable input during submission
 - Show progress indicator
 - Provide clear "Generating..." state on button
 
 **Success Feedback**:
 Provide confirmation when runs are successfully created:
+
 - Brief success message or visual indicator
 - Smooth scroll to newly created run
 - Clear input field only on confirmed success
@@ -179,7 +194,7 @@ flowchart TD
     I -->|Yes| K{Database insert success?}
     K -->|No| L[Show save error]
     K -->|Yes| M[Update UI with new run]
-    
+
     C --> N[Keep input, allow retry]
     F --> N
     J --> N
@@ -190,6 +205,7 @@ flowchart TD
 ## 2. Routing & Navigation Redesign
 
 ### Objective
+
 Implement authentication-aware routing that directs users to appropriate pages based on their login status.
 
 ### Current Router Structure
@@ -199,9 +215,11 @@ The router uses a `ProtectedRoute` wrapper that handles authentication checks. H
 ### Proposed Router Changes
 
 #### Root Path Handler
+
 Create a new component that intelligently redirects based on auth state:
 
 **Component: RootRedirect**
+
 - Check authentication state from authStore
 - If loading: show loading indicator
 - If authenticated (user exists): redirect to "/projects"
@@ -210,24 +228,26 @@ Create a new component that intelligently redirects based on auth state:
 This ensures the root path "/" serves as a smart entry point.
 
 #### Route Aliases
+
 - Keep "/login" as the primary login route
 - Make "/auth" redirect to "/login" using React Router's Navigate component
 - Both routes render the same Login component
 
 ### Updated Route Definitions
 
-| Path | Authenticated | Unauthenticated |
-|------|--------------|-----------------|
-| / | → /projects | → /login |
-| /login | Show login (can navigate away) | Show login |
-| /auth | → /login | → /login |
-| /register | Show registration | Show registration |
-| /projects | Show projects list | → /login (via ProtectedRoute) |
-| /projects/:id | Show project detail | → /login (via ProtectedRoute) |
+| Path          | Authenticated                  | Unauthenticated               |
+| ------------- | ------------------------------ | ----------------------------- |
+| /             | → /projects                    | → /login                      |
+| /login        | Show login (can navigate away) | Show login                    |
+| /auth         | → /login                       | → /login                      |
+| /register     | Show registration              | Show registration             |
+| /projects     | Show projects list             | → /login (via ProtectedRoute) |
+| /projects/:id | Show project detail            | → /login (via ProtectedRoute) |
 
 ### Implementation Approach
 
 **router.tsx modifications**:
+
 1. Create `RootRedirect` component that uses `useAuthStore` hook
 2. Handle loading state to prevent flash of wrong route
 3. Use `<Navigate to="..." replace />` for seamless redirects
@@ -243,13 +263,13 @@ flowchart TD
     B -->|Yes| D{User logged in?}
     D -->|Yes| E[Navigate to /projects]
     D -->|No| F[Navigate to /login]
-    
+
     G[User visits /auth] --> H[Navigate to /login]
-    
+
     I[User visits /projects] --> J{User logged in?}
     J -->|Yes| K[Show Projects page]
     J -->|No| L[Navigate to /login]
-    
+
     C --> B
 ```
 
@@ -267,6 +287,7 @@ The authentication store already implements session persistence through Supabase
 ### Design Philosophy
 
 Create a modern, sophisticated AI assistant interface with:
+
 - Dark theme optimized for extended use
 - Clear visual hierarchy with generous whitespace
 - Chat-like interaction pattern for runs
@@ -279,6 +300,7 @@ Create a modern, sophisticated AI assistant interface with:
 #### Color Palette
 
 **Base Colors** (Dark Theme):
+
 - Background Primary: #0A0E14 (deepest background)
 - Background Secondary: #13171F (card backgrounds)
 - Background Tertiary: #1A1F2B (input fields, elevated elements)
@@ -286,11 +308,13 @@ Create a modern, sophisticated AI assistant interface with:
 - Border Accent: #2D3340 (hover borders)
 
 **Text Colors**:
+
 - Text Primary: #E6E8EC (main text, highest contrast)
 - Text Secondary: #9BA3B4 (secondary text, descriptions)
 - Text Tertiary: #6B7280 (metadata, timestamps)
 
 **Accent Colors** (inspired by reference designs):
+
 - Primary Accent: #00D9A3 (mint/teal - primary actions, AI messages)
 - Secondary Accent: #7C3AED (purple - highlights, links)
 - Success: #10B981 (confirmations)
@@ -298,16 +322,19 @@ Create a modern, sophisticated AI assistant interface with:
 - Error: #EF4444 (errors, destructive actions)
 
 **Gradients**:
+
 - Accent Gradient: linear-gradient(135deg, #00D9A3 0%, #00A67E 100%)
 - Card Glow (subtle): linear-gradient(135deg, rgba(0, 217, 163, 0.05) 0%, rgba(124, 58, 237, 0.05) 100%)
 
 #### Typography
 
 **Font Family**:
+
 - Primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
 - Monospace: 'JetBrains Mono', 'Fira Code', monospace (for code blocks if needed)
 
 **Type Scale**:
+
 - Display: 32px / 700 weight (page titles)
 - Heading 1: 24px / 600 weight (section titles)
 - Heading 2: 20px / 600 weight (subsections)
@@ -318,6 +345,7 @@ Create a modern, sophisticated AI assistant interface with:
 - Caption: 12px / 500 weight (labels, metadata)
 
 **Line Heights**:
+
 - Headings: 1.2
 - Body: 1.6
 - Captions: 1.4
@@ -325,6 +353,7 @@ Create a modern, sophisticated AI assistant interface with:
 #### Spacing System
 
 Consistent spacing scale based on 4px grid:
+
 - xs: 4px
 - sm: 8px
 - md: 12px
@@ -337,18 +366,21 @@ Consistent spacing scale based on 4px grid:
 #### Component Patterns
 
 **Borders**:
+
 - Radius Small: 8px (buttons, inputs)
 - Radius Medium: 12px (cards)
 - Radius Large: 16px (modals, panels)
 - Border Width: 1px (default)
 
 **Shadows**:
+
 - Subtle: 0 1px 3px rgba(0, 0, 0, 0.2)
 - Medium: 0 4px 12px rgba(0, 0, 0, 0.3)
 - Strong: 0 8px 24px rgba(0, 0, 0, 0.4)
 - Glow: 0 0 20px rgba(0, 217, 163, 0.15) (accent elements)
 
 **Transitions**:
+
 - Fast: 150ms ease-in-out (hover states)
 - Medium: 250ms ease-in-out (layout changes)
 - Slow: 350ms ease-in-out (page transitions)
@@ -358,6 +390,7 @@ Consistent spacing scale based on 4px grid:
 #### Sidebar Navigation
 
 **Fixed Left Sidebar** (240px width):
+
 - WADI logo/branding at top
 - Navigation sections:
   - Projects (icon + label)
@@ -367,6 +400,7 @@ Consistent spacing scale based on 4px grid:
 - Hover states with subtle background change
 
 **Sidebar Structure**:
+
 ```
 ┌─────────────────────┐
 │ WADI Logo           │ (32px height + 24px padding)
@@ -385,6 +419,7 @@ Consistent spacing scale based on 4px grid:
 ```
 
 **Visual Properties**:
+
 - Background: Background Secondary (#13171F)
 - Border Right: 1px solid Border Subtle (#252933)
 - Fixed position, full height
@@ -393,6 +428,7 @@ Consistent spacing scale based on 4px grid:
 #### Main Content Area
 
 **Layout**:
+
 - Margin-left: 240px (sidebar width)
 - Max-width: 1200px for readability
 - Padding: 32px
@@ -403,11 +439,13 @@ Consistent spacing scale based on 4px grid:
 #### 1. Login / Register Page
 
 **Layout**:
+
 - Full-screen centered card
 - No sidebar (authentication pages are standalone)
 - Background gradient or subtle pattern
 
 **Card Design**:
+
 - Max-width: 420px
 - Background: Background Secondary with subtle border
 - Padding: 48px
@@ -415,6 +453,7 @@ Consistent spacing scale based on 4px grid:
 - Subtle shadow
 
 **Elements**:
+
 - WADI logo/title (centered or left-aligned)
 - Welcome message (Text Secondary)
 - Input fields with:
@@ -435,6 +474,7 @@ Consistent spacing scale based on 4px grid:
   - Underline on hover
 
 **Error Display**:
+
 - Background: rgba(239, 68, 68, 0.1)
 - Border: 1px solid rgba(239, 68, 68, 0.3)
 - Text: #EF4444
@@ -445,12 +485,14 @@ Consistent spacing scale based on 4px grid:
 #### 2. Projects List Page
 
 **Layout with Sidebar**:
+
 - Sidebar on left (fixed)
 - Main content area with padding
 - Header section with title and action button
 - Grid of project cards below
 
 **Header**:
+
 - Title: "My Projects" (Display size, 32px)
 - Subtitle: Welcome message with user email (Text Secondary)
 - Create button: positioned top-right or below title
@@ -460,6 +502,7 @@ Consistent spacing scale based on 4px grid:
   - Shadow on hover
 
 **Project Cards Grid**:
+
 - Grid: auto-fill columns, min 280px, max 1fr
 - Gap: 20px
 - Card design:
@@ -470,8 +513,9 @@ Consistent spacing scale based on 4px grid:
   - Transition: transform and border-color on hover
   - Hover: translate up 2px, border becomes Primary Accent
   - Cursor: pointer
-  
+
 **Card Content**:
+
 - Project name (Heading 3, 16px/600)
 - Description (Body Small, Text Secondary, line-clamp 2)
 - Metadata row:
@@ -479,6 +523,7 @@ Consistent spacing scale based on 4px grid:
   - Optional: run count badge
 
 **Create Project Modal**:
+
 - Overlay: rgba(0, 0, 0, 0.6) backdrop blur
 - Modal:
   - Centered
@@ -494,6 +539,7 @@ Consistent spacing scale based on 4px grid:
 #### 3. Project Runs Page (Chat-Style Interface)
 
 **Layout**:
+
 - Sidebar on left (fixed)
 - Main content area divided into:
   - Header with back button + project title
@@ -501,6 +547,7 @@ Consistent spacing scale based on 4px grid:
   - Input box (fixed at bottom)
 
 **Structure**:
+
 ```
 ┌────────────────────────────────────────┐
 │ ← Back to Projects | Project Runs     │ (Header, 60px)
@@ -524,6 +571,7 @@ Consistent spacing scale based on 4px grid:
 **Message Bubbles**:
 
 User Message (right-aligned):
+
 - Max-width: 65% of container
 - Margin-left: auto
 - Background: Background Tertiary
@@ -534,6 +582,7 @@ User Message (right-aligned):
 - Margin-bottom: 8px for timestamp
 
 AI Response (left-aligned):
+
 - Max-width: 75% of container
 - Margin-right: auto
 - Background: linear-gradient or solid with accent tint
@@ -544,16 +593,19 @@ AI Response (left-aligned):
 - Text: Text Primary with slight tint toward accent
 
 **Message Metadata**:
+
 - Timestamp: Caption size, Text Tertiary
 - Model name: (optional) small badge
 - Position: below message bubble, aligned with bubble edge
 
 **Empty State**:
+
 - Centered icon (chat bubble or AI icon)
 - Message: "No runs yet. Start a conversation with AI below!"
 - Text Secondary color
 
 **Input Box (Fixed Bottom)**:
+
 - Full width of content area
 - Background: Background Secondary
 - Border-top: 1px solid Border Subtle
@@ -561,6 +613,7 @@ AI Response (left-aligned):
 - Layout: flex row with gap
 
 **Textarea**:
+
 - Flex-grow: 1
 - Background: Background Tertiary
 - Border: 1px solid Border Subtle (focus: Primary Accent)
@@ -572,6 +625,7 @@ AI Response (left-aligned):
 - Placeholder: "Type your message..."
 
 **Send Button**:
+
 - Background: Accent Gradient
 - Width: 100px
 - Height: 48px (matches textarea min-height)
@@ -582,6 +636,7 @@ AI Response (left-aligned):
 - Loading state: "Generating..." with subtle animation
 
 **Character Counter**:
+
 - Position: below textarea
 - Text: Caption, Text Tertiary
 - Format: "0 / 5000 characters"
@@ -591,17 +646,20 @@ AI Response (left-aligned):
 #### Loading States
 
 **Page Loading**:
+
 - Centered spinner with WADI branding
 - Background: Background Primary
 - Spinner: Primary Accent color
 - Smooth fade-in when content loads
 
 **Inline Loading** (e.g., fetching runs):
+
 - Skeleton cards with shimmer animation
 - Match dimensions of actual content
 - Subtle pulse effect
 
 **Button Loading**:
+
 - Text changes ("Send" → "Generating...")
 - Optional: spinner icon next to text
 - Cursor: not-allowed
@@ -610,22 +668,26 @@ AI Response (left-aligned):
 #### Interactive States
 
 **Focus States** (Accessibility):
+
 - 2px solid outline in Primary Accent
 - Offset by 2px for visibility
 - Applied to all interactive elements
 
 **Hover States**:
+
 - Buttons: slight brightness/opacity change (10-15%)
 - Cards: transform translateY(-2px) + border color change
 - Links: underline or color shift
 
 **Active/Pressed**:
+
 - Buttons: slight scale down (0.98)
 - Cards: no transform (prevent jump)
 
 #### Feedback Mechanisms
 
 **Success Messages**:
+
 - Toast notification (top-right)
 - Background: rgba(16, 185, 129, 0.15)
 - Border: 1px solid rgba(16, 185, 129, 0.3)
@@ -634,6 +696,7 @@ AI Response (left-aligned):
 - Slide-in animation
 
 **Error Messages**:
+
 - Banner (below header or above relevant section)
 - Background: rgba(239, 68, 68, 0.1)
 - Border-left: 4px solid #EF4444
@@ -642,6 +705,7 @@ AI Response (left-aligned):
 - Text: specific error message
 
 **Validation Feedback**:
+
 - Inline below form fields
 - Text: Error color (#EF4444)
 - Caption size
@@ -652,11 +716,13 @@ AI Response (left-aligned):
 While the primary target is desktop (laptop resolutions 1366x768, 1440x900), the design should gracefully handle smaller viewports:
 
 **Breakpoints**:
+
 - Desktop: 1024px and above (sidebar visible)
 - Tablet: 768px - 1023px (collapsible sidebar, could be future enhancement)
 - Mobile: below 768px (sidebar becomes drawer, future enhancement)
 
 **Current Scope** (Desktop-first):
+
 - Ensure layouts work at 1366px width
 - Message bubbles should not exceed readable width
 - Cards in grid should stack appropriately
@@ -669,6 +735,7 @@ To maintain consistency and enable easy theme updates, create a centralized desi
 **Location**: `apps/frontend/src/styles/theme.ts`
 
 **Structure**:
+
 ```
 Design Tokens Object
 ├── colors
@@ -691,12 +758,14 @@ Design Tokens Object
 
 **Usage Pattern**:
 Components import theme tokens and apply them instead of hardcoded values. This allows:
+
 - Single source of truth for design values
 - Easy global theme adjustments
 - Consistency across all components
 - Future theme switching capability (if needed)
 
 Alternative approaches if TypeScript object feels cumbersome:
+
 - CSS custom properties (variables) defined in global CSS
 - Styled-components or emotion theme provider
 - Tailwind CSS with custom configuration
@@ -739,6 +808,7 @@ To implement the new design without breaking existing functionality:
 ### File Organization
 
 **New Files**:
+
 - `apps/frontend/src/styles/theme.ts` - Design system tokens
 - `apps/frontend/src/components/Sidebar.tsx` - Shared navigation
 - `apps/frontend/src/components/Button.tsx` - Reusable button component
@@ -749,6 +819,7 @@ To implement the new design without breaking existing functionality:
 - `apps/frontend/src/router.tsx` - Modified with new root redirect logic
 
 **Modified Files**:
+
 - `apps/frontend/src/pages/Login.tsx` - Apply new design
 - `apps/frontend/src/pages/Register.tsx` - Apply new design
 - `apps/frontend/src/pages/Projects.tsx` - Add sidebar, redesign cards
@@ -759,6 +830,7 @@ To implement the new design without breaking existing functionality:
 ### Environment Variables
 
 No changes to environment variables required. Continue using:
+
 - `VITE_API_URL` in frontend (defaults to http://localhost:4000)
 - Backend runs on port 4000 by default
 - Supabase configuration remains unchanged
@@ -766,6 +838,7 @@ No changes to environment variables required. Continue using:
 ### Supabase Schema
 
 No schema changes required. Existing tables:
+
 - `profiles` (user_id, display_name, created_at)
 - `projects` (id, user_id, name, description, created_at)
 - `runs` (id, project_id, user_id, input, output, model, created_at)
@@ -775,6 +848,7 @@ RLS remains disabled for development as specified.
 ### Testing Checklist
 
 **Runs Functionality**:
+
 - [ ] Create a run and verify it saves to Supabase
 - [ ] Verify run appears immediately in UI after creation
 - [ ] Refresh page and confirm run persists
@@ -783,6 +857,7 @@ RLS remains disabled for development as specified.
 - [ ] Test AI timeout: verify appropriate error message
 
 **Routing**:
+
 - [ ] Visit "/" while logged out → should redirect to "/login"
 - [ ] Visit "/" while logged in → should redirect to "/projects"
 - [ ] Visit "/auth" → should redirect to "/login"
@@ -791,6 +866,7 @@ RLS remains disabled for development as specified.
 - [ ] Logout → should navigate to "/login"
 
 **Design**:
+
 - [ ] All colors match design system specification
 - [ ] Typography is consistent across pages
 - [ ] Spacing follows 4px grid system
@@ -832,15 +908,18 @@ This design will be considered successful when:
 ## References
 
 **UI Inspiration**:
+
 - Primary Reference: https://www.behance.net/gallery/234577369/AI-Chatbot-Mobile-App-UX-UI-Design
 - Secondary Reference: https://www.behance.net/gallery/219412627/Chat-Bot-AI-Mobile-App-UI-Design-Concept
 
 **Technical Documentation**:
+
 - React Router: https://reactrouter.com/
 - Zustand State Management: https://github.com/pmndrs/zustand
 - Supabase Auth: https://supabase.com/docs/guides/auth
 - OpenAI API: https://platform.openai.com/docs
 
 **Design Resources**:
+
 - Inter Font: https://fonts.google.com/specimen/Inter
 - Color Contrast Checker: https://webaim.org/resources/contrastchecker/

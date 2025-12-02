@@ -33,15 +33,18 @@ This guide will help you deploy the WADI application to run 24/7 in the cloud us
 ### Option A: Deploy Backend to Render
 
 #### 2.1 Create Render Account
+
 If you don't have one already, create an account at [render.com](https://render.com)
 
 #### 2.2 Connect Repository to Render
+
 1. Go to your Render Dashboard
 2. Click "New Web Service"
 3. Connect your GitHub repository
 4. Select the branch you want to deploy (usually `main`)
 
 #### 2.3 Configure Render Service
+
 Render will automatically detect the configuration from `render.yaml`, but verify these settings:
 
 - **Name**: wadi-api
@@ -54,6 +57,7 @@ Render will automatically detect the configuration from `render.yaml`, but verif
 - **Plan**: Free (or choose a paid plan for production)
 
 #### 2.4 Set Environment Variables in Render
+
 In your Render service settings, add these environment variables:
 
 ```
@@ -68,13 +72,16 @@ JWT_SECRET=your-generated-jwt-secret
 ```
 
 Notes:
+
 - Get your Supabase keys from your Supabase project settings
 - Get your Groq API key from [console.groq.com](https://console.groq.com)
 - Render will auto-generate the JWT_SECRET value
 - Update FRONTEND_URL after deploying your frontend
 
 #### 2.5 Deploy Backend
+
 Click "Create Web Service" to start the deployment. This will:
+
 1. Clone your repository
 2. Install dependencies
 3. Build the TypeScript code
@@ -85,9 +92,11 @@ Note the deployed URL (e.g., `https://wadi-api.onrender.com`) for use in fronten
 ### Option B: Deploy Backend to Railway (Railpack)
 
 #### 2.1 Create Railway Account
+
 If you don't have one already, create an account at [railway.app](https://railway.app)
 
 #### 2.2 Connect Repository to Railway
+
 1. Go to your Railway Dashboard
 2. Click "New Project"
 3. Select "Deploy from GitHub repo"
@@ -95,6 +104,7 @@ If you don't have one already, create an account at [railway.app](https://railwa
 5. Select the repository
 
 #### 2.3 Configure Railway Service
+
 Railway will automatically detect the configuration from `railway.json`, but verify these settings:
 
 - **Service name**: wadi-api
@@ -103,6 +113,7 @@ Railway will automatically detect the configuration from `railway.json`, but ver
 - **Start command**: Uses `railway.json` configuration
 
 #### 2.4 Set Environment Variables in Railway
+
 Navigate to Variables tab and add:
 
 ```
@@ -118,6 +129,7 @@ FRONTEND_URL=https://placeholder.vercel.app
 **Important Railway Note**: Railway's Railpack expects secrets to be mounted as files in the `/secrets` directory. You must create a secret named `JWT_SECRET` in the Railway "Variables/Secrets" UI with the correct value (the Supabase JWT secret from your Supabase project settings).
 
 #### 2.5 Deploy Backend
+
 Railway will auto-deploy on push, or click "Deploy" manually.
 
 Note the deployment URL (e.g., `https://wadi-api-production.railway.app`) for use in frontend configuration.
@@ -125,15 +137,18 @@ Note the deployment URL (e.g., `https://wadi-api-production.railway.app`) for us
 ## Step 3: Deploy Frontend to Vercel
 
 ### 3.1 Create Vercel Account
+
 If you don't have one already, create an account at [vercel.com](https://vercel.com)
 
 ### 3.2 Connect Repository to Vercel
+
 1. Go to your Vercel Dashboard
 2. Click "Add New Project"
 3. Import your GitHub repository
 4. Select the project
 
 ### 3.3 Configure Vercel Project
+
 Vercel will automatically detect the configuration from `vercel.json` in the frontend directory. Configure these settings:
 
 - **Project Name**: wadi-frontend (or any name you prefer)
@@ -143,6 +158,7 @@ Vercel will automatically detect the configuration from `vercel.json` in the fro
 - **Output Directory**: `dist`
 
 ### 3.4 Set Environment Variables in Vercel
+
 In your Vercel project settings, add these environment variables:
 
 ```
@@ -153,12 +169,15 @@ VITE_GUEST_MODE=true
 ```
 
 Notes:
+
 - Use the same Supabase keys as in the backend
 - Use the backend URL from step 2.5 (either Render or Railway)
-- VITE_ prefix is required for Vercel to expose variables to the frontend
+- VITE\_ prefix is required for Vercel to expose variables to the frontend
 
 ### 3.5 Deploy Frontend
+
 Click "Deploy" to start the deployment. This will:
+
 1. Clone your repository
 2. Install dependencies
 3. Build the React application
@@ -169,11 +188,13 @@ Click "Deploy" to start the deployment. This will:
 After deploying the frontend, update the backend configuration:
 
 ### If using Render:
+
 1. Go to your Render service settings
 2. Update the `FRONTEND_URL` environment variable to your Vercel frontend URL
 3. Click "Save Changes" to redeploy the backend with the new configuration
 
 ### If using Railway:
+
 1. Go to your Railway project
 2. Navigate to Variables tab
 3. Update `FRONTEND_URL` to your Vercel frontend URL
@@ -182,16 +203,20 @@ After deploying the frontend, update the backend configuration:
 ## Step 5: Configure Supabase
 
 ### 5.1 Set Up Authentication
+
 1. In your Supabase project, go to Authentication → Settings
 2. Add your frontend URL to "Additional Redirect URLs"
 3. Enable email signups if needed
 
 ### 5.2 Set Up Database
+
 1. Run the SQL migrations in `apps/api/migrations/` in order
 2. Ensure the database schema matches your application requirements
 
 ### 5.3 Configure Service Key
+
 In your Supabase project settings:
+
 1. Go to API → Service Role Key
 2. Copy this key to your backend as `SUPABASE_SERVICE_KEY`
 
@@ -205,11 +230,13 @@ In your Supabase project settings:
 ## Step 7: Configure Custom Domains (Optional)
 
 ### 7.1 Frontend (Vercel)
+
 1. In your Vercel project, go to Settings → Domains
 2. Add your custom domain
 3. Follow Vercel's DNS configuration instructions
 
 ### 7.2 Backend (Render/Railway)
+
 1. In your service, go to Settings → Custom Domains
 2. Add your custom domain
 3. Follow the platform's DNS configuration instructions
@@ -217,15 +244,19 @@ In your Supabase project settings:
 ## Monitoring and Maintenance
 
 ### Automatic Deployments
+
 Both Vercel and your backend platform will automatically redeploy when you push to your main branch.
 
 ### Environment Updates
+
 To update environment variables:
+
 - Vercel: Project Settings → Environment Variables
 - Render: Service Settings → Environment
 - Railway: Project Settings → Variables
 
 ### Scaling
+
 - Vercel automatically scales your frontend
 - Render/Railway free tier has limitations; consider upgrading for production use
 
@@ -240,7 +271,7 @@ To update environment variables:
 2. **Environment Variables Not Loading**
    - Verify all required variables are set
    - Check for typos in variable names
-   - Remember VITE_ prefix for frontend variables
+   - Remember VITE\_ prefix for frontend variables
 
 3. **Build Failures**
    - Check build logs in deployment dashboards
@@ -260,7 +291,9 @@ To update environment variables:
    - Railway mounts secrets as files in `/secrets/JWT_SECRET` during build
 
 ### Health Checks
+
 Monitor these endpoints:
+
 - Frontend: `https://your-frontend.vercel.app`
 - Backend Health: `https://your-backend.[onrender.com OR railway.app]/health`
 - Backend API: `https://your-backend.[onrender.com OR railway.app]/api/health`

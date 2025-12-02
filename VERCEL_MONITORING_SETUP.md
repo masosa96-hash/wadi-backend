@@ -22,21 +22,22 @@ pnpm add @vercel/analytics       # v1.5.0
 ### Archivo: `apps/frontend/src/App.tsx`
 
 ```tsx
-import { SpeedInsights } from '@vercel/speed-insights/react';
-import { Analytics } from '@vercel/analytics/react';
+import { SpeedInsights } from "@vercel/speed-insights/react";
+import { Analytics } from "@vercel/analytics/react";
 
 export default function App() {
-    return (
-        <ErrorBoundary>
-            <RouterProvider router={router} />
-            <SpeedInsights />
-            <Analytics />
-        </ErrorBoundary>
-    );
+  return (
+    <ErrorBoundary>
+      <RouterProvider router={router} />
+      <SpeedInsights />
+      <Analytics />
+    </ErrorBoundary>
+  );
 }
 ```
 
 **Cambios:**
+
 - ✅ Importación de `SpeedInsights` y `Analytics`
 - ✅ Componentes agregados dentro de `ErrorBoundary`
 - ✅ Sin configuración adicional requerida
@@ -47,13 +48,13 @@ export default function App() {
 
 ### Speed Insights (Core Web Vitals)
 
-| Métrica | Descripción | Objetivo |
-|---------|-------------|----------|
-| **LCP** | Largest Contentful Paint | < 2.5s |
-| **FID** | First Input Delay | < 100ms |
-| **CLS** | Cumulative Layout Shift | < 0.1 |
-| **FCP** | First Contentful Paint | < 1.8s |
-| **TTFB** | Time to First Byte | < 600ms |
+| Métrica  | Descripción              | Objetivo |
+| -------- | ------------------------ | -------- |
+| **LCP**  | Largest Contentful Paint | < 2.5s   |
+| **FID**  | First Input Delay        | < 100ms  |
+| **CLS**  | Cumulative Layout Shift  | < 0.1    |
+| **FCP**  | First Contentful Paint   | < 1.8s   |
+| **TTFB** | Time to First Byte       | < 600ms  |
 
 ### Analytics
 

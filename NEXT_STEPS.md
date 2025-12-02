@@ -10,7 +10,8 @@ GROQ_DEFAULT_MODEL=llama-3.1-8b-instant
 ```
 
 **Get your Groq API key:**
-1. Visit https://console.groq.com
+
+1. Visit <https://console.groq.com>
 2. Sign up/login
 3. Go to API Keys
 4. Create new key
@@ -29,6 +30,7 @@ curl http://localhost:4000/api/health
 ```
 
 **Expected response:**
+
 ```json
 {
   "status": "ok",
@@ -56,7 +58,7 @@ This will trigger Railway automatic deployment.
 
 Go to Railway dashboard and add these environment variables to your API service:
 
-```
+```text
 GROQ_API_KEY = gsk_YOUR_REAL_GROQ_KEY_HERE
 GROQ_DEFAULT_MODEL = llama-3.1-8b-instant
 ```
@@ -74,6 +76,7 @@ curl https://wadi-api-production.up.railway.app/api/health
 ```
 
 Should return:
+
 ```json
 {
   "status": "ok",
@@ -85,9 +88,10 @@ Should return:
 
 ---
 
-## 🎉 Done!
+## 🎉 Done
 
 Your WADI backend is now using Groq for:
+
 - ⚡ **10x faster** LLM responses
 - 💰 **10x cheaper** costs
 - 🚀 **Same quality** with Llama 3.1

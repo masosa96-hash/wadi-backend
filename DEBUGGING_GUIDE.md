@@ -14,8 +14,8 @@ window.zustandDevTools = {
 };
 
 // Uso en console:
-zustandDevTools.auth()
-zustandDevTools.chat()
+zustandDevTools.auth();
+zustandDevTools.chat();
 ```
 
 #### Network Monitoring:
@@ -38,32 +38,34 @@ Click en request → Headers → Ver payload completo
 
 ```javascript
 // Ver todo el storage
-Object.keys(localStorage).forEach(key => {
+Object.keys(localStorage).forEach((key) => {
   console.log(key, localStorage.getItem(key));
 });
 
 // Ver storage de WADI específicamente
-const wadiKeys = Object.keys(localStorage).filter(k => 
-  k.startsWith('wadi')
+const wadiKeys = Object.keys(localStorage).filter((k) => k.startsWith("wadi"));
+console.table(
+  wadiKeys.map((k) => ({
+    key: k,
+    size: `${localStorage.getItem(k)?.length || 0} chars`,
+  })),
 );
-console.table(wadiKeys.map(k => ({
-  key: k,
-  size: `${localStorage.getItem(k)?.length || 0} chars`
-})));
 
 // Parsear y ver contenido
-const auth = JSON.parse(localStorage.getItem('wadi-auth-storage'));
-console.log('Guest ID:', auth.state.guestId);
-console.log('Nickname:', auth.state.guestNick);
+const auth = JSON.parse(localStorage.getItem("wadi-auth-storage"));
+console.log("Guest ID:", auth.state.guestId);
+console.log("Nickname:", auth.state.guestNick);
 
 const conv = JSON.parse(
-  localStorage.getItem(`wadi_conv_${auth.state.guestId}`)
+  localStorage.getItem(`wadi_conv_${auth.state.guestId}`),
 );
-console.table(conv.map(m => ({
-  role: m.role,
-  preview: m.content.substring(0, 30) + '...',
-  time: new Date(m.created_at).toLocaleTimeString()
-})));
+console.table(
+  conv.map((m) => ({
+    role: m.role,
+    preview: m.content.substring(0, 30) + "...",
+    time: new Date(m.created_at).toLocaleTimeString(),
+  })),
+);
 ```
 
 #### React DevTools:
@@ -87,17 +89,15 @@ Store inspection:
 
 ```typescript
 // Agregar en apps/api/src/middleware/logger.ts
-import morgan from 'morgan';
+import morgan from "morgan";
 
 // Custom token para trace ID
-morgan.token('trace-id', (req: any) => req.traceId || 'no-trace');
-morgan.token('guest-id', (req: any) => 
-  req.headers['x-guest-id'] || 'no-guest'
-);
+morgan.token("trace-id", (req: any) => req.traceId || "no-trace");
+morgan.token("guest-id", (req: any) => req.headers["x-guest-id"] || "no-guest");
 
 // Formato custom
 export const morganLogger = morgan(
-  ':trace-id :guest-id :method :url :status :response-time ms'
+  ":trace-id :guest-id :method :url :status :response-time ms",
 );
 
 // Uso:
@@ -110,34 +110,34 @@ app.use(morganLogger);
 // En chatController.ts - agregar más logs
 export async function sendMessage(req: Request, res: Response) {
   const startTime = Date.now();
-  
+
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
   console.log('📥 [CHAT REQUEST]');
   console.log('  Guest ID:', req.headers['x-guest-id']);
   console.log('  Message:', req.body.message?.substring(0, 50) + '...');
   console.log('  History len:', req.body.messages?.length || 0);
   console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━');
-  
+
   try {
     // ... código existente ...
-    
+
     console.log('🧠 [KIVO] Thought:', {
       intent: thought.intent,
       confidence: thought.confidence,
       reasoning: thought.reasoning[0]
     });
-    
+
     console.log('⚡ [WADI] Calling OpenAI...');
     const startAI = Date.now();
-    
+
     const response = await generateChatCompletion(messages);
-    
+
     console.log(`✅ [OPENAI] Responded in ${Date.now() - startAI}ms`);
     console.log('  Response preview:', response.substring(0, 50) + '...');
-    
+
     console.log(`🏁 [TOTAL] Request completed in ${Date.now() - startTime}ms`);
     console.log('━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━\n');
-    
+
     res.json({...});
   } catch (error) {
     console.error('❌ [ERROR]', error);
@@ -152,6 +152,7 @@ export async function sendMessage(req: Request, res: Response) {
 ### Problema 1: "No se pudo conectar con el servidor"
 
 **Síntoma:**
+
 ```
 Error screen en frontend:
 ⚠️ Error de Conexión
@@ -159,6 +160,7 @@ No se pudo conectar con el servidor
 ```
 
 **Debug:**
+
 ```bash
 # 1. Verificar que backend esté corriendo
 curl http://localhost:4000/health
@@ -179,6 +181,7 @@ taskkill /PID <PID> /F
 ```
 
 **Solución:**
+
 ```bash
 # Reiniciar backend
 cd e:\WADI
@@ -190,18 +193,20 @@ pnpm dev:api
 ### Problema 2: Mensaje no se envía (queda en "enviando")
 
 **Síntoma:**
+
 - Input desaparece
 - Botón dice "..."
 - No aparece respuesta
 - No hay error visible
 
 **Debug en Frontend:**
+
 ```javascript
 // En console del navegador
 const chatState = useChatStore.getState();
-console.log('Sending message?', chatState.sendingMessage);
-console.log('Error?', chatState.error);
-console.log('Messages count:', chatState.messages.length);
+console.log("Sending message?", chatState.sendingMessage);
+console.log("Error?", chatState.error);
+console.log("Messages count:", chatState.messages.length);
 
 // Ver último request
 // DevTools → Network → Filter: /api/chat
@@ -209,6 +214,7 @@ console.log('Messages count:', chatState.messages.length);
 ```
 
 **Debug en Backend:**
+
 ```bash
 # Terminal del backend - buscar errores:
 # [ERROR] ...
@@ -233,7 +239,7 @@ OPENAI_API_KEY=sk-proj-...
 async function sendMessageWithRetry(req, res) {
   const maxRetries = 3;
   let attempt = 0;
-  
+
   while (attempt < maxRetries) {
     try {
       await sendMessage(req, res);
@@ -262,65 +268,68 @@ app.use(cors({
 ### Problema 3: Historial no persiste al recargar
 
 **Síntoma:**
+
 - Envías mensajes
 - Recargas página
 - Historial desaparece
 
 **Debug:**
+
 ```javascript
 // En console
-const authState = JSON.parse(localStorage.getItem('wadi-auth-storage'));
-console.log('Guest ID:', authState?.state?.guestId);
+const authState = JSON.parse(localStorage.getItem("wadi-auth-storage"));
+console.log("Guest ID:", authState?.state?.guestId);
 
 const convKey = `wadi_conv_${authState?.state?.guestId}`;
-console.log('Conversation key:', convKey);
+console.log("Conversation key:", convKey);
 
 const conv = localStorage.getItem(convKey);
-console.log('Conversation exists?', !!conv);
-console.log('Conversation length:', conv?.length);
+console.log("Conversation exists?", !!conv);
+console.log("Conversation length:", conv?.length);
 
 if (conv) {
   const parsed = JSON.parse(conv);
-  console.log('Messages count:', parsed.length);
+  console.log("Messages count:", parsed.length);
   console.table(parsed);
 }
 ```
 
 **Solución:**
+
 ```typescript
 // Verificar que se esté guardando en chatStore.ts
 
 // En sendMessage, después de recibir respuesta:
 set((state) => {
   const updatedMessages = [...state.messages, assistantMessage];
-  
+
   // CRUCIAL: Guardar en localStorage
   if (guestId) {
     const key = `wadi_conv_${guestId}`;
-    console.log('💾 Saving to localStorage:', key);
+    console.log("💾 Saving to localStorage:", key);
     localStorage.setItem(key, JSON.stringify(updatedMessages));
   }
-  
+
   return {
     messages: updatedMessages,
-    sendingMessage: false
+    sendingMessage: false,
   };
 });
 
 // Verificar que se cargue en Chat.tsx:
 useEffect(() => {
-  if (!user && guestId && import.meta.env.VITE_GUEST_MODE === 'true') {
+  if (!user && guestId && import.meta.env.VITE_GUEST_MODE === "true") {
     const stored = localStorage.getItem(`wadi_conv_${guestId}`);
-    console.log('📂 Loading from localStorage:', `wadi_conv_${guestId}`);
-    console.log('📊 Stored data exists?', !!stored);
-    
+    console.log("📂 Loading from localStorage:", `wadi_conv_${guestId}`);
+    console.log("📊 Stored data exists?", !!stored);
+
     if (stored) {
       try {
         const history = JSON.parse(stored);
-        console.log('✅ Loaded messages:', history.length);
+        console.log("✅ Loaded messages:", history.length);
         useChatStore.setState({ messages: history });
       } catch (e) {
-        console.error('❌ Error loading history:', e);
+        console.error("❌ Error loading history:", e);
       }
     }
   }
@@ -332,55 +341,61 @@ useEffect(() => {
 ### Problema 4: Modal de nickname aparece siempre
 
 **Síntoma:**
+
 - Ingresas nickname
 - Recargas
 - Modal aparece de nuevo
 
 **Debug:**
+
 ```javascript
 // Ver si se guardó el nickname
-const auth = JSON.parse(localStorage.getItem('wadi-auth-storage'));
-console.log('Nickname:', auth?.state?.guestNick);
+const auth = JSON.parse(localStorage.getItem("wadi-auth-storage"));
+console.log("Nickname:", auth?.state?.guestNick);
 
 // Ver si el modal debería aparecer
 const shouldShow = !auth?.state?.user && !auth?.state?.guestNick;
-console.log('Should show modal?', shouldShow);
+console.log("Should show modal?", shouldShow);
 ```
 
 **Solución:**
+
 ```typescript
 // Verificar en Chat.tsx:
 useEffect(() => {
-  if (!user && !guestNick && import.meta.env.VITE_GUEST_MODE === 'true') {
-    console.log('🎭 Showing nickname modal');
+  if (!user && !guestNick && import.meta.env.VITE_GUEST_MODE === "true") {
+    console.log("🎭 Showing nickname modal");
     setShowNicknameModal(true);
   } else {
-    console.log('🎯 Nickname exists:', guestNick);
+    console.log("🎯 Nickname exists:", guestNick);
   }
 }, [user, guestNick]);
 
 // Verificar que se guarde en authStore.ts:
 setGuestNick: (nick: string) => {
-  console.log('💾 Setting guest nick:', nick);
+  console.log("💾 Setting guest nick:", nick);
   set({ guestNick: nick });
   // El persist middleware de zustand debería guardar automáticamente
-}
+};
 
 // Si no funciona, forzar guardado manual:
 setGuestNick: (nick: string) => {
   set({ guestNick: nick });
-  
+
   // Forzar guardado
   const state = get();
-  localStorage.setItem('wadi-auth-storage', JSON.stringify({
-    state: {
-      guestId: state.guestId,
-      guestNick: nick,
-      user: null,
-      session: null
-    }
-  }));
-}
+  localStorage.setItem(
+    "wadi-auth-storage",
+    JSON.stringify({
+      state: {
+        guestId: state.guestId,
+        guestNick: nick,
+        user: null,
+        session: null,
+      },
+    }),
+  );
+};
 ```
 
 ---
@@ -388,11 +403,13 @@ setGuestNick: (nick: string) => {
 ### Problema 5: Colores incorrectos (blanco invisible)
 
 **Síntoma:**
+
 - Mensajes de usuario son blancos sobre fondo blanco
 - Botón "Enviar" es blanco sobre fondo blanco
 - No se puede leer nada
 
 **Debug:**
+
 ```javascript
 // Inspeccionar elemento en DevTools
 // Click derecho en mensaje → Inspeccionar
@@ -407,6 +424,7 @@ setGuestNick: (nick: string) => {
 ```
 
 **Solución:**
+
 ```typescript
 // En Chat.tsx, cambiar línea:
 background: message.role === "user"
@@ -428,20 +446,22 @@ background: message.role === "user"
 ```javascript
 // Enviar 100 mensajes rápidamente
 async function stressTest() {
-  const messages = Array.from({length: 100}, (_, i) => 
-    `Test message ${i + 1}`
+  const messages = Array.from(
+    { length: 100 },
+    (_, i) => `Test message ${i + 1}`,
   );
-  
+
   for (const msg of messages) {
     await useChatStore.getState().sendMessage(msg);
     // Esperar un poco para no saturar
-    await new Promise(r => setTimeout(r, 100));
+    await new Promise((r) => setTimeout(r, 100));
   }
-  
-  console.log('Stress test complete');
-  console.log('Messages in store:', useChatStore.getState().messages.length);
-  console.log('Messages in localStorage:', 
-    JSON.parse(localStorage.getItem('wadi_conv_XXX')).length
+
+  console.log("Stress test complete");
+  console.log("Messages in store:", useChatStore.getState().messages.length);
+  console.log(
+    "Messages in localStorage:",
+    JSON.parse(localStorage.getItem("wadi_conv_XXX")).length,
   );
 }
 ```
@@ -452,18 +472,18 @@ async function stressTest() {
 // Simular error de red
 async function testNetworkError() {
   // Detener backend (Ctrl+C en terminal)
-  console.log('Backend stopped. Sending message...');
-  
+  console.log("Backend stopped. Sending message...");
+
   try {
-    await useChatStore.getState().sendMessage('Test');
+    await useChatStore.getState().sendMessage("Test");
   } catch (error) {
-    console.log('✅ Error caught:', error);
+    console.log("✅ Error caught:", error);
   }
-  
+
   // Verificar estado
   const state = useChatStore.getState();
-  console.log('Error in state?', state.error);
-  console.log('Still sending?', state.sendingMessage);
+  console.log("Error in state?", state.error);
+  console.log("Still sending?", state.sendingMessage);
 }
 ```
 
@@ -471,22 +491,22 @@ async function testNetworkError() {
 
 ```javascript
 // Medir tiempo de renderizado
-performance.mark('chat-start');
+performance.mark("chat-start");
 
 // Cargar 1000 mensajes
-const manyMessages = Array.from({length: 1000}, (_, i) => ({
+const manyMessages = Array.from({ length: 1000 }, (_, i) => ({
   id: `msg-${i}`,
-  role: i % 2 === 0 ? 'user' : 'assistant',
+  role: i % 2 === 0 ? "user" : "assistant",
   content: `Message ${i}`,
-  created_at: new Date().toISOString()
+  created_at: new Date().toISOString(),
 }));
 
 useChatStore.setState({ messages: manyMessages });
 
-performance.mark('chat-end');
-performance.measure('chat-render', 'chat-start', 'chat-end');
+performance.mark("chat-end");
+performance.measure("chat-render", "chat-start", "chat-end");
 
-const measure = performance.getEntriesByName('chat-render')[0];
+const measure = performance.getEntriesByName("chat-render")[0];
 console.log(`Rendered 1000 messages in ${measure.duration.toFixed(2)}ms`);
 ```
 
@@ -509,9 +529,9 @@ class MetricsService {
   recordRequest(duration: number, error: boolean = false) {
     this.metrics.requests++;
     if (error) this.metrics.errors++;
-    
+
     this.metrics.totalResponseTime += duration;
-    this.metrics.avgResponseTime = 
+    this.metrics.avgResponseTime =
       this.metrics.totalResponseTime / this.metrics.requests;
   }
 
@@ -527,7 +547,7 @@ class MetricsService {
 export const metrics = new MetricsService();
 
 // Uso en endpoint:
-app.get('/metrics', (req, res) => {
+app.get("/metrics", (req, res) => {
   res.json(metrics.getMetrics());
 });
 ```
@@ -586,12 +606,14 @@ x-guest-id: test-guest-123
 ## 🚨 Red Flags (Señales de Alerta)
 
 ### Backend:
+
 - Response time > 5 segundos
 - Error rate > 5%
 - Memory usage creciendo constantemente
 - CPU usage > 80% sostenido
 
 ### Frontend:
+
 - FPS < 30 al scrollear
 - Memory leaks (heap size creciendo)
 - localStorage > 5MB
@@ -621,7 +643,7 @@ new Blob(Object.values(localStorage)).size
 JSON.stringify(localStorage)
 
 # Importar localStorage desde backup
-Object.keys(backup).forEach(key => 
+Object.keys(backup).forEach(key =>
   localStorage.setItem(key, backup[key])
 )
 ```

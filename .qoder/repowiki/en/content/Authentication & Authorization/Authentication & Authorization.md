@@ -23,6 +23,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [System Architecture](#system-architecture)
 3. [Supabase Integration](#supabase-integration)
@@ -40,6 +41,7 @@
 WADI implements a comprehensive authentication and authorization system built on Supabase Auth, providing both traditional user authentication and innovative guest mode functionality. The system supports secure user registration, login, session management, and role-based access control while maintaining flexibility for different user scenarios.
 
 The authentication infrastructure consists of two main components:
+
 - **Traditional Authentication**: Full user accounts with profiles, workspaces, and permissions
 - **Guest Mode**: Anonymous access with temporary session management and local storage persistence
 
@@ -88,11 +90,13 @@ K --> L
 ```
 
 **Diagram sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L1-L151)
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L1-L82)
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts#L1-L27)
 
 **Section sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L1-L151)
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L1-L82)
 
@@ -139,6 +143,7 @@ AuthStore --> SupabaseClient
 ```
 
 **Diagram sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts#L16-L26)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L6-L21)
 
@@ -147,6 +152,7 @@ AuthStore --> SupabaseClient
 The backend maintains a separate Supabase client configuration optimized for server-side operations:
 
 **Section sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts#L1-L27)
 - [supabase.ts](file://apps/api/src/config/supabase.ts#L1-L29)
 
@@ -179,6 +185,7 @@ Frontend->>User : Redirect to home
 ```
 
 **Diagram sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L49-L91)
 - [fix_auth_trigger_v3.sql](file://fix_auth_trigger_v3.sql#L16-L56)
 
@@ -204,6 +211,7 @@ Frontend->>Frontend : Update auth state
 ```
 
 **Diagram sources**
+
 - [Login.tsx](file://apps/frontend/src/pages/Login.tsx#L25-L39)
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L42-L74)
 
@@ -225,10 +233,12 @@ F --> J[Return to reset page]
 ```
 
 **Diagram sources**
+
 - [ForgotPassword.tsx](file://apps/frontend/src/pages/ForgotPassword.tsx#L20-L34)
 - [ResetPassword.tsx](file://apps/frontend/src/pages/ResetPassword.tsx#L22-L47)
 
 **Section sources**
+
 - [Login.tsx](file://apps/frontend/src/pages/Login.tsx#L1-L216)
 - [Register.tsx](file://apps/frontend/src/pages/Register.tsx#L1-L207)
 - [ForgotPassword.tsx](file://apps/frontend/src/pages/ForgotPassword.tsx#L1-L181)
@@ -272,6 +282,7 @@ GuestMode --> AuthStore
 ```
 
 **Diagram sources**
+
 - [GuestNicknameModal.tsx](file://apps/frontend/src/components/GuestNicknameModal.tsx#L1-L145)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L110-L138)
 
@@ -301,6 +312,7 @@ API-->>Browser : Return response
 ```
 
 **Diagram sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L110-L138)
 - [GUEST_MODE_IMPLEMENTATION.md](file://GUEST_MODE_IMPLEMENTATION.md#L22-L192)
 
@@ -315,6 +327,7 @@ Guest mode provides several advantages for users:
 - **Privacy protection**: No personal data collection required
 
 **Section sources**
+
 - [GuestNicknameModal.tsx](file://apps/frontend/src/components/GuestNicknameModal.tsx#L1-L145)
 - [GUEST_MODE_IMPLEMENTATION.md](file://GUEST_MODE_IMPLEMENTATION.md#L22-L192)
 
@@ -341,6 +354,7 @@ Authenticated --> Unauthenticated : User logs out
 The frontend handles token refresh automatically with intelligent expiration detection:
 
 **Section sources**
+
 - [api.ts](file://apps/frontend/src/config/api.ts#L51-L100)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L110-L138)
 
@@ -385,18 +399,19 @@ WORKSPACES ||--o{ WORKSPACE_MEMBERS : contains
 ```
 
 **Diagram sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql#L8-L140)
 
 ### Role-Based Access Control
 
 WADI implements a hierarchical role system for workspace access control:
 
-| Role | Permissions | Description |
-|------|-------------|-------------|
-| Owner | Full control | Can manage workspace, members, and billing |
-| Admin | Administrative | Can manage members and workspace settings |
-| Member | Standard access | Can participate in workspace activities |
-| Viewer | Read-only access | Can view workspace content |
+| Role   | Permissions      | Description                                |
+| ------ | ---------------- | ------------------------------------------ |
+| Owner  | Full control     | Can manage workspace, members, and billing |
+| Admin  | Administrative   | Can manage members and workspace settings  |
+| Member | Standard access  | Can participate in workspace activities    |
+| Viewer | Read-only access | Can view workspace content                 |
 
 ### Middleware Authorization
 
@@ -422,9 +437,11 @@ K --> M[Authentication failed]
 ```
 
 **Diagram sources**
+
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L26-L74)
 
 **Section sources**
+
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L1-L82)
 - [supabase_schema.sql](file://supabase_schema.sql#L102-L117)
 
@@ -455,6 +472,7 @@ WADI implements multiple layers of security to protect user data and maintain sy
 - **Cross-Site Scripting (XSS) Protection**: Content security policies and input sanitization
 
 **Section sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts#L16-L26)
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L42-L74)
 
@@ -464,13 +482,13 @@ Proper configuration is essential for WADI's authentication system to function s
 
 ### Environment Variables
 
-| Variable | Purpose | Example Value |
-|----------|---------|---------------|
-| `VITE_SUPABASE_URL` | Supabase project URL | `https://your-project.supabase.co` |
-| `VITE_SUPABASE_ANON_KEY` | Public API key | `eyJhbGciOiJIUzI1NiIs...` |
-| `SUPABASE_URL` | Backend Supabase URL | Same as frontend |
-| `SUPABASE_ANON_KEY` | Backend API key | Same as frontend |
-| `VITE_GUEST_MODE` | Enable guest mode | `true` or `false` |
+| Variable                 | Purpose              | Example Value                      |
+| ------------------------ | -------------------- | ---------------------------------- |
+| `VITE_SUPABASE_URL`      | Supabase project URL | `https://your-project.supabase.co` |
+| `VITE_SUPABASE_ANON_KEY` | Public API key       | `eyJhbGciOiJIUzI1NiIs...`          |
+| `SUPABASE_URL`           | Backend Supabase URL | Same as frontend                   |
+| `SUPABASE_ANON_KEY`      | Backend API key      | Same as frontend                   |
+| `VITE_GUEST_MODE`        | Enable guest mode    | `true` or `false`                  |
 
 ### Supabase Configuration
 
@@ -486,6 +504,7 @@ Configure Supabase with the appropriate authentication settings:
 Execute the Supabase schema to establish the required tables and policies:
 
 **Section sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts#L1-L27)
 - [supabase.ts](file://apps/api/src/config/supabase.ts#L1-L29)
 - [supabase_schema.sql](file://supabase_schema.sql#L1-L140)
@@ -523,7 +542,8 @@ Execute the Supabase schema to establish the required tables and policies:
 #### Authentication Failures
 
 **Problem**: Users cannot log in or register
-**Solution**: 
+**Solution**:
+
 1. Verify Supabase environment variables are correctly configured
 2. Check network connectivity to Supabase endpoints
 3. Validate email/password combination
@@ -533,6 +553,7 @@ Execute the Supabase schema to establish the required tables and policies:
 
 **Problem**: Guest mode fails to initialize
 **Solution**:
+
 1. Verify `VITE_GUEST_MODE=true` is set in environment
 2. Check browser console for initialization errors
 3. Ensure localStorage is available in browser
@@ -542,6 +563,7 @@ Execute the Supabase schema to establish the required tables and policies:
 
 **Problem**: Users frequently logged out
 **Solution**:
+
 1. Adjust token expiration settings in Supabase
 2. Implement proper session persistence configuration
 3. Check for conflicting authentication state management
@@ -551,6 +573,7 @@ Execute the Supabase schema to establish the required tables and policies:
 
 **Problem**: Users receive 403 Forbidden errors
 **Solution**:
+
 1. Verify user roles and workspace memberships
 2. Check Row Level Security policies
 3. Review database trigger functions
@@ -565,5 +588,6 @@ Execute the Supabase schema to establish the required tables and policies:
 5. **Authentication State**: Use React DevTools to inspect auth store state
 
 **Section sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L110-L138)
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L23-L81)

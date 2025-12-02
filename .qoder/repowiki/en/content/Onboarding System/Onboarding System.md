@@ -12,6 +12,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Onboarding Workflow](#onboarding-workflow)
 3. [User Progress Tracking](#user-progress-tracking)
@@ -24,11 +25,13 @@
 10. [Troubleshooting Guide](#troubleshooting-guide)
 
 ## Introduction
+
 The WADI onboarding system provides a comprehensive user experience for new users, guiding them through account creation, initial configuration, and first interactions with the AI assistant. The system is designed to be intuitive and informative, helping users understand WADI's key features and capabilities from the moment they sign up. The onboarding process combines user progress tracking, interactive tips, and permission handling to create a seamless introduction to the platform.
 
 The system is fully implemented and documented, with a complete database schema for tracking, an event system for analytics, and a well-defined user interface flow. The onboarding experience is designed to be accessible and engaging, using animations and clear messaging to guide users through the initial setup process.
 
 ## Onboarding Workflow
+
 The WADI onboarding workflow begins when a new user creates an account and progresses through a series of guided steps designed to introduce key features and functionality. The workflow starts with account creation through the Register page, where users provide their email, password, and display name. After successful registration, users are automatically logged in and directed to the onboarding flow.
 
 The onboarding process consists of multiple steps that highlight WADI's core capabilities, including AI interaction, workspace organization, and productivity features. Users can complete the onboarding by clicking the "Get Started" button, which marks the onboarding as complete and redirects them to the projects page. Users also have the option to skip the onboarding process if they prefer to explore the platform immediately.
@@ -36,11 +39,13 @@ The onboarding process consists of multiple steps that highlight WADI's core cap
 The workflow is protected by authentication guards that ensure users are properly authenticated before accessing protected routes. The RootGuard component handles route protection, redirecting unauthenticated users to the login page and authenticated users to the appropriate destination based on their onboarding status.
 
 **Section sources**
+
 - [Register.tsx](file://apps/frontend/src/pages/Register.tsx#L1-L207)
 - [Onboarding.tsx](file://apps/frontend/src/pages/Onboarding.tsx#L1-L163)
 - [RootGuard.tsx](file://apps/frontend/src/components/RootGuard.tsx#L1-L76)
 
 ## User Progress Tracking
+
 WADI's user progress tracking system monitors and records users' completion of the onboarding process through a combination of client-side state management and server-side database tracking. The system uses a dedicated onboarding store implemented with Zustand and persisted to local storage, which maintains the user's onboarding completion status.
 
 The frontend onboarding store contains a simple state interface with a boolean flag `hasCompletedOnboarding` and methods to complete or reset the onboarding process. When a user completes the onboarding flow, the `completeOnboarding` method updates the local state and persists this change to storage, ensuring the user won't see the onboarding flow on subsequent visits.
@@ -50,10 +55,12 @@ On the server side, the system extends the profiles table with onboarding-specif
 Additionally, the system implements an onboarding_events table that records detailed analytics about user interactions during onboarding. This table captures events such as 'onboarding_started', 'step_viewed', 'step_completed', 'onboarding_completed', 'onboarding_skipped', 'permission_requested', 'permission_granted', and 'permission_denied', allowing for detailed analysis of user behavior and onboarding effectiveness.
 
 **Section sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L1-L28)
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L8-L21)
 
 ## Interactive Tips Management
+
 The interactive tips management system in WADI provides users with contextual guidance and suggestions during their initial experience with the platform. The system is designed to help users discover key features and best practices for interacting with the AI assistant.
 
 The backend implements a first_time_tips table that stores predefined tips with attributes including tip_key, title, description, example_prompt, display_order, is_active, and created_at. These tips cover essential aspects of using WADI, such as using natural language for communication, understanding the dynamic workspace creation, and upcoming features like file uploads and voice input.
@@ -96,17 +103,21 @@ profiles ||--o{ user_tips_seen : "user"
 ```
 
 **Diagram sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L119-L155)
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L119-L155)
 
 ## Permission Handling
+
 WADI's permission handling system manages user consent for accessing device features such as microphone, camera, notifications, and location. The system is designed to request permissions at appropriate times during the user journey, providing clear explanations of why each permission is needed and how it will enhance the user experience.
 
 The backend implements a user_permissions table that tracks the status of various permissions for each user. The table includes fields for permission_type (restricted to 'microphone', 'camera', 'notifications', 'location'), status (with values 'pending', 'granted', 'denied', 'revoked'), timestamps for when permissions were requested, granted, or denied, and metadata for additional context.
 
 This structured approach allows the system to:
+
 - Track the current status of each permission
 - Remember user decisions across sessions
 - Provide appropriate UI prompts based on permission status
@@ -145,12 +156,15 @@ profiles ||--o{ onboarding_events : "generates"
 ```
 
 **Diagram sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L56-L81)
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L56-L81)
 
 ## Technical Architecture
+
 The WADI onboarding system is built on a robust technical architecture that integrates frontend and backend components to create a seamless user experience. The system follows a client-server model with React-based frontend components communicating with a Node.js/Express backend through API endpoints, with data persisted in a PostgreSQL database via Supabase.
 
 The frontend architecture uses React with TypeScript, leveraging React Router for navigation and Zustand for state management. The onboarding flow is implemented as a dedicated page component (Onboarding.tsx) that guides users through the initial setup process. State persistence is handled by Zustand's middleware, which stores onboarding completion status in the browser's local storage.
@@ -180,18 +194,21 @@ F --> G
 ```
 
 **Diagram sources**
+
 - [Onboarding.tsx](file://apps/frontend/src/pages/Onboarding.tsx#L1-L163)
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L1-L28)
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L1-L156)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L1-L151)
 
 **Section sources**
+
 - [Onboarding.tsx](file://apps/frontend/src/pages/Onboarding.tsx#L1-L163)
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L1-L28)
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L1-L156)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L1-L151)
 
 ## Configuration Options
+
 The WADI onboarding system provides several configuration options that can be adjusted to customize the user experience. These options are primarily controlled through environment variables and feature flags, allowing for flexible deployment across different environments.
 
 The system supports guest mode, which can be enabled through the VITE_GUEST_MODE environment variable. When guest mode is active, users are directed to the chat interface without requiring authentication, allowing for immediate interaction with the AI assistant.
@@ -203,11 +220,13 @@ The onboarding flow itself can be configured through the database, with the abil
 Additionally, the system supports internationalization through the i18n configuration, with language files for different locales stored in the locales directory. This enables the onboarding content to be presented in multiple languages, improving accessibility for non-English speakers.
 
 **Section sources**
+
 - [RootLayout.tsx](file://apps/frontend/src/layouts/RootLayout.tsx#L1-L42)
 - [featureFlags.ts](file://apps/frontend/src/utils/featureFlags.ts)
 - [i18n.ts](file://apps/frontend/src/i18n.ts)
 
 ## Accessibility Considerations
+
 The WADI onboarding system incorporates several accessibility features to ensure an inclusive user experience. The design follows accessibility best practices, with appropriate color contrast ratios, focus states, and touch target sizes.
 
 The system maintains high color contrast ratios, with primary text on white backgrounds achieving 15.8:1 (AAA compliant) and secondary text achieving 4.6:1 (AA compliant). These ratios ensure readability for users with visual impairments.
@@ -219,9 +238,11 @@ Touch target sizes are optimized for mobile devices, with minimum sizes of 44px 
 The onboarding interface uses semantic HTML and ARIA attributes where appropriate, with proper labeling of form fields and buttons. The use of motion and animations is implemented with user preferences in mind, following the reduce motion principle for users who have indicated a preference for reduced motion in their operating system settings.
 
 **Section sources**
+
 - [DESIGN_SPECS.md](file://DESIGN_SPECS.md#L572-L598)
 
 ## Best Practices
+
 To create an effective onboarding experience in WADI, several best practices should be followed:
 
 1. **Progressive Disclosure**: Present information and features gradually, avoiding overwhelming users with too much information at once. The current three-step onboarding flow exemplifies this principle by focusing on key features sequentially.
@@ -241,6 +262,7 @@ To create an effective onboarding experience in WADI, several best practices sho
 8. **Analytics-Driven Iteration**: Use the onboarding_events data to analyze user behavior, identify drop-off points, and continuously improve the onboarding flow based on real user data.
 
 ## Troubleshooting Guide
+
 When troubleshooting issues with the WADI onboarding system, consider the following common scenarios and solutions:
 
 1. **Users not progressing past onboarding**: Verify that the onboarding completion state is being properly persisted in local storage. Check the browser's developer tools to confirm that the Zustand store is updating correctly when the completeOnboarding method is called.
@@ -256,6 +278,7 @@ When troubleshooting issues with the WADI onboarding system, consider the follow
 6. **Analytics data not recording**: Check that the onboarding_events table is receiving data and that the event_type values match the expected enumeration. Verify that the database functions for recording events are properly implemented and accessible.
 
 **Section sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L1-L28)
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L1-L156)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L1-L151)

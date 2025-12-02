@@ -5,6 +5,7 @@
 ### Color System
 
 #### Primary Palette (Cold Blues)
+
 ```
 Royal Blue (Primary)
 HEX: #255FF5
@@ -27,6 +28,7 @@ USAGE: Gradient endpoint, chips, subtle highlights
 ```
 
 #### Background Colors
+
 ```
 Primary Background
 HEX: #F3F6FB
@@ -56,6 +58,7 @@ USAGE: Mobile container background on desktop
 ```
 
 #### Border Colors
+
 ```
 Subtle Border
 HEX: #D6E1F2
@@ -78,6 +81,7 @@ USAGE: Very subtle divisions
 ```
 
 #### Text Colors
+
 ```
 Primary Text
 HEX: #0F172A
@@ -104,6 +108,7 @@ USAGE: Captions, timestamps, low emphasis
 ## 📐 Layout Measurements
 
 ### Desktop Container (1024px+)
+
 ```
 Mobile Frame Max Width: 480px
 Mobile Frame Max Height: 844px
@@ -113,6 +118,7 @@ Shadow: 0 8px 40px rgba(15, 23, 42, 0.1)
 ```
 
 ### Tablet (768px - 1023px)
+
 ```
 Mobile Frame Max Width: 90% viewport
 Border Radius: 32px
@@ -120,6 +126,7 @@ Shadow: 0 8px 40px rgba(15, 23, 42, 0.12)
 ```
 
 ### Mobile (<768px)
+
 ```
 Width: 100% viewport
 Border Radius: 0px (full bleed)
@@ -127,6 +134,7 @@ Shadow: None
 ```
 
 ### Component Spacing
+
 ```
 Header Height: 60px
 Header Padding: 16px 24px
@@ -140,12 +148,14 @@ Bottom Nav Padding: 12px 24px
 ## 🔤 Typography Scale
 
 ### Font Family
+
 ```
 Primary: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif
 Fallback: system sans-serif
 ```
 
 ### Font Sizes
+
 ```
 Display (Hero Title): 24px / 1.5rem
 H1 (Section Headers): 20px / 1.25rem
@@ -158,6 +168,7 @@ Caption: 12px / 0.75rem
 ```
 
 ### Font Weights
+
 ```
 Normal: 400
 Medium: 500
@@ -166,6 +177,7 @@ Bold: 700
 ```
 
 ### Line Heights
+
 ```
 Tight: 1.2 (for headers)
 Normal: 1.6 (for body text)
@@ -177,38 +189,49 @@ Relaxed: 1.4 (for descriptions)
 ## 🎨 Gradient Specifications
 
 ### Primary Gradient (Hero Card)
+
 ```css
-background: linear-gradient(135deg, #255FF5 0%, #7B8CFF 50%, #C5B3FF 100%);
+background: linear-gradient(135deg, #255ff5 0%, #7b8cff 50%, #c5b3ff 100%);
 ```
+
 **Direction**: 135° (diagonal top-left to bottom-right)
-**Stops**: 
+**Stops**:
+
 - 0%: Royal Blue (#255FF5)
 - 50%: Light Purple-Blue (#7B8CFF)
 - 100%: Lavender (#C5B3FF)
 
 ### Hero Gradient (Simplified)
+
 ```css
-background: linear-gradient(135deg, #255FF5 0%, #7B8CFF 100%);
+background: linear-gradient(135deg, #255ff5 0%, #7b8cff 100%);
 ```
+
 **Used for**: Main hero card background
 
 ### Button Gradient
+
 ```css
-background: linear-gradient(135deg, #255FF5 0%, #4A7BF7 100%);
+background: linear-gradient(135deg, #255ff5 0%, #4a7bf7 100%);
 ```
+
 **Used for**: Primary action buttons
 
 ### Subtle Gradient (Cards)
+
 ```css
-background: linear-gradient(180deg, #FFFFFF 0%, #F8FAFD 100%);
+background: linear-gradient(180deg, #ffffff 0%, #f8fafd 100%);
 ```
+
 **Direction**: 180° (vertical top to bottom)
 **Used for**: Subtle card depth
 
 ### Y2K Accent Gradient
+
 ```css
-background: linear-gradient(135deg, #7B8CFF 0%, #C5B3FF 100%);
+background: linear-gradient(135deg, #7b8cff 0%, #c5b3ff 100%);
 ```
+
 **Used for**: Chips, accent elements, orbs
 
 ---
@@ -216,44 +239,56 @@ background: linear-gradient(135deg, #7B8CFF 0%, #C5B3FF 100%);
 ## 🌟 Shadow System
 
 ### Card Shadow
+
 ```css
 box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
 ```
+
 **Elevation**: Low
 **Usage**: Workspace cards, standard elevated elements
 
 ### Medium Shadow
+
 ```css
 box-shadow: 0 4px 12px rgba(15, 23, 42, 0.1);
 ```
+
 **Elevation**: Medium
 **Usage**: Modals, dropdowns, hover states
 
 ### Strong Shadow
+
 ```css
 box-shadow: 0 8px 24px rgba(15, 23, 42, 0.12);
 ```
+
 **Elevation**: High
 **Usage**: Important floating elements
 
 ### Glow (Blue)
+
 ```css
 box-shadow: 0 0 24px rgba(37, 95, 245, 0.15);
 ```
+
 **Effect**: Soft blue glow
 **Usage**: Submit button, active elements
 
 ### Y2K Glow (Lavender)
+
 ```css
 box-shadow: 0 0 32px rgba(197, 179, 255, 0.25);
 ```
+
 **Effect**: Soft lavender glow
 **Usage**: Holographic orbs, Y2K accents
 
 ### Mobile Frame Shadow (Desktop)
+
 ```css
 box-shadow: 0 8px 40px rgba(15, 23, 42, 0.1);
 ```
+
 **Effect**: Floating card effect
 **Usage**: Desktop "phone" container
 
@@ -262,36 +297,42 @@ box-shadow: 0 8px 40px rgba(15, 23, 42, 0.1);
 ## 🔘 Border Radius Scale
 
 ### Small
+
 ```
 Border Radius: 8px
 Usage: Buttons, small cards, chips
 ```
 
 ### Medium
+
 ```
 Border Radius: 12px
 Usage: Workspace cards, input fields
 ```
 
 ### Large
+
 ```
 Border Radius: 16px
 Usage: Hero card, large containers
 ```
 
 ### Pill
+
 ```
 Border Radius: 24px
 Usage: Quick action chips
 ```
 
 ### Circle
+
 ```
 Border Radius: 50%
 Usage: Avatar, icon containers, submit button
 ```
 
 ### Mobile Frame
+
 ```
 Border Radius: 36px (desktop)
 Border Radius: 32px (tablet)
@@ -306,13 +347,15 @@ Usage: Main container
 ### Button States
 
 #### Primary Button (Normal)
+
 ```css
-background: linear-gradient(135deg, #255FF5 0%, #4A7BF7 100%);
-color: #FFFFFF;
+background: linear-gradient(135deg, #255ff5 0%, #4a7bf7 100%);
+color: #ffffff;
 box-shadow: 0 0 24px rgba(37, 95, 245, 0.15);
 ```
 
 #### Primary Button (Hover)
+
 ```css
 filter: brightness(1.1);
 transform: scale(1.05);
@@ -320,14 +363,16 @@ transition: all 150ms ease-in-out;
 ```
 
 #### Primary Button (Active/Pressed)
+
 ```css
 transform: scale(0.95);
 ```
 
 #### Primary Button (Disabled)
+
 ```css
-background: #9CA3AF;
-color: #6B7280;
+background: #9ca3af;
+color: #6b7280;
 opacity: 0.5;
 cursor: not-allowed;
 ```
@@ -335,14 +380,16 @@ cursor: not-allowed;
 ### Workspace Card States
 
 #### Normal
+
 ```css
-background: #FFFFFF;
-border: 1px solid #D6E1F2;
+background: #ffffff;
+border: 1px solid #d6e1f2;
 box-shadow: 0 2px 8px rgba(15, 23, 42, 0.06);
 transform: scale(1);
 ```
 
 #### Hover
+
 ```css
 border-color: rgba(37, 95, 245, 0.3);
 box-shadow: 0 4px 16px rgba(15, 23, 42, 0.12);
@@ -351,6 +398,7 @@ transition: all 150ms ease-in-out;
 ```
 
 #### Active/Tap
+
 ```css
 transform: scale(0.98);
 ```
@@ -358,37 +406,42 @@ transform: scale(0.98);
 ### Quick Action Chip States
 
 #### Inactive (Normal)
+
 ```css
 background: transparent;
-border: 1.5px solid #C5D4EB;
-color: #6B7280;
+border: 1.5px solid #c5d4eb;
+color: #6b7280;
 ```
 
 #### Inactive (Hover)
+
 ```css
-border-color: #255FF5;
-color: #255FF5;
+border-color: #255ff5;
+color: #255ff5;
 ```
 
 #### Active
+
 ```css
-background: #255FF5;
-border: 1.5px solid #255FF5;
-color: #FFFFFF;
+background: #255ff5;
+border: 1.5px solid #255ff5;
+color: #ffffff;
 ```
 
 ### Navigation Item States
 
 #### Inactive
+
 ```css
-color: #9CA3AF;
+color: #9ca3af;
 filter: none;
 ```
 
 #### Active
+
 ```css
-color: #255FF5;
-filter: drop-shadow(0 0 8px #255FF5);
+color: #255ff5;
+filter: drop-shadow(0 0 8px #255ff5);
 font-weight: 600;
 ```
 
@@ -397,13 +450,14 @@ font-weight: 600;
 ## ✨ Y2K Effects Specifications
 
 ### Holographic Orb (Top Right)
+
 ```css
 position: absolute;
 top: -80px;
 right: -80px;
 width: 200px;
 height: 200px;
-background: linear-gradient(135deg, #7B8CFF 0%, #C5B3FF 100%);
+background: linear-gradient(135deg, #7b8cff 0%, #c5b3ff 100%);
 border-radius: 50%;
 filter: blur(60px);
 opacity: 0.15;
@@ -411,26 +465,38 @@ animation: pulse-glow 4s ease-in-out infinite;
 ```
 
 ### Holographic Orb (Inside Hero)
+
 ```css
 position: absolute;
 bottom: -60px;
 left: -60px;
 width: 160px;
 height: 160px;
-background: radial-gradient(circle, rgba(255,255,255,0.2) 0%, transparent 70%);
+background: radial-gradient(
+  circle,
+  rgba(255, 255, 255, 0.2) 0%,
+  transparent 70%
+);
 border-radius: 50%;
 filter: blur(20px);
 ```
 
 ### Pulse Glow Animation
+
 ```css
 @keyframes pulse-glow {
-  0%, 100% { opacity: 0.15; }
-  50% { opacity: 0.25; }
+  0%,
+  100% {
+    opacity: 0.15;
+  }
+  50% {
+    opacity: 0.25;
+  }
 }
 ```
 
 ### Glassmorphism (Prompt Input)
+
 ```css
 background: rgba(255, 255, 255, 0.95);
 backdrop-filter: blur(10px);
@@ -438,11 +504,12 @@ backdrop-filter: blur(10px);
 ```
 
 ### Glassmorphism (Navigation)
+
 ```css
-background: #FFFFFF;
+background: #ffffff;
 backdrop-filter: blur(10px);
 -webkit-backdrop-filter: blur(10px);
-border-top: 1px solid #E8EEF7;
+border-top: 1px solid #e8eef7;
 ```
 
 ---
@@ -450,6 +517,7 @@ border-top: 1px solid #E8EEF7;
 ## 📱 Component Dimensions
 
 ### Header
+
 ```
 Height: 60px
 Logo Font Size: 20px
@@ -460,6 +528,7 @@ Gap Between Items: 12px
 ```
 
 ### Hero Card
+
 ```
 Padding: 32px 24px
 Title Font Size: 24px
@@ -471,6 +540,7 @@ Gap Between Input & Button: 12px
 ```
 
 ### Workspace Card
+
 ```
 Padding: 16px
 Icon Container Size: 48px × 48px
@@ -482,6 +552,7 @@ Grid Gap: 12px
 ```
 
 ### Quick Action Chip
+
 ```
 Padding: 8px 16px
 Border Radius: 24px
@@ -491,6 +562,7 @@ Gap Between Chips: 8px
 ```
 
 ### Bottom Navigation
+
 ```
 Height: 72px
 Padding: 12px 24px
@@ -507,6 +579,7 @@ Active Indicator Size: 4px × 4px
 ### Entrance Animations
 
 #### Mobile Frame
+
 ```javascript
 initial: { opacity: 0, scale: 0.95 }
 animate: { opacity: 1, scale: 1 }
@@ -514,6 +587,7 @@ transition: { duration: 0.5 }
 ```
 
 #### Hero Card
+
 ```javascript
 initial: { opacity: 0, y: 20 }
 animate: { opacity: 1, y: 0 }
@@ -521,6 +595,7 @@ transition: { duration: 0.5, delay: 0.1 }
 ```
 
 #### Workspaces Section
+
 ```javascript
 initial: { opacity: 0, y: 20 }
 animate: { opacity: 1, y: 0 }
@@ -528,6 +603,7 @@ transition: { duration: 0.5, delay: 0.2 }
 ```
 
 #### Individual Workspace Card
+
 ```javascript
 initial: { opacity: 0, scale: 0.9 }
 animate: { opacity: 1, scale: 1 }
@@ -535,6 +611,7 @@ transition: { duration: 0.3, delay: 0.3 + index * 0.05 }
 ```
 
 #### Quick Actions
+
 ```javascript
 initial: { opacity: 0, y: 20 }
 animate: { opacity: 1, y: 0 }
@@ -544,23 +621,31 @@ transition: { duration: 0.5, delay: 0.4 }
 ### Interaction Animations
 
 #### Workspace Card Hover
+
 ```javascript
-whileHover: { scale: 1.02 }
-whileTap: { scale: 0.98 }
+whileHover: {
+  scale: 1.02;
+}
+whileTap: {
+  scale: 0.98;
+}
 ```
 
 #### Button Hover
+
 ```css
 transition: transform 150ms ease-in-out;
 transform: scale(1.05);
 ```
 
 #### Button Active
+
 ```css
 transform: scale(0.95);
 ```
 
 ### Timing Functions
+
 ```
 Fast: 150ms ease-in-out
 Medium: 250ms ease-in-out
@@ -572,14 +657,16 @@ Slow: 350ms ease-in-out
 ## 🔍 Accessibility Specifications
 
 ### Focus States
+
 ```css
 *:focus-visible {
-  outline: 2px solid #255FF5;
+  outline: 2px solid #255ff5;
   outline-offset: 2px;
 }
 ```
 
 ### Color Contrast Ratios
+
 ```
 Primary Text on White: 15.8:1 (AAA ✓)
 Secondary Text on White: 4.6:1 (AA ✓)
@@ -588,6 +675,7 @@ White on Primary Blue: 4.7:1 (AA ✓)
 ```
 
 ### Touch Target Sizes (Mobile)
+
 ```
 Minimum: 44px × 44px
 Bottom Nav Items: 48px × 56px
@@ -600,6 +688,7 @@ Workspace Cards: Full card area (minimum 80px × 80px)
 ## 📊 Responsive Breakpoints
 
 ### Mobile First Approach
+
 ```css
 /* Base styles: 320px - 767px (Mobile) */
 Default styles in components
@@ -628,6 +717,7 @@ Default styles in components
 Use this checklist to verify implementation:
 
 ### Visual Design
+
 - [ ] Light mode color palette implemented
 - [ ] Blue → Purple gradients visible
 - [ ] Holographic orbs present with blur
@@ -636,6 +726,7 @@ Use this checklist to verify implementation:
 - [ ] Clean, professional appearance
 
 ### Layout
+
 - [ ] Desktop shows centered "phone" container
 - [ ] Mobile uses full width
 - [ ] Proper spacing throughout
@@ -643,6 +734,7 @@ Use this checklist to verify implementation:
 - [ ] Bottom navigation sticky
 
 ### Typography
+
 - [ ] Inter font loaded
 - [ ] Font sizes match specifications
 - [ ] Font weights correct (semibold for headers)
@@ -650,6 +742,7 @@ Use this checklist to verify implementation:
 - [ ] Letter spacing on logo
 
 ### Interactions
+
 - [ ] Hover states on all interactive elements
 - [ ] Scale animations on cards
 - [ ] Button glow effects
@@ -657,6 +750,7 @@ Use this checklist to verify implementation:
 - [ ] Smooth transitions (150ms)
 
 ### Y2K Elements
+
 - [ ] Gradients are subtle, not overwhelming
 - [ ] Orbs have soft blur effect
 - [ ] Glows are gentle, not neon
@@ -664,6 +758,7 @@ Use this checklist to verify implementation:
 - [ ] Professional banking aesthetic maintained
 
 ### Responsive
+
 - [ ] Works on 320px width (small mobile)
 - [ ] Adapts to 768px (tablet)
 - [ ] Centered properly on 1920px (desktop)
@@ -671,6 +766,7 @@ Use this checklist to verify implementation:
 - [ ] Touch targets adequate size
 
 ### Performance
+
 - [ ] Animations smooth at 60fps
 - [ ] No layout shifts
 - [ ] Images/gradients render correctly

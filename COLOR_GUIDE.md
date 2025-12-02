@@ -28,6 +28,7 @@ ACENTOS:
 ## 🎯 Componentes y sus Colores
 
 ### 1. HEADER DEL CHAT
+
 ```
 ┌─────────────────────────────────────┐
 │  Chat WADI        [AI] [Espejo]    │  ← Fondo: #18181B
@@ -37,13 +38,15 @@ ACENTOS:
 ```
 
 **Toggle de Modo:**
+
 - Inactivo: Fondo transparent, Texto #A1A1AA
 - Activo: Fondo **#3B82F6** (azul), Texto #FFFFFF
 
 ### 2. ÁREA DE MENSAJES - SIN CHAT
+
 ```
         🤖 (emoji grande 64px)
-    
+
     Hola, soy WADI              ← #FAFAFA
     Tu asistente AI. ¿En qué    ← #A1A1AA
     puedo ayudarte hoy?
@@ -52,12 +55,14 @@ ACENTOS:
 ### 3. BURBUJAS DE MENSAJE
 
 #### Mensaje del Usuario (derecha):
+
 ```
                     ┌──────────────────────┐
                     │ Hola, ¿cómo estás?  │  ← Fondo: #3B82F6 ⭐
                     │ 15:30               │  ← Texto: #FFFFFF
                     └──────────────────────┘
 ```
+
 - Fondo: **#3B82F6** (azul)
 - Texto: #FFFFFF (blanco)
 - Border: ninguno
@@ -65,6 +70,7 @@ ACENTOS:
 - Padding: 12px
 
 #### Mensaje de WADI (izquierda):
+
 ```
 ┌────────────────────────────────┐
 │ ¡Hola! Estoy muy bien, gracias│  ← Fondo: #18181B
@@ -72,6 +78,7 @@ ACENTOS:
 │ 15:31                          │  ← Border: #27272A
 └────────────────────────────────┘
 ```
+
 - Fondo: #18181B (gris oscuro)
 - Texto: #FAFAFA (blanco)
 - Border: 1px solid #27272A
@@ -79,6 +86,7 @@ ACENTOS:
 - Padding: 12px
 
 ### 4. INPUT DE MENSAJE
+
 ```
 ┌─────────────────────────────────────────────────────┬──────────┐
 │ Escribe tu mensaje...                               │ Enviar   │
@@ -86,18 +94,21 @@ ACENTOS:
 ```
 
 **Input:**
+
 - Fondo: #27272A (gris oscuro)
 - Texto: #FAFAFA (blanco)
 - Border: 1px solid #3F3F46
 - Placeholder: #71717A (gris claro)
 
 **Botón "Enviar":**
+
 - **Activo**: Fondo **#3B82F6** (azul), Texto #FFFFFF ⭐
 - **Deshabilitado**: Fondo #3F3F46 (gris), Texto #FFFFFF
 - Hover: Más brillante
 - Border radius: 6px
 
 ### 5. MODAL DE NICKNAME
+
 ```
 ┌─────────────────────────────────────┐
 │                                     │
@@ -119,21 +130,25 @@ ACENTOS:
 ```
 
 **Modal:**
+
 - Fondo: #18181B
 - Border: 1px solid #3F3F46
 - Border radius: 8px
 - Backdrop: rgba(0,0,0,0.7)
 
 **Input del Modal:**
+
 - Fondo: #27272A
 - Border: 1px solid #3F3F46
 - Texto: #FAFAFA
 
 **Botón del Modal:**
+
 - **Con texto**: Fondo #3B82F6, Texto #FFFFFF
 - **Sin texto**: Fondo #3F3F46, Texto #FFFFFF, Cursor not-allowed
 
 ### 6. BOTTOM NAVIGATION (Guest Mode)
+
 ```
 ┌─────────────────────────────────────┐
 │                                     │
@@ -144,6 +159,7 @@ ACENTOS:
 ```
 
 **En Guest Mode:**
+
 - Solo muestra: Chat (💬)
 - Fondo: #09090B
 - Border top: 1px solid #27272A
@@ -151,25 +167,28 @@ ACENTOS:
 - Icono inactivo: #71717A
 
 ### 7. LOADING STATE (3 puntitos)
+
 ```
 ┌──────────────────┐
 │  • • •          │  ← Animación
 │                 │  ← Texto: #A1A1AA
 └──────────────────┘
 ```
+
 - Puntitos: #A1A1AA
 - Fondo: #18181B
 - Border: 1px solid #27272A
 
 ### 8. ERROR SCREEN (Backend caído)
+
 ```
         ⚠️ (48px)
-    
+
     Error de Conexión           ← #000000 (negro)
-    
+
     No se pudo conectar         ← #666666 (gris)
     con el servidor
-    
+
     ┌──────────────┐
     │  Reintentar  │            ← Fondo: #007AFF, Texto: white
     └──────────────┘
@@ -178,6 +197,7 @@ ACENTOS:
 ## 🎨 Mejoras Aplicadas vs Problemas Anteriores
 
 ### ❌ ANTES (Problemas):
+
 ```
 Mensaje Usuario:
 ├─ Fondo: #FAFAFA (casi blanco)
@@ -191,6 +211,7 @@ Botón Enviar:
 ```
 
 ### ✅ AHORA (Corregido):
+
 ```
 Mensaje Usuario:
 ├─ Fondo: #3B82F6 (azul vibrante) ⭐
@@ -223,6 +244,7 @@ Textos:
 ## 🎯 Consistencia de Colores
 
 ### Regla Principal:
+
 ```
 PARA ACCIONES DEL USUARIO = #3B82F6 (Azul)
 ├─ Mensajes enviados por el usuario

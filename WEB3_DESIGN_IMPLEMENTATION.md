@@ -7,6 +7,7 @@ WADI has been successfully transformed into a premium web3-style AI assistant wi
 ## ✨ Key Design Features
 
 ### 1. **Phone Shell Container**
+
 - All authenticated pages are wrapped in a centered phone-like frame (480-600px wide)
 - Highly rounded corners (32px border-radius)
 - Soft gradient shadows with blue accent glows
@@ -14,6 +15,7 @@ WADI has been successfully transformed into a premium web3-style AI assistant wi
 - Responsive: full-width on mobile, centered container on desktop
 
 ### 2. **Web3 Background Aesthetic**
+
 - Multi-layered radial gradients creating depth
 - Floating animated orbs with blur effects:
   - Blue orb (#255FF5) - 400px, blur 80px
@@ -23,12 +25,15 @@ WADI has been successfully transformed into a premium web3-style AI assistant wi
 - Light theme base (#F3F6FB) maintained for readability
 
 ### 3. **Glassmorphism Effects**
+
 Three levels of glass implemented:
+
 - **Light**: `rgba(255, 255, 255, 0.7)` + blur(16px)
 - **Medium**: `rgba(255, 255, 255, 0.85)` + blur(20px)
 - **Heavy**: `rgba(255, 255, 255, 0.95)` + blur(24px)
 
 Applied to:
+
 - Hero card input containers
 - Workspace cards
 - Notification panels
@@ -36,13 +41,20 @@ Applied to:
 - Bottom navigation bar
 
 ### 4. **Gradient System**
+
 ```css
---gradient-primary: linear-gradient(135deg, #255FF5 0%, #7B8CFF 50%, #C5B3FF 100%)
---gradient-hero: linear-gradient(135deg, #255FF5 0%, #7B8CFF 100%)
---gradient-button: linear-gradient(135deg, #255FF5 0%, #4A7BF7 100%)
+--gradient-primary: linear-gradient(
+    135deg,
+    #255ff5 0%,
+    #7b8cff 50%,
+    #c5b3ff 100%
+  )
+  --gradient-hero: linear-gradient(135deg, #255ff5 0%, #7b8cff 100%)
+  --gradient-button: linear-gradient(135deg, #255ff5 0%, #4a7bf7 100%);
 ```
 
 Applied to:
+
 - WADI logo text
 - Primary buttons (with glow shadows)
 - Hero card background
@@ -50,11 +62,13 @@ Applied to:
 - Icon orbs and avatars
 
 ### 5. **Glow Effects (Web3 Signature)**
+
 - Primary glow: `0 0 24px rgba(37, 95, 245, 0.2)`
 - Secondary glow: `0 0 20px rgba(123, 140, 255, 0.2)`
 - Y2K glow: `0 0 32px rgba(197, 179, 255, 0.25)`
 
 Applied to:
+
 - WADI orb icon (pulsing animation)
 - Primary buttons on hover
 - Active bottom navigation icons
@@ -62,24 +76,29 @@ Applied to:
 - User avatar
 
 ### 6. **Micro-Interactions with Framer Motion**
+
 All interactive elements feature smooth animations:
 
 **Hero Card WADI Orb**:
+
 - Continuous pulse effect (4s duration, infinite loop)
 - Scale: 1 → 1.05 → 1
 - Box-shadow pulse with gradient colors
 
 **Buttons & Cards**:
+
 - whileHover: scale(1.02) + enhanced shadow
 - whileTap: scale(0.98)
 - Smooth 200ms ease-out transitions
 
 **Page Transitions**:
+
 - Initial: opacity 0, scale 0.96, y: 20
 - Animate: opacity 1, scale 1, y: 0
 - Duration: 0.6s with custom easing [0.22, 1, 0.36, 1]
 
 **Bottom Navigation**:
+
 - Active indicator with gradient bar
 - Enhanced drop-shadow on active icons
 - Scale animation on hover (1.1) and tap (0.95)
@@ -87,11 +106,13 @@ All interactive elements feature smooth animations:
 ### 7. **Home Screen Redesign**
 
 **Header**:
+
 - Gradient text logo (WADI)
 - Avatar with gradient background and glow
 - Notification bell with pulsing badge
 
 **Hero Card**:
+
 - Central WADI orb with holographic glow and pulse animation
 - Glassmorphism input field with hover shadow effect
 - Gradient submit button with glow
@@ -99,6 +120,7 @@ All interactive elements feature smooth animations:
 - Human-friendly text: "Hola, soy WADI. ¿Qué hacemos hoy?"
 
 **Workspaces Section**:
+
 - Title: "Lo que venimos trabajando"
 - Single main workspace card with glassmorphism
 - Gradient top accent line
@@ -106,11 +128,13 @@ All interactive elements feature smooth animations:
 - Empty state message for dynamic workspace creation
 
 **Quick Actions**:
+
 - Glassmorphism chip buttons
 - Gradient background when active
 - Scale animations on hover/tap
 
 **Bottom Navigation**:
+
 - Glassmorphism bar with blur effect
 - Active state: gradient indicator bar + icon glow
 - Labels: Home, Workspaces, Historial, Perfil
@@ -119,6 +143,7 @@ All interactive elements feature smooth animations:
 ### 8. **Login & Register Pages**
 
 **Shared Features**:
+
 - Centered phone container with web3 background
 - WADI orb icon (80px) with pulsing glow animation
 - Gradient logo text
@@ -128,6 +153,7 @@ All interactive elements feature smooth animations:
 - Spanish text ("Tu asistente de IA del futuro")
 
 **Animations**:
+
 - Card entrance: fade + scale + slide up
 - Orb continuous pulse (3s infinite)
 - Button hover/tap scale effects
@@ -135,6 +161,7 @@ All interactive elements feature smooth animations:
 ### 9. **Settings Page**
 
 **Features**:
+
 - PhoneShell wrapper for consistency
 - Gradient text header
 - Back button with scale animation
@@ -145,15 +172,18 @@ All interactive elements feature smooth animations:
 ## 📁 File Structure
 
 ### New Components
+
 - `apps/frontend/src/components/PhoneShell.tsx` - Main container wrapper
 
 ### Updated Pages
+
 - `apps/frontend/src/pages/Home.tsx` - Complete redesign
 - `apps/frontend/src/pages/Login.tsx` - Web3 styling
 - `apps/frontend/src/pages/Register.tsx` - Web3 styling
 - `apps/frontend/src/pages/Settings.tsx` - PhoneShell integration
 
 ### Updated Styles
+
 - `apps/frontend/src/index.css` - Web3 utilities and gradients
 
 ## 🎯 Design Principles Followed
@@ -169,6 +199,7 @@ All interactive elements feature smooth animations:
 ## 🌈 Color Palette
 
 ### Primary Colors
+
 - Background: `#F3F6FB` (soft blue-white)
 - Secondary: `#FFFFFF` (pure white)
 - Primary Accent: `#255FF5` (royal blue)
@@ -176,11 +207,13 @@ All interactive elements feature smooth animations:
 - Y2K Accent: `#C5B3FF` (lavender)
 
 ### Text Colors
+
 - Primary: `#0F172A` (deep blue-black)
 - Secondary: `#6B7280` (medium gray)
 - Tertiary: `#9CA3AF` (light gray)
 
 ### Semantic
+
 - Success: `#10B981`
 - Warning: `#F59E0B`
 - Error: `#EF4444`
@@ -188,17 +221,20 @@ All interactive elements feature smooth animations:
 ## 🚀 Technical Implementation
 
 ### Dependencies Used
+
 - **Framer Motion**: All animations and micro-interactions
 - **React 19**: Latest React features
 - **TypeScript**: Full type safety
 - **CSS Variables**: Theme consistency
 
 ### Browser Support
+
 - Modern CSS features (backdrop-filter, gradients, box-shadow)
 - Fallbacks for older browsers on glassmorphism
 - Cross-browser tested animations
 
 ### Performance Considerations
+
 - CSS transforms for animations (GPU-accelerated)
 - Optimized blur effects with will-change hints
 - Lazy loading for heavy components
@@ -247,6 +283,7 @@ All interactive elements feature smooth animations:
 ## 🎯 Result
 
 WADI now presents as a **premium web3 fintech AI assistant** with:
+
 - Sophisticated visual depth through layered effects
 - Futuristic yet professional aesthetic
 - Smooth, delightful micro-interactions

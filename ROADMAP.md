@@ -17,6 +17,7 @@ Q1 2025 (Actual)           Q2 2025               Q3 2025               Q4 2025
 ### 1.1 Advanced AI Capabilities
 
 #### **Streaming Responses**
+
 ```typescript
 // Status: Código listo, falta integrar
 // File: apps/api/src/services/openai.ts
@@ -24,27 +25,27 @@ Q1 2025 (Actual)           Q2 2025               Q3 2025               Q4 2025
 
 // Implementación en frontend:
 async function sendMessageStreaming(message: string) {
-  const response = await fetch('/api/chat/stream', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ message })
+  const response = await fetch("/api/chat/stream", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ message }),
   });
-  
+
   const reader = response.body.getReader();
   const decoder = new TextDecoder();
-  
-  let assistantMessage = { role: 'assistant', content: '' };
-  
+
+  let assistantMessage = { role: "assistant", content: "" };
+
   while (true) {
     const { done, value } = await reader.read();
     if (done) break;
-    
+
     const chunk = decoder.decode(value);
     assistantMessage.content += chunk;
-    
+
     // Actualizar UI en tiempo real
-    set(state => ({
-      messages: [...state.messages.slice(0, -1), assistantMessage]
+    set((state) => ({
+      messages: [...state.messages.slice(0, -1), assistantMessage],
     }));
   }
 }
@@ -55,6 +56,7 @@ async function sendMessageStreaming(message: string) {
 ---
 
 #### **Multi-Model Support**
+
 ```typescript
 // Permitir elegir modelo
 interface ChatConfig {
@@ -70,7 +72,7 @@ function ModelSelector() {
     temperature: 0.7,
     maxTokens: 1000
   });
-  
+
   return (
     <div className="model-selector">
       <select value={config.model} onChange={...}>
@@ -87,32 +89,33 @@ function ModelSelector() {
 ---
 
 #### **Context-Aware Conversations**
+
 ```typescript
 // Usar embeddings para búsqueda semántica
 interface ConversationContext {
   relevantMessages: Message[];
   topics: string[];
   entities: string[];
-  sentiment: 'positive' | 'neutral' | 'negative';
+  sentiment: "positive" | "neutral" | "negative";
 }
 
 async function getEnhancedContext(
   currentMessage: string,
-  allMessages: Message[]
+  allMessages: Message[],
 ): Promise<ConversationContext> {
   // 1. Generar embedding del mensaje actual
   const embedding = await generateEmbedding(currentMessage);
-  
+
   // 2. Buscar mensajes similares en el historial
   const relevant = await findSimilarMessages(embedding, allMessages);
-  
+
   // 3. Extraer topics y entities
   const topics = extractTopics(allMessages);
   const entities = extractEntities(allMessages);
-  
+
   // 4. Analizar sentiment
   const sentiment = analyzeSentiment(allMessages);
-  
+
   return { relevantMessages: relevant, topics, entities, sentiment };
 }
 ```
@@ -122,16 +125,17 @@ async function getEnhancedContext(
 ### 1.2 User Experience
 
 #### **Voice Interface**
+
 ```typescript
 // Speech-to-text
 function VoiceInput() {
   const recognition = new webkitSpeechRecognition();
-  
+
   recognition.onresult = (event) => {
     const transcript = event.results[0][0].transcript;
     sendMessage(transcript);
   };
-  
+
   return (
     <button onClick={() => recognition.start()}>
       🎤 Hablar
@@ -150,23 +154,24 @@ function readResponse(text: string) {
 ---
 
 #### **Rich Media Support**
+
 ```typescript
 // Enviar/recibir imágenes
 interface MediaMessage extends Message {
   media?: {
-    type: 'image' | 'file' | 'audio';
+    type: "image" | "file" | "audio";
     url: string;
     thumbnail?: string;
-    size:number;
+    size: number;
   };
 }
 
 // Upload de imágenes
 async function uploadImage(file: File) {
   const formData = new FormData();
-  formData.append('image', file);
-  
-  const { data } = await api.post('/api/upload', formData);
+  formData.append("image", file);
+
+  const { data } = await api.post("/api/upload", formData);
   return data.url;
 }
 
@@ -179,12 +184,12 @@ async function analyzeImage(imageUrl: string, question: string) {
         role: "user",
         content: [
           { type: "text", text: question },
-          { type: "image_url", image_url: { url: imageUrl } }
-        ]
-      }
-    ]
+          { type: "image_url", image_url: { url: imageUrl } },
+        ],
+      },
+    ],
   });
-  
+
   return response.choices[0].message.content;
 }
 ```
@@ -192,6 +197,7 @@ async function analyzeImage(imageUrl: string, question: string) {
 ---
 
 #### **Temas Personalizables**
+
 ```typescript
 // Sistema de temas
 const themes = {
@@ -215,7 +221,7 @@ const themes = {
 
 function ThemeSelector() {
   const [theme, setTheme] = useLocalStorage('theme', 'dark');
-  
+
   return (
     <select value={theme} onChange={(e) => setTheme(e.target.value)}>
       <option value="dark">🌙 Oscuro</option>
@@ -232,6 +238,7 @@ function ThemeSelector() {
 ### 1.3 Productivity Features
 
 #### **Templates y Prompts**
+
 ```typescript
 // Prompts predefinidos
 const promptTemplates = [
@@ -257,7 +264,7 @@ const promptTemplates = [
 
 function TemplateSelector() {
   const [selectedTemplate, setSelectedTemplate] = useState(null);
-  
+
   const applyTemplate = (template, values) => {
     let prompt = template.prompt;
     template.variables.forEach(variable => {
@@ -265,7 +272,7 @@ function TemplateSelector() {
     });
     sendMessage(prompt);
   };
-  
+
   return (
     <div className="templates">
       {promptTemplates.map(t => (
@@ -279,41 +286,45 @@ function TemplateSelector() {
 ---
 
 #### **Export de Conversaciones**
+
 ```typescript
 // Exportar a diferentes formatos
-async function exportConversation(format: 'pdf' | 'txt' | 'md' | 'json') {
+async function exportConversation(format: "pdf" | "txt" | "md" | "json") {
   const messages = useChatStore.getState().messages;
-  
+
   switch (format) {
-    case 'txt':
+    case "txt":
       return exportAsText(messages);
-    case 'md':
+    case "md":
       return exportAsMarkdown(messages);
-    case 'json':
+    case "json":
       return JSON.stringify(messages, null, 2);
-    case 'pdf':
+    case "pdf":
       return await exportAsPDF(messages);
   }
 }
 
 function exportAsMarkdown(messages: Message[]) {
-  return messages.map(m => 
-    `### ${m.role === 'user' ? 'Usuario' : 'WADI'}\n\n${m.content}\n\n`
-  ).join('---\n\n');
+  return messages
+    .map(
+      (m) =>
+        `### ${m.role === "user" ? "Usuario" : "WADI"}\n\n${m.content}\n\n`,
+    )
+    .join("---\n\n");
 }
 
 async function exportAsPDF(messages: Message[]) {
-  const { jsPDF } = await import('jspdf');
+  const { jsPDF } = await import("jspdf");
   const doc = new jsPDF();
-  
+
   let y = 20;
-  messages.forEach(m => {
+  messages.forEach((m) => {
     doc.setFontSize(12);
     doc.text(`${m.role}: ${m.content}`, 10, y);
     y += 10;
   });
-  
-  doc.save('conversation.pdf');
+
+  doc.save("conversation.pdf");
 }
 ```
 
@@ -330,29 +341,29 @@ async function shareConversation(conversationId: string) {
     conversationId,
     expiresIn: '7d' // Expira en 7 días
   });
-  
+
   const shareUrl = `https://wadi.app/shared/${data.shareId}`;
-  
+
   // Copiar al clipboard
   navigator.clipboard.writeText(shareUrl);
-  
+
   return shareUrl;
 }
 
 // Ver conversación compartida (sin auth}
 function SharedConversationView({ shareId }: { shareId: string }) {
   const [conversation, setConversation] = useState(null);
-  
+
   useEffect(() => {
     fetch(`/api/shares/${shareId}`)
       .then(r => r.json())
       .then(data => setConversation(data));
   }, [shareId]);
-  
+
   return (
     <div className="shared-view" style={{/* read-only */}}>
       {conversation?.messages.map(m => <MessageBubble message={m} />)}
-      
+
       <div className="cta">
         <button onClick={() => navigate('/signup')}>
           Crear mi propia cuenta
@@ -372,13 +383,13 @@ function SharedConversationView({ shareId }: { shareId: string }) {
 // Usando WebSocket
 function CollaborativeChat({ conversationId }: Props) {
   const [participants, setParticipants] = useState([]);
-  
+
   useEffect(() => {
     const ws = new WebSocket(`ws://api.wadi.app/collab/${conversationId}`);
-    
+
     ws.onmessage = (event) => {
       const data = JSON.parse(event.data);
-      
+
       switch (data.type) {
         case 'user_joined':
           setParticipants(p => [...p, data.user]);
@@ -394,10 +405,10 @@ function CollaborativeChat({ conversationId }: Props) {
           break;
       }
     };
-    
+
     return () => ws.close();
   }, [conversationId]);
-  
+
   return (
     <div>
       <ParticipantList participants={participants} />
@@ -420,12 +431,12 @@ interface Plugin {
   id: string;
   name: string;
   version: string;
-  
+
   // Hooks
   onMessageSend?: (message: string) => Promise<string>;
   onMessageReceive?: (message: string) => Promise<string>;
   onRender?: (message: Message) => React.ReactNode;
-  
+
   // UI Extensions
   toolbarButtons?: ToolbarButton[];
   settingsPanel?: React.ReactNode;
@@ -433,41 +444,40 @@ interface Plugin {
 
 // Plugin de ejemplo: Traductor
 const translatorPlugin: Plugin = {
-  id: 'translator',
-  name: 'Traductor',
-  version: '1.0.0',
-  
+  id: "translator",
+  name: "Traductor",
+  version: "1.0.0",
+
   onMessageSend: async (message) => {
-    if (message.startsWith('/translate')) {
-      const [_, lang, ...text] = message.split(' ');
-      const translated = await translate(text.join(' '), lang);
+    if (message.startsWith("/translate")) {
+      const [_, lang, ...text] = message.split(" ");
+      const translated = await translate(text.join(" "), lang);
       return translated;
     }
     return message;
   },
-  
-  toolbarButtons: [{
-    icon: '🌐',
-    label: 'Traducir',
-    onClick: () => insertCommand('/translate en ')
-  }]
+
+  toolbarButtons: [
+    {
+      icon: "🌐",
+      label: "Traducir",
+      onClick: () => insertCommand("/translate en "),
+    },
+  ],
 };
 
 // Plugin manager
 class PluginManager {
   private plugins: Map<string, Plugin> = new Map();
-  
+
   register(plugin: Plugin) {
     this.plugins.set(plugin.id, plugin);
   }
-  
-  async executeHook(
-    hookName: keyof Plugin,
-    ...args: any[]
-  ) {
+
+  async executeHook(hookName: keyof Plugin, ...args: any[]) {
     for (const plugin of this.plugins.values()) {
       const hook = plugin[hookName];
-      if (typeof hook === 'function') {
+      if (typeof hook === "function") {
         await hook(...args);
       }
     }
@@ -485,37 +495,34 @@ class PluginManager {
 
 // Sync con backend
 async function syncConversations() {
-  const localConvs = await AsyncStorage.getItem('conversations');
-  const serverConvs = await api.get('/api/conversations');
-  
+  const localConvs = await AsyncStorage.getItem("conversations");
+  const serverConvs = await api.get("/api/conversations");
+
   const merged = mergeConversations(
-    JSON.parse(localConvs || '[]'),
-    serverConvs.data
+    JSON.parse(localConvs || "[]"),
+    serverConvs.data,
   );
-  
-  await AsyncStorage.setItem('conversations', JSON.stringify(merged));
+
+  await AsyncStorage.setItem("conversations", JSON.stringify(merged));
   return merged;
 }
 
 // Push notifications
-import PushNotification from 'react-native-push-notification';
+import PushNotification from "react-native-push-notification";
 
 PushNotification.configure({
   onNotification: (notification) => {
-    console.log('Nueva respuesta de WADI:', notification);
+    console.log("Nueva respuesta de WADI:", notification);
   },
 });
 
 // Offline-first con React Query
-const { data } = useQuery('messages', 
-  () => api.get('/api/messages'),
-  {
-    // Usar cache si offline
-    staleTime: Infinity,
-    cacheTime: Infinity,
-    refetchOnReconnect: true
-  }
-);
+const { data } = useQuery("messages", () => api.get("/api/messages"), {
+  // Usar cache si offline
+  staleTime: Infinity,
+  cacheTime: Infinity,
+  refetchOnReconnect: true,
+});
 ```
 
 ---
@@ -529,9 +536,9 @@ class LongTermMemory {
     // 1. Generar embedding
     const embedding = await openai.embeddings.create({
       model: "text-embedding-3-small",
-      input: content
+      input: content,
     });
-    
+
     // 2. Guardar en vector database (Pinecone/Weaviate)
     await vectorDB.upsert({
       id: generateId(),
@@ -539,26 +546,26 @@ class LongTermMemory {
       metadata: {
         content,
         timestamp: Date.now(),
-        ...metadata
-      }
+        ...metadata,
+      },
     });
   }
-  
+
   async recall(query: string, limit = 5) {
     // 1. Generar embedding del query
     const queryEmbedding = await openai.embeddings.create({
       model: "text-embedding-3-small",
-      input: query
+      input: query,
     });
-    
+
     // 2. Buscar similares
     const results = await vectorDB.query({
       vector: queryEmbedding.data[0].embedding,
       topK: limit,
-      includeMetadata: true
+      includeMetadata: true,
     });
-    
-    return results.matches.map(m => m.metadata.content);
+
+    return results.matches.map((m) => m.metadata.content);
   }
 }
 
@@ -566,26 +573,26 @@ class LongTermMemory {
 async function sendMessageWithMemory(message: string) {
   // Buscar recuerdos relevantes
   const memories = await longTermMemory.recall(message);
-  
+
   // Incluir en contexto
   const systemPrompt = `
   Eres WADI. Información relevante que recuerdas:
-  ${memories.join('\n')}
+  ${memories.join("\n")}
   
   Usa esta información si es relevante para la conversación.
   `;
-  
+
   const response = await generateChatCompletion([
-    { role: 'system', content: systemPrompt },
-    { role: 'user', content: message }
+    { role: "system", content: systemPrompt },
+    { role: "user", content: message },
   ]);
-  
+
   // Guardar nueva memoria
   await longTermMemory.addMemory(
     `Usuario dijo: ${message}. WADI respondió: ${response}`,
-    { timestamp: Date.now(), topic: extractTopic(message) }
+    { timestamp: Date.now(), topic: extractTopic(message) },
   );
-  
+
   return response;
 }
 ```
@@ -607,19 +614,21 @@ interface Workspace {
 }
 
 // Roles y permisos
-type Role = 'owner' | 'admin' | 'member' | 'guest';
+type Role = "owner" | "admin" | "member" | "guest";
 
 const permissions = {
-  owner: ['*'],
-  admin: ['manage_members', 'create_conversations', 'delete_conversations'],
-  member: ['create_conversations', 'send_messages'],
-  guest: ['send_messages']
+  owner: ["*"],
+  admin: ["manage_members", "create_conversations", "delete_conversations"],
+  member: ["create_conversations", "send_messages"],
+  guest: ["send_messages"],
 };
 
 function checkPermission(user: User, action: string) {
   const userRole = user.role;
-  return permissions[userRole].includes(action) || 
-         permissions[userRole].includes('*');
+  return (
+    permissions[userRole].includes(action) ||
+    permissions[userRole].includes("*")
+  );
 }
 ```
 
@@ -640,7 +649,7 @@ interface Analytics {
 
 async function getAnalytics(workspaceId: string): Promise<Analytics> {
   const messages = await db.messages.find({ workspaceId });
-  
+
   return {
     totalMessages: messages.length,
     activeUsers: new Set(messages.map(m => m.userId)).size,
@@ -657,10 +666,10 @@ function AnalyticsDashboard({ analytics }: { analytics: Analytics }) {
     <div className="dashboard">
       <MetricCard title="Mensajes" value={analytics.totalMessages} />
       <MetricCard title="Usuarios Activos" value={analytics.activeUsers} />
-      
+
       <Chart type="line" data={analytics.sentimentTrend} />
       <Chart type="bar" data={analytics.usageByHour} />
-      
+
       <TopicCloud topics={analytics.topTopics} />
     </div>
   );
@@ -687,14 +696,17 @@ interface BrandingConfig {
 
 // Aplicar branding
 function applyBranding(config: BrandingConfig) {
-  document.documentElement.style.setProperty('--primary-color', config.primaryColor);
+  document.documentElement.style.setProperty(
+    "--primary-color",
+    config.primaryColor,
+  );
   document.title = `${config.companyName} AI Assistant`;
-  
+
   // Actualizar manifest
   updateManifest({
     name: `${config.companyName} AI`,
     short_name: config.companyName,
-    theme_color: config.primaryColor
+    theme_color: config.primaryColor,
   });
 }
 
@@ -725,9 +737,9 @@ function applyBranding(config: BrandingConfig) {
                 High Impact
                     │
     Streaming    ⬢  │  ⬢ Voice Interface
-    Responses       │     
+    Responses       │
                     │
-    ────────────────┼────────────────► 
+    ────────────────┼────────────────►
     Low Effort      │     High Effort
                     │
     Themes       ⬢  │  ⬢ Enterprise
@@ -751,6 +763,7 @@ function applyBranding(config: BrandingConfig) {
 ## 🚀 Vision 2026
 
 **WADI será:**
+
 - La plataforma de IA conversacional más versátil
 - Open-source y self-hostable
 - Con plugins ecosystem vibrante

@@ -14,18 +14,21 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 1: Multi-Tenant Workspaces - **COMPLETO**
 
 ### Backend
+
 - ✅ Controller: `workspacesController.ts` (609 líneas)
 - ✅ Routes: `workspaces.ts` registrada en `/api/workspaces`
 - ✅ Schema SQL: `phase1-workspaces-schema.sql`
 - ✅ RLS Policies: Implementadas y verificadas
 
 ### Frontend
+
 - ✅ Store: `workspacesStore.ts` con Zustand
 - ✅ Page: `WorkspaceDetail.tsx` (346 líneas)
 - ✅ Component: `WorkspaceDropdown.tsx`
 - ✅ Route: `/workspaces/:id` registrada
 
 ### Funcionalidades
+
 - ✅ CRUD de workspaces
 - ✅ Gestión de miembros (invitar, actualizar rol, eliminar)
 - ✅ Control de acceso basado en roles (owner/admin/member)
@@ -36,17 +39,20 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 2: Billing & Credits - **COMPLETO**
 
 ### Backend
+
 - ✅ Controller: `billingController.ts` (279 líneas)
 - ✅ Routes: `billing.ts` registrada en `/api/billing`
 - ✅ Schema SQL: `phase2-billing-schema.sql`
 - ✅ Funciones PL/pgSQL: `use_credits()`, `add_credits()`, `renew_monthly_credits()`
 
 ### Frontend
+
 - ✅ Store: `billingStore.ts` con estados de carga y error
 - ✅ Page: `Billing.tsx` (346 líneas)
 - ✅ Route: `/billing` registrada
 
 ### Funcionalidades
+
 - ✅ Planes: Free (200), Pro (5000), Business (20000) créditos
 - ✅ Consumo atómico de créditos con transacciones
 - ✅ Historial de uso de créditos
@@ -58,17 +64,20 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 3: Prompt Presets - **COMPLETO**
 
 ### Backend
+
 - ✅ Controller: `presetsController.ts` (410 líneas)
 - ✅ Routes: `presets.ts` registrada en `/api/presets`
 - ✅ Schema SQL: `phase3-presets-schema.sql`
 - ✅ Endpoint de ejecución: `POST /api/presets/:id/execute`
 
 ### Frontend
+
 - ✅ Store: `presetsStore.ts`
 - ✅ Page: `Presets.tsx` (464 líneas) - **CORREGIDO**
 - ✅ Route: `/presets` registrada
 
 ### Funcionalidades
+
 - ✅ CRUD de presets
 - ✅ Organización por carpetas
 - ✅ Presets públicos y privados
@@ -81,16 +90,19 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 4: Real-Time Runs - **COMPLETO**
 
 ### Backend
+
 - ✅ Controller: `runsController.ts` (299 líneas)
 - ✅ Service: `websocket.ts` (256 líneas)
 - ✅ WebSocket path: `/ws`
 - ✅ Streaming: `streamRunToClient()` con generación incremental
 
 ### Frontend
+
 - ✅ Integración en `ProjectDetail.tsx`
 - ✅ WebSocket client ready
 
 ### Funcionalidades
+
 - ✅ Creación de runs con consumo de créditos
 - ✅ Validación de créditos antes de ejecutar
 - ✅ Reembolso automático si falla la IA
@@ -103,11 +115,13 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 5: Versioning - **READY**
 
 ### Backend
+
 - ✅ Schema SQL: `phase5-versioning-schema.sql`
 - ✅ Funciones: `create_version_snapshot()`, `restore_from_version()`
 - ⚠️ Controller: Por implementar cuando se necesite
 
 ### Estado
+
 - ✅ Base de datos preparada
 - 🔄 Frontend pendiente (no es Beta 1)
 
@@ -116,11 +130,13 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 6: File Handling - **READY**
 
 ### Backend
+
 - ✅ Controller: `filesController.ts` (implementado)
 - ✅ Routes: `files.ts` registrada en `/api/files`
 - ✅ Schema SQL: `phase6-files-schema.sql`
 
 ### Estado
+
 - ✅ Backend preparado para upload/parsing
 - 🔄 Frontend pendiente (no es Beta 1)
 
@@ -129,10 +145,12 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 7: Electron Desktop - **READY**
 
 ### Archivos
+
 - ✅ `main.js`, `preload.js`, `index.html` en raíz
 - ✅ Scripts de inicio: `WadiStart.bat`
 
 ### Estado
+
 - ✅ Estructura preparada
 - 🔄 Configuración final pendiente
 
@@ -141,9 +159,11 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## ✅ FASE 8: Admin Panel - **READY**
 
 ### Backend
+
 - ⚠️ Controller: Por implementar según necesidad
 
 ### Estado
+
 - 🔄 Planificado para post-Beta 1
 
 ---
@@ -151,16 +171,18 @@ Se completó con éxito la auditoría y consolidación de las 8 fases del proyec
 ## 🔧 Correcciones Aplicadas
 
 ### Frontend
+
 1. ✅ **Presets.tsx**: Eliminadas líneas duplicadas de `onChange`
-2. ✅ **WorkspaceDetail.tsx**: 
+2. ✅ **WorkspaceDetail.tsx**:
    - Corregidos onChange de Input (value directa en vez de event)
    - Agregado `export default WorkspaceDetail`
-3. ✅ **router.tsx**: 
+3. ✅ **router.tsx**:
    - Agregadas rutas: `/workspaces/:id`, `/billing`, `/presets`
    - Imports corregidos para Billing y Presets
 
 ### Backend
-4. ✅ **index.ts**: 
+
+4. ✅ **index.ts**:
    - Agregada ruta `/api/presets` con `presetsRouter`
    - Agregada ruta `/api/files` con `filesRouter`
 
@@ -222,10 +244,12 @@ WS   /ws/runs/:runId/stream           → WebSocket para streaming
 ## 🗄️ Estado de Migraciones SQL
 
 ### Ejecutadas
+
 - ✅ `001_initial_schema.sql` - Schema base
 - ✅ `002_beta_invitations_and_roles.sql` - Invitaciones
 
 ### Pendientes de Ejecutar en Supabase
+
 1. ⏳ `phase1-workspaces-schema.sql`
 2. ⏳ `phase2-billing-schema.sql`
 3. ⏳ `phase3-presets-schema.sql`
@@ -237,6 +261,7 @@ WS   /ws/runs/:runId/stream           → WebSocket para streaming
 ## 🚀 Próximos Pasos
 
 ### 1. Despliegue de Base de Datos
+
 ```bash
 # Ejecutar en Supabase SQL Editor en orden:
 1. phase1-workspaces-schema.sql
@@ -245,6 +270,7 @@ WS   /ws/runs/:runId/stream           → WebSocket para streaming
 ```
 
 ### 2. Testing Backend
+
 ```bash
 cd apps/api
 pnpm dev
@@ -255,6 +281,7 @@ curl -H "Authorization: Bearer TOKEN" http://localhost:4000/api/workspaces
 ```
 
 ### 3. Testing Frontend
+
 ```bash
 cd apps/frontend
 pnpm dev
@@ -266,6 +293,7 @@ http://localhost:5173/presets
 ```
 
 ### 4. Verificar Integración
+
 - [ ] Crear cuenta → verificar que se cree `billing_info`
 - [ ] Crear workspace → verificar membresía
 - [ ] Crear preset → ejecutar en proyecto
@@ -277,18 +305,21 @@ http://localhost:5173/presets
 ## 📊 Métricas de Implementación
 
 ### Backend
+
 - **Controladores**: 13 archivos
 - **Rutas**: 12 archivos
 - **Servicios**: 4 (openai, websocket, vector-memory, ai-tools)
 - **Líneas de código**: ~4,500
 
 ### Frontend
+
 - **Stores**: 5 (auth, projects, workspaces, billing, presets)
 - **Pages**: 7 (Login, Register, Projects, ProjectDetail, WorkspaceDetail, Billing, Presets)
 - **Components**: 15+
 - **Líneas de código**: ~3,000
 
 ### Schemas SQL
+
 - **Migraciones**: 2
 - **Schemas de fase**: 5
 - **Tablas totales**: ~20
@@ -299,6 +330,7 @@ http://localhost:5173/presets
 ## 🎯 Estado Beta 1
 
 ### ✅ Scope Original (BETA_SCOPE.md)
+
 1. ✅ Auth (Supabase)
 2. ✅ Proyectos (CRUD)
 3. ✅ Runs con IA (OpenAI)
@@ -306,6 +338,7 @@ http://localhost:5173/presets
 5. ✅ Scripts de desarrollo
 
 ### ✅ Extras Implementados (Más allá del scope)
+
 1. ✅ Multi-tenant workspaces (Fase 1)
 2. ✅ Billing con créditos (Fase 2)
 3. ✅ Prompt presets (Fase 3)
@@ -317,6 +350,7 @@ http://localhost:5173/presets
 ## 🔐 Variables de Entorno Requeridas
 
 ### Backend (.env)
+
 ```env
 PORT=4000
 NODE_ENV=development
@@ -332,6 +366,7 @@ OPENAI_API_KEY=sk-xxx
 ```
 
 ### Frontend (.env)
+
 ```env
 VITE_API_URL=http://localhost:4000
 VITE_SUPABASE_URL=https://xxx.supabase.co
@@ -343,6 +378,7 @@ VITE_SUPABASE_ANON_KEY=xxx
 ## ✅ Checklist Final
 
 ### Código
+
 - [x] Todos los controladores implementados
 - [x] Todas las rutas registradas
 - [x] Stores frontend completos
@@ -351,12 +387,14 @@ VITE_SUPABASE_ANON_KEY=xxx
 - [x] Exports/imports corregidos
 
 ### Database
+
 - [ ] Ejecutar phase1-workspaces-schema.sql
 - [ ] Ejecutar phase2-billing-schema.sql
 - [ ] Ejecutar phase3-presets-schema.sql
 - [ ] Verificar RLS policies activas
 
 ### Testing
+
 - [ ] Compilación TypeScript sin errores
 - [ ] Backend inicia correctamente
 - [ ] Frontend inicia correctamente
@@ -374,6 +412,7 @@ VITE_SUPABASE_ANON_KEY=xxx
 **WADI está 100% implementado según la especificación de las 8 fases.**
 
 Todos los componentes backend⇄frontend están integrados y listos. Lo que falta es:
+
 1. Ejecutar las migraciones SQL en Supabase
 2. Configurar variables de entorno
 3. Testing end-to-end

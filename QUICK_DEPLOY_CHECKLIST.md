@@ -1,6 +1,7 @@
 # ✅ Quick Deploy Checklist
 
 ## Pre-requisitos
+
 - [ ] Cuenta en [Vercel](https://vercel.com) (gratis)
 - [ ] Cuenta en [Render](https://render.com) (gratis)
 - [ ] Repositorio en GitHub con código de WADI
@@ -12,12 +13,14 @@
 ## 🎯 Deploy en 5 Pasos
 
 ### 1️⃣ Preparar Supabase
+
 - [ ] Obtener `SUPABASE_URL` desde Supabase Dashboard → Settings → API
 - [ ] Obtener `SUPABASE_ANON_KEY` (public key)
 - [ ] Obtener `SUPABASE_SERVICE_KEY` (secret key) ⚠️ Solo para backend
 - [ ] Ejecutar migraciones en SQL Editor (carpeta `apps/api/migrations/`)
 
 ### 2️⃣ Deploy Backend (Render)
+
 1. [ ] Ir a [render.com/dashboard](https://dashboard.render.com)
 2. [ ] Click "New +" → "Web Service"
 3. [ ] Conectar repositorio GitHub
@@ -36,6 +39,7 @@
 9. [ ] Verificar en: `https://tu-api.onrender.com/health`
 
 ### 3️⃣ Deploy Frontend (Vercel)
+
 1. [ ] Ir a [vercel.com/dashboard](https://vercel.com/dashboard)
 2. [ ] Click "Add New..." → "Project"
 3. [ ] Importar repositorio GitHub
@@ -51,6 +55,7 @@
 8. [ ] **Copiar la URL** (ej: `https://wadi.vercel.app`)
 
 ### 4️⃣ Actualizar CORS en Backend
+
 1. [ ] Volver a Render dashboard
 2. [ ] Ir a tu servicio → Environment
 3. [ ] Actualizar `FRONTEND_URL`:
@@ -60,6 +65,7 @@
 4. [ ] Guardar cambios → Render hará redeploy automático
 
 ### 5️⃣ Verificación Final
+
 - [ ] Frontend carga correctamente en tu URL de Vercel
 - [ ] Login funciona
 - [ ] Backend responde en `/health`
@@ -71,6 +77,7 @@
 ## 🔄 Auto-Deploy Configurado
 
 Cada vez que hagas `git push` a la rama `main`:
+
 - ✅ Vercel desplegará automáticamente el frontend
 - ✅ Render desplegará automáticamente el backend
 
@@ -79,15 +86,19 @@ Cada vez que hagas `git push` a la rama `main`:
 ## 🚨 Solución de Problemas Comunes
 
 ### "Build failed" en Vercel
+
 **Solución:** Revisá los logs en Vercel dashboard. Usualmente es por variables de entorno faltantes.
 
 ### "Service Unavailable" en Render
+
 **Solución:** El deploy puede tardar 3-5 minutos. Esperá un poco y refrescá.
 
 ### CORS Error
+
 **Solución:** Verificá que `FRONTEND_URL` en Render sea exactamente la URL de Vercel (sin `/` al final).
 
 ### "Database connection failed"
+
 **Solución:** Verificá las credenciales de Supabase. Asegurate que las migraciones se ejecutaron.
 
 ---

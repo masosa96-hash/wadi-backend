@@ -20,6 +20,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Project Structure](#project-structure)
 3. [Core Components](#core-components)
@@ -31,6 +32,7 @@
 9. [Conclusion](#conclusion)
 
 ## Introduction
+
 This document provides comprehensive architectural documentation for the WADI frontend application, a React 18 application built with Vite and TypeScript. The frontend serves as the user interface for an AI assistant platform, featuring authentication, chat functionality, workspace management, and various productivity tools. The architecture emphasizes modularity, state management with Zustand, and seamless integration with backend services through REST and WebSocket APIs.
 
 ## Project Structure
@@ -58,9 +60,11 @@ H --> Q[theme and styling]
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src](file://apps/frontend/src)
 
 **Section sources**
+
 - [apps/frontend/package.json](file://apps/frontend/package.json)
 
 ## Core Components
@@ -68,6 +72,7 @@ H --> Q[theme and styling]
 The frontend architecture is built around several core components that handle critical application functionality. The component organization follows React best practices with a clear separation between presentational and container components. The application uses React 19 with Vite for fast development and optimized production builds, leveraging modern React features like concurrent rendering and server components.
 
 **Section sources**
+
 - [apps/frontend/src/App.tsx](file://apps/frontend/src/App.tsx)
 - [apps/frontend/src/main.tsx](file://apps/frontend/src/main.tsx)
 - [apps/frontend/package.json](file://apps/frontend/package.json)
@@ -112,6 +117,7 @@ A --> U
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/App.tsx](file://apps/frontend/src/App.tsx)
 - [apps/frontend/src/main.tsx](file://apps/frontend/src/main.tsx)
 - [apps/frontend/src/router.tsx](file://apps/frontend/src/router.tsx)
@@ -124,6 +130,7 @@ A --> U
 The application implements a global state management system using Zustand, providing a lightweight and efficient solution for managing application state across components. The store architecture is modular, with separate stores for different domains of functionality.
 
 #### Auth Store Analysis
+
 The authStore manages user authentication state, including session management, user data, and guest mode functionality. It uses Zustand's persist middleware to maintain state across page reloads.
 
 ```mermaid
@@ -150,9 +157,11 @@ useAuthStore --> "1" supabase : "uses"
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/store/authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
 #### Chat Store Analysis
+
 The chatStore manages chat-related state, including conversations, messages, and WebSocket connections. It implements sophisticated logic for handling both authenticated user sessions and guest mode interactions.
 
 ```mermaid
@@ -187,9 +196,11 @@ useChatStore --> "1" authStore : "depends on"
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/store/chatStore.ts](file://apps/frontend/src/store/chatStore.ts)
 
 #### Workspace Store Analysis
+
 The workspaceStore manages workspace-related state, including workspace data, members, and permissions. It includes mock data for development purposes and is designed to be easily extended with real API integration.
 
 ```mermaid
@@ -215,6 +226,7 @@ WorkspaceState <|-- useWorkspaceStore
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/store/workspaceStore.ts](file://apps/frontend/src/store/workspaceStore.ts)
 
 ### Routing with React Router
@@ -222,6 +234,7 @@ WorkspaceState <|-- useWorkspaceStore
 The application implements client-side routing using React Router v6, with a comprehensive routing configuration that handles authentication guards, redirects, and nested layouts.
 
 #### Routing Flow Analysis
+
 The routing system implements role-based access control through the RootGuard component, which protects routes based on authentication status and user roles.
 
 ```mermaid
@@ -243,9 +256,11 @@ S[/*] --> T[NotFound Page]
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/router.tsx](file://apps/frontend/src/router.tsx)
 
 **Section sources**
+
 - [apps/frontend/src/router.tsx](file://apps/frontend/src/router.tsx)
 - [apps/frontend/src/components/RootGuard.tsx](file://apps/frontend/src/components/RootGuard.tsx)
 
@@ -254,6 +269,7 @@ S[/*] --> T[NotFound Page]
 The application follows a component-based architecture with a clear hierarchy and reusable UI elements. The layout system is built around the RootLayout component, which provides a consistent structure across all pages.
 
 #### Root Layout Analysis
+
 The RootLayout component serves as the base layout for the application, initializing authentication and providing global UI elements like the toast container and command palette.
 
 ```mermaid
@@ -277,9 +293,11 @@ RL->>O : Render Outlet (page content)
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/layouts/RootLayout.tsx](file://apps/frontend/src/layouts/RootLayout.tsx)
 
 #### Sidebar Component Analysis
+
 The Sidebar component provides navigation and user information, with a fixed position and responsive design.
 
 ```mermaid
@@ -299,9 +317,11 @@ SettingsLink --> |Click| NoAction["No action (disabled)"]
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/components/Sidebar.tsx](file://apps/frontend/src/components/Sidebar.tsx)
 
 **Section sources**
+
 - [apps/frontend/src/components/Sidebar.tsx](file://apps/frontend/src/components/Sidebar.tsx)
 
 ## Dependency Analysis
@@ -333,10 +353,12 @@ J --> P[React Router]
 ```
 
 **Diagram sources**
+
 - [apps/frontend/package.json](file://apps/frontend/package.json)
 - [apps/frontend/vite.config.ts](file://apps/frontend/vite.config.ts)
 
 **Section sources**
+
 - [apps/frontend/package.json](file://apps/frontend/package.json)
 - [apps/frontend/vite.config.ts](file://apps/frontend/vite.config.ts)
 
@@ -351,12 +373,14 @@ The API client implements retry logic with exponential backoff, request timeout 
 The application includes several mechanisms for error handling and troubleshooting. The App component implements a health check on boot to verify API connectivity, displaying a user-friendly error message if the backend is unavailable. The API client logs requests and responses in development mode to aid debugging.
 
 Common issues and their solutions:
+
 - **API connectivity issues**: Verify the VITE_API_URL environment variable is correctly set
 - **Authentication failures**: Check Supabase configuration and ensure VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY are properly configured
 - **WebSocket connection problems**: Ensure the WebSocket endpoint is accessible and CORS is properly configured
 - **Internationalization issues**: Verify locale files exist in the correct location and are properly imported in i18n.ts
 
 **Section sources**
+
 - [apps/frontend/src/App.tsx](file://apps/frontend/src/App.tsx)
 - [apps/frontend/src/config/api.ts](file://apps/frontend/src/config/api.ts)
 - [apps/frontend/src/config/supabase.ts](file://apps/frontend/src/config/supabase.ts)

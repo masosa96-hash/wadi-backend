@@ -3,6 +3,7 @@
 ## 🎨 P3: Premium Web3 Aesthetics
 
 ### Glassmorphism System
+
 Use estas clases CSS en tus componentes:
 
 ```jsx
@@ -17,6 +18,7 @@ Use estas clases CSS en tus componentes:
 ```
 
 ### WADI Orb Component
+
 ```jsx
 import WadiOrb from "../components/WadiOrb";
 
@@ -31,6 +33,7 @@ import WadiOrb from "../components/WadiOrb";
 ```
 
 ### CSS Tokens Nuevos
+
 ```css
 /* Glassmorphism */
 var(--glass-surface)        /* rgba(255,255,255,0.7) */
@@ -49,21 +52,23 @@ var(--gradient-border)      /* Para bordes glassmorphic */
 ### 1. Favoritos
 
 #### Store
+
 ```jsx
 import { useFavoritesStore } from "../store/favoritesStore";
 
-const { 
-  favorites,          // Array de favoritos
-  loading,            // Estado de carga
-  error,              // Mensaje de error
-  loadFavorites,      // Cargar favoritos
-  addFavorite,        // Agregar favorito
-  removeFavorite,     // Eliminar favorito
-  isFavorited,        // Verificar si está favorito
+const {
+  favorites, // Array de favoritos
+  loading, // Estado de carga
+  error, // Mensaje de error
+  loadFavorites, // Cargar favoritos
+  addFavorite, // Agregar favorito
+  removeFavorite, // Eliminar favorito
+  isFavorited, // Verificar si está favorito
 } = useFavoritesStore();
 ```
 
 #### Uso básico
+
 ```jsx
 // Cargar favoritos
 useEffect(() => {
@@ -81,6 +86,7 @@ const isFav = isFavorited(messageId);
 ```
 
 #### API Endpoints
+
 ```
 GET    /api/favorites              - Listar favoritos del usuario
 POST   /api/favorites              - Agregar favorito
@@ -91,31 +97,34 @@ GET    /api/favorites/check/:id    - Verificar estado
 ### 2. Plantillas
 
 #### Store
+
 ```jsx
 import { useTemplatesStore, Template } from "../store/templatesStore";
 
-const { 
-  templates,          // Array de plantillas
-  loading,            // Estado de carga
-  error,              // Mensaje de error
-  loadTemplates,      // Cargar plantillas
-  getTemplateById,    // Obtener por ID
+const {
+  templates, // Array de plantillas
+  loading, // Estado de carga
+  error, // Mensaje de error
+  loadTemplates, // Cargar plantillas
+  getTemplateById, // Obtener por ID
 } = useTemplatesStore();
 ```
 
 #### Template Interface
+
 ```typescript
 interface Template {
-  id: string;                                    // 'ideas-rapidas'
-  name: string;                                  // 'Ideas rápidas'
-  description: string;                           // 'Generá ideas...'
-  prompt: string;                                // 'Necesito ideas...'
-  icon: string;                                  // '💡'
-  category: 'general' | 'social' | 'productivity';
+  id: string; // 'ideas-rapidas'
+  name: string; // 'Ideas rápidas'
+  description: string; // 'Generá ideas...'
+  prompt: string; // 'Necesito ideas...'
+  icon: string; // '💡'
+  category: "general" | "social" | "productivity";
 }
 ```
 
 #### Plantillas Disponibles
+
 1. 💡 **Ideas rápidas** (general)
 2. 📱 **Texto para Instagram** (social)
 3. 📝 **Resumen** (productivity)
@@ -124,16 +133,18 @@ interface Template {
 6. ✅ **Checklist** (productivity)
 
 #### Navegar con Template
+
 ```jsx
 // Desde Templates page
-navigate("/chat", { 
-  state: { templatePrompt: template.prompt } 
+navigate("/chat", {
+  state: { templatePrompt: template.prompt },
 });
 
 // El Chat recibe el prompt y lo pone en el input
 ```
 
 #### API Endpoints
+
 ```
 GET /api/templates         - Listar todas
 GET /api/templates?category=social  - Filtrar por categoría
@@ -143,13 +154,14 @@ GET /api/templates/:id     - Obtener específica
 ### 3. Modo Voz
 
 #### En Chat Component
+
 ```jsx
 const [isListening, setIsListening] = useState(false);
 const [voiceSupported, setVoiceSupported] = useState(false);
 
 // Detectar soporte
 useEffect(() => {
-  const SpeechRecognition = 
+  const SpeechRecognition =
     window.SpeechRecognition || window.webkitSpeechRecognition;
   setVoiceSupported(!!SpeechRecognition);
 }, []);
@@ -157,21 +169,23 @@ useEffect(() => {
 // Usar voz
 const handleVoiceInput = () => {
   const recognition = new SpeechRecognition();
-  recognition.lang = 'es-AR';
+  recognition.lang = "es-AR";
   recognition.onresult = (event) => {
     const transcript = event.results[0][0].transcript;
-    setInputMessage(prev => prev + ' ' + transcript);
+    setInputMessage((prev) => prev + " " + transcript);
   };
   recognition.start();
 };
 ```
 
 #### UI
+
 - 🎤 Botón micrófono cuando `voiceSupported === true`
 - ⏸️ Icono cuando `isListening === true`
 - Background rojo cuando escuchando
 
 #### Soporte
+
 - ✅ Chrome/Edge (Web Speech API)
 - ✅ Android Chrome
 - ❌ Firefox (no soportado)
@@ -181,17 +195,18 @@ const handleVoiceInput = () => {
 
 ## 🗂️ Nuevas Rutas
 
-| Ruta | Componente | Descripción |
-|------|-----------|-------------|
-| `/favorites` | `Favorites.tsx` | Lista de mensajes favoritos |
+| Ruta         | Componente      | Descripción                    |
+| ------------ | --------------- | ------------------------------ |
+| `/favorites` | `Favorites.tsx` | Lista de mensajes favoritos    |
 | `/templates` | `Templates.tsx` | Plantillas rápidas categorized |
 
 ### Acceso desde Home
+
 ```jsx
 // Quick action chips
 const quickActions = [
   { label: "Historial", path: "/projects" },
-  { label: "Favoritos", path: "/favorites" },     // NUEVO
+  { label: "Favoritos", path: "/favorites" }, // NUEVO
   { label: "Plantillas rápidas", path: "/templates" }, // NUEVO
 ];
 ```
@@ -201,10 +216,11 @@ const quickActions = [
 ## 🎯 Navigation Patterns
 
 ### Template → Chat
+
 ```jsx
 // From Templates page
-navigate("/chat", { 
-  state: { templatePrompt: "Ayudame a..." } 
+navigate("/chat", {
+  state: { templatePrompt: "Ayudame a..." },
 });
 
 // Chat receives it
@@ -215,10 +231,11 @@ useEffect(() => {
 ```
 
 ### Favorite → Chat
+
 ```jsx
 // From Favorites page
-navigate("/chat", { 
-  state: { conversationId: favorite.conversation_id } 
+navigate("/chat", {
+  state: { conversationId: favorite.conversation_id },
 });
 
 // Chat loads that conversation
@@ -233,6 +250,7 @@ useEffect(() => {
 ## 🗄️ Database Schema
 
 ### Favorites Table
+
 ```sql
 CREATE TABLE favorites (
   id UUID PRIMARY KEY,
@@ -245,12 +263,14 @@ CREATE TABLE favorites (
 ```
 
 **Indices**:
+
 - `idx_favorites_user_id`
 - `idx_favorites_message_id`
 - `idx_favorites_conversation_id`
 - `idx_favorites_created_at`
 
 **RLS Policies**: Enabled
+
 - Users can view/create/delete own favorites only
 
 ---
@@ -258,17 +278,20 @@ CREATE TABLE favorites (
 ## 📝 Empty States (Rioplatense)
 
 ### Favoritos
+
 ```
-"Todavía no guardaste nada. Cuando algo te sirva, 
+"Todavía no guardaste nada. Cuando algo te sirva,
 marcá ⭐ en el chat y lo vas a encontrar acá"
 ```
 
 ### Plantillas (si vacío)
+
 ```
 "No hay plantillas disponibles en este momento"
 ```
 
 ### Notificaciones
+
 ```
 "Pronto vas a ver tus recordatorios y alertas acá."
 ```
@@ -278,20 +301,27 @@ marcá ⭐ en el chat y lo vas a encontrar acá"
 ## 🎨 Design Tokens Quick Reference
 
 ### Colors
+
 ```css
---color-accent-primary: #255FF5   /* Blue */
---color-accent-secondary: #7B8CFF /* Blue-lilac */
---color-accent-y2k: #C5B3FF       /* Lilac */
+--color-accent-primary: #255ff5 /* Blue */ --color-accent-secondary: #7b8cff
+  /* Blue-lilac */ --color-accent-y2k: #c5b3ff /* Lilac */;
 ```
 
 ### Gradients
+
 ```css
---gradient-primary: linear-gradient(135deg, #255FF5 0%, #7B8CFF 50%, #C5B3FF 100%);
---gradient-hero: linear-gradient(135deg, #255FF5 0%, #7B8CFF 100%);
---gradient-button: linear-gradient(135deg, #255FF5 0%, #4A7BF7 100%);
+--gradient-primary: linear-gradient(
+  135deg,
+  #255ff5 0%,
+  #7b8cff 50%,
+  #c5b3ff 100%
+);
+--gradient-hero: linear-gradient(135deg, #255ff5 0%, #7b8cff 100%);
+--gradient-button: linear-gradient(135deg, #255ff5 0%, #4a7bf7 100%);
 ```
 
 ### Glow Effects
+
 ```css
 .glow-primary   /* Blue glow */
 .glow-secondary /* Blue-lilac glow */
@@ -304,6 +334,7 @@ marcá ⭐ en el chat y lo vas a encontrar acá"
 ## 🔧 Development Tips
 
 ### Testing Favorites
+
 ```bash
 # 1. Crear favorito desde Postman/curl
 curl -X POST http://localhost:4000/api/favorites \
@@ -316,6 +347,7 @@ curl -X POST http://localhost:4000/api/favorites \
 ```
 
 ### Testing Templates
+
 ```bash
 # 1. Obtener templates
 curl http://localhost:4000/api/templates \
@@ -326,6 +358,7 @@ curl http://localhost:4000/api/templates \
 ```
 
 ### Testing Voice
+
 1. Abrir Chrome/Edge
 2. Ir a `/chat`
 3. Click botón 🎤

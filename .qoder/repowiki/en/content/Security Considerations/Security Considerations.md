@@ -17,6 +17,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Rate Limiting](#rate-limiting)
 3. [Input Validation](#input-validation)
@@ -27,6 +28,7 @@
 8. [Monitoring and Best Practices](#monitoring-and-best-practices)
 
 ## Introduction
+
 WADI implements a comprehensive security framework to protect against common vulnerabilities such as brute force attacks, injection attempts, and data leakage. The system employs multiple layers of protection including rate limiting, input validation, authentication middleware, and structured error handling. Security is enforced at both the application and database levels, with additional protections for environment variables and sensitive configuration data. This document details the implementation of these security measures, providing both conceptual overviews for beginners and technical details for experienced developers.
 
 ## Rate Limiting
@@ -50,9 +52,11 @@ H --> I["Response"]
 ```
 
 **Diagram sources**
+
 - [rateLimit.ts](file://apps/api/src/middleware/rateLimit.ts#L4-L38)
 
 The rate limiting configuration includes:
+
 - General API limit: 100 requests per minute
 - Run creation limit: 5 requests per 10 seconds
 - Session creation limit: 5 requests per 10 seconds
@@ -62,6 +66,7 @@ The rate limiting configuration includes:
 Guest users are subject to stricter rate limits to prevent abuse of the free tier while authenticated users benefit from higher limits appropriate to their subscription level.
 
 **Section sources**
+
 - [rateLimit.ts](file://apps/api/src/middleware/rateLimit.ts#L1-L39)
 - [chat.ts](file://apps/api/src/routes/chat.ts#L19)
 
@@ -85,16 +90,19 @@ I --> L["Ensures Data Integrity"]
 ```
 
 **Diagram sources**
+
 - [validation.ts](file://apps/frontend/src/utils/validation.ts#L47-L74)
 - [chatController.ts](file://apps/api/src/controllers/chatController.ts#L35-L38)
 
 Client-side validation includes:
+
 - Email validation using regex pattern matching
 - Password validation requiring minimum 6 characters
 - Input sanitization that removes HTML tags and limits length to 1000 characters
 - HTML content sanitization using DOM textContent to prevent XSS
 
 Server-side validation in the chat controller verifies:
+
 - Message presence and non-empty content
 - Proper data types for all input parameters
 - Authorization before processing any request
@@ -103,6 +111,7 @@ Server-side validation in the chat controller verifies:
 The system uses a layered approach where client-side validation improves user experience with immediate feedback, while server-side validation provides the definitive security check that cannot be bypassed.
 
 **Section sources**
+
 - [validation.ts](file://apps/frontend/src/utils/validation.ts#L47-L74)
 - [chatController.ts](file://apps/api/src/controllers/chatController.ts#L35-L38)
 
@@ -134,10 +143,12 @@ end
 ```
 
 **Diagram sources**
+
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L18-L82)
 - [chat.ts](file://apps/api/src/routes/chat.ts#L15)
 
 The authentication flow:
+
 1. Checks for guest mode configuration and guest ID header
 2. For guest access, validates the x-guest-id header and attaches guest_id to the request
 3. For standard authentication, extracts the Bearer token from the Authorization header
@@ -148,6 +159,7 @@ The authentication flow:
 The system distinguishes between different authentication error types, returning specific error codes like "AUTH_EXPIRED" for expired tokens and "AUTH_INVALID" for invalid tokens, enabling appropriate client-side handling.
 
 **Section sources**
+
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L18-L82)
 - [chat.ts](file://apps/api/src/routes/chat.ts#L15)
 
@@ -174,9 +186,11 @@ K --> L["Client Receives Consistent Error Format"]
 ```
 
 **Diagram sources**
+
 - [errorHandler.ts](file://apps/api/src/middleware/errorHandler.ts#L78-L201)
 
 The error handling system features:
+
 - Custom ApiError class with standardized properties (statusCode, code, details, retryable)
 - Centralized errorHandler middleware that catches and processes all errors
 - Specific error creators for common scenarios (notFound, unauthorized, forbidden, etc.)
@@ -186,6 +200,7 @@ The error handling system features:
 Error codes follow a consistent naming convention (e.g., "AUTH_MISSING", "PROJECT_NOT_FOUND") and are documented in the ErrorCodes constant. The system logs full error details including stack traces for debugging while returning sanitized responses to clients to prevent information leakage.
 
 **Section sources**
+
 - [errorHandler.ts](file://apps/api/src/middleware/errorHandler.ts#L6-L201)
 
 ## Security Headers and Environment Protection
@@ -206,10 +221,12 @@ F --> J["Protects Against Secret Leakage"]
 ```
 
 **Diagram sources**
+
 - [env.ts](file://apps/api/src/config/env.ts#L1-L34)
 - [env-validator.ts](file://apps/api/src/config/env-validator.ts#L47-L180)
 
 Key security features:
+
 - Environment variables loaded from the monorepo root .env file using resolved paths
 - Comprehensive validation of required variables (SUPABASE_URL, SUPABASE_ANON_KEY, SUPABASE_SERVICE_KEY, GROQ_API_KEY)
 - URL format validation requiring HTTPS for production endpoints
@@ -220,6 +237,7 @@ Key security features:
 The env-validator performs strict validation, exiting the application if required variables are missing or invalid, which prevents running with insecure or incomplete configurations. Sensitive values like API keys are masked in logs to prevent accidental exposure.
 
 **Section sources**
+
 - [env.ts](file://apps/api/src/config/env.ts#L1-L34)
 - [env-validator.ts](file://apps/api/src/config/env-validator.ts#L47-L180)
 
@@ -243,10 +261,12 @@ class CONVERSATION "Ownership\n- User-specific\n- Verified in controllers"
 ```
 
 **Diagram sources**
+
 - [security_hardening.sql](file://security_hardening.sql#L1-L91)
 - [chatController.ts](file://apps/api/src/controllers/chatController.ts#L63-L74)
 
 Database security measures include:
+
 - Row Level Security enabled on all sensitive tables (folders, tags, projects, user_usage, etc.)
 - Workspace membership policies that allow members to view other members and owners to manage membership
 - Project access policies requiring workspace membership for viewing or modifying projects
@@ -257,6 +277,7 @@ Database security measures include:
 The RLS policies ensure that even if an attacker gains partial access to the database, they cannot access data outside their authorized scope. Application code reinforces these policies by verifying ownership in controllers before processing requests.
 
 **Section sources**
+
 - [security_hardening.sql](file://security_hardening.sql#L1-L91)
 - [chatController.ts](file://apps/api/src/controllers/chatController.ts#L63-L74)
 
@@ -265,6 +286,7 @@ The RLS policies ensure that even if an attacker gains partial access to the dat
 WADI incorporates usage tracking and monitoring to detect potential abuse and ensure system integrity while following security best practices.
 
 The system implements:
+
 - Usage tracking for key operations (messages sent, files uploaded, workspaces created)
 - Message limit checking that integrates with the billing system
 - File size validation based on user subscription level
@@ -274,6 +296,7 @@ The system implements:
 Usage tracking functions record events like message sending, file uploads, and workspace creation, which are used to enforce subscription limits and detect abnormal patterns. The limit-check middleware verifies that users remain within their plan limits before allowing operations to proceed.
 
 Security best practices followed by WADI:
+
 - Principle of least privilege in database access
 - Input validation on all external inputs
 - Proper error handling without information leakage
@@ -285,6 +308,7 @@ Security best practices followed by WADI:
 These measures work together to create a secure environment that protects user data, prevents abuse, and maintains system availability.
 
 **Section sources**
+
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L7-L172)
 - [usage-tracking.ts](file://apps/api/src/middleware/usage-tracking.ts#L6-L108)
 - [userController.ts](file://apps/api/src/controllers/userController.ts#L4-L67)

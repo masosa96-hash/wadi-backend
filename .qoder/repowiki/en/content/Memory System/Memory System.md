@@ -13,6 +13,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [System Architecture](#system-architecture)
 3. [Core Components](#core-components)
@@ -71,6 +72,7 @@ DB --> TM
 ```
 
 **Diagram sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L1-L185)
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L1-L134)
 - [vector-memory.ts](file://apps/api/src/services/vector-memory.ts#L1-L359)
@@ -123,10 +125,12 @@ MemoryStore --> MemoryController : communicates
 ```
 
 **Diagram sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L8-L185)
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L4-L134)
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L1-L185)
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L1-L134)
 
@@ -155,11 +159,13 @@ Chat-->>User : Send Response
 ```
 
 **Diagram sources**
+
 - [chatController.ts](file://apps/api/src/controllers/chatController.ts#L20-L215)
 - [kivo.ts](file://apps/api/src/services/brain/kivo.ts#L7-L41)
 - [wadi.ts](file://apps/api/src/services/brain/wadi.ts#L7-L43)
 
 **Section sources**
+
 - [chatController.ts](file://apps/api/src/controllers/chatController.ts#L1-L457)
 - [kivo.ts](file://apps/api/src/services/brain/kivo.ts#L1-L41)
 - [wadi.ts](file://apps/api/src/services/brain/wadi.ts#L1-L43)
@@ -168,14 +174,14 @@ Chat-->>User : Send Response
 
 WADI's memory system organizes information into six distinct types, each serving specific purposes in conversation personalization:
 
-| Memory Type | Purpose | Examples | Confidence Threshold |
-|-------------|---------|----------|---------------------|
-| **Preference** | User preferences and choices | Preferred tone, language, response length | 0.5+ |
-| **Fact** | Important user information | Names, expertise areas, interests | 0.7+ |
-| **Style** | Communication style guidelines | Formality level, vocabulary choice | 0.6+ |
-| **Context** | Situational awareness | Current projects, recent discussions | 0.5+ |
-| **Skill** | Expertise and abilities | Technical skills, knowledge areas | 0.8+ |
-| **Goal** | User objectives and aspirations | Short-term goals, long-term vision | 0.7+ |
+| Memory Type    | Purpose                         | Examples                                  | Confidence Threshold |
+| -------------- | ------------------------------- | ----------------------------------------- | -------------------- |
+| **Preference** | User preferences and choices    | Preferred tone, language, response length | 0.5+                 |
+| **Fact**       | Important user information      | Names, expertise areas, interests         | 0.7+                 |
+| **Style**      | Communication style guidelines  | Formality level, vocabulary choice        | 0.6+                 |
+| **Context**    | Situational awareness           | Current projects, recent discussions      | 0.5+                 |
+| **Skill**      | Expertise and abilities         | Technical skills, knowledge areas         | 0.8+                 |
+| **Goal**       | User objectives and aspirations | Short-term goals, long-term vision        | 0.7+                 |
 
 ### Memory Categories
 
@@ -188,6 +194,7 @@ The system further categorizes memories for efficient retrieval and organization
 - **Technical**: Platform usage, accessibility needs
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L13-L17)
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L5-L19)
 
@@ -251,6 +258,7 @@ MEMORIES ||--|| CONVERSATIONS : associated_with
 ```
 
 **Diagram sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L8-L47)
 - [vector-memory.ts](file://apps/api/src/services/vector-memory.ts#L13-L22)
 
@@ -264,6 +272,7 @@ The system leverages PostgreSQL functions for optimized memory retrieval and man
 - **initialize_user_memory**: Sets up default memories for new users
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L1-L212)
 
 ## API Endpoints
@@ -271,12 +280,15 @@ The system leverages PostgreSQL functions for optimized memory retrieval and man
 The memory system exposes RESTful endpoints for comprehensive memory management:
 
 ### GET /api/memory
+
 Retrieves all active memories for the authenticated user with confidence filtering.
 
 **Request Headers:**
+
 - Authorization: Bearer [user_token]
 
 **Response:**
+
 ```json
 {
   "ok": true,
@@ -298,9 +310,11 @@ Retrieves all active memories for the authenticated user with confidence filteri
 ```
 
 ### POST /api/memory
+
 Creates or updates a memory entry with automatic conflict resolution.
 
 **Request Body:**
+
 ```json
 {
   "key": "preferred_tone",
@@ -317,9 +331,11 @@ Creates or updates a memory entry with automatic conflict resolution.
 ```
 
 ### DELETE /api/memory/:memoryId
+
 Removes a specific memory entry while maintaining data integrity.
 
 **Response:**
+
 ```json
 {
   "ok": true,
@@ -328,9 +344,11 @@ Removes a specific memory entry while maintaining data integrity.
 ```
 
 ### GET /api/memory/context
+
 Generates formatted memory context specifically for chat conversations.
 
 **Response:**
+
 ```json
 {
   "ok": true,
@@ -346,6 +364,7 @@ Generates formatted memory context specifically for chat conversations.
 ```
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L8-L185)
 - [memory.ts](file://apps/api/src/routes/memory.ts#L1-L14)
 
@@ -371,6 +390,7 @@ Deleting --> Error : delete failed
 ```
 
 **Diagram sources**
+
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L45-L134)
 
 ### Memory Operations
@@ -383,6 +403,7 @@ The frontend provides intuitive methods for memory management:
 - **Context Generation**: Formatted context for AI processing
 
 **Section sources**
+
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L1-L134)
 
 ## Vector Memory System
@@ -404,6 +425,7 @@ Context --> Response[Generate Response]
 ```
 
 **Diagram sources**
+
 - [vector-memory.ts](file://apps/api/src/services/vector-memory.ts#L1-L359)
 
 ### Key Features
@@ -415,6 +437,7 @@ Context --> Response[Generate Response]
 - **Project Isolation**: Memories scoped to specific projects
 
 **Section sources**
+
 - [vector-memory.ts](file://apps/api/src/services/vector-memory.ts#L1-L359)
 
 ## Memory Context Management
@@ -448,6 +471,7 @@ Memories are filtered based on confidence scores to ensure reliable information:
 - **Low Confidence (< 0.5)**: Excluded from context
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L122-L184)
 
 ## Privacy and Security
@@ -539,12 +563,14 @@ Common issues and solutions for memory system problems:
 ### Memory Not Persisting
 
 **Symptoms**: Memories disappear after page refresh
-**Causes**: 
+**Causes**:
+
 - Supabase service key not configured
 - Network connectivity issues
 - Authentication failures
 
 **Solutions**:
+
 1. Verify SUPABASE_SERVICE_KEY in environment
 2. Check network connectivity to Supabase
 3. Ensure proper authentication setup
@@ -553,11 +579,13 @@ Common issues and solutions for memory system problems:
 
 **Symptoms**: Delays in memory loading/saving
 **Causes**:
+
 - Database performance issues
 - Network latency
 - Large memory payloads
 
 **Solutions**:
+
 1. Optimize database indexes
 2. Implement client-side caching
 3. Reduce memory payload sizes
@@ -566,16 +594,19 @@ Common issues and solutions for memory system problems:
 
 **Symptoms**: Incorrect or missing context in responses
 **Causes**:
+
 - Low confidence memories included
 - Memory filtering too aggressive
 - Context formatting errors
 
 **Solutions**:
+
 1. Adjust confidence thresholds
 2. Review memory categories
 3. Validate context formatting logic
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L1-L185)
 
 ## Best Practices

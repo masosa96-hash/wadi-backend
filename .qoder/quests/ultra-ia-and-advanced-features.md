@@ -69,13 +69,13 @@ The design encompasses 10 major domains representing a complete platform evoluti
 
 Each tool follows a standardized interface:
 
-| Tool Component | Description |
-|---------------|-------------|
-| Tool ID | Unique identifier (e.g., `pdf_analyzer`, `image_vision`) |
-| Input Schema | JSON schema defining required and optional parameters |
+| Tool Component    | Description                                                       |
+| ----------------- | ----------------------------------------------------------------- |
+| Tool ID           | Unique identifier (e.g., `pdf_analyzer`, `image_vision`)          |
+| Input Schema      | JSON schema defining required and optional parameters             |
 | Execution Handler | Async function that processes input and returns structured output |
-| Output Schema | JSON schema for response format |
-| Error Handling | Standardized error codes and messages |
+| Output Schema     | JSON schema for response format                                   |
+| Error Handling    | Standardized error codes and messages                             |
 
 **Tool Catalog**:
 
@@ -99,7 +99,7 @@ Each tool follows a standardized interface:
 
 - **Capability**: Execute code snippets safely, analyze code structure, generate documentation
 - **Input**: Code string, language identifier, execution mode (analyze vs execute)
-- **Processing**: 
+- **Processing**:
   - Analysis: Use AST parsers for static analysis
   - Execution: Sandboxed environment (Docker container with timeout)
 - **Output**: Execution results, errors, static analysis findings, complexity metrics
@@ -116,7 +116,7 @@ Each tool follows a standardized interface:
 **Tool Invocation Flow**:
 
 ```
-User Request → AI Decides Tool Needed → Tool Invoked with Parameters → 
+User Request → AI Decides Tool Needed → Tool Invoked with Parameters →
 Result Returned to AI → AI Synthesizes Response → Streamed to User
 ```
 
@@ -135,12 +135,12 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Architecture**:
 
-| Component | Technology Choice | Purpose |
-|-----------|------------------|---------|
-| Vector Database | Pinecone, Weaviate, or pgvector (Supabase extension) | Store embedding vectors |
-| Embedding Model | OpenAI `text-embedding-3-small` | Generate semantic embeddings |
-| Indexing Strategy | Namespace per user/project | Isolate data |
-| Retrieval Strategy | Semantic search with score threshold | Find relevant context |
+| Component          | Technology Choice                                    | Purpose                      |
+| ------------------ | ---------------------------------------------------- | ---------------------------- |
+| Vector Database    | Pinecone, Weaviate, or pgvector (Supabase extension) | Store embedding vectors      |
+| Embedding Model    | OpenAI `text-embedding-3-small`                      | Generate semantic embeddings |
+| Indexing Strategy  | Namespace per user/project                           | Isolate data                 |
+| Retrieval Strategy | Semantic search with score threshold                 | Find relevant context        |
 
 **Data Model**:
 
@@ -172,17 +172,17 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Assistant Configuration Model**:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| assistant_id | UUID | Unique identifier |
-| project_id | UUID | Associated project |
-| name | String | Assistant name (e.g., "Python Code Expert") |
-| instructions | Text | System prompt defining behavior |
-| model | String | Base model (gpt-4o, gpt-3.5-turbo) |
-| knowledge_files | Array | Uploaded documents for RAG |
-| tools_enabled | Array | Which AI tools are available |
-| temperature | Float | Creativity parameter |
-| created_at | Timestamp | Creation time |
+| Field           | Type      | Description                                 |
+| --------------- | --------- | ------------------------------------------- |
+| assistant_id    | UUID      | Unique identifier                           |
+| project_id      | UUID      | Associated project                          |
+| name            | String    | Assistant name (e.g., "Python Code Expert") |
+| instructions    | Text      | System prompt defining behavior             |
+| model           | String    | Base model (gpt-4o, gpt-3.5-turbo)          |
+| knowledge_files | Array     | Uploaded documents for RAG                  |
+| tools_enabled   | Array     | Which AI tools are available                |
+| temperature     | Float     | Creativity parameter                        |
+| created_at      | Timestamp | Creation time                               |
 
 **Knowledge Base (RAG)**:
 
@@ -248,16 +248,16 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Playground Features**:
 
-| Feature | Description |
-|---------|-------------|
-| Prompt Editor | Multi-line text area with syntax highlighting |
-| System Message | Configurable system prompt |
-| Model Selector | Dropdown with all available models |
-| Parameter Controls | Sliders for temperature, max_tokens, top_p, frequency_penalty |
-| Multi-Turn Conversation | Add user/assistant messages to build conversation |
-| Response Display | Formatted output with token count and latency |
-| Save to Project | Button to save successful experiments as runs |
-| History | Recent playground sessions (not saved to projects by default) |
+| Feature                 | Description                                                   |
+| ----------------------- | ------------------------------------------------------------- |
+| Prompt Editor           | Multi-line text area with syntax highlighting                 |
+| System Message          | Configurable system prompt                                    |
+| Model Selector          | Dropdown with all available models                            |
+| Parameter Controls      | Sliders for temperature, max_tokens, top_p, frequency_penalty |
+| Multi-Turn Conversation | Add user/assistant messages to build conversation             |
+| Response Display        | Formatted output with token count and latency                 |
+| Save to Project         | Button to save successful experiments as runs                 |
+| History                 | Recent playground sessions (not saved to projects by default) |
 
 **Playground Data Model**:
 
@@ -282,7 +282,7 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 #### 1. Create Document
 
 - **Trigger**: User command like "Create a business proposal for [topic]"
-- **Process**: 
+- **Process**:
   - AI generates full document structure
   - Sections: Introduction, Body, Conclusion
   - Export as Markdown or PDF
@@ -333,18 +333,18 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Task Data Model**:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| task_id | UUID | Unique identifier |
-| project_id | UUID | Associated project |
-| title | String | Task description |
-| status | Enum | pending, in_progress, completed, cancelled |
-| priority | Enum | low, medium, high, urgent |
-| due_date | Date | Optional deadline |
-| assigned_to | UUID | User ID (for collaboration) |
-| ai_generated | Boolean | Whether task was AI-created |
-| created_at | Timestamp | Creation time |
-| completed_at | Timestamp | Completion time |
+| Field        | Type      | Description                                |
+| ------------ | --------- | ------------------------------------------ |
+| task_id      | UUID      | Unique identifier                          |
+| project_id   | UUID      | Associated project                         |
+| title        | String    | Task description                           |
+| status       | Enum      | pending, in_progress, completed, cancelled |
+| priority     | Enum      | low, medium, high, urgent                  |
+| due_date     | Date      | Optional deadline                          |
+| assigned_to  | UUID      | User ID (for collaboration)                |
+| ai_generated | Boolean   | Whether task was AI-created                |
+| created_at   | Timestamp | Creation time                              |
+| completed_at | Timestamp | Completion time                            |
 
 **AI Auto-Complete Features**:
 
@@ -402,14 +402,14 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Calendar Features**:
 
-| Feature | Description |
-|---------|-------------|
-| Task Scheduling | Drag tasks onto calendar to assign dates/times |
-| AI Session Blocks | Reserve time slots for focused AI work |
-| Conflict Detection | Warn when tasks overlap or deadlines collide |
-| Smart Scheduling | AI suggests optimal times based on priorities |
-| Recurring Tasks | Support for daily, weekly, monthly patterns |
-| Reminders | Email or in-app notifications before deadlines |
+| Feature            | Description                                    |
+| ------------------ | ---------------------------------------------- |
+| Task Scheduling    | Drag tasks onto calendar to assign dates/times |
+| AI Session Blocks  | Reserve time slots for focused AI work         |
+| Conflict Detection | Warn when tasks overlap or deadlines collide   |
+| Smart Scheduling   | AI suggests optimal times based on priorities  |
+| Recurring Tasks    | Support for daily, weekly, monthly patterns    |
+| Reminders          | Email or in-app notifications before deadlines |
 
 **AI Scheduling Logic**:
 
@@ -485,14 +485,14 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Version Data Model**:
 
-| Field | Type | Description |
-|-------|------|-------------|
-| version_id | UUID | Unique version identifier |
-| project_id | UUID | Associated project |
-| snapshot_data | JSONB | Serialized project state |
-| version_tag | String | User-provided label |
-| created_at | Timestamp | Snapshot time |
-| created_by | UUID | User who created version |
+| Field         | Type      | Description               |
+| ------------- | --------- | ------------------------- |
+| version_id    | UUID      | Unique version identifier |
+| project_id    | UUID      | Associated project        |
+| snapshot_data | JSONB     | Serialized project state  |
+| version_tag   | String    | User-provided label       |
+| created_at    | Timestamp | Snapshot time             |
+| created_by    | UUID      | User who created version  |
 
 **Versioning Operations**:
 
@@ -515,13 +515,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Comparison Features**:
 
-| Aspect | Comparison Method |
-|--------|------------------|
-| Input Text | Side-by-side diff highlighting changes |
-| Output Text | Word-level or line-level diff |
-| Model/Parameters | Table showing parameter differences |
-| Performance | Token usage, latency, cost comparison |
-| Semantic Similarity | AI-generated similarity score |
+| Aspect              | Comparison Method                      |
+| ------------------- | -------------------------------------- |
+| Input Text          | Side-by-side diff highlighting changes |
+| Output Text         | Word-level or line-level diff          |
+| Model/Parameters    | Table showing parameter differences    |
+| Performance         | Token usage, latency, cost comparison  |
+| Semantic Similarity | AI-generated similarity score          |
 
 **Diff Algorithms**:
 
@@ -564,13 +564,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Search Features**:
 
-| Feature | Description |
-|---------|-------------|
-| Auto-Complete | Suggest queries as user types |
-| Filters | Narrow by date range, project, model, tags |
-| Sorting | By relevance, date, project |
-| Result Previews | Show snippet with highlighted matches |
-| Search History | Recent searches saved for quick access |
+| Feature         | Description                                |
+| --------------- | ------------------------------------------ |
+| Auto-Complete   | Suggest queries as user types              |
+| Filters         | Narrow by date range, project, model, tags |
+| Sorting         | By relevance, date, project                |
+| Result Previews | Show snippet with highlighted matches      |
+| Search History  | Recent searches saved for quick access     |
 
 **Implementation**:
 
@@ -594,11 +594,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **User Roles**:
 
-| Role | Permissions |
-|------|-------------|
-| Owner | Full control: edit project, invite/remove users, delete project |
-| Editor | Create/edit runs, tasks, sessions; cannot manage users |
-| Viewer | Read-only access to all project content |
+| Role   | Permissions                                                     |
+| ------ | --------------------------------------------------------------- |
+| Owner  | Full control: edit project, invite/remove users, delete project |
+| Editor | Create/edit runs, tasks, sessions; cannot manage users          |
+| Viewer | Read-only access to all project content                         |
 
 **Data Model**:
 
@@ -653,13 +653,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Real-Time Features**:
 
-| Feature | Description |
-|---------|-------------|
+| Feature           | Description                                                 |
+| ----------------- | ----------------------------------------------------------- |
 | Typing Indicators | Show "User is typing..." when collaborator composes message |
-| Presence Status | Online/away/offline indicators |
-| Message Delivery | Real-time message delivery without page refresh |
-| Read Receipts | Track when messages are seen |
-| Notifications | Desktop/mobile notifications for new messages |
+| Presence Status   | Online/away/offline indicators                              |
+| Message Delivery  | Real-time message delivery without page refresh             |
+| Read Receipts     | Track when messages are seen                                |
+| Notifications     | Desktop/mobile notifications for new messages               |
 
 **Message Types**:
 
@@ -727,14 +727,14 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Shared Session Features**:
 
-| Feature | Description |
-|---------|-------------|
-| Live Cursors | See collaborators' cursor positions with name labels |
-| Simultaneous Editing | Multiple users type in shared input field |
-| Turn-Based Input | Optional mode where users take turns querying AI |
-| Shared Output | All collaborators see AI responses in real-time |
-| Version History | Track who made which contributions |
-| Merge Conflicts | Automatic resolution with last-write-wins or manual merge |
+| Feature              | Description                                               |
+| -------------------- | --------------------------------------------------------- |
+| Live Cursors         | See collaborators' cursor positions with name labels      |
+| Simultaneous Editing | Multiple users type in shared input field                 |
+| Turn-Based Input     | Optional mode where users take turns querying AI          |
+| Shared Output        | All collaborators see AI responses in real-time           |
+| Version History      | Track who made which contributions                        |
+| Merge Conflicts      | Automatic resolution with last-write-wins or manual merge |
 
 **Session Locking**:
 
@@ -859,11 +859,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **2FA Methods**:
 
-| Method | Implementation |
-|--------|----------------|
-| Email OTP | Send 6-digit code to user's email |
+| Method            | Implementation                                   |
+| ----------------- | ------------------------------------------------ |
+| Email OTP         | Send 6-digit code to user's email                |
 | Authenticator App | TOTP using apps like Google Authenticator, Authy |
-| SMS (Optional) | Send code via Twilio (costly, less secure) |
+| SMS (Optional)    | Send code via Twilio (costly, less secure)       |
 
 **2FA Setup Flow**:
 
@@ -914,24 +914,24 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Advanced Roles**:
 
-| Role | Permissions Summary |
-|------|--------------------|
-| Owner | All permissions |
-| Admin | All except delete project and manage ownership |
-| Editor | Create/edit content, cannot invite users |
+| Role        | Permissions Summary                                |
+| ----------- | -------------------------------------------------- |
+| Owner       | All permissions                                    |
+| Admin       | All except delete project and manage ownership     |
+| Editor      | Create/edit content, cannot invite users           |
 | Contributor | Create runs and tasks, cannot edit others' content |
-| Commenter | Read content, add comments only |
-| Viewer | Read-only access |
+| Commenter   | Read content, add comments only                    |
+| Viewer      | Read-only access                                   |
 
 **Permission Matrix** (example):
 
-| Resource | Owner | Admin | Editor | Contributor | Commenter | Viewer |
-|----------|-------|-------|--------|-------------|-----------|--------|
-| Create Run | ✓ | ✓ | ✓ | ✓ | ✗ | ✗ |
-| Delete Run | ✓ | ✓ | ✓ | Own only | ✗ | ✗ |
-| Invite User | ✓ | ✓ | ✗ | ✗ | ✗ | ✗ |
-| Add Comment | ✓ | ✓ | ✓ | ✓ | ✓ | ✗ |
-| Export Project | ✓ | ✓ | ✓ | ✗ | ✗ | ✗ |
+| Resource       | Owner | Admin | Editor | Contributor | Commenter | Viewer |
+| -------------- | ----- | ----- | ------ | ----------- | --------- | ------ |
+| Create Run     | ✓     | ✓     | ✓      | ✓           | ✗         | ✗      |
+| Delete Run     | ✓     | ✓     | ✓      | Own only    | ✗         | ✗      |
+| Invite User    | ✓     | ✓     | ✗      | ✗           | ✗         | ✗      |
+| Add Comment    | ✓     | ✓     | ✓      | ✓           | ✓         | ✗      |
+| Export Project | ✓     | ✓     | ✓      | ✗           | ✗         | ✗      |
 
 **RLS Policy Implementation**:
 
@@ -939,7 +939,7 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 - Example policy:
   ```
   Policy: Users can delete runs if they are owner or admin, or if they created the run
-  Condition: 
+  Condition:
     - user_id matches run creator OR
     - user is member with role 'owner' or 'admin'
   ```
@@ -958,11 +958,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Token Strategy**:
 
-| Token Type | Lifespan | Purpose |
-|------------|----------|----------|
-| Access Token | 15-60 minutes | Authenticate API requests |
-| Refresh Token | 7-30 days | Obtain new access tokens |
-| Session Token | Same as refresh | Identify user session |
+| Token Type    | Lifespan        | Purpose                   |
+| ------------- | --------------- | ------------------------- |
+| Access Token  | 15-60 minutes   | Authenticate API requests |
+| Refresh Token | 7-30 days       | Obtain new access tokens  |
+| Session Token | Same as refresh | Identify user session     |
 
 **Authentication Flow**:
 
@@ -1006,20 +1006,20 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Rate Limiting Strategies**:
 
-| Strategy | Description |
-|----------|-------------|
-| Per-User Limits | Different limits based on subscription plan |
+| Strategy            | Description                                       |
+| ------------------- | ------------------------------------------------- |
+| Per-User Limits     | Different limits based on subscription plan       |
 | Per-Endpoint Limits | Stricter limits on expensive operations (AI runs) |
-| Per-IP Limits | Prevent brute-force attacks on login |
-| Global Limits | Overall system capacity constraints |
+| Per-IP Limits       | Prevent brute-force attacks on login              |
+| Global Limits       | Overall system capacity constraints               |
 
 **Rate Limit Tiers**:
 
-| Plan | AI Runs/Hour | API Requests/Minute | WebSocket Connections |
-|------|--------------|---------------------|----------------------|
-| Free | 10 | 30 | 2 concurrent |
-| Pro | 100 | 120 | 10 concurrent |
-| Enterprise | Custom | Custom | Unlimited |
+| Plan       | AI Runs/Hour | API Requests/Minute | WebSocket Connections |
+| ---------- | ------------ | ------------------- | --------------------- |
+| Free       | 10           | 30                  | 2 concurrent          |
+| Pro        | 100          | 120                 | 10 concurrent         |
+| Enterprise | Custom       | Custom              | Unlimited             |
 
 **Implementation**:
 
@@ -1050,11 +1050,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **API Key Types**:
 
-| Type | Scope | Use Case |
-|------|-------|----------|
-| User API Key | Access to all user's projects | Personal automation scripts |
-| Project API Key | Access to specific project only | Third-party integrations |
-| Temporary Key | Limited lifespan (e.g., 24 hours) | One-time data imports |
+| Type            | Scope                             | Use Case                    |
+| --------------- | --------------------------------- | --------------------------- |
+| User API Key    | Access to all user's projects     | Personal automation scripts |
+| Project API Key | Access to specific project only   | Third-party integrations    |
+| Temporary Key   | Limited lifespan (e.g., 24 hours) | One-time data imports       |
 
 **API Key Data Model**:
 
@@ -1182,20 +1182,20 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Core Components**:
 
-| Component | Purpose |
-|-----------|----------|
-| Button | Primary, secondary, ghost, danger variants |
-| Input | Text, number, email, password with validation states |
-| Select | Dropdown with search and multi-select |
-| Modal | Overlay dialogs with focus trapping |
-| Tooltip | Contextual hints on hover/focus |
-| Dropdown Menu | Action menus with keyboard navigation |
-| Tabs | Content organization with lazy loading |
-| Card | Content containers with consistent spacing |
-| Badge | Status indicators and tags |
-| Avatar | User profile images with fallback initials |
-| Progress Bar | Loading states and task completion |
-| Toast | Non-intrusive notifications |
+| Component     | Purpose                                              |
+| ------------- | ---------------------------------------------------- |
+| Button        | Primary, secondary, ghost, danger variants           |
+| Input         | Text, number, email, password with validation states |
+| Select        | Dropdown with search and multi-select                |
+| Modal         | Overlay dialogs with focus trapping                  |
+| Tooltip       | Contextual hints on hover/focus                      |
+| Dropdown Menu | Action menus with keyboard navigation                |
+| Tabs          | Content organization with lazy loading               |
+| Card          | Content containers with consistent spacing           |
+| Badge         | Status indicators and tags                           |
+| Avatar        | User profile images with fallback initials           |
+| Progress Bar  | Loading states and task completion                   |
+| Toast         | Non-intrusive notifications                          |
 
 **Component Library Choice**:
 
@@ -1275,15 +1275,15 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Editor Features**:
 
-| Feature | Description |
-|---------|-------------|
-| Syntax Highlighting | Code blocks with language detection |
-| Live Preview | Split-pane showing rendered Markdown |
-| Toolbar | Quick formatting buttons (bold, italic, headings, lists) |
-| Image Upload | Drag-and-drop images, generate embed links |
-| Table Editor | Visual table creation and editing |
-| Emoji Picker | Insert emojis via shortcodes or picker |
-| Link Insertion | Auto-complete for internal project links |
+| Feature             | Description                                              |
+| ------------------- | -------------------------------------------------------- |
+| Syntax Highlighting | Code blocks with language detection                      |
+| Live Preview        | Split-pane showing rendered Markdown                     |
+| Toolbar             | Quick formatting buttons (bold, italic, headings, lists) |
+| Image Upload        | Drag-and-drop images, generate embed links               |
+| Table Editor        | Visual table creation and editing                        |
+| Emoji Picker        | Insert emojis via shortcodes or picker                   |
+| Link Insertion      | Auto-complete for internal project links                 |
 
 **Editor Implementation**:
 
@@ -1318,14 +1318,14 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Block Types**:
 
-| Block Type | Purpose |
-|-----------|----------|
-| Text Block | Free-form text input |
-| Variable Block | Dynamic placeholders (user name, project context) |
-| Context Block | Inject project data, previous runs, memory |
-| Instruction Block | System-level directives for AI behavior |
-| Example Block | Few-shot examples for AI guidance |
-| Output Format Block | Define expected response structure |
+| Block Type          | Purpose                                           |
+| ------------------- | ------------------------------------------------- |
+| Text Block          | Free-form text input                              |
+| Variable Block      | Dynamic placeholders (user name, project context) |
+| Context Block       | Inject project data, previous runs, memory        |
+| Instruction Block   | System-level directives for AI behavior           |
+| Example Block       | Few-shot examples for AI guidance                 |
+| Output Format Block | Define expected response structure                |
 
 **Block Editor Features**:
 
@@ -1365,11 +1365,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Responsive Breakpoints**:
 
-| Breakpoint | Width | Layout Adjustments |
-|------------|-------|-------------------|
-| Mobile | < 640px | Single column, hamburger menu, stacked components |
-| Tablet | 640-1024px | Two-column where appropriate, collapsible sidebar |
-| Desktop | > 1024px | Multi-column, persistent sidebar, wide dashboard |
+| Breakpoint | Width      | Layout Adjustments                                |
+| ---------- | ---------- | ------------------------------------------------- |
+| Mobile     | < 640px    | Single column, hamburger menu, stacked components |
+| Tablet     | 640-1024px | Two-column where appropriate, collapsible sidebar |
+| Desktop    | > 1024px   | Multi-column, persistent sidebar, wide dashboard  |
 
 **Mobile-Specific Features**:
 
@@ -1437,13 +1437,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Background Themes**:
 
-| Theme | Description |
-|-------|-------------|
-| Gradient Flow | Slow-moving color gradients (CSS animations) |
-| Particle Stars | Animated star field with parallax effect |
-| Glassmorphism | Frosted glass panels with backdrop blur |
-| Mesh Gradient | Dynamic 3D mesh with lighting effects |
-| Minimalist | Solid color or subtle texture (default, performance-friendly) |
+| Theme          | Description                                                   |
+| -------------- | ------------------------------------------------------------- |
+| Gradient Flow  | Slow-moving color gradients (CSS animations)                  |
+| Particle Stars | Animated star field with parallax effect                      |
+| Glassmorphism  | Frosted glass panels with backdrop blur                       |
+| Mesh Gradient  | Dynamic 3D mesh with lighting effects                         |
+| Minimalist     | Solid color or subtle texture (default, performance-friendly) |
 
 **Implementation**:
 
@@ -1559,13 +1559,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Supported Import Formats**:
 
-| Format | Processing |
-|--------|------------|
-| PDF | Extract text, create initial project description and context |
-| TXT | Plain text import, use as project description or first run input |
+| Format   | Processing                                                             |
+| -------- | ---------------------------------------------------------------------- |
+| PDF      | Extract text, create initial project description and context           |
+| TXT      | Plain text import, use as project description or first run input       |
 | Markdown | Parse structure, create project + optionally create runs from sections |
-| DOCX | Extract text and formatting, convert to Markdown |
-| JSON | Restore previously exported WADI project |
+| DOCX     | Extract text and formatting, convert to Markdown                       |
+| JSON     | Restore previously exported WADI project                               |
 
 **Import Flow**:
 
@@ -1644,13 +1644,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Integration Capabilities**:
 
-| Feature | Description |
-|---------|-------------|
+| Feature             | Description                                                  |
+| ------------------- | ------------------------------------------------------------ |
 | Repository Analysis | AI reads README, analyzes file structure, summarizes purpose |
-| Issue Exploration | Fetch and discuss open issues, suggest solutions |
-| Code Review | AI reviews pull request diffs, provides feedback |
-| Commit History | Analyze commit messages and identify patterns |
-| Code Search | Search for functions, classes, or patterns across codebase |
+| Issue Exploration   | Fetch and discuss open issues, suggest solutions             |
+| Code Review         | AI reviews pull request diffs, provides feedback             |
+| Commit History      | Analyze commit messages and identify patterns                |
+| Code Search         | Search for functions, classes, or patterns across codebase   |
 
 **Authentication**:
 
@@ -1763,13 +1763,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Webhook Features**:
 
-| Event | Notification Content |
-|-------|---------------------|
-| New Run Completed | Project name, input summary, output preview, link to run |
-| Task Completed | Task title, completer name, project link |
-| Collaborator Joined | User name, project name |
-| Comment Added | Commenter name, comment preview, run link |
-| Daily Digest | Summary of day's activity across all projects |
+| Event               | Notification Content                                     |
+| ------------------- | -------------------------------------------------------- |
+| New Run Completed   | Project name, input summary, output preview, link to run |
+| Task Completed      | Task title, completer name, project link                 |
+| Collaborator Joined | User name, project name                                  |
+| Comment Added       | Commenter name, comment preview, run link                |
+| Daily Digest        | Summary of day's activity across all projects            |
 
 **Configuration**:
 
@@ -1819,17 +1819,17 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Core API Endpoints** (examples):
 
-| Endpoint | Method | Description |
-|----------|--------|-------------|
-| `/api/v1/projects` | GET | List all projects |
-| `/api/v1/projects` | POST | Create new project |
-| `/api/v1/projects/:id` | GET | Get project details |
-| `/api/v1/projects/:id/runs` | GET | List runs in project |
-| `/api/v1/projects/:id/runs` | POST | Create new AI run |
-| `/api/v1/runs/:id` | GET | Get run details |
-| `/api/v1/tasks` | GET | List tasks |
-| `/api/v1/tasks/:id` | PATCH | Update task status |
-| `/api/v1/search` | GET | Global search |
+| Endpoint                    | Method | Description          |
+| --------------------------- | ------ | -------------------- |
+| `/api/v1/projects`          | GET    | List all projects    |
+| `/api/v1/projects`          | POST   | Create new project   |
+| `/api/v1/projects/:id`      | GET    | Get project details  |
+| `/api/v1/projects/:id/runs` | GET    | List runs in project |
+| `/api/v1/projects/:id/runs` | POST   | Create new AI run    |
+| `/api/v1/runs/:id`          | GET    | Get run details      |
+| `/api/v1/tasks`             | GET    | List tasks           |
+| `/api/v1/tasks/:id`         | PATCH  | Update task status   |
+| `/api/v1/search`            | GET    | Global search        |
 
 **Response Format** (JSON):
 
@@ -1899,7 +1899,7 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 - **Documentation**: Developer guide and API reference
 - **Sandbox**: Test environment for plugin development
 
-*Note: This is a complex future feature requiring significant infrastructure.*
+_Note: This is a complex future feature requiring significant infrastructure._
 
 ---
 
@@ -1911,22 +1911,22 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Plan Comparison**:
 
-| Feature | Free | Pro | Enterprise |
-|---------|------|-----|------------|
-| Projects | 3 | Unlimited | Unlimited |
-| AI Runs per Month | 100 | 5,000 | Unlimited |
-| AI Models | GPT-3.5-turbo only | All models | All models + fine-tuned |
-| Collaborators per Project | 0 (solo) | 5 | Unlimited |
-| Storage | 100 MB | 10 GB | Custom |
-| Long-Term Memory | No | Yes | Yes |
-| Priority Support | No | Email | Dedicated account manager |
-| Custom Domain | No | No | Yes |
-| SSO / SAML | No | No | Yes |
-| API Access | No | Yes | Yes |
-| Webhooks | No | Yes | Yes |
-| Audit Logs | 30 days | 1 year | Custom retention |
-| Uptime SLA | Best effort | 99.5% | 99.9% |
-| Price | $0 | $20/user/month | Custom pricing |
+| Feature                   | Free               | Pro            | Enterprise                |
+| ------------------------- | ------------------ | -------------- | ------------------------- |
+| Projects                  | 3                  | Unlimited      | Unlimited                 |
+| AI Runs per Month         | 100                | 5,000          | Unlimited                 |
+| AI Models                 | GPT-3.5-turbo only | All models     | All models + fine-tuned   |
+| Collaborators per Project | 0 (solo)           | 5              | Unlimited                 |
+| Storage                   | 100 MB             | 10 GB          | Custom                    |
+| Long-Term Memory          | No                 | Yes            | Yes                       |
+| Priority Support          | No                 | Email          | Dedicated account manager |
+| Custom Domain             | No                 | No             | Yes                       |
+| SSO / SAML                | No                 | No             | Yes                       |
+| API Access                | No                 | Yes            | Yes                       |
+| Webhooks                  | No                 | Yes            | Yes                       |
+| Audit Logs                | 30 days            | 1 year         | Custom retention          |
+| Uptime SLA                | Best effort        | 99.5%          | 99.9%                     |
+| Price                     | $0                 | $20/user/month | Custom pricing            |
 
 **Plan Enforcement**:
 
@@ -1965,11 +1965,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Credit Allocation by Plan**:
 
-| Plan | Monthly Credits | Approximate Runs |
-|------|----------------|------------------|
-| Free | 100 credits | ~100 runs (1K tokens avg) |
-| Pro | 5,000 credits | ~5,000 runs |
-| Enterprise | Custom | Custom |
+| Plan       | Monthly Credits | Approximate Runs          |
+| ---------- | --------------- | ------------------------- |
+| Free       | 100 credits     | ~100 runs (1K tokens avg) |
+| Pro        | 5,000 credits   | ~5,000 runs               |
+| Enterprise | Custom          | Custom                    |
 
 **Credit Tracking**:
 
@@ -2009,13 +2009,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Stripe Integration Components**:
 
-| Component | Purpose |
-|-----------|----------|
-| Stripe Checkout | Hosted payment page for subscriptions and one-time purchases |
+| Component              | Purpose                                                            |
+| ---------------------- | ------------------------------------------------------------------ |
+| Stripe Checkout        | Hosted payment page for subscriptions and one-time purchases       |
 | Stripe Customer Portal | Self-service billing management (update card, cancel subscription) |
-| Stripe Webhooks | Real-time notifications for payment events |
-| Stripe Invoices | Automatic invoice generation and email delivery |
-| Stripe Payment Methods | Securely store and charge payment methods |
+| Stripe Webhooks        | Real-time notifications for payment events                         |
+| Stripe Invoices        | Automatic invoice generation and email delivery                    |
+| Stripe Payment Methods | Securely store and charge payment methods                          |
 
 **Subscription Flow**:
 
@@ -2117,11 +2117,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Billing History Table**:
 
-| Date | Description | Amount | Status | Invoice |
-|------|-------------|--------|--------|----------|
-| 2024-01-01 | Pro Plan - Monthly | $20.00 | Paid | [Download] |
-| 2024-01-15 | Credit Pack (1000) | $10.00 | Paid | [Download] |
-| 2024-02-01 | Pro Plan - Monthly | $20.00 | Failed | [Retry] |
+| Date       | Description        | Amount | Status | Invoice    |
+| ---------- | ------------------ | ------ | ------ | ---------- |
+| 2024-01-01 | Pro Plan - Monthly | $20.00 | Paid   | [Download] |
+| 2024-01-15 | Credit Pack (1000) | $10.00 | Paid   | [Download] |
+| 2024-02-01 | Pro Plan - Monthly | $20.00 | Failed | [Retry]    |
 
 **Features**:
 
@@ -2151,14 +2151,14 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Limit Enforcement Strategies**:
 
-| Limit Type | Free | Pro | Enterprise |
-|------------|------|-----|------------|
-| Project Count | 3 max | Unlimited | Unlimited |
-| Runs per Project | 50 max | Unlimited | Unlimited |
-| File Upload Size | 5 MB | 50 MB | 500 MB |
-| AI Tools Access | Basic only | All tools | All + custom |
-| Collaborators | 0 | 5 per project | Unlimited |
-| API Rate Limit | 10 req/min | 100 req/min | 1000 req/min |
+| Limit Type       | Free       | Pro           | Enterprise   |
+| ---------------- | ---------- | ------------- | ------------ |
+| Project Count    | 3 max      | Unlimited     | Unlimited    |
+| Runs per Project | 50 max     | Unlimited     | Unlimited    |
+| File Upload Size | 5 MB       | 50 MB         | 500 MB       |
+| AI Tools Access  | Basic only | All tools     | All + custom |
+| Collaborators    | 0          | 5 per project | Unlimited    |
+| API Rate Limit   | 10 req/min | 100 req/min   | 1000 req/min |
 
 **Limit Checking**:
 
@@ -2189,13 +2189,13 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Container Architecture**:
 
-| Service | Image | Purpose |
-|---------|-------|----------|
-| Frontend | `wadi-frontend:latest` | React app served by Nginx |
-| Backend | `wadi-backend:latest` | Node.js/Express API server |
-| Database | `postgres:16` | PostgreSQL database |
-| Redis | `redis:7-alpine` | Caching and real-time pub/sub |
-| Nginx | `nginx:alpine` | Reverse proxy and load balancer |
+| Service  | Image                  | Purpose                         |
+| -------- | ---------------------- | ------------------------------- |
+| Frontend | `wadi-frontend:latest` | React app served by Nginx       |
+| Backend  | `wadi-backend:latest`  | Node.js/Express API server      |
+| Database | `postgres:16`          | PostgreSQL database             |
+| Redis    | `redis:7-alpine`       | Caching and real-time pub/sub   |
+| Nginx    | `nginx:alpine`         | Reverse proxy and load balancer |
 
 **Docker Compose Configuration**:
 
@@ -2303,12 +2303,12 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Monitoring Stack**:
 
-| Component | Tool | Purpose |
-|-----------|------|----------|
-| Application Monitoring | New Relic, Datadog, or Sentry | Track errors, performance, user sessions |
-| Infrastructure Monitoring | Prometheus + Grafana | Server metrics (CPU, memory, disk) |
-| Log Aggregation | Elasticsearch + Kibana, or Loki | Centralize and search logs |
-| Uptime Monitoring | Pingdom, UptimeRobot | External endpoint monitoring |
+| Component                 | Tool                            | Purpose                                  |
+| ------------------------- | ------------------------------- | ---------------------------------------- |
+| Application Monitoring    | New Relic, Datadog, or Sentry   | Track errors, performance, user sessions |
+| Infrastructure Monitoring | Prometheus + Grafana            | Server metrics (CPU, memory, disk)       |
+| Log Aggregation           | Elasticsearch + Kibana, or Loki | Centralize and search logs               |
+| Uptime Monitoring         | Pingdom, UptimeRobot            | External endpoint monitoring             |
 
 **Key Metrics**:
 
@@ -2353,11 +2353,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Backup Strategy**:
 
-| Backup Type | Frequency | Retention | Storage |
-|-------------|-----------|-----------|----------|
-| Full Backup | Daily at 2 AM UTC | 30 days | AWS S3, Google Cloud Storage |
-| Incremental Backup | Every 6 hours | 7 days | Same as full |
-| Transaction Log Backup | Continuous | 7 days | Same as full |
+| Backup Type            | Frequency         | Retention | Storage                      |
+| ---------------------- | ----------------- | --------- | ---------------------------- |
+| Full Backup            | Daily at 2 AM UTC | 30 days   | AWS S3, Google Cloud Storage |
+| Incremental Backup     | Every 6 hours     | 7 days    | Same as full                 |
+| Transaction Log Backup | Continuous        | 7 days    | Same as full                 |
 
 **Backup Methods**:
 
@@ -2397,14 +2397,14 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Environment Isolation**:
 
-| Aspect | Staging | Production |
-|--------|---------|------------|
-| Purpose | Testing, QA, demos | Live user traffic |
-| Data | Anonymized production copy or synthetic data | Real user data |
-| Infrastructure | Smaller instances (cost optimization) | Full-scale, redundant |
-| Domain | `staging.wadi.app` | `app.wadi.app` |
-| Database | Separate database instance | Production database cluster |
-| API Keys | Test/sandbox keys | Live keys |
+| Aspect         | Staging                                      | Production                  |
+| -------------- | -------------------------------------------- | --------------------------- |
+| Purpose        | Testing, QA, demos                           | Live user traffic           |
+| Data           | Anonymized production copy or synthetic data | Real user data              |
+| Infrastructure | Smaller instances (cost optimization)        | Full-scale, redundant       |
+| Domain         | `staging.wadi.app`                           | `app.wadi.app`              |
+| Database       | Separate database instance                   | Production database cluster |
+| API Keys       | Test/sandbox keys                            | Live keys                   |
 
 **Deployment Flow**:
 
@@ -2474,11 +2474,11 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Scaling Strategies**:
 
-| Strategy | Description |
-|----------|-------------|
-| Horizontal Scaling | Add more API server instances (containers/VMs) |
-| Vertical Scaling | Increase CPU/memory of existing instances (limited, manual) |
-| Serverless | Use AWS Lambda or Google Cloud Run (auto-scales per request) |
+| Strategy           | Description                                                  |
+| ------------------ | ------------------------------------------------------------ |
+| Horizontal Scaling | Add more API server instances (containers/VMs)               |
+| Vertical Scaling   | Increase CPU/memory of existing instances (limited, manual)  |
+| Serverless         | Use AWS Lambda or Google Cloud Run (auto-scales per request) |
 
 **Kubernetes Auto-Scaling**:
 
@@ -2802,15 +2802,15 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 **Feedback Form Fields**:
 
-| Field | Type | Required |
-|-------|------|----------|
-| Feedback Type | Dropdown (bug/feature/other) | Yes |
-| Title | Text input | Yes |
-| Description | Textarea | Yes |
-| Reproduction Steps | Textarea (for bugs) | Conditional |
-| Screenshot | File upload | No |
-| Priority | Dropdown (low/medium/high) | No |
-| Contact Email | Text input | Yes |
+| Field              | Type                         | Required    |
+| ------------------ | ---------------------------- | ----------- |
+| Feedback Type      | Dropdown (bug/feature/other) | Yes         |
+| Title              | Text input                   | Yes         |
+| Description        | Textarea                     | Yes         |
+| Reproduction Steps | Textarea (for bugs)          | Conditional |
+| Screenshot         | File upload                  | No          |
+| Priority           | Dropdown (low/medium/high)   | No          |
+| Contact Email      | Text input                   | Yes         |
 
 **Automatic Context Capture**:
 
@@ -2976,24 +2976,24 @@ Result Returned to AI → AI Synthesizes Response → Streamed to User
 
 To support the expanded feature set, the following technology additions are recommended:
 
-| Category | Technology | Purpose |
-|----------|------------|----------|
-| WebSocket | `ws` library | Bidirectional streaming |
-| Vector Database | Pinecone / Weaviate / pgvector | Long-term memory |
-| Document Processing | `pdf-parse`, `mammoth`, `pdfjs-dist` | PDF and DOCX handling |
-| Image Processing | OpenAI Vision API | Image analysis |
-| Code Execution | Docker sandbox | Safe code interpretation |
-| Real-Time | Redis Pub/Sub | Chat and collaboration |
-| Collaborative Editing | ShareDB / Yjs | Shared session editing |
-| Payment Processing | Stripe SDK | Billing and subscriptions |
-| Monitoring | Sentry / Datadog | Error tracking and APM |
-| Logging | Winston / Pino | Structured logging |
-| Queue | Bull / BullMQ | Background jobs |
-| Email | SendGrid / AWS SES | Transactional emails |
-| File Storage | AWS S3 / Cloudinary | Uploads and exports |
-| CDN | Cloudflare / CloudFront | Asset delivery |
-| Container Orchestration | Kubernetes / Docker Swarm | Auto-scaling |
-| CI/CD | GitHub Actions | Automation |
+| Category                | Technology                           | Purpose                   |
+| ----------------------- | ------------------------------------ | ------------------------- |
+| WebSocket               | `ws` library                         | Bidirectional streaming   |
+| Vector Database         | Pinecone / Weaviate / pgvector       | Long-term memory          |
+| Document Processing     | `pdf-parse`, `mammoth`, `pdfjs-dist` | PDF and DOCX handling     |
+| Image Processing        | OpenAI Vision API                    | Image analysis            |
+| Code Execution          | Docker sandbox                       | Safe code interpretation  |
+| Real-Time               | Redis Pub/Sub                        | Chat and collaboration    |
+| Collaborative Editing   | ShareDB / Yjs                        | Shared session editing    |
+| Payment Processing      | Stripe SDK                           | Billing and subscriptions |
+| Monitoring              | Sentry / Datadog                     | Error tracking and APM    |
+| Logging                 | Winston / Pino                       | Structured logging        |
+| Queue                   | Bull / BullMQ                        | Background jobs           |
+| Email                   | SendGrid / AWS SES                   | Transactional emails      |
+| File Storage            | AWS S3 / Cloudinary                  | Uploads and exports       |
+| CDN                     | Cloudflare / CloudFront              | Asset delivery            |
+| Container Orchestration | Kubernetes / Docker Swarm            | Auto-scaling              |
+| CI/CD                   | GitHub Actions                       | Automation                |
 
 ### Risk Mitigation
 
@@ -3076,4 +3076,3 @@ The phased implementation strategy allows for iterative development, continuous 
 - **Strengths**: Clear existing codebase foundation, well-defined feature requirements, proven technology stack
 - **Uncertainties**: Massive scope requiring 15+ months of development, coordination complexity, third-party integration dependencies, resource availability
 - **Recommendations**: Begin with Phase 1-2 as proof of concept, validate architecture with smaller feature set, gather user feedback before committing to full roadmap
-

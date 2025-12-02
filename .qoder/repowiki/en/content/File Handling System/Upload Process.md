@@ -14,6 +14,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [System Architecture](#system-architecture)
 3. [Frontend Implementation](#frontend-implementation)
@@ -68,6 +69,7 @@ RT --> RC
 ```
 
 **Diagram sources**
+
 - [FileUpload.tsx](file://apps/frontend/src/components/FileUpload.tsx#L1-L158)
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L1-L314)
 - [files.ts](file://apps/api/src/routes/files.ts#L1-L28)
@@ -108,18 +110,19 @@ FileUpload --> AnimationSystem : controls
 ```
 
 **Diagram sources**
+
 - [FileUpload.tsx](file://apps/frontend/src/components/FileUpload.tsx#L5-L17)
 
 #### Component Props and Configuration
 
 The FileUpload component accepts several configuration options:
 
-| Prop | Type | Default | Description |
-|------|------|---------|-------------|
-| `onFileSelected` | `(file: File) => void` | Required | Callback triggered when a valid file is selected |
-| `disabled` | `boolean` | `false` | Disables the upload functionality |
-| `maxSizeMB` | `number` | `100` | Maximum file size in megabytes |
-| `acceptedTypes` | `string[]` | `[".pdf", ".jpg", ".jpeg", ".png", ".gif", ".txt", ".docx"]` | Allowed file extensions |
+| Prop             | Type                   | Default                                                      | Description                                      |
+| ---------------- | ---------------------- | ------------------------------------------------------------ | ------------------------------------------------ |
+| `onFileSelected` | `(file: File) => void` | Required                                                     | Callback triggered when a valid file is selected |
+| `disabled`       | `boolean`              | `false`                                                      | Disables the upload functionality                |
+| `maxSizeMB`      | `number`               | `100`                                                        | Maximum file size in megabytes                   |
+| `acceptedTypes`  | `string[]`             | `[".pdf", ".jpg", ".jpeg", ".png", ".gif", ".txt", ".docx"]` | Allowed file extensions                          |
 
 #### Drag-and-Drop Functionality
 
@@ -149,6 +152,7 @@ CallCallback --> End
 ```
 
 **Diagram sources**
+
 - [FileUpload.tsx](file://apps/frontend/src/components/FileUpload.tsx#L22-L39)
 
 #### Animation and Visual Feedback
@@ -161,6 +165,7 @@ The component uses Framer Motion for smooth animations and user feedback:
 - **Progress Indicators**: Visual feedback during upload process
 
 **Section sources**
+
 - [FileUpload.tsx](file://apps/frontend/src/components/FileUpload.tsx#L1-L158)
 
 ### Files Store Management
@@ -183,6 +188,7 @@ Progress --> Complete : Upload Finished
 ```
 
 **Diagram sources**
+
 - [filesStore.ts](file://apps/frontend/src/store/filesStore.ts#L23-L41)
 
 #### State Management Features
@@ -195,6 +201,7 @@ The files store maintains several key pieces of state:
 - **Error Handling**: Centralized error state management
 
 **Section sources**
+
 - [filesStore.ts](file://apps/frontend/src/store/filesStore.ts#L1-L188)
 
 ### FileAttachment Component
@@ -229,9 +236,11 @@ FileAttachment --> StatusBadge : creates
 ```
 
 **Diagram sources**
+
 - [FileAttachment.tsx](file://apps/frontend/src/components/FileAttachment.tsx#L4-L23)
 
 **Section sources**
+
 - [FileAttachment.tsx](file://apps/frontend/src/components/FileAttachment.tsx#L1-L234)
 
 ## Backend Implementation
@@ -261,6 +270,7 @@ Note over Controller,Queue : Background processing handles content extraction
 ```
 
 **Diagram sources**
+
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L11-L121)
 
 #### Upload Endpoint Implementation
@@ -295,24 +305,27 @@ Cleanup --> Error
 ```
 
 **Diagram sources**
+
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L52-L116)
 
 **Section sources**
+
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L1-L314)
 
 ### Route Configuration
 
 The routing system provides clean API endpoints for file operations:
 
-| Endpoint | Method | Purpose | Authentication |
-|----------|--------|---------|----------------|
-| `/api/files/upload` | POST | Upload new file | Yes |
-| `/api/files/:fileId` | GET | Get file metadata | Yes |
-| `/api/files/:fileId/download` | GET | Download file content | Yes |
-| `/api/files/:fileId` | DELETE | Delete file | Yes |
-| `/api/files/conversation/:conversationId` | GET | Get conversation files | Yes |
+| Endpoint                                  | Method | Purpose                | Authentication |
+| ----------------------------------------- | ------ | ---------------------- | -------------- |
+| `/api/files/upload`                       | POST   | Upload new file        | Yes            |
+| `/api/files/:fileId`                      | GET    | Get file metadata      | Yes            |
+| `/api/files/:fileId/download`             | GET    | Download file content  | Yes            |
+| `/api/files/:fileId`                      | DELETE | Delete file            | Yes            |
+| `/api/files/conversation/:conversationId` | GET    | Get conversation files | Yes            |
 
 **Section sources**
+
 - [files.ts](file://apps/api/src/routes/files.ts#L1-L28)
 
 ## Database Schema
@@ -377,6 +390,7 @@ FILES ||--o{ FILE_PROCESSING_QUEUE : queued_for
 ```
 
 **Diagram sources**
+
 - [002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L8-L40)
 
 ### Processing Queue System
@@ -389,6 +403,7 @@ The processing queue enables asynchronous file handling with priority management
 - **Status Monitoring**: Real-time processing status updates
 
 **Section sources**
+
 - [002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L57-L78)
 
 ## File Processing Workflow
@@ -416,15 +431,16 @@ AIProcessor --> KeyPoints[Extract Key Points]
 
 The system automatically detects file types based on MIME types:
 
-| MIME Type Pattern | Detected Type | Processing Method |
-|-------------------|---------------|-------------------|
-| `application/pdf` | `pdf` | PDF parser |
-| `image/*` | `image` | OCR processing |
-| `text/plain` | `text` | Direct text extraction |
-| `application/msword` | `docx` | Word document parser |
-| Other | `other` | Generic processing |
+| MIME Type Pattern    | Detected Type | Processing Method      |
+| -------------------- | ------------- | ---------------------- |
+| `application/pdf`    | `pdf`         | PDF parser             |
+| `image/*`            | `image`       | OCR processing         |
+| `text/plain`         | `text`        | Direct text extraction |
+| `application/msword` | `docx`        | Word document parser   |
+| Other                | `other`       | Generic processing     |
 
 **Section sources**
+
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L292-L306)
 
 ## Error Handling and Validation
@@ -446,6 +462,7 @@ Success --> Animation[Hide Error Animation]
 ```
 
 **Diagram sources**
+
 - [FileUpload.tsx](file://apps/frontend/src/components/FileUpload.tsx#L22-L39)
 
 ### Backend Validation
@@ -468,6 +485,7 @@ The system implements several error recovery strategies:
 - **Logging**: Comprehensive error logging for debugging and monitoring
 
 **Section sources**
+
 - [filesStore.ts](file://apps/frontend/src/store/filesStore.ts#L89-L104)
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L117-L120)
 
@@ -524,6 +542,7 @@ All file operations require proper authentication:
 - **Secure Deletion**: Files are securely deleted from storage and database
 
 **Section sources**
+
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L13-L19)
 - [002_files_and_storage.sql](file://apps/api/migrations/002_files_and_storage.sql#L159-L178)
 
@@ -536,12 +555,14 @@ All file operations require proper authentication:
 **Problem**: The upload endpoint returns "requires formidable package" error.
 
 **Solution**: Install the required package:
+
 ```bash
 cd apps/api
 npm install formidable
 ```
 
 **Section sources**
+
 - [filesController.ts](file://apps/api/src/controllers/filesController.ts#L35-L38)
 
 #### File Upload Failures
@@ -549,6 +570,7 @@ npm install formidable
 **Problem**: Files fail to upload with various error messages.
 
 **Diagnostic Steps**:
+
 1. Check file size against configured limits
 2. Verify file type is in accepted types list
 3. Ensure sufficient disk space on server
@@ -560,6 +582,7 @@ npm install formidable
 **Problem**: Cannot access uploaded files or storage operations fail.
 
 **Solutions**:
+
 1. Verify Supabase Storage bucket configuration
 2. Check RLS policies are properly set
 3. Confirm user authentication is working
@@ -570,6 +593,7 @@ npm install formidable
 **Problem**: Files take too long to process or fail in processing.
 
 **Optimization Steps**:
+
 1. Check background processing queue status
 2. Monitor system resources (CPU, memory)
 3. Verify processing dependencies are installed
@@ -583,6 +607,7 @@ npm install formidable
 - **Performance Monitoring**: Built-in performance tracking
 
 **Section sources**
+
 - [api.ts](file://apps/frontend/src/config/api.ts#L110-L128)
 - [filesStore.ts](file://apps/frontend/src/store/filesStore.ts#L89-L104)
 

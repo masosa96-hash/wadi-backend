@@ -39,6 +39,7 @@ WADI is a modern, open-source AI conversational assistant built with a **dual-br
 ## ✨ Features
 
 ### Core Features:
+
 - ✅ Intelligent conversational AI powered by OpenAI GPT
 - ✅ Guest mode with localStorage persistence
 - ✅ User authentication with Supabase
@@ -49,6 +50,7 @@ WADI is a modern, open-source AI conversational assistant built with a **dual-br
 - ✅ Rate limiting and security headers
 
 ### Coming Soon:
+
 - 🔄 Streaming responses
 - 🎤 Voice interface
 - 📸 Image analysis (GPT-4 Vision)
@@ -106,17 +108,17 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## 📚 Documentation
 
-| Document | Description |
-|----------|-------------|
-| [📖 DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md) | **Start here** - Complete documentation index |
-| [🚀 README_GUEST_MODE.md](README_GUEST_MODE.md) | Quick start for guest mode |
-| [🧪 TESTING_GUIDE.md](TESTING_GUIDE.md) | Step-by-step testing guide |
-| [🎨 COLOR_GUIDE.md](COLOR_GUIDE.md) | Visual color reference |
-| [🧠 ARCHITECTURE_DEEP_DIVE.md](ARCHITECTURE_DEEP_DIVE.md) | Deep architecture explanation |
-| [🔧 DEBUGGING_GUIDE.md](DEBUGGING_GUIDE.md) | Debugging & troubleshooting |
-| [⚡ PERFORMANCE_OPTIMIZATION.md](PERFORMANCE_OPTIMIZATION.md) | Performance & scalability |
-| [🚀 DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) | Production deployment guide |
-| [🗺️ ROADMAP.md](ROADMAP.md) | Future features roadmap |
+| Document                                                      | Description                                   |
+| ------------------------------------------------------------- | --------------------------------------------- |
+| [📖 DOCUMENTATION_INDEX.md](DOCUMENTATION_INDEX.md)           | **Start here** - Complete documentation index |
+| [🚀 README_GUEST_MODE.md](README_GUEST_MODE.md)               | Quick start for guest mode                    |
+| [🧪 TESTING_GUIDE.md](TESTING_GUIDE.md)                       | Step-by-step testing guide                    |
+| [🎨 COLOR_GUIDE.md](COLOR_GUIDE.md)                           | Visual color reference                        |
+| [🧠 ARCHITECTURE_DEEP_DIVE.md](ARCHITECTURE_DEEP_DIVE.md)     | Deep architecture explanation                 |
+| [🔧 DEBUGGING_GUIDE.md](DEBUGGING_GUIDE.md)                   | Debugging & troubleshooting                   |
+| [⚡ PERFORMANCE_OPTIMIZATION.md](PERFORMANCE_OPTIMIZATION.md) | Performance & scalability                     |
+| [🚀 DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md)                 | Production deployment guide                   |
+| [🗺️ ROADMAP.md](ROADMAP.md)                                   | Future features roadmap                       |
 
 ---
 
@@ -153,6 +155,7 @@ wadi/
 ## 🛠️ Tech Stack
 
 ### Backend:
+
 - **Runtime**: Node.js 20+
 - **Framework**: Express
 - **Database**: Supabase (PostgreSQL)
@@ -161,6 +164,7 @@ wadi/
 - **Auth**: Supabase Auth
 
 ### Frontend:
+
 - **Framework**: React 18
 - **Build Tool**: Vite
 - **State**: Zustand
@@ -169,6 +173,7 @@ wadi/
 - **Styling**: Inline styles with theme system
 
 ### DevOps:
+
 - **Package Manager**: pnpm
 - **Monorepo**: pnpm workspaces
 - **Deployment**: Vercel (frontend) + Railway (backend)
@@ -184,6 +189,7 @@ wadi/
 **Frontend** → [Vercel](https://vercel.com)
 
 **Quick deployment commands:**
+
 ```powershell
 # Deploy frontend to Vercel (from repo root)
 cd E:\WADI
@@ -194,11 +200,13 @@ vercel --prod
 ```
 
 See deployment guides:
+
 - [🚀 DEPLOYMENT_GUIDE.md](DEPLOYMENT_GUIDE.md) - Complete deployment guide
 - [⚡ QUICK_DEPLOY.md](QUICK_DEPLOY.md) - Fast 3-step deployment
 - [🔧 VERCEL_DEPLOYMENT_FIX.md](VERCEL_DEPLOYMENT_FIX.md) - Vercel troubleshooting
 
 Includes:
+
 - Docker deployment
 - Custom domains
 - Environment variables
@@ -224,6 +232,7 @@ pnpm preview:frontend
 ```
 
 Manual testing:
+
 1. Follow [TESTING_GUIDE.md](TESTING_GUIDE.md)
 2. Complete Tests 1-9
 3. Verify all checkboxes
@@ -233,16 +242,19 @@ Manual testing:
 ## 🎨 Screenshots
 
 ### Guest Mode
+
 ![Guest Chat]()
-*Clean, modern chat interface*
+_Clean, modern chat interface_
 
 ### Nickname Modal
+
 ![Nickname Modal]()
-*First-time user experience*
+_First-time user experience_
 
 ### Message Bubbles
+
 ![Messages]()
-*User messages in blue, AI responses in dark gray*
+_User messages in blue, AI responses in dark gray_
 
 ---
 
@@ -311,6 +323,7 @@ MIT License - see [LICENSE](LICENSE) file for details.
 ## 🗺️ Roadmap
 
 See [ROADMAP.md](ROADMAP.md) for detailed future plans including:
+
 - Streaming responses
 - Voice interface
 - Multi-modal support

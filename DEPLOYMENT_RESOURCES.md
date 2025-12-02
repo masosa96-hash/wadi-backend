@@ -5,7 +5,9 @@ This document explains all the deployment resources that have been prepared to h
 ## Deployment Guides
 
 ### 1. [COMPLETE_DEPLOYMENT_GUIDE.md](file:///E:/WADI/COMPLETE_DEPLOYMENT_GUIDE.md)
+
 A comprehensive, step-by-step guide with all the exact configuration details you need for deployment:
+
 - Exact build commands for frontend and backend
 - Required environment variables with examples
 - Detailed steps for each platform (Vercel, Render, Supabase, Groq)
@@ -13,25 +15,31 @@ A comprehensive, step-by-step guide with all the exact configuration details you
 - Troubleshooting tips
 
 ### 2. [CLOUD_DEPLOYMENT_GUIDE.md](file:///E:/WADI/CLOUD_DEPLOYMENT_GUIDE.md)
+
 A supplementary guide with additional context and explanations.
 
 ### 3. [DEPLOYMENT_CHECKLIST.md](file:///E:/WADI/DEPLOYMENT_CHECKLIST.md)
+
 A checklist format to ensure you don't miss any steps during deployment.
 
 ## Configuration Files
 
 ### Frontend Configuration
+
 - [apps/frontend/vercel.json](file:///E:/WADI/apps/frontend/vercel.json) - Vercel deployment configuration
 - [apps/frontend/.env.example](file:///E:/WADI/apps/frontend/.env.example) - Frontend environment variables template
 
 ### Backend Configuration
+
 - [render.yaml](file:///E:/WADI/render.yaml) - Render deployment configuration
 - [apps/api/.env.example](file:///E:/WADI/apps/api/.env.example) - Backend environment variables template
 
 ## Automation Scripts
 
 ### 1. [deploy-check.bat](file:///E:/WADI/deploy-check.bat)
+
 A Windows batch file that verifies all required deployment files are present:
+
 - Checks for [render.yaml](file:///E:/WADI/render.yaml)
 - Checks for [apps/frontend/vercel.json](file:///E:/WADI/apps/frontend/vercel.json)
 - Checks for environment variable templates

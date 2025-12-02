@@ -85,6 +85,7 @@ curl https://[RAILWAY_URL]/health
 ```
 
 **Open browser:** `https://[VERCEL_URL]`
+
 - ✅ No console errors
 - ✅ Login/register works
 - ✅ Can create projects
@@ -94,12 +95,14 @@ curl https://[RAILWAY_URL]/health
 ## 🎯 Alternative: Dashboard Method
 
 ### Railway Dashboard
+
 1. Go to https://railway.app
 2. New Project → Deploy from GitHub
 3. Add environment variables (Variables tab)
 4. Deploy
 
 ### Vercel Dashboard
+
 1. Go to https://vercel.com
 2. Import Git Repository
 3. Root Directory: `apps/frontend`
@@ -111,12 +114,14 @@ curl https://[RAILWAY_URL]/health
 ## ⚠️ Before You Start
 
 **Required:**
+
 - [ ] SUPABASE_SERVICE_KEY (from Supabase Dashboard)
 - [ ] Railway account
 - [ ] Vercel account
 - [ ] GitHub repository connected
 
 **Optional:**
+
 - [ ] Railway CLI: `npm install -g @railway/cli`
 - [ ] Vercel CLI: `npm install -g vercel`
 
@@ -125,18 +130,21 @@ curl https://[RAILWAY_URL]/health
 ## 🆘 Quick Fixes
 
 **Build fails on Railway:**
+
 ```powershell
 railway logs
 # Check for missing env vars
 ```
 
 **CORS errors:**
+
 ```powershell
 # Verify FRONTEND_URL matches Vercel URL exactly
 railway variables
 ```
 
 **Frontend doesn't connect:**
+
 - Check VITE_API_URL in Vercel dashboard
 - Ensure Railway deployment is healthy
 
@@ -145,6 +153,7 @@ railway variables
 ## 📚 Full Documentation
 
 For detailed instructions, see:
+
 - `DEPLOYMENT_COMMANDS.md` - Complete guide with both CLI and dashboard
 - `PRE_DEPLOYMENT_CHECKLIST.md` - Full verification checklist
 - `ENV_VERIFICATION_REPORT.md` - Environment variables details
@@ -152,6 +161,7 @@ For detailed instructions, see:
 ---
 
 **Time per step:**
+
 - Step 1 (Railway): ~10 min
 - Step 2 (Vercel): ~10 min
 - Step 3 (Update): ~2 min

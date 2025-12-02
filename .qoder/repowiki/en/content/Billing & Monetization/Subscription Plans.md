@@ -10,6 +10,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Data Model Overview](#data-model-overview)
 3. [Subscription Plans Table](#subscription-plans-table)
@@ -27,6 +28,7 @@
 The subscription_plans table is a core component of WADI's monetization system, designed to manage different user tiers and their associated capabilities. This documentation provides a comprehensive overview of the data model, including entity relationships, field definitions, business rules, and integration points. The system supports a tiered subscription model with free, pro, and business plans, each with specific limits and feature sets. The documentation covers the complete lifecycle of plan assignment, from default plan assignment for new users through database triggers to plan changes and their impact on user capabilities.
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L8-L49)
 
 ## Data Model Overview
@@ -113,6 +115,7 @@ user_subscriptions }|--|| subscription_plans : "belongs to"
 ```
 
 **Diagram sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L8-L127)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L133-L161)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L171-L203)
@@ -125,6 +128,7 @@ The subscription_plans table defines the available subscription tiers in the WAD
 The table includes three predefined plans: free, pro, and business, each with increasing levels of capabilities and limits. The free plan serves as the default for new users, providing basic functionality to encourage adoption. The pro plan offers enhanced capabilities for individual power users, while the business plan provides unlimited resources for teams and professional users. The table structure supports easy querying and filtering through indexes on the is_active and display_order columns.
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L8-L49)
 
 ## Field Definitions
@@ -132,12 +136,14 @@ The table includes three predefined plans: free, pro, and business, each with in
 The subscription_plans table contains a comprehensive set of fields that define each subscription tier. These fields can be categorized into identification, limits, features, pricing, and metadata.
 
 ### Plan Identification
+
 - **id**: UUID primary key, automatically generated
 - **plan_key**: Unique text identifier for the plan (e.g., 'free', 'pro', 'business')
 - **display_name**: User-friendly name for the plan
 - **description**: Detailed description of the plan's benefits
 
 ### Limits
+
 - **max_messages_per_month**: Maximum number of messages allowed per month (-1 for unlimited)
 - **max_file_uploads_per_month**: Maximum number of file uploads allowed per month (-1 for unlimited)
 - **max_file_size_mb**: Maximum size of individual files in megabytes
@@ -145,6 +151,7 @@ The subscription_plans table contains a comprehensive set of fields that define 
 - **max_storage_mb**: Maximum total storage in megabytes (-1 for unlimited)
 
 ### Features
+
 - **voice_input_enabled**: Boolean indicating if voice input is available
 - **priority_support**: Boolean indicating if priority support is included
 - **advanced_ai_models**: Boolean indicating access to advanced AI models
@@ -153,16 +160,19 @@ The subscription_plans table contains a comprehensive set of fields that define 
 - **features**: JSONB array containing descriptive text of included features
 
 ### Pricing
+
 - **price_monthly**: Monthly price in decimal format
 - **price_yearly**: Yearly price in decimal format
 - **currency**: Currency code (default: USD)
 
 ### Stripe Integration
+
 - **stripe_price_id_monthly**: Stripe price ID for monthly billing
 - **stripe_price_id_yearly**: Stripe price ID for yearly billing
 - **stripe_product_id**: Stripe product ID
 
 ### Status and Metadata
+
 - **is_active**: Boolean indicating if the plan is currently available
 - **is_default**: Boolean indicating if this is the default plan for new users
 - **display_order**: Integer for ordering plans in UI displays
@@ -170,6 +180,7 @@ The subscription_plans table contains a comprehensive set of fields that define 
 - **updated_at**: Timestamp of last update
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L11-L48)
 
 ## Plan Hierarchies and Default Assignment
@@ -194,6 +205,7 @@ style H fill:#9f9,stroke:#333
 ```
 
 **Diagram sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L453-L471)
 - [fix_auth_trigger_v3.sql](file://fix_auth_trigger_v3.sql#L60-L63)
 
@@ -206,12 +218,14 @@ The user_subscriptions table serves as a junction between the subscription_plans
 The usage_metrics table is indirectly related to subscription_plans through the user_subscriptions table. When checking usage limits, the system joins these tables to determine a user's current plan and compare their usage against the plan's limits. This relationship is critical for enforcing subscription limits and providing accurate usage information to users.
 
 The entity relationships support the business requirements of the monetization system by enabling:
+
 - Accurate tracking of user subscriptions
 - Efficient enforcement of usage limits
 - Clear separation between plan definitions and user assignments
 - Flexible plan management and updates
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L135-L136)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L34-L35)
 
@@ -226,6 +240,7 @@ For the status field in the related user_subscriptions table, a CHECK constraint
 The is_active and is_default fields have DEFAULT values of true and false respectively, providing sensible defaults when creating new plans. The display_order field has a DEFAULT value of 0, ensuring that plans have a defined order even if not explicitly set.
 
 Additional constraints include:
+
 - NOT NULL constraints on critical fields like plan_key and display_name
 - Foreign key constraints between user_subscriptions and both subscription_plans and profiles tables
 - ON DELETE CASCADE on the user_id foreign key, ensuring that when a user is deleted, their subscription is also removed
@@ -233,6 +248,7 @@ Additional constraints include:
 These constraints work together to maintain data integrity and prevent common data entry errors, ensuring the reliability of the monetization system.
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L14-L15)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L140-L141)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L43-L45)
@@ -250,6 +266,7 @@ If a user exceeds their limit, the middleware returns a 429 Too Many Requests re
 Usage is tracked through the track_usage_event function, which logs individual usage events and updates the aggregated metrics in the usage_metrics table. This two-level tracking system provides both detailed event history and efficient aggregated data for limit checking.
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L309-L372)
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L7-L162)
 - [usage-tracking.ts](file://apps/api/src/middleware/usage-tracking.ts#L6-L107)
@@ -265,12 +282,14 @@ The system also includes a one-time initialization script that runs after the mi
 Plan changes are managed through the billingController.ts, which handles updates to a user's subscription. When a user upgrades or downgrades their plan, the controller updates the plan_id in their user_subscriptions record. This change immediately affects the user's capabilities and limits, as subsequent requests will use the new plan's limits for enforcement.
 
 The integration between these tables enables several key features:
+
 - Automatic plan assignment for new users
 - Seamless plan upgrades and downgrades
 - Accurate billing and usage tracking
 - Consistent enforcement of plan limits
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L429-L447)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L453-L471)
 - [billingController.ts](file://apps/api/src/controllers/billingController.ts#L226-L251)
@@ -290,6 +309,7 @@ END IF;
 ```
 
 This design choice provides several benefits:
+
 - Simplicity: A single value (-1) represents unlimited across all limit types
 - Efficiency: The check is performed early in the function, avoiding unnecessary calculations
 - Clarity: The meaning of -1 is documented in code comments
@@ -302,6 +322,7 @@ The frontend also respects this convention, displaying unlimited limits appropri
 This approach to unlimited limits ensures a consistent user experience across all plan tiers and simplifies both database queries and application logic.
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L17-L21)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L355-L358)
 
@@ -320,5 +341,6 @@ The system also implements a graceful degradation model for plan changes. When a
 Finally, the system is designed with extensibility in mind, allowing for the addition of new plans, features, and pricing models without requiring significant changes to the core architecture. This flexibility supports future business needs and market adaptations.
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L73-L126)
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L7-L162)

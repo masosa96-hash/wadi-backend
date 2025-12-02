@@ -3,16 +3,19 @@
 ## 🎯 What's Been Fixed
 
 ### Backend Improvements
+
 ✅ **All 500 errors fixed** with proper logging and error handling
 ✅ **Consistent API response format**: `{ ok: boolean, data: any, error?: { code, message } }`
 ✅ **Enhanced authentication** with detailed logging
 ✅ **New endpoints added**:
-   - `GET /api/projects/:id` - Get specific project details
-✅ **Better error logging** in all controllers:
-   - `[getProjects]`, `[createProject]`, `[getRuns]`, `[getSessions]` etc.
-✅ **CORS properly configured** for http://localhost:5173
+
+- `GET /api/projects/:id` - Get specific project details
+  ✅ **Better error logging** in all controllers:
+- `[getProjects]`, `[createProject]`, `[getRuns]`, `[getSessions]` etc.
+  ✅ **CORS properly configured** for http://localhost:5173
 
 ### Frontend Improvements
+
 ✅ **Modern dashboard UI** with stats cards and animations (Framer Motion)
 ✅ **Proper error handling** with retry functionality
 ✅ **Loading states** with skeleton screens
@@ -73,6 +76,7 @@ VITE_SUPABASE_ANON_KEY=your-anon-key-here
 Make sure your Supabase database has these tables (check your SQL migrations or create them):
 
 **Required Tables:**
+
 - `profiles` (user_id, email, created_at, updated_at)
 - `projects` (id, user_id, name, description, created_at, default_mode)
 - `sessions` (id, project_id, user_id, name, description, is_active, created_at, updated_at)
@@ -83,6 +87,7 @@ Make sure your Supabase database has these tables (check your SQL migrations or 
 
 **Enable RLS (Row Level Security):**
 Make sure policies allow authenticated users to:
+
 - Read/write their own projects, runs, sessions
 - Read/write their own tags
 
@@ -93,12 +98,14 @@ Make sure policies allow authenticated users to:
 In separate terminal windows:
 
 **Terminal 1 - Backend:**
+
 ```powershell
 cd E:\WADI
 pnpm --filter api dev
 ```
 
 **Terminal 2 - Frontend:**
+
 ```powershell
 cd E:\WADI
 pnpm --filter frontend dev
@@ -117,6 +124,7 @@ pnpm dev
 - **Health Check**: http://localhost:4000/health
 
 Expected health check response:
+
 ```json
 {
   "status": "ok",
@@ -146,11 +154,13 @@ The backend now has comprehensive logging. You should see:
 
 **Symptom:** All API calls return 401
 **Check:**
+
 - Is the user logged in? (Check browser DevTools → Application → Session Storage)
 - Is the Supabase token valid?
 - Check backend logs for `[Auth]` messages
 
 **Fix:**
+
 - Log out and log back in
 - Check SUPABASE_URL and SUPABASE_ANON_KEY are correct
 - Verify Supabase RLS policies allow the user access
@@ -159,11 +169,13 @@ The backend now has comprehensive logging. You should see:
 
 **Symptom:** Backend logs show `[getProjects] Supabase error`
 **Check:**
+
 - Do the database tables exist?
 - Are RLS policies configured?
 - Is the user_id column present in all tables?
 
 **Fix:**
+
 - Run Supabase migrations
 - Check table structure matches expected schema
 - Temporarily disable RLS for debugging (re-enable after!)
@@ -172,6 +184,7 @@ The backend now has comprehensive logging. You should see:
 
 **Symptom:** Browser console shows CORS policy errors
 **Fix:**
+
 - Verify `FRONTEND_URL=http://localhost:5173` in backend .env
 - Restart backend server
 - Check no trailing slashes in URLs
@@ -179,6 +192,7 @@ The backend now has comprehensive logging. You should see:
 #### 4. **Frontend shows "Network error"**
 
 **Check:**
+
 - Is backend running on port 4000?
 - Check `VITE_API_URL=http://localhost:4000` in frontend .env
 - Test health check: http://localhost:4000/health
@@ -188,6 +202,7 @@ The backend now has comprehensive logging. You should see:
 ## 🎨 Features Overview
 
 ### Projects Page
+
 - **Stats Dashboard**: Total projects, last activity, status
 - **Error Handling**: Retry button if API fails
 - **Empty State**: Friendly message when no projects exist
@@ -196,6 +211,7 @@ The backend now has comprehensive logging. You should see:
 - **Project Cards**: Click to view project details
 
 ### Project Detail Page
+
 - **Sessions Management**: Create, rename, delete sessions
 - **Runs Display**: Grouped by session with AI conversations
 - **Input Box**: Fixed at bottom for new messages

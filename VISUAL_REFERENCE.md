@@ -404,6 +404,7 @@ Height:        100vh (full screen)
 Use this to verify your implementation:
 
 ### Colors & Gradients
+
 - [ ] Page background is soft bluish (#F3F6FB)
 - [ ] Cards are pure white (#FFFFFF)
 - [ ] Hero card has blue→purple gradient
@@ -412,6 +413,7 @@ Use this to verify your implementation:
 - [ ] Gradients are smooth, not banded
 
 ### Layout & Spacing
+
 - [ ] Desktop shows centered "phone" (480px)
 - [ ] Mobile is full-width
 - [ ] Consistent spacing throughout
@@ -419,12 +421,14 @@ Use this to verify your implementation:
 - [ ] Bottom nav is sticky
 
 ### Typography
+
 - [ ] Font is Inter (sans-serif)
 - [ ] Logo is uppercase
 - [ ] Headers are semibold/bold
 - [ ] Text is legible on all backgrounds
 
 ### Y2K Elements
+
 - [ ] Holographic orb visible (blurred)
 - [ ] Orb is pulsing gently
 - [ ] Gradients are subtle, not harsh
@@ -432,6 +436,7 @@ Use this to verify your implementation:
 - [ ] Overall feel is refined
 
 ### Interactions
+
 - [ ] Cards scale on hover
 - [ ] Button has glow effect
 - [ ] Chips change on hover

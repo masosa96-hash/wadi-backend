@@ -13,6 +13,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Architecture Overview](#architecture-overview)
 3. [WebSocket Server Setup](#websocket-server-setup)
@@ -73,6 +74,7 @@ RM --> WS
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L20-L80)
 - [index.ts](file://apps/api/src/index.ts#L133-L137)
 
@@ -104,6 +106,7 @@ CM->>Client : send connected message
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L20-L80)
 - [index.ts](file://apps/api/src/index.ts#L133-L137)
 
@@ -117,6 +120,7 @@ The WebSocket server uses a standardized path structure that supports both chat 
 The path parsing logic automatically determines the resource type and extracts the appropriate identifier for connection management.
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L20-L80)
 - [index.ts](file://apps/api/src/index.ts#L133-L137)
 
@@ -130,12 +134,12 @@ Each WebSocket connection is represented by a `WSClient` interface containing es
 
 ```typescript
 interface WSClient {
-  ws: WebSocket;           // WebSocket instance
-  id: string;             // Unique client identifier
-  userId: string;         // Authenticated user ID
+  ws: WebSocket; // WebSocket instance
+  id: string; // Unique client identifier
+  userId: string; // Authenticated user ID
   conversationId?: string; // Chat conversation reference
-  runId?: string;         // AI run reference
-  isActive: boolean;      // Connection status flag
+  runId?: string; // AI run reference
+  isActive: boolean; // Connection status flag
 }
 ```
 
@@ -161,6 +165,7 @@ Closed --> [*]
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L37-L70)
 
 ### Resource Type Detection
@@ -168,6 +173,7 @@ Closed --> [*]
 The system automatically detects whether a connection is for chat or run streaming based on the URL path structure, enabling appropriate client state initialization.
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L9-L18)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L37-L70)
 
@@ -204,6 +210,7 @@ end
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L82-L102)
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L18-L81)
 
@@ -224,6 +231,7 @@ The authentication system incorporates several security measures:
 - **Access Control**: Resource-level permissions based on user identity
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L82-L102)
 - [auth.ts](file://apps/api/src/middleware/auth.ts#L18-L81)
 
@@ -260,6 +268,7 @@ Success --> End
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L47-L61)
 
 ### Handler Routing
@@ -271,6 +280,7 @@ The message processor routes messages to specialized handlers based on type:
 - **Stop Messages**: Terminate ongoing AI runs and clean resources
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L47-L61)
 
 ## Supported Message Types
@@ -284,7 +294,7 @@ Authentication messages enable secure client identification:
 ```typescript
 interface AuthMessage {
   type: "auth";
-  token: string;  // Supabase JWT token
+  token: string; // Supabase JWT token
 }
 ```
 
@@ -295,7 +305,7 @@ Chat messages represent user input and trigger AI response generation:
 ```typescript
 interface ChatMessage {
   type: "message";
-  content: string;  // User's message text
+  content: string; // User's message text
 }
 ```
 
@@ -355,9 +365,11 @@ WebSocketMessage <|-- SystemMessage
 ```
 
 **Diagram sources**
+
 - [types.ts](file://apps/api/src/services/brain/types.ts#L22-L44)
 
 **Section sources**
+
 - [types.ts](file://apps/api/src/services/brain/types.ts#L22-L44)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L51-L57)
 
@@ -381,7 +393,7 @@ When errors occur, the system responds with structured error messages:
 ```typescript
 interface ErrorMessage {
   type: "error";
-  message: string;  // Human-readable error description
+  message: string; // Human-readable error description
 }
 ```
 
@@ -415,9 +427,11 @@ RetryLogic --> End
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L58-L61)
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L58-L61)
 
 ## Scalability and Memory Management
@@ -433,6 +447,7 @@ const clients = new Map<string, WSClient>();
 ```
 
 This approach provides:
+
 - **O(1) Lookup**: Efficient client access by ID
 - **Memory Efficiency**: Automatic garbage collection when clients disconnect
 - **Scalability**: Handles thousands of concurrent connections
@@ -479,6 +494,7 @@ LM --> MT
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L17-L18)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L64-L70)
 
@@ -491,6 +507,7 @@ The system exposes utility functions for monitoring connection health:
 - **Resource Utilization**: Memory and CPU usage tracking
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L17-L18)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L64-L70)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L177-L186)
@@ -528,6 +545,7 @@ WS->>Store : onmessage handler ready
 ```
 
 **Diagram sources**
+
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L52-L94)
 
 ### Message Handling
@@ -549,6 +567,7 @@ The frontend includes robust error recovery mechanisms:
 - **Server Errors**: User-friendly error messaging
 
 **Section sources**
+
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L52-L94)
 
 ## Extending the Protocol
@@ -573,34 +592,38 @@ export type WebSocketMessageType =
   | "auth"
   | "message"
   | "stop"
-  | "custom-action"  // New type
+  | "custom-action"; // New type
 
 // Step 2: Update message interface
 export interface WebSocketMessage {
   type: WebSocketMessageType;
   // ... existing properties
-  customData?: any;  // New property
+  customData?: any; // New property
 }
 
 // Step 3: Implement handler
 async function handleCustomAction(clientId: string, data: any) {
   const client = clients.get(clientId);
   if (!client) return;
-  
+
   try {
     // Process custom action
     // ...
-    
+
     // Send response if needed
-    client.ws.send(JSON.stringify({
-      type: "custom-response",
-      result: "success"
-    }));
+    client.ws.send(
+      JSON.stringify({
+        type: "custom-response",
+        result: "success",
+      }),
+    );
   } catch (error) {
-    client.ws.send(JSON.stringify({
-      type: "error",
-      message: "Custom action failed"
-    }));
+    client.ws.send(
+      JSON.stringify({
+        type: "error",
+        message: "Custom action failed",
+      }),
+    );
   }
 }
 
@@ -621,6 +644,7 @@ When extending the WebSocket protocol:
 - **Testing**: Thoroughly test new functionality with various scenarios
 
 **Section sources**
+
 - [types.ts](file://apps/api/src/services/brain/types.ts#L22-L44)
 
 ## Performance Considerations
@@ -662,6 +686,7 @@ The system implements rate limiting to prevent abuse:
 - **Intelligent Throttling**: Adaptive throttling based on server load
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L142-L167)
 - [PERFORMANCE_OPTIMIZATION.md](file://PERFORMANCE_OPTIMIZATION.md#L351-L431)
 
@@ -673,6 +698,7 @@ Common issues and their solutions for WebSocket implementation troubleshooting.
 
 **Problem**: WebSocket connections fail to establish
 **Solutions**:
+
 - Verify server is running and listening on correct port
 - Check CORS configuration allows WebSocket connections
 - Validate SSL/TLS certificates for secure connections
@@ -680,6 +706,7 @@ Common issues and their solutions for WebSocket implementation troubleshooting.
 
 **Problem**: Authentication failures
 **Solutions**:
+
 - Verify Supabase configuration and API keys
 - Check token validity and expiration
 - Ensure user account is active and verified
@@ -689,6 +716,7 @@ Common issues and their solutions for WebSocket implementation troubleshooting.
 
 **Problem**: Slow message delivery
 **Solutions**:
+
 - Monitor server CPU and memory usage
 - Check network latency between client and server
 - Optimize AI model selection for response speed
@@ -696,6 +724,7 @@ Common issues and their solutions for WebSocket implementation troubleshooting.
 
 **Problem**: Memory leaks
 **Solutions**:
+
 - Monitor active connection count
 - Check for unclosed WebSocket connections
 - Review client cleanup logic
@@ -705,6 +734,7 @@ Common issues and their solutions for WebSocket implementation troubleshooting.
 
 **Problem**: Messages not being processed
 **Solutions**:
+
 - Check message format and required fields
 - Verify message type routing logic
 - Review error handling and logging
@@ -712,6 +742,7 @@ Common issues and their solutions for WebSocket implementation troubleshooting.
 
 **Problem**: Streaming interruptions
 **Solutions**:
+
 - Monitor connection stability
 - Check for network interruptions
 - Implement automatic reconnection logic
@@ -727,5 +758,6 @@ The system includes several debugging utilities:
 - **Health Checks**: Automated system health monitoring
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L58-L61)
 - [DEBUGGING_GUIDE.md](file://apps/frontend/src/utils/debug.ts#L84-L136)

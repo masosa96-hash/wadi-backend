@@ -5,6 +5,7 @@ This document describes the Supabase database schema for WADI Beta 1.
 ## Tables Overview
 
 The database consists of three main tables:
+
 1. **profiles** - User profile information
 2. **projects** - User projects
 3. **runs** - AI execution runs within projects
@@ -24,14 +25,17 @@ CREATE TABLE profiles (
 ```
 
 **Columns:**
+
 - `user_id` (UUID, Primary Key): References auth.users.id
 - `display_name` (TEXT): User's display name
 - `created_at` (TIMESTAMP): Profile creation timestamp
 
 **Indexes:**
+
 - Primary key on `user_id` (automatic)
 
 **Row Level Security (RLS):**
+
 ```sql
 -- Enable RLS
 ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
@@ -70,6 +74,7 @@ CREATE TABLE projects (
 ```
 
 **Columns:**
+
 - `id` (UUID, Primary Key): Unique project identifier
 - `user_id` (UUID, Foreign Key): References profiles.user_id
 - `name` (TEXT): Project name (max 100 characters)
@@ -77,6 +82,7 @@ CREATE TABLE projects (
 - `created_at` (TIMESTAMP): Project creation timestamp
 
 **Indexes:**
+
 ```sql
 -- Index for efficient user project queries
 CREATE INDEX idx_projects_user_id ON projects(user_id);
@@ -86,6 +92,7 @@ CREATE INDEX idx_projects_created_at ON projects(created_at DESC);
 ```
 
 **Row Level Security (RLS):**
+
 ```sql
 -- Enable RLS
 ALTER TABLE projects ENABLE ROW LEVEL SECURITY;
@@ -131,6 +138,7 @@ CREATE TABLE runs (
 ```
 
 **Columns:**
+
 - `id` (UUID, Primary Key): Unique run identifier
 - `project_id` (UUID, Foreign Key): References projects.id
 - `user_id` (UUID, Foreign Key): References profiles.user_id
@@ -140,6 +148,7 @@ CREATE TABLE runs (
 - `created_at` (TIMESTAMP): Run creation timestamp
 
 **Indexes:**
+
 ```sql
 -- Index for efficient project run queries
 CREATE INDEX idx_runs_project_id ON runs(project_id);
@@ -152,6 +161,7 @@ CREATE INDEX idx_runs_created_at ON runs(created_at DESC);
 ```
 
 **Row Level Security (RLS):**
+
 ```sql
 -- Enable RLS
 ALTER TABLE runs ENABLE ROW LEVEL SECURITY;
@@ -165,10 +175,10 @@ CREATE POLICY "Users can read own runs"
 CREATE POLICY "Users can insert own runs"
   ON runs FOR INSERT
   WITH CHECK (
-    auth.uid() = user_id 
+    auth.uid() = user_id
     AND EXISTS (
-      SELECT 1 FROM projects 
-      WHERE projects.id = runs.project_id 
+      SELECT 1 FROM projects
+      WHERE projects.id = runs.project_id
       AND projects.user_id = auth.uid()
     )
   );
@@ -194,6 +204,7 @@ runs (project_id FK, user_id FK)
 ```
 
 **Cascade Deletion:**
+
 - Deleting a user deletes their profile (CASCADE)
 - Deleting a profile deletes all projects (CASCADE)
 - Deleting a project deletes all runs (CASCADE)
@@ -205,6 +216,7 @@ runs (project_id FK, user_id FK)
 ### 1. Create Tables in Supabase
 
 Execute the SQL scripts above in your Supabase SQL Editor in the following order:
+
 1. profiles table
 2. projects table
 3. runs table
@@ -218,9 +230,9 @@ After creating tables, enable RLS and create policies as shown above.
 Run the following query to verify all tables are created:
 
 ```sql
-SELECT table_name 
-FROM information_schema.tables 
-WHERE table_schema = 'public' 
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
 AND table_name IN ('profiles', 'projects', 'runs');
 ```
 
@@ -233,13 +245,16 @@ Create a test user via Supabase Auth and verify they can only access their own d
 ## Data Validation Constraints
 
 ### profiles
+
 - `display_name`: Required, no max length enforced (consider adding if needed)
 
 ### projects
+
 - `name`: Required, max 100 characters
 - `description`: Optional, max 500 characters
 
 ### runs
+
 - `input`: Required, max 5000 characters
 - `output`: Required, no max length (AI-generated)
 - `model`: Required, defaults to 'gpt-3.5-turbo'
@@ -262,6 +277,7 @@ Create a test user via Supabase Auth and verify they can only access their own d
 ## Migration Notes
 
 When migrating from the current file-based system:
+
 - User data in `apps/api/data/users.json` → profiles table
 - Conversation history in `memory.json` → runs table (requires project assignment)
 - Brain modules (memory.ts, adaptiveStyle.ts) → Not migrated (out of scope)
@@ -271,6 +287,7 @@ When migrating from the current file-based system:
 ## Future Considerations (Beta 2+)
 
 Potential schema enhancements for future releases:
+
 - Add `updated_at` columns with triggers
 - Add `deleted_at` for soft deletes
 - Add project tags or categories

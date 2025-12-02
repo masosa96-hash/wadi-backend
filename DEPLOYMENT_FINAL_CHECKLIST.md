@@ -31,16 +31,19 @@
 **Root Directory:** `apps/api`
 
 **Build Command:**
+
 ```bash
 pnpm install && pnpm build
 ```
 
 **Start Command:**
+
 ```bash
 pnpm start
 ```
 
 **Environment Variables (REQUIRED):**
+
 ```bash
 NODE_ENV=production
 PORT=4000
@@ -54,6 +57,7 @@ GUEST_MODE=true
 ```
 
 **⚠️ Critical Notes:**
+
 - `OPENAI_API_KEY` must start with `sk-` and be valid
 - `FRONTEND_URL` must match Vercel URL EXACTLY (no trailing slash)
 - `SUPABASE_SERVICE_KEY` required for authenticated users
@@ -63,11 +67,13 @@ GUEST_MODE=true
 ### Step 2: Verify Backend Health
 
 **Command:**
+
 ```bash
 curl https://YOUR-RAILWAY-URL.railway.app/health
 ```
 
 **Expected Response:**
+
 ```json
 {
   "status": "ok",
@@ -78,6 +84,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 ```
 
 **If status is "degraded":**
+
 - Check Railway logs for errors
 - Verify OpenAI API key is valid
 - Verify Supabase credentials are correct
@@ -97,6 +104,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 **Framework Preset:** Vite
 
 **Build Command:**
+
 ```bash
 pnpm build
 ```
@@ -104,6 +112,7 @@ pnpm build
 **Output Directory:** `dist`
 
 **Environment Variables (REQUIRED):**
+
 ```bash
 VITE_API_URL=https://YOUR-RAILWAY-URL.railway.app
 VITE_SUPABASE_URL=https://your-project.supabase.co
@@ -112,6 +121,7 @@ VITE_GUEST_MODE=true
 ```
 
 **⚠️ Critical Notes:**
+
 - `VITE_API_URL` must point to Railway backend (no trailing slash)
 - All `VITE_` variables are exposed to client (don't put secrets)
 - After deployment, update Railway's `FRONTEND_URL` to match Vercel URL
@@ -133,14 +143,17 @@ Then restart Railway service for changes to take effect.
 ### Step 5: Production Smoke Test
 
 #### ✓ Health Check
+
 ```bash
 curl https://YOUR-RAILWAY-URL.railway.app/health
 ```
+
 - [ ] Status: "ok"
 - [ ] Supabase: "connected"
 - [ ] OpenAI: "connected"
 
 #### ✓ Guest Flow
+
 1. [ ] Open frontend URL
 2. [ ] Nickname modal appears with disclaimer
 3. [ ] Enter nickname "Test User"
@@ -151,6 +164,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 8. [ ] See rate limit error: "Estás enviando mensajes muy rápido..."
 
 #### ✓ Auth Flow
+
 1. [ ] Click "creá una cuenta" link from guest modal
 2. [ ] Register with email/password
 3. [ ] Verify email (check Supabase)
@@ -160,6 +174,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 7. [ ] Logout returns to guest mode
 
 #### ✓ Error Handling
+
 1. [ ] Disconnect internet
 2. [ ] Try to send message
 3. [ ] See: "Sin conexión a internet. Verificá tu red..."
@@ -167,6 +182,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 5. [ ] Message sends successfully
 
 #### ✓ UI/UX
+
 1. [ ] Page loads in < 2 seconds
 2. [ ] No console errors
 3. [ ] Guest disclaimer visible and readable
@@ -179,6 +195,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 ## 📊 DEPLOYMENT VERIFICATION
 
 ### Backend Metrics
+
 - [ ] Health endpoint returns 200 OK
 - [ ] Response time < 500ms
 - [ ] Railway logs show no errors
@@ -186,6 +203,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 - [ ] Supabase connection successful
 
 ### Frontend Metrics
+
 - [ ] Vercel build successful
 - [ ] Bundle size ~195 KB gzipped
 - [ ] First contentful paint < 1.5s
@@ -194,6 +212,7 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 - [ ] No runtime errors
 
 ### Security Checklist
+
 - [ ] HTTPS enabled on both services
 - [ ] CORS configured correctly
 - [ ] Rate limiting active (20 req/min)
@@ -208,12 +227,14 @@ curl https://YOUR-RAILWAY-URL.railway.app/health
 ### Share These URLs:
 
 **Backend (Railway):**
+
 ```
 URL: https://_____.railway.app
 Health: https://_____.railway.app/health
 ```
 
 **Frontend (Vercel):**
+
 ```
 URL: https://_____.vercel.app
 ```
@@ -240,30 +261,36 @@ UI/UX: ✅ / ❌
 ## 🆘 TROUBLESHOOTING
 
 ### "degraded" health status
+
 **Problem:** OpenAI or Supabase showing "disconnected"
 
 **Solution:**
+
 1. Check Railway logs for specific error
 2. Verify API keys in Railway dashboard
 3. Test API keys manually:
+
    ```bash
    # OpenAI
    curl https://api.openai.com/v1/models \
      -H "Authorization: Bearer YOUR_OPENAI_KEY"
-   
+
    # Supabase
    curl https://YOUR_PROJECT.supabase.co/rest/v1/ \
      -H "apikey: YOUR_ANON_KEY"
    ```
+
 4. Update keys if invalid
 5. Restart Railway service
 
 ---
 
 ### CORS errors in browser console
+
 **Problem:** "Access-Control-Allow-Origin" errors
 
 **Solution:**
+
 1. Verify `FRONTEND_URL` in Railway matches Vercel URL exactly
 2. No trailing slash: ✅ `https://wadi.vercel.app` ❌ `https://wadi.vercel.app/`
 3. Update Railway env var
@@ -274,9 +301,11 @@ UI/UX: ✅ / ❌
 ---
 
 ### Rate limit not working
+
 **Problem:** Can send unlimited messages
 
 **Solution:**
+
 1. Check Railway logs for rate limiter initialization
 2. Verify code deployed (commit aeba1d4c)
 3. Test with `x-guest-id` header:
@@ -293,13 +322,16 @@ UI/UX: ✅ / ❌
 ---
 
 ### Build failures
+
 **Railway Build Error:**
+
 - Check `package.json` has all dependencies
 - Verify `pnpm-lock.yaml` is committed
 - Check Railway build logs for specific error
 - Try local build: `pnpm build`
 
 **Vercel Build Error:**
+
 - Check environment variables are set
 - Verify `vite.config.ts` is correct
 - Check Vercel build logs

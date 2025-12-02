@@ -16,6 +16,7 @@ vercel --prod
 ```
 
 **Why this works:**
+
 - Vercel's `Root Directory = apps/frontend` setting tells Vercel to look inside `apps/frontend`
 - Running from `E:\WADI` + Vercel's root setting = correct path
 - Running from `E:\WADI\apps\frontend` + Vercel's root setting = wrong path (duplication)
@@ -28,6 +29,7 @@ cd E:\WADI
 ```
 
 This script:
+
 - Ensures you're in the correct directory
 - Verifies configuration
 - Asks for confirmation
@@ -44,6 +46,7 @@ If you prefer to deploy from `apps/frontend`:
 4. Save and redeploy
 
 Then you can run:
+
 ```powershell
 cd E:\WADI\apps\frontend
 vercel --prod
@@ -76,16 +79,17 @@ vercel ls
 
 ## 📊 Configuration Matrix
 
-| Vercel Root Directory | Deploy Command Location | Result |
-|----------------------|-------------------------|---------|
-| `apps/frontend` | `E:\WADI` | ✅ Works |
-| `apps/frontend` | `E:\WADI\apps\frontend` | ❌ Fails |
-| `.` (empty) | `E:\WADI\apps\frontend` | ✅ Works |
-| `.` (empty) | `E:\WADI` | ⚠️ Requires config |
+| Vercel Root Directory | Deploy Command Location | Result             |
+| --------------------- | ----------------------- | ------------------ |
+| `apps/frontend`       | `E:\WADI`               | ✅ Works           |
+| `apps/frontend`       | `E:\WADI\apps\frontend` | ❌ Fails           |
+| `.` (empty)           | `E:\WADI\apps\frontend` | ✅ Works           |
+| `.` (empty)           | `E:\WADI`               | ⚠️ Requires config |
 
 ## 💡 Best Practice
 
 **Keep your Vercel settings as:**
+
 - Root Directory: `apps/frontend`
 - Build Command: `pnpm build`
 - Output Directory: `dist`

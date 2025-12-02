@@ -19,6 +19,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Dual-Brain Architecture](#dual-brain-architecture)
 3. [System Architecture Overview](#system-architecture-overview)
@@ -48,6 +49,7 @@ WADI is a modern, open-source AI conversational assistant built with a revolutio
 ### Target Audience
 
 WADI serves two primary user groups:
+
 - **Beginners**: Users who want immediate access to AI assistance without registration
 - **Advanced Users**: Power users requiring persistent conversations, sharing capabilities, and team collaboration features
 
@@ -74,16 +76,19 @@ G --> K["Perform Action"]
 ```
 
 **Diagram sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L7-L41)
 - [apps/api/src/services/brain/types.ts](file://apps/api/src/services/brain/types.ts#L54-L60)
 
 #### Key Responsibilities:
+
 - **Intent Analysis**: Classifies user requests into categories (chat, creation, query, command)
 - **Context Evaluation**: Determines what additional information is needed
 - **Confidence Scoring**: Evaluates certainty in analysis decisions
 - **Action Planning**: Creates step-by-step execution plans
 
 #### Current Implementation:
+
 The current Kivo implementation uses heuristic-based pattern matching for intent detection. Future enhancements will incorporate LLM-powered analysis for improved accuracy.
 
 ### Wadi: The Execution Engine
@@ -106,16 +111,19 @@ J --> K["Final User Response"]
 ```
 
 **Diagram sources**
+
 - [apps/api/src/services/brain/wadi.ts](file://apps/api/src/services/brain/wadi.ts#L7-L43)
 - [apps/api/src/services/brain/types.ts](file://apps/api/src/services/brain/types.ts#L62-L66)
 
 #### Key Responsibilities:
+
 - **Thought Processing**: Interprets Kivo's analytical output
 - **Action Coordination**: Executes appropriate response mechanisms
 - **Tool Management**: Interfaces with external services and APIs
 - **Response Generation**: Creates final user-facing content
 
 **Section sources**
+
 - [ARCHITECTURE_DEEP_DIVE.md](file://ARCHITECTURE_DEEP_DIVE.md#L38-L132)
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L1-L41)
 - [apps/api/src/services/brain/wadi.ts](file://apps/api/src/services/brain/wadi.ts#L1-L43)
@@ -162,6 +170,7 @@ E --> M
 ```
 
 **Diagram sources**
+
 - [apps/frontend/package.json](file://apps/frontend/package.json#L16-L32)
 - [apps/api/package.json](file://apps/api/package.json#L14-L31)
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L7)
@@ -175,6 +184,7 @@ E --> M
 5. **Observability**: Comprehensive logging, monitoring, and debugging capabilities
 
 **Section sources**
+
 - [README.md](file://README.md#L123-L150)
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L7)
 
@@ -185,20 +195,26 @@ E --> M
 The frontend is built with React 18 and Vite, utilizing modern web technologies for optimal performance and developer experience.
 
 #### Chat Interface
+
 The primary user interaction point featuring:
+
 - **Message Bubbles**: Distinct styling for user and AI messages
 - **Input Controls**: Rich text editing with character limits
 - **Real-time Updates**: WebSocket-based live messaging
 - **Mobile Responsiveness**: Adaptive layout for various screen sizes
 
 #### State Management
+
 Uses Zustand for lightweight, performant state management:
+
 - **Chat State**: Conversation history and current session data
 - **Auth State**: User authentication and session management
 - **UI State**: Theme preferences, modal visibility, and loading states
 
 #### WebSocket Integration
+
 Real-time communication for authenticated users:
+
 - **Connection Management**: Automatic reconnection with exponential backoff
 - **Message Streaming**: Live response generation with incremental updates
 - **Error Handling**: Graceful degradation when connections fail
@@ -206,20 +222,26 @@ Real-time communication for authenticated users:
 ### Backend Components
 
 #### Express API Server
+
 Handles all HTTP requests with comprehensive middleware:
+
 - **Authentication Middleware**: Validates user sessions and guest tokens
 - **Rate Limiting**: Protects against abuse with configurable limits
 - **Error Handling**: Structured error responses with detailed logging
 - **CORS Configuration**: Secure cross-origin resource sharing
 
 #### Brain Services
+
 The core AI processing engines:
+
 - **Kivo Service**: Intent analysis and planning
 - **Wadi Service**: Action execution and response generation
 - **OpenAI Integration**: Seamless LLM interactions with multiple providers
 
 #### Database Layer
+
 Powered by Supabase for robust data management:
+
 - **Conversations**: Persistent chat histories with metadata
 - **Users**: Authentication and profile management
 - **Files**: Attachment and media storage capabilities
@@ -230,19 +252,24 @@ Powered by Supabase for robust data management:
 The `@wadi/chat-core` package provides common functionality across the application:
 
 #### Type Definitions
+
 Consistent interfaces for:
+
 - **Message Objects**: Standardized message structures
 - **Conversation Models**: Conversation metadata and relationships
 - **WebSocket Messages**: Real-time communication protocols
 - **Brain Types**: Kivo and Wadi operation schemas
 
 #### Utility Functions
+
 Reusable helpers for:
+
 - **API Communication**: Standardized HTTP client configuration
 - **Data Validation**: Input sanitization and type checking
 - **Error Handling**: Consistent error response formatting
 
 **Section sources**
+
 - [apps/frontend/src/store/chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L1-L415)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L1-L457)
 - [apps/api/src/services/openai.ts](file://apps/api/src/services/openai.ts#L1-L309)
@@ -277,6 +304,7 @@ Frontend-->>User : Display Response
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/store/chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L140-L209)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L20-L215)
 
@@ -311,6 +339,7 @@ Frontend-->>User : Display Response
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/store/chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L212-L287)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L45-L215)
 
@@ -319,21 +348,25 @@ Frontend-->>User : Display Response
 Both flows include comprehensive error handling:
 
 #### Network Errors
+
 - **Retry Logic**: Automatic retry with exponential backoff
 - **Timeout Handling**: Configurable timeouts with user feedback
 - **Graceful Degradation**: Fallback to cached data when offline
 
 #### Authentication Errors
+
 - **Token Refresh**: Automatic session renewal
 - **Redirect Handling**: Seamless re-authentication flow
 - **Access Control**: Proper permission validation
 
 #### API Errors
+
 - **Structured Responses**: Consistent error formatting
 - **User-Friendly Messages**: Translated error descriptions
 - **Debug Information**: Developer-friendly logs in development
 
 **Section sources**
+
 - [apps/frontend/src/config/api.ts](file://apps/frontend/src/config/api.ts#L130-L287)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L215-L252)
 
@@ -370,27 +403,32 @@ I --> N[Connection Management]
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/pages/Chat.tsx](file://apps/frontend/src/pages/Chat.tsx#L1-L402)
 - [apps/frontend/src/store/chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L39-L415)
 
 ### Performance Optimizations
 
 #### Lazy Loading
+
 - **Route-based Splitting**: Code splitting for different pages
 - **Component Splitting**: Dynamic imports for heavy components
 - **Asset Optimization**: Efficient bundling and compression
 
 #### Memory Management
+
 - **State Cleanup**: Automatic cleanup of unused state
 - **Event Listener Management**: Proper cleanup of event handlers
 - **WebSocket Connections**: Efficient connection lifecycle management
 
 #### User Experience Enhancements
+
 - **Optimistic Updates**: Immediate UI feedback before server confirmation
 - **Loading States**: Clear indication of ongoing operations
 - **Error Boundaries**: Preventing application crashes from component failures
 
 **Section sources**
+
 - [apps/frontend/package.json](file://apps/frontend/package.json#L16-L48)
 - [apps/frontend/src/pages/Chat.tsx](file://apps/frontend/src/pages/Chat.tsx#L1-L402)
 
@@ -425,22 +463,26 @@ E --> L[Topic Detection]
 ```
 
 **Diagram sources**
+
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L1-L457)
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L1-L41)
 
 ### Middleware Architecture
 
 #### Authentication Middleware
+
 - **Session Validation**: JWT token verification
 - **Guest Mode Support**: Alternative authentication for anonymous users
 - **Permission Checking**: Role-based access control
 
 #### Rate Limiting
+
 - **Configurable Limits**: Adjustable thresholds per user type
 - **Sliding Window**: Fair distribution of requests over time
 - **Bypass Mechanisms**: Special handling for authenticated users
 
 #### Error Handling
+
 - **Centralized Error Processing**: Consistent error response formatting
 - **Logging Integration**: Structured logging with correlation IDs
 - **Health Monitoring**: Endpoint availability checks
@@ -448,12 +490,14 @@ E --> L[Topic Detection]
 ### API Design
 
 RESTful API with comprehensive documentation:
+
 - **Resource-Oriented**: Clear URL structure following REST principles
 - **Versioning**: Semantic versioning for API stability
 - **Documentation**: OpenAPI specification for easy integration
 - **Validation**: Input sanitization and type checking
 
 **Section sources**
+
 - [apps/api/package.json](file://apps/api/package.json#L14-L42)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L1-L457)
 
@@ -473,27 +517,32 @@ B --> F[types.ts]
 ```
 
 **Diagram sources**
+
 - [packages/chat-core/index.ts](file://packages/chat-core/index.ts)
 - [packages/chat-core/types.ts](file://packages/chat-core/types.ts#L1-L67)
 
 ### Benefits of Shared Packages
 
 #### Type Safety
+
 - **Consistent Interfaces**: Uniform type definitions across applications
 - **Compile-Time Validation**: Early detection of type mismatches
 - **Documentation**: Self-documenting code through TypeScript definitions
 
 #### Code Reusability
+
 - **Utility Functions**: Common helper methods
 - **Configuration**: Shared environment and feature flags
 - **Constants**: Centralized configuration values
 
 #### Maintenance Efficiency
+
 - **Single Source of Truth**: Changes propagate automatically
 - **Testing Coverage**: Shared tests ensure consistent behavior
 - **Version Control**: Coordinated releases across dependent packages
 
 **Section sources**
+
 - [packages/chat-core/types.ts](file://packages/chat-core/types.ts#L1-L67)
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L7)
 
@@ -515,6 +564,7 @@ F --> G[Ready for Interaction]
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/pages/Chat.tsx](file://apps/frontend/src/pages/Chat.tsx#L61-L86)
 
 ### Authenticated User Journey
@@ -538,16 +588,19 @@ H --> I[Sync with Cloud]
 The platform provides excellent mobile support with responsive design principles:
 
 #### Touch Optimization
+
 - **Large Tap Targets**: Minimum 44px touch areas
 - **Gesture Support**: Swipe gestures for navigation
 - **Keyboard Handling**: Adaptive layouts for virtual keyboards
 
 #### Performance Considerations
+
 - **Battery Optimization**: Efficient resource usage
 - **Network Awareness**: Adaptive behavior for different connection types
 - **Offline Capability**: Basic functionality without internet
 
 **Section sources**
+
 - [apps/frontend/src/pages/Chat.tsx](file://apps/frontend/src/pages/Chat.tsx#L61-L86)
 - [apps/frontend/src/store/chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L290-L341)
 
@@ -558,6 +611,7 @@ The platform provides excellent mobile support with responsive design principles
 WADI integrates with multiple LLM providers for flexibility and reliability.
 
 #### Provider Abstraction
+
 ```mermaid
 graph TB
 A[AI Service Layer] --> B[Groq Provider]
@@ -569,9 +623,11 @@ D --> G[Offline Mode]
 ```
 
 **Diagram sources**
+
 - [apps/api/src/services/openai.ts](file://apps/api/src/services/openai.ts#L1-L309)
 
 #### Model Management
+
 - **Automatic Selection**: Intelligent model choice based on use case
 - **Fallback Mechanisms**: Redundant providers for reliability
 - **Performance Monitoring**: Model-specific performance tracking
@@ -581,12 +637,14 @@ D --> G[Offline Mode]
 The Supabase schema supports comprehensive conversation management:
 
 #### Core Tables
+
 - **conversations**: Chat session metadata and organization
 - **messages**: Individual message content and metadata
 - **users**: User profiles and authentication data
 - **files**: Attachment and media storage
 
 #### Relationship Patterns
+
 - **One-to-Many**: Conversations contain multiple messages
 - **Many-to-Many**: Users can participate in multiple conversations
 - **Hierarchical**: Nested conversations for thread-like discussions
@@ -594,17 +652,20 @@ The Supabase schema supports comprehensive conversation management:
 ### Security Implementation
 
 #### Authentication Security
+
 - **JWT Tokens**: Secure session management
 - **Refresh Tokens**: Automatic token renewal
 - **CSRF Protection**: Cross-site request forgery prevention
 - **Rate Limiting**: Protection against brute force attacks
 
 #### Data Protection
+
 - **Encryption**: Data at rest and in transit encryption
 - **Sanitization**: Input validation and XSS prevention
 - **Audit Logging**: Comprehensive audit trails for compliance
 
 **Section sources**
+
 - [apps/api/src/services/openai.ts](file://apps/api/src/services/openai.ts#L1-L309)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L20-L215)
 
@@ -657,6 +718,7 @@ WADI represents a significant advancement in conversational AI platforms, combin
 ### Future Roadmap
 
 The platform continues evolving with planned enhancements including:
+
 - **Streaming Responses**: Real-time message generation
 - **Voice Interface**: Audio input and output capabilities
 - **Plugin System**: Extensible functionality through third-party integrations

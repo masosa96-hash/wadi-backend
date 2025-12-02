@@ -38,6 +38,7 @@ USER RESPONSE
 ## 🔍 KIVO: El Motor de Razonamiento
 
 ### Responsabilidades:
+
 1. **Análisis de Intención**: Clasifica el tipo de solicitud
 2. **Planificación**: Crea pasos para cumplir la solicitud
 3. **Contexto**: Determina qué información adicional se necesita
@@ -46,11 +47,11 @@ USER RESPONSE
 ### Tipos de Intent:
 
 ```typescript
-type Intent = 
-  | "chat"      // Conversación general
-  | "command"   // Comando directo (crear, eliminar, etc)
-  | "query"     // Búsqueda de información
-  | "creation"  // Creación de recursos (proyecto, archivo, etc)
+type Intent =
+  | "chat" // Conversación general
+  | "command" // Comando directo (crear, eliminar, etc)
+  | "query" // Búsqueda de información
+  | "creation"; // Creación de recursos (proyecto, archivo, etc)
 ```
 
 ### Implementación Actual:
@@ -58,17 +59,16 @@ type Intent =
 ```typescript
 // apps/api/src/services/brain/kivo.ts
 export async function pensar(
-  input: string, 
-  context: any = {}
+  input: string,
+  context: any = {},
 ): Promise<KivoThought> {
-  
   const normalizedInput = input.toLowerCase().trim();
-  
+
   // 1. Análisis de palabras clave (heurística simple)
   let intent: Intent = "chat";
   const reasoning: string[] = [];
   const plan: string[] = [];
-  
+
   // 2. Detección de patrones
   if (includes("crear", "nuevo")) {
     intent = "creation";
@@ -78,14 +78,14 @@ export async function pensar(
     plan.push("Ejecutar creación");
   }
   // ... más patrones
-  
+
   // 3. Retornar pensamiento estructurado
   return {
     intent,
     confidence: 0.8,
     reasoning,
     plan,
-    context_needed: []
+    context_needed: [],
   };
 }
 ```
@@ -115,16 +115,19 @@ async function pensarConLLM(input: string, context: any) {
     "context_needed": ["...", "..."]
   }
   `;
-  
+
   const response = await openai.chat.completions.create({
     model: "gpt-4",
     messages: [
-      { role: "system", content: "Eres un asistente de análisis de intención." },
-      { role: "user", content: analysisPrompt }
+      {
+        role: "system",
+        content: "Eres un asistente de análisis de intención.",
+      },
+      { role: "user", content: analysisPrompt },
     ],
     temperature: 0.3, // Baja para análisis consistente
   });
-  
+
   return JSON.parse(response.choices[0].message.content);
 }
 ```
@@ -134,6 +137,7 @@ async function pensarConLLM(input: string, context: any) {
 ## ⚡ WADI: El Motor de Ejecución
 
 ### Responsabilidades:
+
 1. **Interpretación**: Lee el pensamiento de Kivo
 2. **Ejecución**: Llama a las herramientas necesarias
 3. **Generación**: Crea la respuesta final
@@ -142,10 +146,10 @@ async function pensarConLLM(input: string, context: any) {
 ### Tipos de Acción:
 
 ```typescript
-type ActionType = 
-  | "response"    // Respuesta directa de texto
-  | "tool_call"   // Llamada a una herramienta externa
-  | "error"       // Error en la ejecución
+type ActionType =
+  | "response" // Respuesta directa de texto
+  | "tool_call" // Llamada a una herramienta externa
+  | "error"; // Error en la ejecución
 ```
 
 ### Implementación Actual:
@@ -153,40 +157,39 @@ type ActionType =
 ```typescript
 // apps/api/src/services/brain/wadi.ts
 export async function ejecutar(
-  thought: KivoThought, 
-  context: any = {}
+  thought: KivoThought,
+  context: any = {},
 ): Promise<WadiAction> {
-  
   switch (thought.intent) {
     case "creation":
       return {
         type: "tool_call",
         payload: {
           tool: "create_resource",
-          params: extractParams(context)
+          params: extractParams(context),
         },
-        thought_process: thought
+        thought_process: thought,
       };
-    
+
     case "query":
       return {
         type: "tool_call",
         payload: {
           tool: "search",
-          query: extractQuery(context)
+          query: extractQuery(context),
         },
-        thought_process: thought
+        thought_process: thought,
       };
-    
+
     case "chat":
     default:
       // Para chat, delega a generateChatCompletion
       return {
         type: "response",
         payload: {
-          text: await generateAIResponse(context)
+          text: await generateAIResponse(context),
         },
-        thought_process: thought
+        thought_process: thought,
       };
   }
 }
@@ -205,18 +208,18 @@ interface Tool {
 
 class ToolRegistry {
   private tools = new Map<string, Tool>();
-  
+
   register(tool: Tool) {
     this.tools.set(tool.name, tool);
   }
-  
+
   async execute(toolName: string, params: any) {
     const tool = this.tools.get(toolName);
     if (!tool) throw new Error(`Tool ${toolName} not found`);
-    
+
     // Validar parámetros
     this.validateParams(params, tool.parameters);
-    
+
     // Ejecutar
     return await tool.execute(params);
   }
@@ -227,13 +230,13 @@ async function ejecutarConTools(thought: KivoThought) {
   if (thought.intent === "creation") {
     const result = await toolRegistry.execute("create_project", {
       name: extractedName,
-      type: extractedType
+      type: extractedType,
     });
-    
+
     return {
       type: "tool_call",
       payload: result,
-      thought_process: thought
+      thought_process: thought,
     };
   }
 }
@@ -255,7 +258,7 @@ async function ejecutarConTools(thought: KivoThought) {
    ├─ Obtiene historial completo de localStorage
    └─ POST /api/chat
       Headers: { x-guest-id: "uuid" }
-      Body: { 
+      Body: {
         message: "Hola WADI, ¿cómo estás?",
         messages: [
           { role: "user", content: "Mensaje anterior..." },
@@ -353,14 +356,12 @@ const updatedMessages = [...state.messages, assistantMessage];
 
 // Guarda solo si es guest
 if (guestId) {
-  localStorage.setItem(
-    `wadi_conv_${guestId}`, 
-    JSON.stringify(updatedMessages)
-  );
+  localStorage.setItem(`wadi_conv_${guestId}`, JSON.stringify(updatedMessages));
 }
 ```
 
 **Por qué es eficiente:**
+
 - Solo guarda cuando hay cambios
 - Serializa solo los datos necesarios
 - No hace round-trips a servidor
@@ -378,6 +379,7 @@ set((state) => ({
 ```
 
 **Beneficio:**
+
 - UI instantánea
 - Mejor experiencia de usuario
 - Reduce sensación de lag
@@ -395,6 +397,7 @@ const { data: history } = await supabase
 ```
 
 **Por qué:**
+
 - Reduce tokens enviados a OpenAI
 - Mantiene costos bajos
 - OpenAI tiene límite de contexto (4096 tokens para gpt-3.5-turbo)
@@ -412,6 +415,7 @@ try {
 ```
 
 **Cobertura:**
+
 - Network errors
 - API errors (405, 422, 500)
 - OpenAI rate limits
@@ -425,9 +429,10 @@ try {
 
 ```typescript
 // En chatController.ts
-console.log("[sendMessage] Request from:", 
-  userId ? `User ${userId}` : `Guest ${guestId}`, 
-  { message: message?.substring(0, 50), conversationId }
+console.log(
+  "[sendMessage] Request from:",
+  userId ? `User ${userId}` : `Guest ${guestId}`,
+  { message: message?.substring(0, 50), conversationId },
 );
 
 console.log("[sendMessage] Kivo thought:", thought);
@@ -437,6 +442,7 @@ console.log("[sendMessage] Calling OpenAI with", messages.length, "messages");
 ### Qué monitorear:
 
 1. **Tiempo de respuesta**:
+
    ```typescript
    const start = Date.now();
    const response = await generateChatCompletion(messages);
@@ -445,18 +451,21 @@ console.log("[sendMessage] Calling OpenAI with", messages.length, "messages");
    ```
 
 2. **Tasa de error**:
+
    ```typescript
    let errorCount = 0;
    let totalRequests = 0;
-   
+
    try {
      totalRequests++;
      await sendMessage();
    } catch {
      errorCount++;
    }
-   
-   console.log(`Error rate: ${(errorCount/totalRequests*100).toFixed(2)}%`);
+
+   console.log(
+     `Error rate: ${((errorCount / totalRequests) * 100).toFixed(2)}%`,
+   );
    ```
 
 3. **Uso de tokens**:
@@ -480,7 +489,7 @@ export async function* streamChatCompletion(messages) {
     messages,
     stream: true, // ← STREAMING
   });
-  
+
   for await (const chunk of stream) {
     const content = chunk.choices[0]?.delta?.content;
     if (content) {
@@ -491,6 +500,7 @@ export async function* streamChatCompletion(messages) {
 ```
 
 **Beneficio:**
+
 - Usuario ve respuesta aparecer en tiempo real
 - Sensación de "pensando" más natural
 - Mejor UX
@@ -503,19 +513,20 @@ const responseCache = new Map<string, string>();
 
 async function getCachedOrGenerate(input: string) {
   const normalized = input.toLowerCase().trim();
-  
+
   if (responseCache.has(normalized)) {
     return responseCache.get(normalized)!;
   }
-  
+
   const response = await generateChatCompletion([...]);
   responseCache.set(normalized, response);
-  
+
   return response;
 }
 ```
 
 **Casos de uso:**
+
 - "Hola" → Siempre similar
 - "¿Qué puedes hacer?" → FAQ
 - "Ayuda" → Guía
@@ -528,22 +539,20 @@ async function getRelevantContext(query: string, allMessages) {
   // 1. Generar embedding del query
   const queryEmbedding = await openai.embeddings.create({
     model: "text-embedding-3-small",
-    input: query
+    input: query,
   });
-  
+
   // 2. Calcular similitud con historial
-  const scored = allMessages.map(msg => ({
+  const scored = allMessages.map((msg) => ({
     ...msg,
     similarity: cosineSimilarity(
       queryEmbedding.data[0].embedding,
-      msg.embedding
-    )
+      msg.embedding,
+    ),
   }));
-  
+
   // 3. Tomar top 5 más relevantes
-  return scored
-    .sort((a, b) => b.similarity - a.similarity)
-    .slice(0, 5);
+  return scored.sort((a, b) => b.similarity - a.similarity).slice(0, 5);
 }
 ```
 
@@ -551,27 +560,31 @@ async function getRelevantContext(query: string, allMessages) {
 
 ```typescript
 // Límite por usuario
-const userRateLimits = new Map<string, {
-  count: number;
-  resetAt: number;
-}>();
+const userRateLimits = new Map<
+  string,
+  {
+    count: number;
+    resetAt: number;
+  }
+>();
 
 function checkRateLimit(userId: string) {
   const limit = userRateLimits.get(userId);
   const now = Date.now();
-  
+
   if (!limit || now > limit.resetAt) {
     userRateLimits.set(userId, {
       count: 1,
-      resetAt: now + 60000 // 1 minuto
+      resetAt: now + 60000, // 1 minuto
     });
     return true;
   }
-  
-  if (limit.count >= 10) { // Max 10 mensajes/minuto
+
+  if (limit.count >= 10) {
+    // Max 10 mensajes/minuto
     throw new Error("Rate limit exceeded");
   }
-  
+
   limit.count++;
   return true;
 }
@@ -599,7 +612,7 @@ Ahora responde al usuario:
 
 const response = await generateChatCompletion([
   { role: "system", content: thoughtPrompt },
-  { role: "user", content: userMessage }
+  { role: "user", content: userMessage },
 ]);
 ```
 
@@ -626,13 +639,13 @@ Ahora responde al usuario:
 
 ```typescript
 // Para respuestas más predecibles (FAQ, datos)
-temperature: 0.3
+temperature: 0.3;
 
 // Para conversación natural
-temperature: 0.7
+temperature: 0.7;
 
 // Para respuestas creativas (historias, ideas)
-temperature: 0.9
+temperature: 0.9;
 ```
 
 ---
@@ -642,7 +655,7 @@ temperature: 0.9
 ### Console Logs Estructurados:
 
 ```typescript
-const DEBUG = process.env.DEBUG === 'true';
+const DEBUG = process.env.DEBUG === "true";
 
 function debugLog(category: string, ...args: any[]) {
   if (DEBUG) {
@@ -652,16 +665,16 @@ function debugLog(category: string, ...args: any[]) {
 }
 
 // Uso:
-debugLog('KIVO', 'Analyzing input:', input);
-debugLog('WADI', 'Executing action:', action);
-debugLog('OPENAI', 'Response received:', response);
+debugLog("KIVO", "Analyzing input:", input);
+debugLog("WADI", "Executing action:", action);
+debugLog("OPENAI", "Response received:", response);
 ```
 
 ### Request Tracing:
 
 ```typescript
 // Generar ID único para cada request
-import { v4 as uuid } from 'uuid';
+import { v4 as uuid } from "uuid";
 
 function generateTraceId() {
   return uuid();

@@ -15,6 +15,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [System Architecture](#system-architecture)
 3. [Subscription Plans](#subscription-plans)
@@ -34,6 +35,7 @@
 WADI implements a sophisticated billing and monetization system built around a credit-based model with tiered subscription plans. The system provides granular usage tracking, automatic limit enforcement, and seamless payment processing capabilities. This infrastructure supports both freemium and premium user experiences while maintaining real-time usage monitoring and financial transaction management.
 
 The billing system operates on two primary models:
+
 - **Subscription-based**: Monthly/yearly plans with feature access controls
 - **Pay-per-use**: Credit-based consumption for flexible pricing
 
@@ -75,11 +77,13 @@ Stripe --> Controller
 ```
 
 **Diagram sources**
+
 - [billing.ts](file://apps/api/src/routes/billing.ts#L1-L28)
 - [billingController.ts](file://apps/api/src/controllers/billingController.ts#L1-L279)
 - [billingStore.ts](file://apps/frontend/src/store/billingStore.ts#L1-L144)
 
 **Section sources**
+
 - [billing.ts](file://apps/api/src/routes/billing.ts#L1-L28)
 - [billingController.ts](file://apps/api/src/controllers/billingController.ts#L1-L279)
 
@@ -89,17 +93,17 @@ WADI offers three distinct subscription tiers, each with specific feature sets a
 
 ### Plan Structure
 
-| Feature | Free | Pro | Business |
-|---------|------|-----|----------|
-| **Monthly Messages** | 100 | 10,000 | Unlimited |
-| **Daily Messages** | 10 | 500 | Unlimited |
-| **Max File Size** | 5 MB | 50 MB | 100 MB |
-| **Workspaces** | 1 | 10 | Unlimited |
-| **Priority Support** | ❌ | ✅ | ✅ |
-| **Advanced AI Models** | ❌ | ✅ | ✅ |
-| **API Access** | ❌ | ❌ | ✅ |
-| **Custom Branding** | ❌ | ✅ | ✅ |
-| **Price** | $0 | $19.99/mo | $29.99/mo |
+| Feature                | Free | Pro       | Business  |
+| ---------------------- | ---- | --------- | --------- |
+| **Monthly Messages**   | 100  | 10,000    | Unlimited |
+| **Daily Messages**     | 10   | 500       | Unlimited |
+| **Max File Size**      | 5 MB | 50 MB     | 100 MB    |
+| **Workspaces**         | 1    | 10        | Unlimited |
+| **Priority Support**   | ❌   | ✅        | ✅        |
+| **Advanced AI Models** | ❌   | ✅        | ✅        |
+| **API Access**         | ❌   | ❌        | ✅        |
+| **Custom Branding**    | ❌   | ✅        | ✅        |
+| **Price**              | $0   | $19.99/mo | $29.99/mo |
 
 ### Plan Implementation Details
 
@@ -111,6 +115,7 @@ The system automatically assigns default plans to new users and provides seamles
 - **Upgrade Paths**: Seamless transitions between tiers
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L55-L126)
 - [billing.ts](file://apps/frontend/src/types/billing.ts#L46-L100)
 
@@ -135,6 +140,7 @@ Controller-->>User : Response/Error
 ```
 
 **Diagram sources**
+
 - [usage-tracking.ts](file://apps/api/src/middleware/usage-tracking.ts#L1-L108)
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L1-L198)
 
@@ -150,10 +156,12 @@ The system tracks four primary usage categories:
 ### Token Estimation
 
 For AI interactions, the system estimates token usage based on text length:
+
 - **English Text**: ~1 token per 4 characters
 - **Spanish Text**: ~1 token per 3.5 characters
 
 **Section sources**
+
 - [usage-tracking.ts](file://apps/api/src/middleware/usage-tracking.ts#L1-L108)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L168-L240)
 
@@ -177,6 +185,7 @@ PurchasePrompt --> Success
 ```
 
 **Diagram sources**
+
 - [billingController.ts](file://apps/api/src/controllers/billingController.ts#L102-L161)
 
 ### Credit Management Functions
@@ -192,14 +201,15 @@ The system provides atomic credit operations through PostgreSQL functions:
 
 Each credit transaction maintains detailed audit trails:
 
-| Field | Description | Example |
-|-------|-------------|---------|
-| **Amount** | Credit quantity changed | 50, -25 |
-| **Reason** | Transaction purpose | "Message sent", "Purchase" |
-| **Metadata** | Additional context | `{tokens: 120, model: "gpt-3.5"}` |
-| **Timestamp** | Transaction time | `2024-01-15T10:30:00Z` |
+| Field         | Description             | Example                           |
+| ------------- | ----------------------- | --------------------------------- |
+| **Amount**    | Credit quantity changed | 50, -25                           |
+| **Reason**    | Transaction purpose     | "Message sent", "Purchase"        |
+| **Metadata**  | Additional context      | `{tokens: 120, model: "gpt-3.5"}` |
+| **Timestamp** | Transaction time        | `2024-01-15T10:30:00Z`            |
 
 **Section sources**
+
 - [billingController.ts](file://apps/api/src/controllers/billingController.ts#L102-L219)
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L168-L240)
 
@@ -224,6 +234,7 @@ Reject --> ErrorResponse[Error Response]
 ```
 
 **Diagram sources**
+
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L1-L198)
 
 ### Per-Resource Limits
@@ -238,12 +249,14 @@ The system enforces limits on multiple resources:
 ### Graceful Degradation
 
 When limits are reached, the system provides:
+
 - **Clear Error Messages**: Informative limit violation responses
 - **Upgrade Suggestions**: Direct links to billing pages
 - **Remaining Calculations**: Quantities still available
 - **Alternative Actions**: Suggestions for resolution
 
 **Section sources**
+
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L1-L198)
 
 ## Payment Processing
@@ -272,6 +285,7 @@ API-->>Frontend : Confirmation
 ```
 
 **Diagram sources**
+
 - [billingController.ts](file://apps/api/src/controllers/billingController.ts#L168-L219)
 
 ### Payment Integration Points
@@ -286,12 +300,14 @@ The system provides several payment-related endpoints:
 ### Security Measures
 
 Payment processing incorporates multiple security layers:
+
 - **Token Validation**: Secure authentication for all requests
 - **Webhook Verification**: Stripe webhook signature validation
 - **Transaction Logging**: Complete audit trail for compliance
 - **Error Handling**: Graceful failure scenarios
 
 **Section sources**
+
 - [billingController.ts](file://apps/api/src/controllers/billingController.ts#L168-L219)
 
 ## Frontend Implementation
@@ -330,12 +346,14 @@ BillingStore --> BillingPlan
 ```
 
 **Diagram sources**
+
 - [Billing.tsx](file://apps/frontend/src/pages/Billing.tsx#L1-L152)
 - [billingStore.ts](file://apps/frontend/src/store/billingStore.ts#L1-L144)
 
 ### Usage Monitoring
 
 The frontend continuously monitors usage patterns and provides:
+
 - **Real-time Updates**: Live usage statistics
 - **Visual Indicators**: Progress bars and counters
 - **Limit Warnings**: Early notifications of approaching limits
@@ -344,12 +362,14 @@ The frontend continuously monitors usage patterns and provides:
 ### Responsive Design
 
 The billing interface adapts to various screen sizes:
+
 - **Mobile-first**: Optimized for smartphones and tablets
 - **Desktop Support**: Full feature availability on larger screens
 - **Touch-friendly**: Intuitive gesture controls
 - **Accessibility**: Screen reader support and keyboard navigation
 
 **Section sources**
+
 - [Billing.tsx](file://apps/frontend/src/pages/Billing.tsx#L1-L152)
 - [billingStore.ts](file://apps/frontend/src/store/billingStore.ts#L1-L144)
 
@@ -405,6 +425,7 @@ USER_SUBSCRIPTIONS ||--o{ USAGE_EVENTS : "generates"
 ```
 
 **Diagram sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L8-L240)
 
 ### Database Functions
@@ -420,12 +441,14 @@ The system includes several PostgreSQL functions for billing operations:
 ### Index Strategy
 
 Database performance optimization through strategic indexing:
+
 - **Composite Indexes**: Multi-column indexes for frequently queried combinations
 - **Partial Indexes**: Conditional indexes for filtered queries
 - **Functional Indexes**: Expression-based indexes for computed values
 - **Maintenance Planning**: Regular vacuum and analyze operations
 
 **Section sources**
+
 - [005_monetization.sql](file://apps/api/migrations/005_monetization.sql#L1-L472)
 
 ## Integration Patterns
@@ -449,6 +472,7 @@ Controller-->>Route : Response
 ```
 
 **Diagram sources**
+
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L1-L198)
 - [usage-tracking.ts](file://apps/api/src/middleware/usage-tracking.ts#L1-L108)
 
@@ -464,12 +488,14 @@ The billing system integrates with AI chat functionality through usage tracking:
 ### Authentication Integration
 
 Billing operations require user authentication:
+
 - **User ID Extraction**: Secure user identification from JWT tokens
 - **Authorization Checks**: Permission validation for billing operations
 - **Session Management**: Persistent user context across requests
 - **Guest Mode Handling**: Alternative flow for anonymous users
 
 **Section sources**
+
 - [chatController.ts](file://apps/api/src/controllers/chatController.ts#L1-L200)
 - [limit-check.ts](file://apps/api/src/middleware/limit-check.ts#L1-L198)
 
@@ -526,16 +552,19 @@ The billing system implements multiple security layers to protect user data and 
 ### Common Issues
 
 **Insufficient Credits Error**
+
 - Verify user has adequate credit balance
 - Check recent credit usage and expiration dates
 - Confirm payment processing completion
 
 **Limit Exceeded Responses**
+
 - Review user's current plan limits
 - Check usage tracking accuracy
 - Verify limit enforcement middleware activation
 
 **Payment Processing Failures**
+
 - Validate Stripe integration configuration
 - Check webhook endpoint accessibility
 - Verify payment method validity

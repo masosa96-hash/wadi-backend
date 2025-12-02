@@ -3,6 +3,7 @@
 ## 🚀 Deployment Sequence
 
 Deploy in this order to ensure proper configuration:
+
 1. Backend (Railway)
 2. Frontend (Vercel)
 3. Update Backend CORS
@@ -61,6 +62,7 @@ railway logs
 
 3. **Set Environment Variables**
    Navigate to Variables tab and add:
+
    ```
    SUPABASE_URL=https://smkbiguvgiscojwxgbae.supabase.co
    SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNta2JpZ3V2Z2lzY29qd3hnYmFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0MTE4MjMsImV4cCI6MjA3ODk4NzgyM30.n0Axs-saQDaAhGJidiRkI_w9EEOJDavJnmPXZ0UUvyM
@@ -128,12 +130,13 @@ vercel --prod
 
 3. **Set Environment Variables**
    Navigate to Settings > Environment Variables and add:
+
    ```
    VITE_SUPABASE_URL=https://smkbiguvgiscojwxgbae.supabase.co
    VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNta2JpZ3V2Z2lzY29qd3hnYmFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0MTE4MjMsImV4cCI6MjA3ODk4NzgyM30.n0Axs-saQDaAhGJidiRkI_w9EEOJDavJnmPXZ0UUvyM
    VITE_API_URL=[Railway URL from backend deployment]
    ```
-   
+
    **Important**: Select "Production" environment for each variable
 
 4. **Deploy**
@@ -148,11 +151,13 @@ vercel --prod
 After frontend deployment, update Railway to allow the actual Vercel URL:
 
 ### CLI Method
+
 ```powershell
 railway variables set FRONTEND_URL="[actual-vercel-url]"
 ```
 
 ### Dashboard Method
+
 1. Go to Railway project
 2. Navigate to Variables tab
 3. Update `FRONTEND_URL` to actual Vercel URL
@@ -163,10 +168,13 @@ railway variables set FRONTEND_URL="[actual-vercel-url]"
 ## ✅ Verification Steps
 
 ### 1. Test Backend Health
+
 ```powershell
 curl https://[railway-url]/health
 ```
+
 Expected response:
+
 ```json
 {
   "status": "ok",
@@ -175,11 +183,13 @@ Expected response:
 ```
 
 ### 2. Test Frontend
+
 1. Open `https://[vercel-url]` in browser
 2. Check browser console for errors
 3. Verify no CORS errors
 
 ### 3. Test Full Flow
+
 1. Register a new user
 2. Login
 3. Create a project
@@ -193,6 +203,7 @@ Expected response:
 ### Backend Issues
 
 **Build Fails**
+
 ```powershell
 # Check Railway logs
 railway logs
@@ -204,6 +215,7 @@ railway logs
 ```
 
 **Runtime Errors**
+
 ```powershell
 # Check runtime logs
 railway logs --tail
@@ -215,6 +227,7 @@ railway variables
 ### Frontend Issues
 
 **Build Fails**
+
 ```powershell
 # Check Vercel logs in dashboard
 # Common fixes:
@@ -224,6 +237,7 @@ railway variables
 ```
 
 **CORS Errors**
+
 - Verify FRONTEND_URL on Railway matches Vercel URL exactly
 - Check browser console for the exact origin being blocked
 - Ensure Railway service has redeployed after FRONTEND_URL update
@@ -231,11 +245,13 @@ railway variables
 ### Environment Variable Issues
 
 **Backend not connecting to Supabase**
+
 - Verify SUPABASE_URL is correct
 - Check SUPABASE_SERVICE_KEY is valid
 - Test connection: `curl https://[railway-url]/health`
 
 **Frontend can't reach backend**
+
 - Verify VITE_API_URL points to Railway URL
 - Check browser Network tab for failed requests
 - Ensure Railway deployment is healthy
@@ -245,17 +261,21 @@ railway variables
 ## 📊 Monitoring
 
 ### Railway Monitoring
+
 - View metrics in Railway dashboard
 - Set up deployment notifications
 - Enable log streaming
 
 ### Vercel Monitoring
+
 - Enable Vercel Analytics
 - Monitor build times
 - Track deployment status
 
 ### External Monitoring
+
 Recommended: Set up external uptime monitoring
+
 - [UptimeRobot](https://uptimerobot.com)
 - [Better Uptime](https://betteruptime.com)
 - Monitor both `/health` endpoints
@@ -265,6 +285,7 @@ Recommended: Set up external uptime monitoring
 ## 🔄 Redeployment
 
 ### Backend Updates
+
 ```powershell
 # CLI: Trigger redeploy
 railway up
@@ -274,6 +295,7 @@ git push origin main
 ```
 
 ### Frontend Updates
+
 ```powershell
 # CLI
 cd apps/frontend
@@ -288,6 +310,7 @@ git push origin main
 ## 🔙 Rollback Procedures
 
 ### Railway Rollback
+
 ```powershell
 # CLI
 railway rollback
@@ -299,6 +322,7 @@ railway rollback
 ```
 
 ### Vercel Rollback
+
 ```powershell
 # CLI
 vercel rollback [deployment-url]
@@ -314,14 +338,17 @@ vercel rollback [deployment-url]
 ## 📋 Quick Reference
 
 ### Railway URLs
+
 - Dashboard: https://railway.app
 - Docs: https://docs.railway.app
 
 ### Vercel URLs
+
 - Dashboard: https://vercel.com
 - Docs: https://vercel.com/docs
 
 ### Project URLs (after deployment)
+
 - Backend: `https://[your-project].railway.app`
 - Frontend: `https://[your-project].vercel.app`
 - Backend Health: `https://[your-project].railway.app/health`
@@ -342,6 +369,7 @@ vercel rollback [deployment-url]
 ## ✨ Success Criteria
 
 Deployment is successful when:
+
 - ✅ Backend health check returns `{"status":"ok","supabase":"connected"}`
 - ✅ Frontend loads without console errors
 - ✅ User can register and login

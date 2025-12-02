@@ -18,6 +18,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Top-Level Directory Overview](#top-level-directory-overview)
 3. [Application Structure](#application-structure)
@@ -33,6 +34,7 @@
 The WADI monorepo follows a well-structured organization that separates concerns while maintaining cohesion across the full-stack application. This document provides a comprehensive guide to the directory structure, explaining the purpose of each top-level directory and the internal organization of key components. The structure supports WADI's dual-brain architecture (Kivo + Wadi) and facilitates efficient development workflows for both frontend and backend systems.
 
 **Section sources**
+
 - [README.md](file://README.md#L123-L149)
 
 ## Top-Level Directory Overview
@@ -68,11 +70,13 @@ style E fill:#bbf,stroke:#333
 ```
 
 **Diagram sources**
+
 - [README.md](file://README.md#L123-L149)
 - [package.json](file://package.json#L4)
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L3)
 
 **Section sources**
+
 - [README.md](file://README.md#L123-L149)
 - [package.json](file://package.json#L4)
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L3)
@@ -131,10 +135,12 @@ style I fill:#bbf,stroke:#333
 ```
 
 **Diagram sources**
+
 - [apps/api/src/index.ts](file://apps/api/src/index.ts#L1-L144)
 - [apps/api/package.json](file://apps/api/package.json#L1-L42)
 
 **Section sources**
+
 - [apps/api/src/index.ts](file://apps/api/src/index.ts#L1-L144)
 - [apps/api/package.json](file://apps/api/package.json#L1-L42)
 
@@ -190,10 +196,12 @@ style F fill:#bbf,stroke:#333
 ```
 
 **Diagram sources**
+
 - [apps/frontend/src/main.tsx](file://apps/frontend/src/main.tsx#L1-L9)
 - [apps/frontend/package.json](file://apps/frontend/package.json#L1-L48)
 
 **Section sources**
+
 - [apps/frontend/src/main.tsx](file://apps/frontend/src/main.tsx#L1-L9)
 - [apps/frontend/package.json](file://apps/frontend/package.json#L1-L48)
 
@@ -202,6 +210,7 @@ style F fill:#bbf,stroke:#333
 The `packages/` directory contains shared code that can be reused across multiple applications within the monorepo. Currently, the primary shared package is `chat-core/`, which exports core functionality used by both frontend and backend applications.
 
 The `chat-core/` package follows a clean structure with:
+
 - **index.ts**: The main entry point that re-exports all public APIs
 - **kivo.ts**: Implements the Kivo brain functionality
 - **wadi.ts**: Implements the Wadi brain functionality
@@ -246,11 +255,13 @@ end note
 ```
 
 **Diagram sources**
+
 - [packages/chat-core/index.ts](file://packages/chat-core/index.ts#L1-L4)
 - [apps/api/package.json](file://apps/api/package.json#L17)
 - [apps/frontend/package.json](file://apps/frontend/package.json#L20)
 
 **Section sources**
+
 - [packages/chat-core/index.ts](file://packages/chat-core/index.ts#L1-L4)
 - [apps/api/package.json](file://apps/api/package.json#L17)
 - [apps/frontend/package.json](file://apps/frontend/package.json#L20)
@@ -260,6 +271,7 @@ end note
 The `scripts/` directory contains various utility scripts that support development, testing, and deployment workflows. These scripts are designed to automate common tasks and ensure consistency across development environments.
 
 Key scripts include:
+
 - **health-check.js**: Verifies that all required services and configurations are in place
 - **create-admin.js**: Creates administrative users in the system
 - **quick-test.js**: Runs quick validation tests on core functionality
@@ -299,10 +311,12 @@ style E fill:#bbf,stroke:#333
 ```
 
 **Diagram sources**
+
 - [scripts/health-check.js](file://scripts/health-check.js#L1-L164)
 - [package.json](file://package.json#L25-L28)
 
 **Section sources**
+
 - [scripts/health-check.js](file://scripts/health-check.js#L1-L164)
 - [package.json](file://package.json#L25-L28)
 
@@ -332,10 +346,12 @@ Note over CLI,Script : Uses spawnSync to ensure<br/>synchronous execution and<br
 ```
 
 **Diagram sources**
+
 - [wadi-cli/bin/wadi.js](file://wadi-cli/bin/wadi.js#L1-L27)
 - [wadi-cli/wadi-doctor.ps1](file://wadi-cli/wadi-doctor.ps1)
 
 **Section sources**
+
 - [wadi-cli/bin/wadi.js](file://wadi-cli/bin/wadi.js#L1-L27)
 
 ## Navigation and Development Workflow
@@ -343,6 +359,7 @@ Note over CLI,Script : Uses spawnSync to ensure<br/>synchronous execution and<br
 Navigating the WADI monorepo follows a logical pattern based on the separation of concerns and the full-stack nature of the application. Developers can quickly locate functionality by understanding the relationship between frontend and backend components.
 
 For example, to understand the chat functionality:
+
 1. Start with the frontend page component (`apps/frontend/src/pages/Chat.tsx`)
 2. Examine the associated state store (`apps/frontend/src/store/chatStore.ts`)
 3. Trace API calls to the backend route definition (`apps/api/src/routes/chat.ts`)
@@ -352,6 +369,7 @@ For example, to understand the chat functionality:
 This clear separation makes it easy to debug issues, add new features, and understand data flow through the system. The use of consistent naming conventions across frontend and backend components further enhances discoverability.
 
 When adding new features, developers should:
+
 - Place UI components in the appropriate frontend directory (`components/`, `pages/`, etc.)
 - Implement state management in the `store/` directory using Zustand
 - Create new API endpoints in `apps/api/src/routes/` and `controllers/`
@@ -389,10 +407,12 @@ style M fill:#bbf,stroke:#333
 ```
 
 **Diagram sources**
+
 - [README.md](file://README.md#L90-L101)
 - [package.json](file://package.json#L7-L10)
 
 **Section sources**
+
 - [README.md](file://README.md#L90-L101)
 - [package.json](file://package.json#L7-L10)
 
@@ -456,11 +476,13 @@ style I fill:#bbf,stroke:#333
 ```
 
 **Diagram sources**
+
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L1-L200)
 - [README.md](file://README.md#L26-L35)
 - [apps/api/src/index.ts](file://apps/api/src/index.ts#L1-L144)
 
 **Section sources**
+
 - [apps/api/migrations/001_workspace_enhancements.sql](file://apps/api/migrations/001_workspace_enhancements.sql#L1-L200)
 - [README.md](file://README.md#L26-L35)
 - [apps/api/src/index.ts](file://apps/api/src/index.ts#L1-L144)

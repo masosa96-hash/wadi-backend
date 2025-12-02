@@ -7,6 +7,7 @@ Hemos implementado completamente el **modo Guest** para WADI, permitiendo que lo
 ### 🎯 Características Implementadas
 
 #### 1. **Backend (API)**
+
 - ✅ Variable de entorno `GUEST_MODE=true` en `.env`
 - ✅ Endpoint `/api/health` disponible en `/health` y `/api/health`
 - ✅ `authMiddleware` modificado para aceptar guests:
@@ -19,7 +20,8 @@ Hemos implementado completamente el **modo Guest** para WADI, permitiendo que lo
   - Solo procesa el mensaje con el cerebro y retorna la respuesta
 - ✅ **Nota**: Los AI tools se deshabilitaron temporalmente debido a un error de `DOMMatrix`
 
-#### 2. **Frontend**  
+#### 2. **Frontend**
+
 - ✅ Variable de entorno `VITE_GUEST_MODE=true` en `.env`
 - ✅ `authStore`:
   - Genera automáticamente `guestId` con `crypto.randomUUID()`
@@ -48,6 +50,7 @@ Hemos implementado completamente el **modo Guest** para WADI, permitiendo que lo
 ### 🔄 Flujo de Usuario Guest
 
 #### Primera Visita:
+
 1. Usuario entra a `http://localhost:5173`
 2. Se genera `guestId` único automáticamente
 3. Se redirige a `/chat`
@@ -56,13 +59,16 @@ Hemos implementado completamente el **modo Guest** para WADI, permitiendo que lo
 6. Chat listo para usar
 
 #### Envío de Mensaje:
+
 1. Usuario escribe mensaje
 2. Frontend agrega optimistically el mensaje al chat
 3. POST `/api/chat` con:
    ```json
    {
      "message": "Hola WADI",
-     "messages": [/* historial previo */]
+     "messages": [
+       /* historial previo */
+     ]
    }
    ```
    Headers: `x-guest-id: <uuid>`
@@ -76,6 +82,7 @@ Hemos implementado completamente el **modo Guest** para WADI, permitiendo que lo
    - Guarda todo en `localStorage` con key `wadi_conv_${guestId}`
 
 #### Visitas Siguientes:
+
 1. Usuario vuelve a entrar
 2. Se detecta `guestId` y `guestNick` en localStorage
 3. Se carga historial desde `localStorage`
@@ -89,7 +96,7 @@ cd e:\WADI
 pnpm dev:api
 
 # Terminal 2 - Frontend
-cd e:\WADI  
+cd e:\WADI
 pnpm dev:front
 
 # Navegador
@@ -97,6 +104,7 @@ pnpm dev:front
 ```
 
 ### 📊 Estado del Backend
+
 - ✅ Servidor corriendo en `http://localhost:4000`
 - ✅ Health check: `http://localhost:4000/health`
 - ✅ WebSocket: `ws://localhost:4000/ws` (solo para usuarios auth)
@@ -104,16 +112,20 @@ pnpm dev:front
 - ⚠️ AI Tools temporalmente deshabilitados (error de DOMMatrix)
 
 ### 🎨 Tema y Estilos
+
 - ✅ Paleta dark consistente definida en `theme.ts`
 - ✅ Colores de botones y chat correctos
 - ✅ Contraste apropiado en todos los componentes
 
 ### ⚠️ Endpoints NO Usados en Guest Mode
+
 Los guests solo pueden acceder a:
+
 - `POST /api/chat` (enviar mensajes)
 - `GET /api/health` (health check)
 
 NO tienen acceso a:
+
 - `/api/projects/*`
 - `/api/sessions/*`
 - `/api/runs/*`
@@ -124,10 +136,12 @@ NO tienen acceso a:
 ### 🔍 Persistencia de Datos Guest
 
 **localStorage Keys:**
+
 - `wadi-auth-storage`: Contiene `{ guestId, guestNick }`
 - `wadi_conv_${guestId}`: Array de mensajes del chat
 
 **Formato de mensajes:**
+
 ```typescript
 {
   id: string,
@@ -140,26 +154,29 @@ NO tienen acceso a:
 ### 🧪 Testing
 
 1. **Limpiar localStorage:**
+
    ```javascript
    // En consola del navegador:
-   localStorage.clear()
-   location.reload()
+   localStorage.clear();
+   location.reload();
    ```
 
 2. **Verificar guest ID:**
+
    ```javascript
-   JSON.parse(localStorage.getItem('wadi-auth-storage'))
+   JSON.parse(localStorage.getItem("wadi-auth-storage"));
    ```
 
 3. **Ver historial:**
    ```javascript
-   const auth = JSON.parse(localStorage.getItem('wadi-auth-storage'));
-   JSON.parse(localStorage.getItem(`wadi_conv_${auth.state.guestId}`))
+   const auth = JSON.parse(localStorage.getItem("wadi-auth-storage"));
+   JSON.parse(localStorage.getItem(`wadi_conv_${auth.state.guestId}`));
    ```
 
 ### 📝 Notas Importantes
 
 1. **OpenAI API Key**: Asegúrate de tener una API key válida en `apps/api/.env`:
+
    ```
    OPENAI_API_KEY=sk-...
    ```
@@ -177,6 +194,7 @@ NO tienen acceso a:
 ### 🎉 Resultado Final
 
 El usuario puede:
+
 - ✅ Entrar directamente a chat sin registro
 - ✅ Usar un nickname personalizado
 - ✅ Conversar con WADI (AI)

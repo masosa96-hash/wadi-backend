@@ -3,6 +3,7 @@
 ## 🎯 Development Checklist
 
 ### Environment Setup
+
 - [ ] Node.js 20+ installed
 - [ ] pnpm installed (`npm install -g pnpm`)
 - [ ] Git configured
@@ -13,6 +14,7 @@
 - [ ] Supabase credentials added (if using auth)
 
 ### Initial Setup
+
 - [ ] `pnpm install` ran successfully
 - [ ] No dependency errors
 - [ ] TypeScript compiles without errors
@@ -25,6 +27,7 @@
 ## 🧪 Testing Checklist
 
 ### Guest Mode
+
 - [ ] Modal de nickname aparece en primera visita
 - [ ] Nickname se guarda en localStorage
 - [ ] Chat muestra UI vacío inicial
@@ -36,6 +39,7 @@
 - [ ] No hay errores en console
 
 ### Colores y UI
+
 - [ ] Fondo general es negro (#09090B)
 - [ ] Header es gris oscuro (#18181B)
 - [ ] Mensajes de usuario tienen fondo AZUL (#3B82F6)
@@ -48,6 +52,7 @@
 - [ ] Contraste es legible en todos los elementos
 
 ### Performance
+
 - [ ] Carga inicial < 2 segundos
 - [ ] Optimistic updates instantáneos
 - [ ] Scroll automático funciona
@@ -56,6 +61,7 @@
 - [ ] Bundle size < 300 KB gzipped
 
 ### Error Handling
+
 - [ ] Error screen aparece si backend está caído
 - [ ] Mensajes de error son claros
 - [ ] Timeouts manejados correctamente
@@ -67,6 +73,7 @@
 ## 🚀 Pre-Deployment Checklist
 
 ### Code Quality
+
 - [ ] No hay console.logs sin propósito
 - [ ] No hay TODOs críticos sin resolver
 - [ ] Código comentado donde es necesario
@@ -75,6 +82,7 @@
 - [ ] Prettier formateó todo el código
 
 ### Security
+
 - [ ] `.env` no está en git
 - [ ] `.gitignore` incluye archivos sensibles
 - [ ] API keys no en código
@@ -85,6 +93,7 @@
 - [ ] HTTPS en producción
 
 ### Backend
+
 - [ ] OpenAI API key válido
 - [ ] Supabase conectado
 - [ ] Health endpoint funciona
@@ -94,6 +103,7 @@
 - [ ] Logs estructurados
 
 ### Frontend
+
 - [ ] Build de producción exitoso
 - [ ] No warnings en build
 - [ ] Assets optimizados
@@ -103,6 +113,7 @@
 - [ ] 404 page funciona
 
 ### Documentation
+
 - [ ] README.md actualizado
 - [ ] DEPLOYMENT_GUIDE.md revisado
 - [ ] Environment variables documentadas
@@ -114,6 +125,7 @@
 ## 🌐 Deployment Checklist
 
 ### Pre-Deploy
+
 - [ ] Tests pasan
 - [ ] Build local exitoso
 - [ ] Health checks pasan
@@ -122,6 +134,7 @@
 - [ ] Security audit hecho
 
 ### Backend Deployment (Railway/etc)
+
 - [ ] Repositorio conectado
 - [ ] Environment variables configuradas
 - [ ] Build command correcto
@@ -132,6 +145,7 @@
 - [ ] CORS permite frontend domain
 
 ### Frontend Deployment (Vercel/etc)
+
 - [ ] Repositorio conectado
 - [ ] Environment variables configuradas
 - [ ] Build command correcto
@@ -142,6 +156,7 @@
 - [ ] No errores en console
 
 ### Post-Deploy Verification
+
 - [ ] Frontend accesible públicamente
 - [ ] Backend accesible
 - [ ] Health check pasa
@@ -153,6 +168,7 @@
 - [ ] Mobile responsive
 
 ### DNS & Custom Domain (si aplica)
+
 - [ ] DNS configurado
 - [ ] SSL/TLS activo
 - [ ] Propagación completa
@@ -164,6 +180,7 @@
 ## 📊 Monitoring Checklist
 
 ### Setup
+
 - [ ] Error tracking configurado (Sentry/etc)
 - [ ] Analytics configurado (si aplica)
 - [ ] Uptime monitoring configurado
@@ -171,6 +188,7 @@
 - [ ] Alertas configuradas
 
 ### Metrics
+
 - [ ] Response time monitoreado
 - [ ] Error rate monitoreado
 - [ ] API usage monitoreado
@@ -182,6 +200,7 @@
 ## 🎓 Knowledge Transfer Checklist
 
 ### Team Onboarding
+
 - [ ] README claro y completo
 - [ ] DOCUMENTATION_INDEX navegable
 - [ ] Setup instructions probadas
@@ -190,6 +209,7 @@
 - [ ] Roadmap comunicado
 
 ### Handoff
+
 - [ ] Credenciales compartidas (securely)
 - [ ] Acceso a servicios otorgado
 - [ ] Proceso de deploy documentado
@@ -201,6 +221,7 @@
 ## ✨ Final Checklist
 
 ### Before Announcing
+
 - [ ] Smoke tests completos
 - [ ] Performance acceptable
 - [ ] No critical bugs
@@ -210,6 +231,7 @@
 - [ ] Rollback plan ready
 
 ### Launch Day
+
 - [ ] Monitor logs closely
 - [ ] Watch error rates
 - [ ] Check performance metrics
@@ -218,6 +240,7 @@
 - [ ] Communicate status
 
 ### Post-Launch
+
 - [ ] Collect feedback
 - [ ] Monitor metrics daily
 - [ ] Fix critical bugs ASAP
@@ -238,6 +261,7 @@
 5. **Rollback** if critical
 
 **Critical Issues (rollback immediately):**
+
 - Backend down > 5 minutes
 - Data loss
 - Security breach
@@ -245,6 +269,7 @@
 - Error rate > 10%
 
 **Non-Critical (fix in next deploy):**
+
 - UI glitches
 - Performance degradation
 - Minor bugs

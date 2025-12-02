@@ -17,6 +17,7 @@ Abrí: https://app.supabase.com/
 ### 2. Seleccionar tu Proyecto
 
 Tu proyecto actual es:
+
 - **URL**: `https://smkbiguvgiscojwxgbae.supabase.co`
 - **Project**: `smkbiguvgiscojwxgbae`
 
@@ -30,6 +31,7 @@ Tu proyecto actual es:
 Vas a ver dos secciones:
 
 #### Project API keys
+
 ```
 ┌─────────────────────────────────────────┐
 │ anon public                              │
@@ -49,11 +51,13 @@ Vas a ver dos secciones:
 Abrí el archivo: `apps/api/.env`
 
 Buscá la línea:
+
 ```env
 SUPABASE_SERVICE_KEY=your-service-role-key-here
 ```
 
 Reemplazá con:
+
 ```env
 SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZi...
 ```
@@ -61,6 +65,7 @@ SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZS
 ### 6. Guardar y Reiniciar Backend
 
 Si el backend está corriendo:
+
 1. Detené el servidor (Ctrl+C)
 2. Ejecutá de nuevo: `pnpm --filter api dev`
 
@@ -69,11 +74,13 @@ Si el backend está corriendo:
 ## ✅ Verificar que Funcionó
 
 Ejecutá el script de verificación:
+
 ```powershell
 .\test-chat-ready.ps1
 ```
 
 Deberías ver:
+
 ```
 ✅ SUPABASE_SERVICE_KEY configurada
 ```

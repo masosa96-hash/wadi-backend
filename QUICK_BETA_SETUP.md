@@ -10,11 +10,13 @@
 In Supabase SQL Editor, execute in order:
 
 ### Migration 1: Core Schema
+
 ```sql
 -- Copy/paste contents of: docs/migrations/001_initial_schema.sql
 ```
 
 ### Migration 2: Beta Features
+
 ```sql
 -- Copy/paste contents of: docs/migrations/002_beta_invitations_and_roles.sql
 ```
@@ -82,23 +84,28 @@ curl http://localhost:3000
 ## Step 5: Create Admin User (5 min)
 
 ### Method A: Register via UI + SQL
+
 1. Open `http://localhost:3000/register`
 2. Register with any email/password (will fail without invitation)
 3. Create profile manually in Supabase Auth UI
 4. In SQL Editor:
+
 ```sql
-UPDATE profiles SET role = 'admin' 
+UPDATE profiles SET role = 'admin'
 WHERE user_id = 'your-user-id-from-auth';
 ```
 
 ### Method B: Environment Variable
+
 Add to `.env`:
+
 ```env
 INITIAL_ADMIN_EMAIL=admin@yourdomain.com
 INITIAL_ADMIN_PASSWORD=ChangeMe123!
 ```
 
 Restart backend:
+
 ```bash
 docker-compose restart backend
 ```
@@ -167,6 +174,7 @@ Copy codes for beta testers.
 ## Quick Troubleshooting
 
 ### Container Won't Start
+
 ```bash
 # Check logs
 docker-compose logs backend
@@ -177,6 +185,7 @@ docker-compose logs backend
 ```
 
 ### Database Connection Failed
+
 ```bash
 # Test Supabase URL
 curl https://your-project.supabase.co/rest/v1/
@@ -186,6 +195,7 @@ curl https://your-project.supabase.co/rest/v1/
 ```
 
 ### Registration Fails
+
 ```sql
 -- Check invitation validity
 SELECT * FROM beta_invitations WHERE code = 'YOUR-CODE';
@@ -194,6 +204,7 @@ SELECT * FROM beta_invitations WHERE code = 'YOUR-CODE';
 ```
 
 ### Rate Limit Hit
+
 ```bash
 # Edit apps/api/src/middleware/rateLimit.ts
 # Increase 'max' values, rebuild:
@@ -211,10 +222,12 @@ For production (not localhost):
 1. **Get Domain**: Configure DNS records
 2. **SSL Certificates**: Use Certbot/Let's Encrypt
 3. **Update URLs** in `.env`:
+
 ```env
 FRONTEND_URL=https://your-domain.com
 API_URL=https://api.your-domain.com
 ```
+
 4. **Nginx Reverse Proxy**: See `docs/BETA_DEPLOYMENT_GUIDE.md` Section 3
 
 ---
@@ -239,12 +252,12 @@ docker-compose down
 
 ## Quick Reference
 
-| Component | Port | URL | Purpose |
-|-----------|------|-----|---------|
-| Frontend | 3000 | http://localhost:3000 | User interface |
-| Backend | 4000 | http://localhost:4000 | API server |
-| Health | 4000 | http://localhost:4000/health | Status check |
-| Redis | 6379 | localhost:6379 | Caching (optional) |
+| Component | Port | URL                          | Purpose            |
+| --------- | ---- | ---------------------------- | ------------------ |
+| Frontend  | 3000 | http://localhost:3000        | User interface     |
+| Backend   | 4000 | http://localhost:4000        | API server         |
+| Health    | 4000 | http://localhost:4000/health | Status check       |
+| Redis     | 6379 | localhost:6379               | Caching (optional) |
 
 ---
 

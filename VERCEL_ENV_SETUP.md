@@ -5,17 +5,20 @@
 Configure these environment variables in Vercel dashboard (Production environment):
 
 ### 1. Supabase Configuration
+
 ```
 VITE_SUPABASE_URL=https://smkbiguvgiscojwxgbae.supabase.co
 VITE_SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InNta2JpZ3V2Z2lzY29qd3hnYmFlIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjM0MTE4MjMsImV4cCI6MjA3ODk4NzgyM30.n0Axs-saQDaAhGJidiRkI_w9EEOJDavJnmPXZ0UUvyM
 ```
 
 ### 2. API Configuration
+
 ```
 VITE_API_URL=[railway-api-url-from-step-1]
 ```
 
 Example:
+
 ```
 VITE_API_URL=https://wadi-api-production.railway.app
 ```

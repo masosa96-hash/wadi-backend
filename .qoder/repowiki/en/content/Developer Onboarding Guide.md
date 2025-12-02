@@ -18,6 +18,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Development Environment Setup](#development-environment-setup)
 3. [Local Development Configuration](#local-development-configuration)
@@ -37,6 +38,7 @@ WADI is built as a monorepo with two main applications: a Node.js/Express backen
 The documentation uses terminology consistent with the codebase such as 'development workflow' and 'debugging tips', and provides practical examples for common tasks like starting servers, running tests, and making code changes.
 
 **Section sources**
+
 - [README.md](file://README.md#L1-L330)
 
 ## Development Environment Setup
@@ -53,6 +55,7 @@ Before starting, ensure you have the following tools installed on your system:
 - **Supabase account**: Needed for authentication and database services
 
 The project structure follows a monorepo pattern with the following organization:
+
 - `apps/api`: Backend application with Express, controllers, services, and routes
 - `apps/frontend`: Frontend application with React components, stores, and pages
 - `packages/chat-core`: Shared package for chat functionality
@@ -74,6 +77,7 @@ pnpm install
 The `pnpm install` command will install all dependencies for both the frontend and backend applications, as well as any shared packages. The installation process is managed through the `pnpm-workspace.yaml` file which defines the workspace packages.
 
 **Section sources**
+
 - [README.md](file://README.md#L64-L88)
 - [package.json](file://package.json#L1-L40)
 - [pnpm-workspace.yaml](file://pnpm-workspace.yaml#L1-L7)
@@ -134,6 +138,7 @@ The WADI application requires a Supabase database with specific tables and Row L
 Ensure that RLS policies are enabled and configured to allow authenticated users to read and write their own data.
 
 **Section sources**
+
 - [SETUP_INSTRUCTIONS.md](file://SETUP_INSTRUCTIONS.md#L44-L88)
 - [apps/api/src/config/env.ts](file://apps/api/src/config/env.ts#L1-L34)
 
@@ -211,6 +216,7 @@ The health check endpoint should return a JSON response indicating the status of
 ```
 
 **Section sources**
+
 - [QUICK_START.md](file://QUICK_START.md#L7-L35)
 - [package.json](file://package.json#L7-L11)
 - [apps/api/package.json](file://apps/api/package.json#L9-L12)
@@ -259,6 +265,7 @@ node scripts/health-check.js
 ```
 
 This script checks for:
+
 - Required project structure directories
 - Backend and frontend environment variables
 - Services health (backend API connectivity)
@@ -266,6 +273,7 @@ This script checks for:
 The health check script will provide detailed feedback on any issues with the setup and guide you through resolving them.
 
 **Section sources**
+
 - [README.md](file://README.md#L212-L224)
 - [scripts/health-check.js](file://scripts/health-check.js#L1-L164)
 
@@ -278,6 +286,7 @@ Effective debugging is essential for productive development on the WADI platform
 For frontend debugging, use the browser's Developer Tools with the following techniques:
 
 #### Console Logging
+
 Use the browser console to inspect application state:
 
 ```javascript
@@ -286,19 +295,23 @@ console.log(useAuthStore.getState());
 console.log(useChatStore.getState());
 
 // Inspect localStorage
-Object.keys(localStorage).forEach(key => {
+Object.keys(localStorage).forEach((key) => {
   console.log(key, localStorage.getItem(key));
 });
 ```
 
 #### Network Monitoring
+
 Use the Network tab to monitor API requests:
+
 - Filter by `/api/chat` to view chat-related requests
 - Check for 4xx (client) and 5xx (server) status codes
 - Inspect request payloads and response data
 
 #### React DevTools
+
 Use React DevTools to inspect component hierarchy and state:
+
 - Examine props and state of key components like Chat, GuestNicknameModal, and BottomNav
 - Monitor store usage in useAuthStore and useChatStore
 
@@ -307,6 +320,7 @@ Use React DevTools to inspect component hierarchy and state:
 The backend provides comprehensive logging to help identify issues:
 
 #### Request Logging
+
 The backend logs detailed information about each request:
 
 ```
@@ -317,37 +331,43 @@ The backend logs detailed information about each request:
 ```
 
 #### Error Handling
+
 The system uses structured error responses:
+
 ```json
-{ 
-  "ok": false, 
-  "error": { 
-    "code": "auth_required", 
-    "message": "Authentication required" 
-  } 
+{
+  "ok": false,
+  "error": {
+    "code": "auth_required",
+    "message": "Authentication required"
+  }
 }
 ```
 
 ### Common Issues and Solutions
 
 #### 401 Unauthorized Errors
+
 - Verify user is logged in (check browser session storage)
 - Confirm Supabase token is valid
 - Check backend logs for authentication messages
 - Verify Supabase RLS policies allow user access
 
 #### 500 Database Errors
+
 - Ensure database tables exist
 - Verify RLS policies are configured
 - Check that user_id column is present in all tables
 - Run Supabase migrations if needed
 
 #### CORS Errors
+
 - Verify FRONTEND_URL=http://localhost:5173 in backend .env
 - Restart the backend server after configuration changes
 - Ensure no trailing slashes in URLs
 
 **Section sources**
+
 - [DEBUGGING_GUIDE.md](file://DEBUGGING_GUIDE.md#L1-L632)
 - [SETUP_INSTRUCTIONS.md](file://SETUP_INSTRUCTIONS.md#L130-L178)
 
@@ -377,10 +397,12 @@ These scripts verify that the application is functioning correctly and that all 
 Follow the testing guide to verify key functionality:
 
 #### Health Check Verification
+
 1. Access http://localhost:4000/health
 2. Verify response contains "status": "ok" and "supabase": "connected"
 
 #### Guest Mode Testing
+
 1. Clear localStorage and reload the page
 2. Verify the nickname modal appears
 3. Enter a nickname and begin chatting
@@ -388,6 +410,7 @@ Follow the testing guide to verify key functionality:
 5. Reload the page and confirm chat history persists
 
 #### API Testing
+
 Use curl or Postman to test API endpoints:
 
 ```powershell
@@ -417,6 +440,7 @@ Before submitting changes, verify the following:
 - [ ] Retry button works when API fails
 
 **Section sources**
+
 - [TESTING_GUIDE.md](file://TESTING_GUIDE.md#L1-L288)
 - [SETUP_INSTRUCTIONS.md](file://SETUP_INSTRUCTIONS.md#L279-L291)
 
@@ -460,6 +484,7 @@ Update documentation when adding new features or changing existing behavior:
 - Include usage examples and configuration options
 
 **Section sources**
+
 - [README.md](file://README.md#L253-L259)
 
 ## Best Practices
@@ -497,5 +522,6 @@ Follow these best practices for efficient and effective development on the WADI 
 By following these guidelines and best practices, you can contribute effectively to the WADI platform and help maintain its high quality and reliability.
 
 **Section sources**
+
 - [README.md](file://README.md#L263-L270)
 - [PERFORMANCE_OPTIMIZATION.md](file://PERFORMANCE_OPTIMIZATION.md)

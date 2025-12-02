@@ -3,14 +3,17 @@
 ## 📱 Pantallas Implementadas
 
 ### 1. Home (Modificada)
+
 **Ruta:** `/home`
 
 **Cambios realizados:**
+
 - ✅ Hero input ahora navega a `/chat` (antes iba a `/workspaces/default`)
 - ✅ Card "Conversa con WADI" ahora navega a `/chat`
 - ✅ Bottom nav "Workspaces" ahora navega a `/chat`
 
 **Elementos clave:**
+
 ```
 ┌─────────────────────────────────────┐
 │  WADI            🔔  👤             │  ← Header
@@ -42,9 +45,11 @@
 ---
 
 ### 2. Chat (Nueva)
+
 **Ruta:** `/chat`
 
 **Estructura:**
+
 ```
 ┌─────────────────────────────────────┐
 │  ← Conversa con WADI      [W]      │  ← Header
@@ -76,12 +81,14 @@
 **Características visuales:**
 
 #### Header
+
 - Botón back (←) para volver a Home
 - Título: "Conversa con WADI"
 - Subtítulo: "Tu espacio principal de trabajo"
 - Orb de WADI pulsante con animación
 
 #### Área de Mensajes
+
 - **Mensajes de usuario:**
   - Alineados a la derecha
   - Gradiente azul-morado
@@ -102,6 +109,7 @@
   - Aparece mientras WADI está "pensando"
 
 #### Input Area
+
 - Fijo en la parte inferior
 - Textarea multilinea
   - Placeholder: "Escribime como si me hablaras a un amigo…"
@@ -117,6 +125,7 @@
 ## 🎨 Elementos de Diseño
 
 ### Colores
+
 ```
 Gradiente Principal: #255FF5 → #7B8CFF
 Gradiente Button:    #255FF5 0%, #7B8CFF 100%
@@ -140,6 +149,7 @@ Error:          #EF4444
 ```
 
 ### Tipografía
+
 ```
 Font Family: Inter, system-ui, sans-serif
 
@@ -159,6 +169,7 @@ Weights:
 ```
 
 ### Espaciado
+
 ```
 xs:  4px
 sm:  8px
@@ -169,6 +180,7 @@ xl:  24px
 ```
 
 ### Border Radius
+
 ```
 small:  6px
 medium: 8px
@@ -181,6 +193,7 @@ xlarge: 24px
 ## 🎭 Animaciones
 
 ### Entrada de Mensajes
+
 ```typescript
 initial: { opacity: 0, y: 20 }
 animate: { opacity: 1, y: 0 }
@@ -188,6 +201,7 @@ transition: { duration: 0.3, delay: index * 0.05 }
 ```
 
 ### Orb de WADI (Header)
+
 ```typescript
 animate: {
   scale: [1, 1.05, 1],
@@ -201,6 +215,7 @@ transition: { duration: 3, repeat: Infinity }
 ```
 
 ### Typing Indicator
+
 ```typescript
 animate: { y: [-3, 0, -3] }
 transition: {
@@ -211,10 +226,11 @@ transition: {
 ```
 
 ### Botón de Envío
+
 ```typescript
-whileHover: { 
-  scale: 1.08, 
-  boxShadow: "0 0 20px rgba(37, 95, 245, 0.4)" 
+whileHover: {
+  scale: 1.08,
+  boxShadow: "0 0 20px rgba(37, 95, 245, 0.4)"
 }
 whileTap: { scale: 0.95 }
 ```
@@ -224,12 +240,14 @@ whileTap: { scale: 0.95 }
 ## 📐 Layout Responsivo
 
 ### PhoneShell
+
 - Ancho máximo: 480px
 - Altura mínima: 100vh
 - Centrado horizontal
 - Shadow externa sutil
 
 ### Área de Mensajes
+
 ```css
 flex: 1
 overflow: auto
@@ -238,6 +256,7 @@ paddingBottom: 120px  /* Para el input fijo */
 ```
 
 ### Input Fijo
+
 ```css
 position: sticky
 bottom: 0
@@ -251,6 +270,7 @@ boxShadow: 0 -4px 24px rgba(15, 23, 42, 0.06)
 ## 🔄 Estados de la UI
 
 ### Estado Vacío (Primera vez)
+
 ```
 ┌─────────────────────────────────────┐
 │                                     │
@@ -266,6 +286,7 @@ boxShadow: 0 -4px 24px rgba(15, 23, 42, 0.06)
 ```
 
 ### Enviando Mensaje
+
 ```
 ┌─────────────────────────────────────┐
 │                                     │
@@ -281,6 +302,7 @@ boxShadow: 0 -4px 24px rgba(15, 23, 42, 0.06)
 ```
 
 ### Error
+
 ```
 ┌─────────────────────────────────────┐
 │  ⚠️ No pude enviar el mensaje.   ✕ │  ← Banner rojo
@@ -295,6 +317,7 @@ boxShadow: 0 -4px 24px rgba(15, 23, 42, 0.06)
 ## 🎯 Interacciones del Usuario
 
 ### 1. Enviar mensaje desde Home
+
 ```
 Home > Hero Input
   ↓
@@ -312,6 +335,7 @@ Aparece mensaje + respuesta
 ```
 
 ### 2. Enviar mensaje desde Chat
+
 ```
 Chat > Input
   ↓
@@ -331,6 +355,7 @@ Respuesta aparece
 ```
 
 ### 3. Multilinea
+
 ```
 Chat > Input
   ↓
@@ -341,6 +366,7 @@ Enter solo → Enviar
 ```
 
 ### 4. Volver a Home
+
 ```
 Chat > Header
   ↓
@@ -356,21 +382,25 @@ Conversación queda guardada
 ## 🌟 Detalles de Pulido
 
 ### Glassmorphism
+
 - **Hero card:** `backdrop-filter: blur(10px)`
 - **Mensajes WADI:** `backdrop-filter: blur(10px)`
 - **Input area:** `backdrop-filter: blur(20px)`
 
 ### Shadows
+
 - **User messages:** `0 4px 12px rgba(37, 95, 245, 0.2)`
 - **WADI messages:** `0 4px 12px rgba(15, 23, 42, 0.08)`
 - **Input:** `0 4px 16px rgba(15, 23, 42, 0.12)`
 
 ### Auto-scroll
+
 - Referencia: `messagesEndRef`
 - Comportamiento: `smooth scroll` al agregar mensaje
 - Se mantiene en el fondo al recibir nuevos mensajes
 
 ### Accesibilidad
+
 - Input con placeholder descriptivo
 - Estados disabled claros (opacidad 0.5)
 - Cursor `not-allowed` cuando disabled

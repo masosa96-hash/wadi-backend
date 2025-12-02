@@ -5,6 +5,7 @@
 The backend API service fails to load environment variables from the root-level `.env` file when executed via `pnpm --filter api dev`. The error occurs because the current environment variable loading mechanism uses `dotenv/config` without specifying the correct path to the root `.env` file, causing the API to look for environment variables in the wrong location.
 
 **Error Message:**
+
 ```
 Error: Missing Supabase environment variables. Please check SUPABASE_URL and SUPABASE_ANON_KEY in .env
 ```
@@ -45,12 +46,14 @@ Implement explicit environment variable loading with monorepo-aware path resolut
 **Purpose**: Centralized environment variable initialization with explicit root path resolution
 
 **Responsibilities**:
+
 - Calculate the monorepo root path relative to the API package
 - Load `.env` file from the monorepo root explicitly
 - Provide early validation of critical environment variables
 - Serve as single source of truth for environment configuration
 
 **Path Resolution Logic**:
+
 - Use Node.js `path` module to resolve from API package directory to monorepo root
 - The relationship is: `apps/api/src/config` → `../../..` → root
 - Construct absolute path to ensure consistency across different execution contexts
@@ -60,6 +63,7 @@ Implement explicit environment variable loading with monorepo-aware path resolut
 **Location**: `apps/api/src/index.ts`
 
 **Changes**:
+
 - Remove generic `import "dotenv/config"`
 - Import the new environment configuration module at the very top (before any other imports that use environment variables)
 - Ensure environment variables are loaded before Supabase config initialization
@@ -69,6 +73,7 @@ Implement explicit environment variable loading with monorepo-aware path resolut
 **Location**: `apps/api/src/config/supabase.ts`
 
 **Changes**:
+
 - Update error message to reference the correct `.env` location (monorepo root)
 - Optionally add diagnostic information showing where dotenv searched for the file
 
@@ -76,15 +81,15 @@ Implement explicit environment variable loading with monorepo-aware path resolut
 
 The following variables from the root `.env` file must be accessible:
 
-| Variable Name | Purpose | Used By |
-|---------------|---------|---------|
-| `SUPABASE_URL` | Supabase project URL | Supabase client initialization |
-| `SUPABASE_ANON_KEY` | Supabase anonymous key | Supabase client initialization |
-| `OPENAI_API_KEY` | OpenAI API authentication | OpenAI service integration |
-| `API_URL` | Backend API base URL | CORS, service discovery |
-| `FRONTEND_URL` | Frontend application URL | CORS configuration |
-| `API_PORT` | Backend server port | Express server binding |
-| `FRONTEND_PORT` | Frontend dev server port | Development environment |
+| Variable Name       | Purpose                   | Used By                        |
+| ------------------- | ------------------------- | ------------------------------ |
+| `SUPABASE_URL`      | Supabase project URL      | Supabase client initialization |
+| `SUPABASE_ANON_KEY` | Supabase anonymous key    | Supabase client initialization |
+| `OPENAI_API_KEY`    | OpenAI API authentication | OpenAI service integration     |
+| `API_URL`           | Backend API base URL      | CORS, service discovery        |
+| `FRONTEND_URL`      | Frontend application URL  | CORS configuration             |
+| `API_PORT`          | Backend server port       | Express server binding         |
+| `FRONTEND_PORT`     | Frontend dev server port  | Development environment        |
 
 ## Implementation Approach
 
@@ -124,17 +129,18 @@ After implementation, the solution must satisfy:
 
 ## File Modification Summary
 
-| File | Modification Type | Purpose |
-|------|------------------|---------|
-| `apps/api/src/config/env.ts` | Create New | Explicit root `.env` loading with path resolution |
-| `apps/api/src/index.ts` | Modify Import | Replace generic dotenv import with explicit env module |
-| `apps/api/src/config/supabase.ts` | Update Error Message | Clarify `.env` location in error output |
+| File                              | Modification Type    | Purpose                                                |
+| --------------------------------- | -------------------- | ------------------------------------------------------ |
+| `apps/api/src/config/env.ts`      | Create New           | Explicit root `.env` loading with path resolution      |
+| `apps/api/src/index.ts`           | Modify Import        | Replace generic dotenv import with explicit env module |
+| `apps/api/src/config/supabase.ts` | Update Error Message | Clarify `.env` location in error output                |
 
 ## Implementation Notes
 
 ### Path Resolution Explanation
 
 From `apps/api/src/config/env.ts`, the path traversal to monorepo root is:
+
 - `__dirname` = `E:\WADI intento mil\apps\api\src\config`
 - `../` = `E:\WADI intento mil\apps\api\src`
 - `../../` = `E:\WADI intento mil\apps\api`
@@ -146,6 +152,7 @@ Therefore, the resolution path is: `path.resolve(__dirname, '../../../../.env')`
 ### Execution Context Independence
 
 By using `path.resolve` with `__dirname`, the solution works regardless of:
+
 - Current working directory when executing the command
 - Whether PNPM executes from root or from the API package
 - How `ts-node-dev` resolves file paths
@@ -153,6 +160,7 @@ By using `path.resolve` with `__dirname`, the solution works regardless of:
 ### No Changes to Environment Variables
 
 All existing variable names are preserved:
+
 - No renaming required
 - No prefix additions (e.g., no `VITE_` prefix needed for backend)
 - Backend code continues to access variables via `process.env.VARIABLE_NAME`
@@ -162,6 +170,7 @@ All existing variable names are preserved:
 ### Build Tool Compatibility
 
 The solution uses standard Node.js path resolution compatible with:
+
 - `ts-node-dev` (current dev tool)
 - Future migration to `tsx`, `nodemon`, or other TypeScript runners
 - Production builds with compiled JavaScript
@@ -169,6 +178,7 @@ The solution uses standard Node.js path resolution compatible with:
 ### Monorepo Structure Changes
 
 If the API package location changes in the future:
+
 - Only `apps/api/src/config/env.ts` path resolution needs updating
 - Error messages will clearly indicate environment loading failure
 - The centralized approach makes debugging straightforward

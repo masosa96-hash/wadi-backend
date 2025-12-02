@@ -9,6 +9,7 @@ Successfully completed the remaining implementation work for **Phase 6** and **P
 ## Phase 6: Local File Handling - NOW COMPLETE ✅
 
 ### Files Created:
+
 1. **Backend Controller**: `apps/api/src/controllers/filesController.ts` (284 lines)
    - Upload file metadata
    - Get project files
@@ -33,6 +34,7 @@ Successfully completed the remaining implementation work for **Phase 6** and **P
    - Error handling and loading states
 
 ### Implementation Details:
+
 - Uses Supabase Storage for file storage
 - Metadata tracked in `project_files` table
 - File attachments to runs via `run_files` junction table
@@ -40,6 +42,7 @@ Successfully completed the remaining implementation work for **Phase 6** and **P
 - Support for file parsing (infrastructure ready, requires optional dependencies)
 
 ### Database Schema:
+
 Already created in previous session: `docs/database/phase6-files-schema.sql`
 
 ---
@@ -66,6 +69,7 @@ Phase 7 was already complete from the previous session with a comprehensive impl
 ## Final Status Document Created:
 
 `FINAL_COMPLETE_STATUS.md` - Comprehensive summary of all 8 phases with:
+
 - Feature details
 - File listings
 - Deployment checklist

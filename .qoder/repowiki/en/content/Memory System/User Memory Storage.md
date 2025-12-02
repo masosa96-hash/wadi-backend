@@ -11,6 +11,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [System Architecture](#system-architecture)
 3. [Database Schema Design](#database-schema-design)
@@ -76,6 +77,7 @@ MemTemplates --> InitMem
 ```
 
 **Diagram sources**
+
 - [memory.ts](file://apps/api/src/routes/memory.ts#L1-L14)
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L1-L185)
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L1-L134)
@@ -86,27 +88,28 @@ MemTemplates --> InitMem
 
 The `user_memory` table serves as the core storage mechanism for user preferences and learned behaviors:
 
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | UUID | PRIMARY KEY | Unique identifier for each memory entry |
-| user_id | UUID | NOT NULL, FOREIGN KEY | References profiles(user_id) with CASCADE |
-| memory_type | TEXT | NOT NULL, CHECK | Type of memory (preference, fact, style, context, skill, goal) |
-| category | TEXT | NULLABLE | Classification category (tone, format, recurring_topic, expertise_area) |
-| key | TEXT | NOT NULL, UNIQUE(user_id, key) | Unique identifier within user context |
-| value | TEXT | NOT NULL | The actual content or preference value |
-| metadata | JSONB | DEFAULT '{}' | Structured additional data |
-| source | TEXT | DEFAULT 'explicit', CHECK | How memory was acquired (explicit, inferred, feedback, system) |
-| confidence | FLOAT | DEFAULT 1.0, CHECK | Confidence level (0-1) affecting usage |
-| derived_from_conversation_id | UUID | FOREIGN KEY | Reference to conversation source |
-| examples | JSONB | NULLABLE | Example interactions supporting this memory |
-| times_referenced | INTEGER | DEFAULT 0 | Usage counter for popularity |
-| last_used_at | TIMESTAMPTZ | DEFAULT now() | Last usage timestamp |
-| is_active | BOOLEAN | DEFAULT true | Active status indicator |
-| expires_at | TIMESTAMPTZ | NULLABLE | Optional expiration timestamp |
-| created_at | TIMESTAMPTZ | DEFAULT now() | Creation timestamp |
-| updated_at | TIMESTAMPTZ | DEFAULT now() | Last update timestamp |
+| Field                        | Type        | Constraints                    | Description                                                             |
+| ---------------------------- | ----------- | ------------------------------ | ----------------------------------------------------------------------- |
+| id                           | UUID        | PRIMARY KEY                    | Unique identifier for each memory entry                                 |
+| user_id                      | UUID        | NOT NULL, FOREIGN KEY          | References profiles(user_id) with CASCADE                               |
+| memory_type                  | TEXT        | NOT NULL, CHECK                | Type of memory (preference, fact, style, context, skill, goal)          |
+| category                     | TEXT        | NULLABLE                       | Classification category (tone, format, recurring_topic, expertise_area) |
+| key                          | TEXT        | NOT NULL, UNIQUE(user_id, key) | Unique identifier within user context                                   |
+| value                        | TEXT        | NOT NULL                       | The actual content or preference value                                  |
+| metadata                     | JSONB       | DEFAULT '{}'                   | Structured additional data                                              |
+| source                       | TEXT        | DEFAULT 'explicit', CHECK      | How memory was acquired (explicit, inferred, feedback, system)          |
+| confidence                   | FLOAT       | DEFAULT 1.0, CHECK             | Confidence level (0-1) affecting usage                                  |
+| derived_from_conversation_id | UUID        | FOREIGN KEY                    | Reference to conversation source                                        |
+| examples                     | JSONB       | NULLABLE                       | Example interactions supporting this memory                             |
+| times_referenced             | INTEGER     | DEFAULT 0                      | Usage counter for popularity                                            |
+| last_used_at                 | TIMESTAMPTZ | DEFAULT now()                  | Last usage timestamp                                                    |
+| is_active                    | BOOLEAN     | DEFAULT true                   | Active status indicator                                                 |
+| expires_at                   | TIMESTAMPTZ | NULLABLE                       | Optional expiration timestamp                                           |
+| created_at                   | TIMESTAMPTZ | DEFAULT now()                  | Creation timestamp                                                      |
+| updated_at                   | TIMESTAMPTZ | DEFAULT now()                  | Last update timestamp                                                   |
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L8-L46)
 
 ### Index Strategy
@@ -137,27 +140,30 @@ ConfIdx --> Q5
 ```
 
 **Diagram sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L48-L54)
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L48-L54)
 
 ### memory_templates Table
 
 The templates table provides default memory entries for new users:
 
-| Field | Type | Constraints | Description |
-|-------|------|-------------|-------------|
-| id | UUID | PRIMARY KEY | Template identifier |
-| key | TEXT | UNIQUE, NOT NULL | Template key identifier |
-| default_value | TEXT | NOT NULL | Default value for template |
-| memory_type | TEXT | NOT NULL | Associated memory type |
-| category | TEXT | NULLABLE | Template category |
-| description | TEXT | NULLABLE | Template description |
-| is_active | BOOLEAN | DEFAULT true | Activation status |
-| created_at | TIMESTAMPTZ | DEFAULT now() | Creation timestamp |
+| Field         | Type        | Constraints      | Description                |
+| ------------- | ----------- | ---------------- | -------------------------- |
+| id            | UUID        | PRIMARY KEY      | Template identifier        |
+| key           | TEXT        | UNIQUE, NOT NULL | Template key identifier    |
+| default_value | TEXT        | NOT NULL         | Default value for template |
+| memory_type   | TEXT        | NOT NULL         | Associated memory type     |
+| category      | TEXT        | NULLABLE         | Template category          |
+| description   | TEXT        | NULLABLE         | Template description       |
+| is_active     | BOOLEAN     | DEFAULT true     | Activation status          |
+| created_at    | TIMESTAMPTZ | DEFAULT now()    | Creation timestamp         |
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L141-L152)
 
 ## Core Functions and Procedures
@@ -180,15 +186,18 @@ ReturnExisting --> End
 ```
 
 **Diagram sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L106-L135)
 
 Key features of the upsert function:
+
 - **Atomic Operation**: Uses PostgreSQL's `ON CONFLICT` clause for atomic updates
 - **Selective Updates**: Only updates changed fields to minimize database load
 - **Timestamp Management**: Automatically updates `updated_at` on conflicts
 - **Return Value**: Returns the complete memory object for immediate use
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L106-L135)
 
 ### get_user_memory_for_chat Function
@@ -212,10 +221,12 @@ Controller-->>Client : Formatted memory list
 ```
 
 **Diagram sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L8-L29)
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L63-L85)
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L63-L85)
 
 ### System Initialization Functions
@@ -239,20 +250,22 @@ Complete --> End([Function Exit])
 ```
 
 **Diagram sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L166-L181)
 
 #### Default Memory Templates
 
 The system initializes users with four essential preferences:
 
-| Key | Default Value | Type | Category | Description |
-|-----|---------------|------|----------|-------------|
-| preferred_tone | cercano y amigable | preference | communication | Friendly and approachable tone |
-| preferred_language | español argentino | preference | communication | Argentine Spanish variant |
-| response_length | conciso pero completo | preference | format | Concise but complete responses |
-| emoji_usage | moderado | preference | style | Moderate emoji usage |
+| Key                | Default Value         | Type       | Category      | Description                    |
+| ------------------ | --------------------- | ---------- | ------------- | ------------------------------ |
+| preferred_tone     | cercano y amigable    | preference | communication | Friendly and approachable tone |
+| preferred_language | español argentino     | preference | communication | Argentine Spanish variant      |
+| response_length    | conciso pero completo | preference | format        | Concise but complete responses |
+| emoji_usage        | moderado              | preference | style         | Moderate emoji usage           |
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L155-L160)
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L166-L181)
 
@@ -271,9 +284,11 @@ Complete --> End([Function Exit])
 ```
 
 **Diagram sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L92-L99)
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L92-L99)
 
 ## Backend API Implementation
@@ -300,6 +315,7 @@ GetContext --> Auth
 ```
 
 **Diagram sources**
+
 - [memory.ts](file://apps/api/src/routes/memory.ts#L1-L14)
 
 ### Controller Implementation
@@ -326,6 +342,7 @@ Controller-->>Client : JSON response with memories
 ```
 
 **Diagram sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L8-L29)
 
 #### saveMemory Controller
@@ -345,22 +362,25 @@ ReturnSuccess --> End
 ```
 
 **Diagram sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L39-L76)
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L1-L185)
 
 ### Supabase RPC Integration
 
 The backend communicates with PostgreSQL through Supabase's RPC system:
 
-| RPC Function | Purpose | Parameters | Return Type |
-|--------------|---------|------------|-------------|
-| get_user_memory_for_chat | Retrieve active memories | p_user_id (UUID) | Table with memory fields |
-| upsert_user_memory | Create or update memory | Various parameters | Full memory object |
-| increment_memory_usage | Track usage | p_memory_id (UUID) | Void |
+| RPC Function             | Purpose                  | Parameters         | Return Type              |
+| ------------------------ | ------------------------ | ------------------ | ------------------------ |
+| get_user_memory_for_chat | Retrieve active memories | p_user_id (UUID)   | Table with memory fields |
+| upsert_user_memory       | Create or update memory  | Various parameters | Full memory object       |
+| increment_memory_usage   | Track usage              | p_memory_id (UUID) | Void                     |
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L18-L76)
 
 ## Frontend Integration
@@ -403,6 +423,7 @@ MemoryState --> UserMemory : manages
 ```
 
 **Diagram sources**
+
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L4-L134)
 
 ### Memory Context Formatting
@@ -421,9 +442,11 @@ Return --> End([Context Ready])
 ```
 
 **Diagram sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L122-L184)
 
 **Section sources**
+
 - [memoryStore.ts](file://apps/frontend/src/store/memoryStore.ts#L1-L134)
 
 ## Data Lifecycle Management
@@ -432,14 +455,14 @@ Return --> End([Context Ready])
 
 The system organizes memories into distinct categories for different use cases:
 
-| Memory Type | Purpose | Examples |
-|-------------|---------|----------|
-| preference | User preferences | Preferred tone, language, response length |
-| fact | Important facts | User expertise, project context |
-| style | Communication style | Emoji usage, formality level |
-| context | Conversation context | Recent topics, project details |
-| skill | Expertise areas | Technical skills, domains |
-| goal | User goals | Project objectives, learning targets |
+| Memory Type | Purpose              | Examples                                  |
+| ----------- | -------------------- | ----------------------------------------- |
+| preference  | User preferences     | Preferred tone, language, response length |
+| fact        | Important facts      | User expertise, project context           |
+| style       | Communication style  | Emoji usage, formality level              |
+| context     | Conversation context | Recent topics, project details            |
+| skill       | Expertise areas      | Technical skills, domains                 |
+| goal        | User goals           | Project objectives, learning targets      |
 
 ### Confidence Threshold System
 
@@ -463,6 +486,7 @@ Filter --> Sort
 ```
 
 **Diagram sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L83-L84)
 
 ### Expiration and Cleanup
@@ -474,6 +498,7 @@ Memory entries can have expiration dates for temporary context:
 - **Automatic Cleanup**: System periodically removes expired entries
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L80-L83)
 
 ## Performance Optimization
@@ -484,12 +509,12 @@ Memory entries can have expiration dates for temporary context:
 
 The system leverages multiple indexes for optimal performance:
 
-| Index Type | Columns | Query Pattern | Benefit |
-|------------|---------|---------------|---------|
-| Single Column | user_id | User-specific queries | Fast user isolation |
-| Composite | (user_id, key) | Upsert operations | Atomic conflict detection |
-| Range | confidence DESC | Confidence sorting | Efficient filtering |
-| Conditional | is_active WHERE true | Active memory queries | Reduced result sets |
+| Index Type    | Columns              | Query Pattern         | Benefit                   |
+| ------------- | -------------------- | --------------------- | ------------------------- |
+| Single Column | user_id              | User-specific queries | Fast user isolation       |
+| Composite     | (user_id, key)       | Upsert operations     | Atomic conflict detection |
+| Range         | confidence DESC      | Confidence sorting    | Efficient filtering       |
+| Conditional   | is_active WHERE true | Active memory queries | Reduced result sets       |
 
 #### Function Optimization
 
@@ -508,6 +533,7 @@ While the system doesn't implement explicit caching, several factors contribute 
 - **Function Caching**: PostgreSQL caches compiled function plans
 
 **Section sources**
+
 - [003_user_memory.sql](file://apps/api/migrations/003_user_memory.sql#L48-L54)
 
 ## Security and Access Control
@@ -553,6 +579,7 @@ The system maintains comprehensive audit information:
 - **Times Referenced**: Popularity metrics
 
 **Section sources**
+
 - [supabase.ts](file://apps/api/src/config/supabase.ts#L1-L29)
 
 ## Common Issues and Solutions
@@ -599,13 +626,14 @@ ON CONFLICT (user_id, key) DO UPDATE SET ...
 // Categories are grouped and formatted consistently
 const contextStrings = [
   "Preferencias del usuario:",
-  ...preferences.map(p => `- ${p.key}: ${p.value}`),
+  ...preferences.map((p) => `- ${p.key}: ${p.value}`),
   "\nContexto importante:",
-  ...facts.map(f => `- ${f.value}`)
+  ...facts.map((f) => `- ${f.value}`),
 ];
 ```
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L140-L170)
 
 ## Best Practices
@@ -646,7 +674,8 @@ const contextStrings = [
 
 **Symptoms**: 401 Unauthorized responses
 **Causes**: Invalid or missing JWT tokens
-**Solutions**: 
+**Solutions**:
+
 - Verify authentication middleware is configured
 - Check JWT token validity and expiration
 - Ensure proper header formatting
@@ -656,6 +685,7 @@ const contextStrings = [
 **Symptoms**: 500 Internal Server errors on save
 **Causes**: Database constraint violations, network issues
 **Solutions**:
+
 - Check database connectivity
 - Verify memory key uniqueness
 - Review database logs for specific errors
@@ -665,6 +695,7 @@ const contextStrings = [
 **Symptoms**: High latency on memory requests
 **Causes**: Missing indexes, large result sets
 **Solutions**:
+
 - Verify index creation
 - Check query execution plans
 - Consider result set pagination
@@ -694,5 +725,6 @@ const contextStrings = [
 4. **Monitoring**: Monitor for issues
 
 **Section sources**
+
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L21-L32)
 - [memoryController.ts](file://apps/api/src/controllers/memoryController.ts#L69-L72)

@@ -9,12 +9,14 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 ## ✅ Componentes Implementados
 
 ### 1. Header
+
 - **Logo**: Texto "WADI" en mayúsculas, alineado a la izquierda
 - **Avatar**: Círculo con inicial del usuario, con gradiente azul→lila
 - **Notificaciones**: Icono de campana con badge de notificación activa
 - **Navegación**: Avatar clickeable que lleva a la página de Billing/Perfil
 
 ### 2. Hero Card (Prompt Principal)
+
 - **Gradiente**: Azul→Lila (#255FF5 → #7B8CFF)
 - **Título**: "¿En qué te ayudo hoy?" centrado en blanco
 - **Input**: Campo de texto con placeholder "Escribí tu prompt…"
@@ -23,6 +25,7 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 - **Animación**: Fade-in suave al cargar
 
 ### 3. Sección "Mis Workspaces"
+
 - **Grid**: 2 columnas en mobile/tablet, responsive a 1 columna en pantallas muy pequeñas (<380px)
 - **Cards**: 4 workspaces predefinidos:
   - 🔍 Research (Azul primario)
@@ -33,12 +36,14 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 - **Animación**: Stagger effect (aparición escalonada)
 
 ### 4. Chips de Acciones Rápidas
+
 - **Opciones**: Historial, Favoritos, Plantillas rápidas
 - **Estilo**: Píldoras con borde azul-lavanda
 - **Hover**: Cambio de color a azul primario
 - **Layout**: Row con wrap automático
 
 ### 5. Bottom Navigation Bar
+
 - **Iconos**: Home 🏠, Workspaces 💼, Historial 📜, Perfil 👤
 - **Estado activo**: Icono azul con glow, texto semibold, indicador circular
 - **Posición**: Sticky al pie del contenedor móvil
@@ -49,23 +54,24 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 ## 🎨 Sistema de Diseño
 
 ### Paleta de Colores
+
 ```css
---color-bg-primary: #F3F6FB      /* Fondo general */
---color-bg-secondary: #FFFFFF    /* Cards */
---color-border-subtle: #D6E1F2   /* Bordes */
---color-accent-primary: #255FF5  /* Azul primario */
---color-accent-secondary: #7B8CFF /* Azul-lila */
---color-accent-y2k: #C5B3FF      /* Lavanda Y2K */
---color-text-primary: #0F172A    /* Texto principal */
---color-text-secondary: #6B7280  /* Texto secundario */
+--color-bg-primary: #f3f6fb /* Fondo general */ --color-bg-secondary: #ffffff
+  /* Cards */ --color-border-subtle: #d6e1f2 /* Bordes */
+  --color-accent-primary: #255ff5 /* Azul primario */
+  --color-accent-secondary: #7b8cff /* Azul-lila */ --color-accent-y2k: #c5b3ff
+  /* Lavanda Y2K */ --color-text-primary: #0f172a /* Texto principal */
+  --color-text-secondary: #6b7280 /* Texto secundario */;
 ```
 
 ### Gradientes Y2K
+
 - **Principal**: `#255FF5 → #7B8CFF → #C5B3FF`
 - **Hero Card**: `#255FF5 → #7B8CFF`
 - **Botón**: `#255FF5 → #4A7BF7`
 
 ### Tipografía
+
 - **Font**: Inter (Google Fonts)
 - **Pesos**: 400 (normal), 500 (medium), 600 (semibold), 700 (bold)
 - **Tamaños**: Desde 12px (caption) hasta 32px (display)
@@ -75,17 +81,20 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 ## 📱 Diseño Responsivo
 
 ### Mobile First (< 768px)
+
 - Contenido ocupa todo el ancho de pantalla
 - Grid de workspaces: 2 columnas
 - Padding reducido para optimizar espacio
 - Sin bordes redondeados extremos
 
 ### Tablet (768px - 1023px)
+
 - Bordes redondeados del contenedor: 32px
 - Sombra suave alrededor del frame
 - Espaciado mejorado
 
 ### Desktop (≥ 1024px)
+
 - **Contenedor centrado** tipo "teléfono móvil":
   - Ancho máximo: 480px
   - Altura máxima: 844px (iPhone Pro Max)
@@ -95,6 +104,7 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 - Fondo del navegador: #F3F6FB
 
 ### Pantallas Muy Pequeñas (< 380px)
+
 - Grid de workspaces: 1 columna automática
 
 ---
@@ -102,7 +112,8 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 ## ✨ Animaciones Implementadas
 
 ### Framer Motion Animations
-1. **Hero Card**: 
+
+1. **Hero Card**:
    - Fade-in + desplazamiento desde abajo
    - Duración: 500ms
    - Delay: 100ms
@@ -123,13 +134,21 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
    - Duración: 500ms
 
 ### CSS Animations
+
 1. **Y2K Orbs**:
+
    ```css
    @keyframes pulse-glow {
-     0%, 100% { opacity: 0.15; }
-     50% { opacity: 0.25; }
+     0%,
+     100% {
+       opacity: 0.15;
+     }
+     50% {
+       opacity: 0.25;
+     }
    }
    ```
+
    - Duración: 4s
    - Infinite loop
 
@@ -147,6 +166,7 @@ La pantalla Home de WADI ha sido completamente implementada siguiendo el diseño
 ## 🔧 Estructura Técnica
 
 ### Archivos Principales
+
 ```
 apps/frontend/src/
 ├── pages/
@@ -165,6 +185,7 @@ apps/frontend/src/
 ```
 
 ### Dependencias
+
 - **React**: 19.2.0
 - **Framer Motion**: 12.23.24 (animaciones)
 - **React Router**: 6.20.1 (navegación)
@@ -176,8 +197,10 @@ apps/frontend/src/
 ## 🐛 Correcciones Realizadas
 
 ### 1. Input Component (Input.tsx)
+
 **Problema**: Props `style` no existía en la interfaz `InputProps`
-**Solución**: 
+**Solución**:
+
 ```typescript
 interface InputProps {
   // ... props existentes
@@ -189,8 +212,10 @@ interface InputProps {
 ```
 
 ### 2. Files Store (filesStore.ts)
+
 **Problema**: TypeScript errors por tipo `unknown` en respuestas de API
-**Solución**: 
+**Solución**:
+
 ```typescript
 // Interfaz de respuesta agregada:
 interface ApiResponse<T> {
@@ -203,8 +228,10 @@ const response = (await api.get(...)) as ApiResponse<ProjectFile[]>;
 ```
 
 ### 3. Responsividad en Desktop
+
 **Problema**: Contenedor no estaba centrado verticalmente
 **Solución**:
+
 ```css
 @media (min-width: 1024px) {
   .wadi-desktop-container {
@@ -221,24 +248,31 @@ const response = (await api.get(...)) as ApiResponse<ProjectFile[]>;
 ## ✅ Verificación Completada
 
 ### Build de Producción
+
 ```bash
 pnpm --filter frontend build
 ```
+
 **Resultado**: ✅ Build exitoso sin errores
+
 - TypeScript compilation: ✅ Sin errores
 - Vite build: ✅ Exitoso
 - Bundle size: 646KB (gzipped: 187KB)
 
 ### Servidor de Desarrollo
+
 ```bash
 pnpm --filter frontend dev
 ```
+
 **Resultado**: ✅ Corriendo en http://localhost:5173/
+
 - Hot reload: ✅ Funcionando
 - No console errors: ✅ Verificado
 - Responsive design: ✅ Testeado
 
 ### Routing
+
 - Ruta principal: `/` → Redirect a `/home` (autenticado)
 - Home protegida: ✅ Requiere autenticación
 - Navegación: ✅ Todas las rutas configuradas
@@ -280,6 +314,7 @@ pnpm --filter frontend dev
 ## 🚀 Cómo Ejecutar
 
 ### Desarrollo
+
 ```bash
 # Desde la raíz del proyecto
 pnpm --filter frontend dev
@@ -292,6 +327,7 @@ pnpm dev
 Abre http://localhost:5173/ en tu navegador.
 
 ### Producción
+
 ```bash
 # Build
 pnpm --filter frontend build
@@ -305,17 +341,20 @@ pnpm --filter frontend preview
 ## 🎯 Resultado Visual
 
 ### Mobile (360px - 767px)
+
 - Contenido a ancho completo
 - Grid de workspaces: 2 columnas
 - Bottom nav fijo al pie
 - Sin scroll horizontal
 
 ### Tablet (768px - 1023px)
+
 - Bordes redondeados suaves (32px)
 - Más espaciado interno
 - Mismo layout que mobile mejorado
 
 ### Desktop (≥ 1024px)
+
 - Contenedor central tipo "iPhone" (480px x 844px)
 - Centrado vertical y horizontal
 - Bordes super redondeados (36px)

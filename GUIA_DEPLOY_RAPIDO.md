@@ -73,7 +73,7 @@ Para que el chat funcione correctamente (especialmente el modo invitado), necesi
 
 ```sql
 -- Add user_id column to conversations table
-ALTER TABLE conversations 
+ALTER TABLE conversations
 ADD COLUMN IF NOT EXISTS user_id UUID REFERENCES auth.users(id) ON DELETE CASCADE;
 
 -- Create index for performance

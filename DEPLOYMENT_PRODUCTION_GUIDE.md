@@ -54,6 +54,7 @@ railway up
 ### 1.3 Obtener URL de Railway
 
 Después del deploy, Railway te dará una URL tipo:
+
 ```
 https://wadi-api-production.up.railway.app
 ```
@@ -113,6 +114,7 @@ curl https://tu-proyecto.up.railway.app/api/health
 ```
 
 **Resultado esperado:**
+
 ```json
 {
   "status": "ok",
@@ -151,7 +153,7 @@ railway logs
 ### Si Supabase no conecta:
 
 - Verificar que las URLs no tengan espacios al principio/final
-- Confirmar que las keys sean las mismas en Railway y Vercel (frontend usa VITE_ prefix)
+- Confirmar que las keys sean las mismas en Railway y Vercel (frontend usa VITE\_ prefix)
 
 ---
 

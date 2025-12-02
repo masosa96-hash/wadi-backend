@@ -7,17 +7,20 @@ This guide provides step-by-step instructions for deploying WADI to production f
 ## Prerequisites
 
 ### Server Requirements
+
 - **OS**: Ubuntu 22.04 LTS or similar Linux distribution
 - **RAM**: Minimum 2GB (4GB recommended)
 - **Disk**: 20GB available space
 - **CPU**: 2 cores (4 cores recommended)
 
 ### Required Software
+
 - Docker Engine 20.10+ ([Installation Guide](https://docs.docker.com/engine/install/))
 - Docker Compose 2.0+ (included with Docker Desktop)
 - Git
 
 ### Required Accounts
+
 - **Supabase Account**: For database and authentication
 - **OpenAI Account**: For AI functionality
 - **Domain Name**: For production deployment (optional for testing)
@@ -157,6 +160,7 @@ curl http://localhost:4000/health
 ```
 
 Expected response:
+
 ```json
 {
   "status": "ok",
@@ -394,6 +398,7 @@ sudo docker system df
 ### Database Backups
 
 Configure automatic backups in Supabase:
+
 1. Go to Project Settings → Database
 2. Enable Point-in-Time Recovery (PITR)
 3. Set backup retention period
@@ -417,6 +422,7 @@ sudo docker-compose up -d
 ### Backend Won't Start
 
 **Check environment variables:**
+
 ```bash
 sudo docker-compose logs backend | grep "Environment Validation"
 ```
@@ -426,6 +432,7 @@ sudo docker-compose logs backend | grep "Environment Validation"
 ### Database Connection Fails
 
 **Check Supabase URL and keys:**
+
 ```bash
 curl https://your-project.supabase.co/rest/v1/
 ```
@@ -437,11 +444,13 @@ curl https://your-project.supabase.co/rest/v1/
 **Check browser console for errors.**
 
 **Common causes:**
+
 - API URL misconfigured
 - CORS settings incorrect
 - Supabase URL mismatch
 
 **Solution**: Update `.env` files and rebuild:
+
 ```bash
 sudo docker-compose down
 sudo docker-compose build frontend

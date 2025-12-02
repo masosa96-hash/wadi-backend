@@ -25,6 +25,7 @@ SUPABASE_SERVICE_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.tu_key_real_aqui...
 ```
 
 **Debes ver**:
+
 ```
 ✅ ¡Todo listo! El chat está configurado correctamente.
 ```
@@ -36,22 +37,26 @@ Si ves advertencias o errores, seguí las instrucciones del script.
 ### 3️⃣ Iniciar Servicios
 
 **Terminal 1 - Backend**:
+
 ```powershell
 pnpm --filter api dev
 ```
 
 **Debes ver**:
+
 ```
 🚀 WADI API running on http://localhost:4000
 📊 Health check: http://localhost:4000/health
 ```
 
 **Terminal 2 - Frontend**:
+
 ```powershell
 pnpm --filter frontend dev
 ```
 
 **Debes ver**:
+
 ```
   VITE v5.x.x  ready in XXX ms
 
@@ -63,11 +68,13 @@ pnpm --filter frontend dev
 ## 🧪 Probar el Chat
 
 ### Paso 1: Login
+
 1. Abrir: http://localhost:5173/login
 2. Loguear con tu cuenta (la que ya tenés)
 3. Deberías caer en `/home`
 
 ### Paso 2: Enviar Mensaje desde Home
+
 1. En `/home`, escribir en el input grande: **"Hola WADI"**
 2. Click en el botón enviar (✈️)
 3. Deberías ser redirigido a `/chat`
@@ -76,11 +83,13 @@ pnpm --filter frontend dev
 6. Respuesta de WADI aparece
 
 ### Paso 3: Conversación Continua
+
 1. Escribir otro mensaje en `/chat`
 2. Presionar Enter o click enviar
 3. Mensaje aparece → Typing indicator → Respuesta
 
 ### Paso 4: Persistencia
+
 1. Presionar F5 (refresh página)
 2. Los mensajes siguen ahí ✅
 3. Podés seguir conversando
@@ -108,12 +117,14 @@ pnpm --filter frontend dev
 ## 🔍 Verificaciones de Consola
 
 ### ✅ Frontend Console (F12)
+
 ```javascript
 [API] POST /api/chat - XXXms
 [Chat] Message sent successfully
 ```
 
 ### ✅ Backend Console
+
 ```javascript
 [sendMessage] Request from user: <userId>
 [sendMessage] User message saved: <messageId>
@@ -127,32 +138,41 @@ pnpm --filter frontend dev
 ## 🚨 Problemas Comunes
 
 ### ❌ Error: "Missing Supabase environment variables"
+
 **Solución**: Verificar que `apps/frontend/.env` tiene:
+
 ```env
 VITE_SUPABASE_URL=https://...
 VITE_SUPABASE_ANON_KEY=eyJ...
 ```
 
 ### ❌ Error: 401 Unauthorized
-**Solución**: 
+
+**Solución**:
+
 1. Cerrar sesión
 2. Volver a loguear
 3. Verificar que el token está en sessionStorage/localStorage
 
 ### ❌ Error: "Failed to send message"
+
 **Causa**: Backend no está corriendo o CORS error  
 **Solución**:
+
 1. Verificar backend en http://localhost:4000/health
 2. Verificar `FRONTEND_URL=http://localhost:5173` en `apps/api/.env`
 
 ### ❌ No aparece respuesta de WADI
+
 **Causa**: OpenAI API key inválida  
 **Solución**:
+
 1. Verificar `OPENAI_API_KEY` en `apps/api/.env`
 2. Ver logs del backend para error específico
 3. Verificar créditos en cuenta de OpenAI
 
 ### ❌ Mensajes no persisten después de refresh
+
 **Causa**: SUPABASE_SERVICE_KEY faltante  
 **Solución**: Completar Paso 1 de esta guía
 
@@ -160,24 +180,24 @@ VITE_SUPABASE_ANON_KEY=eyJ...
 
 ## 📊 URLs de Verificación
 
-| Servicio | URL | Descripción |
-|----------|-----|-------------|
-| Frontend Home | http://localhost:5173/home | Pantalla principal |
-| Frontend Chat | http://localhost:5173/chat | Pantalla de chat |
-| Frontend Login | http://localhost:5173/login | Login |
-| Backend Health | http://localhost:4000/health | Health check |
-| Supabase Dashboard | https://app.supabase.com/project/smkbiguvgiscojwxgbae | Panel admin |
+| Servicio           | URL                                                   | Descripción        |
+| ------------------ | ----------------------------------------------------- | ------------------ |
+| Frontend Home      | http://localhost:5173/home                            | Pantalla principal |
+| Frontend Chat      | http://localhost:5173/chat                            | Pantalla de chat   |
+| Frontend Login     | http://localhost:5173/login                           | Login              |
+| Backend Health     | http://localhost:4000/health                          | Health check       |
+| Supabase Dashboard | https://app.supabase.com/project/smkbiguvgiscojwxgbae | Panel admin        |
 
 ---
 
 ## 📖 Documentación Completa
 
-| Archivo | Descripción |
-|---------|-------------|
-| `CHECKLIST_PRUEBA_CHAT.md` | Checklist completo de pruebas funcionales |
-| `COMPLETAR_SUPABASE_SERVICE_KEY.md` | Guía para obtener Service Role Key |
-| `RESUMEN_CONFIGURACION_CHAT.md` | Resumen técnico completo |
-| `test-chat-ready.ps1` | Script de verificación automática |
+| Archivo                             | Descripción                               |
+| ----------------------------------- | ----------------------------------------- |
+| `CHECKLIST_PRUEBA_CHAT.md`          | Checklist completo de pruebas funcionales |
+| `COMPLETAR_SUPABASE_SERVICE_KEY.md` | Guía para obtener Service Role Key        |
+| `RESUMEN_CONFIGURACION_CHAT.md`     | Resumen técnico completo                  |
+| `test-chat-ready.ps1`               | Script de verificación automática         |
 
 ---
 

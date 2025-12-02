@@ -3,8 +3,9 @@
 ## ✅ Completed (Phases 1 & 2)
 
 ### Phase 1: Multi-Tenant Workspaces ✅
+
 - [x] Backend workspace CRUD
-- [x] Backend member management  
+- [x] Backend member management
 - [x] RLS policies validated
 - [x] Projects-workspace integration
 - [x] Frontend workspace store
@@ -12,6 +13,7 @@
 - [x] Database schema applied
 
 ### Phase 2: Billing & Credits ✅
+
 - [x] Backend billing controller
 - [x] Credit consumption in runs
 - [x] Frontend billing store
@@ -63,6 +65,7 @@ app.use("/api/billing", billingRoutes);
 ## 🧪 Testing Workflow
 
 ### Test Workspaces
+
 1. Navigate to workspaces page
 2. Create a new workspace
 3. Invite a member (use another user's email)
@@ -72,6 +75,7 @@ app.use("/api/billing", billingRoutes);
 7. Delete workspace
 
 ### Test Billing
+
 1. Navigate to `/billing`
 2. View current plan and credits
 3. Change plan (free → pro → business)
@@ -80,6 +84,7 @@ app.use("/api/billing", billingRoutes);
 6. View credit history
 
 ### Test Projects with Workspaces
+
 1. Create workspace
 2. Create project with `workspace_id`
 3. Verify workspace members can see the project
@@ -90,16 +95,19 @@ app.use("/api/billing", billingRoutes);
 ## 🎯 Next Steps (Priority Order)
 
 ### 🔥 CRITICAL: Phase 4 - Real-Time Runs
+
 **Status:** Not Started  
 **Priority:** Highest - Core Product Feature  
 **Estimated Time:** 4-6 hours
 
 **Why Critical:**
+
 - This is what makes WADI different from competitors
 - Users expect to see real-time AI output
 - Essential for good UX
 
 **What to Build:**
+
 1. WebSocket server on backend
 2. Stream endpoint: `ws://localhost:4000/runs/:id/stream`
 3. Terminal-style UI component
@@ -109,16 +117,19 @@ app.use("/api/billing", billingRoutes);
 ---
 
 ### ⚡ HIGH: Phase 3 - Prompt Presets
+
 **Status:** Not Started  
 **Priority:** High - Major UX Improvement  
 **Estimated Time:** 2-4 hours
 
 **Why Important:**
+
 - Users can save and reuse prompts
 - Significantly improves workflow
 - Easy to implement
 
 **What to Build:**
+
 1. Database schema for presets
 2. Backend controller (CRUD)
 3. Frontend store
@@ -128,6 +139,7 @@ app.use("/api/billing", billingRoutes);
 ---
 
 ### 📦 MEDIUM: Phase 5 - Project Versioning
+
 **Status:** Not Started  
 **Priority:** Medium - Nice to Have  
 **Estimated Time:** 3-5 hours
@@ -137,6 +149,7 @@ app.use("/api/billing", billingRoutes);
 ---
 
 ### 📁 MEDIUM: Phase 6 - Local File Handling
+
 **Status:** Not Started  
 **Priority:** Medium - Nice to Have  
 **Estimated Time:** 3-4 hours
@@ -146,6 +159,7 @@ app.use("/api/billing", billingRoutes);
 ---
 
 ### 🖥️ LOW: Phase 7 - Electron App
+
 **Status:** Not Started  
 **Priority:** Low - Post-Beta  
 **Estimated Time:** 8-12 hours
@@ -155,6 +169,7 @@ app.use("/api/billing", billingRoutes);
 ---
 
 ### 👑 LOW: Phase 8 - Admin Panel
+
 **Status:** Not Started  
 **Priority:** Low - Post-Beta  
 **Estimated Time:** 6-8 hours
@@ -165,16 +180,16 @@ app.use("/api/billing", billingRoutes);
 
 ## 📊 Feature Comparison
 
-| Feature | Status | Beta Required? | Time to Complete |
-|---------|--------|----------------|------------------|
-| Workspaces | ✅ Done | ✅ Yes | - |
-| Billing | ✅ Done | ✅ Yes | - |
-| Presets | 🔄 Pending | ⚠️ Recommended | 2-4h |
-| Real-time Runs | 🔄 Pending | ✅ **CRITICAL** | 4-6h |
-| Versioning | 🔄 Pending | ❌ No | 3-5h |
-| File Upload | 🔄 Pending | ❌ No | 3-4h |
-| Electron | 🔄 Pending | ❌ No | 8-12h |
-| Admin Panel | 🔄 Pending | ❌ No | 6-8h |
+| Feature        | Status     | Beta Required?  | Time to Complete |
+| -------------- | ---------- | --------------- | ---------------- |
+| Workspaces     | ✅ Done    | ✅ Yes          | -                |
+| Billing        | ✅ Done    | ✅ Yes          | -                |
+| Presets        | 🔄 Pending | ⚠️ Recommended  | 2-4h             |
+| Real-time Runs | 🔄 Pending | ✅ **CRITICAL** | 4-6h             |
+| Versioning     | 🔄 Pending | ❌ No           | 3-5h             |
+| File Upload    | 🔄 Pending | ❌ No           | 3-4h             |
+| Electron       | 🔄 Pending | ❌ No           | 8-12h            |
+| Admin Panel    | 🔄 Pending | ❌ No           | 6-8h             |
 
 ---
 
@@ -183,16 +198,19 @@ app.use("/api/billing", billingRoutes);
 ### Current State: **40% Beta Ready**
 
 **What's Done:**
+
 - ✅ Multi-tenant infrastructure
 - ✅ Billing system
 - ✅ Credit management
 - ✅ Basic run execution
 
 **What's Missing for Beta:**
+
 - 🔥 **Real-time run streaming** (CRITICAL)
 - ⚡ Prompt presets (Highly recommended)
 
 **Minimum Viable Beta:**
+
 - Complete Phase 4 (Real-time Runs)
 - Add Phase 3 (Presets) for better UX
 - Basic testing
@@ -201,6 +219,7 @@ app.use("/api/billing", billingRoutes);
 ### Recommended Launch Timeline
 
 **Option 1: Full-Featured Beta (Recommended)**
+
 - ✅ Phases 1-2 (Done)
 - 🔄 Phase 3: Presets (2-4 hours)
 - 🔄 Phase 4: Real-time Runs (4-6 hours)
@@ -208,6 +227,7 @@ app.use("/api/billing", billingRoutes);
 - **Total: 7-12 hours → Beta Ready** 🚀
 
 **Option 2: Minimal Beta**
+
 - ✅ Phases 1-2 (Done)
 - 🔄 Phase 4: Real-time Runs (4-6 hours)
 - 🧪 Testing (1 hour)
@@ -234,7 +254,7 @@ app.use("/api/billing", billingRoutes);
 cd apps/api
 pnpm dev
 
-# Terminal 2 - Frontend  
+# Terminal 2 - Frontend
 cd apps/frontend
 pnpm dev
 ```
@@ -279,16 +299,19 @@ pnpm build
 ## 💡 Key Files Reference
 
 ### Backend
+
 - Controllers: `apps/api/src/controllers/`
 - Routes: `apps/api/src/routes/`
 - Config: `apps/api/src/config/`
 
 ### Frontend
+
 - Pages: `apps/frontend/src/pages/`
 - Stores: `apps/frontend/src/store/`
 - Components: `apps/frontend/src/components/`
 
 ### Database
+
 - Schemas: `docs/database/`
 - RLS: `docs/database/rls-validation.sql`
 

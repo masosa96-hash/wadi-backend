@@ -16,8 +16,9 @@ Este error suele ocurrir cuando el cliente no envía un token de Captcha pero Su
 El problema principal es que el Frontend está intentando contactar al Backend, pero la URL configurada (`VITE_API_URL`) probablemente apunta al mismo Frontend o a una URL incorrecta, causando que recibas HTML (la página 404/index del frontend) o errores 405.
 
 **He actualizado `railway.json` en el repositorio** para asegurar que el monorepo se construya correctamente:
-*   **Build Command**: `pnpm install && pnpm --filter @wadi/chat-core build && pnpm --filter api build` (Asegura que las dependencias internas se compilen).
-*   **Start Command**: `node apps/api/dist/index.js`.
+
+- **Build Command**: `pnpm install && pnpm --filter @wadi/chat-core build && pnpm --filter api build` (Asegura que las dependencias internas se compilen).
+- **Start Command**: `node apps/api/dist/index.js`.
 
 **Acción Manual Requerida (en Railway):**
 
@@ -36,5 +37,5 @@ El problema principal es que el Frontend está intentando contactar al Backend, 
 
 ## Resumen de Archivos Modificados
 
-*   **`railway.json`**: Configuración corregida para construir `chat-core` y `api` en orden.
-*   **`apps/api/package.json`**: (Previamente) Se aseguró `engines: node >= 20`.
+- **`railway.json`**: Configuración corregida para construir `chat-core` y `api` en orden.
+- **`apps/api/package.json`**: (Previamente) Se aseguró `engines: node >= 20`.

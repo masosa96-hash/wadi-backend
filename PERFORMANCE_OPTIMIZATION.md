@@ -52,6 +52,7 @@ Total:                   ~297 KB (gzipped: ~95 KB) ✅
 ```
 
 **Análisis:**
+
 - ✅ Tamaño razonable para una SPA
 - ✅ Code splitting implementado (react-vendor, state-vendor)
 - ⚠️ Framer Motion puede ser lazy-loaded
@@ -70,8 +71,8 @@ export default defineConfig({
     rollupOptions: {
       output: {
         manualChunks: {
-          'react-vendor': ['react', 'react-dom', 'react-router-dom'],
-          'state-vendor': ['zustand'],
+          "react-vendor": ["react", "react-dom", "react-router-dom"],
+          "state-vendor": ["zustand"],
         },
       },
     },
@@ -80,6 +81,7 @@ export default defineConfig({
 ```
 
 **Beneficio:**
+
 - React carga una vez y cachea
 - State management separado
 - App code puede actualizar sin re-descargar vendors
@@ -102,6 +104,7 @@ const Settings = lazy(() => import('./pages/Settings'));
 ```
 
 **Beneficio:**
+
 - Carga inicial más rápida
 - Solo descarga lo que se usa
 - Settings solo carga si usuario va ahí
@@ -115,10 +118,10 @@ sendMessage: async (message: string) => {
   set((state) => ({
     messages: [...state.messages, newUserMessage],
   }));
-  
+
   // 2. Enviar al servidor (en background)
   const response = await api.post('/api/chat', {...});
-  
+
   // 3. Actualizar con respuesta real
   set((state) => ({
     messages: [...state.messages, response.data.assistantMessage],
@@ -127,6 +130,7 @@ sendMessage: async (message: string) => {
 ```
 
 **Impacto:**
+
 - Usuario ve su mensaje instantly
 - No bloquea UI
 - Percepción de velocidad mucho mayor
@@ -137,15 +141,13 @@ sendMessage: async (message: string) => {
 // Guardar solo cuando cambia
 useEffect(() => {
   if (messages.length > 0 && guestId) {
-    localStorage.setItem(
-      `wadi_conv_${guestId}`, 
-      JSON.stringify(messages)
-    );
+    localStorage.setItem(`wadi_conv_${guestId}`, JSON.stringify(messages));
   }
 }, [messages, guestId]);
 ```
 
 **Beneficio:**
+
 - No hace DB queries
 - Instant load en reload
 - Funciona offline
@@ -169,6 +171,7 @@ const MessageBubble = memo(({ message }: { message: Message }) => {
 ```
 
 **Beneficio:**
+
 - No re-renderiza mensajes viejos
 - Solo renderiza nuevos mensajes
 - Mejora mucho con historial largo
@@ -186,7 +189,7 @@ export const supabase = createClient(
   process.env.SUPABASE_ANON_KEY!,
   {
     db: {
-      schema: 'public',
+      schema: "public",
     },
     auth: {
       persistSession: false, // Backend no necesita persistir
@@ -194,10 +197,10 @@ export const supabase = createClient(
     },
     global: {
       headers: {
-        'x-application-name': 'wadi-api'
-      }
-    }
-  }
+        "x-application-name": "wadi-api",
+      },
+    },
+  },
 );
 ```
 
@@ -205,18 +208,21 @@ export const supabase = createClient(
 
 ```typescript
 // index.ts
-import compression from 'compression';
+import compression from "compression";
 
-app.use(compression({
-  filter: (req, res) => {
-    // Solo comprimir JSON y text
-    return /json|text/.test(res.getHeader('Content-Type') as string);
-  },
-  threshold: 1024, // Solo si > 1KB
-}));
+app.use(
+  compression({
+    filter: (req, res) => {
+      // Solo comprimir JSON y text
+      return /json|text/.test(res.getHeader("Content-Type") as string);
+    },
+    threshold: 1024, // Solo si > 1KB
+  }),
+);
 ```
 
 **Impacto:**
+
 - Reduce tamaño de respuesta ~70%
 - Especialmente útil para historiales largos
 - Mínimo overhead en CPU
@@ -225,25 +231,25 @@ app.use(compression({
 
 ```typescript
 // rateLimit.ts
-import rateLimit from 'express-rate-limit';
+import rateLimit from "express-rate-limit";
 
 export const chatLimiter = rateLimit({
   windowMs: 60 * 1000, // 1 minuto
   max: (req) => {
     // Más límite para guests
-    const isGuest = req.headers['x-guest-id'];
+    const isGuest = req.headers["x-guest-id"];
     return isGuest ? 10 : 30; // 10 para guest, 30 para auth
   },
   message: {
     ok: false,
-    error: 'Demasiadas solicitudes. Espera un momento.'
+    error: "Demasiadas solicitudes. Espera un momento.",
   },
   standardHeaders: true,
   legacyHeaders: false,
 });
 
 // Uso:
-app.use('/api/chat', chatLimiter);
+app.use("/api/chat", chatLimiter);
 ```
 
 ### 4. **Streaming Responses** (Futuro)
@@ -255,7 +261,7 @@ export async function* generateCompletionStream(messages) {
     messages,
     stream: true, // ← Streaming
   });
-  
+
   for await (const chunk of stream) {
     yield chunk.choices[0]?.delta?.content;
   }
@@ -263,20 +269,21 @@ export async function* generateCompletionStream(messages) {
 
 // En chatController:
 async function streamMessage(req, res) {
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+
   for await (const chunk of generateCompletionStream(messages)) {
     res.write(`data: ${JSON.stringify({ chunk })}\n\n`);
   }
-  
-  res.write('data: [DONE]\n\n');
+
+  res.write("data: [DONE]\n\n");
   res.end();
 }
 ```
 
 **Beneficio:**
+
 - Usuario ve texto aparecer en tiempo real
 - Sensación mucho más rápida
 - ChatGPT-like experience
@@ -293,10 +300,11 @@ const MAX_CONTEXT_MESSAGES = 10;
 
 const history = allMessages
   .slice(-MAX_CONTEXT_MESSAGES)
-  .map(m => ({ role: m.role, content: m.content }));
+  .map((m) => ({ role: m.role, content: m.content }));
 ```
 
 **Por qué:**
+
 - OpenAI cobra por token
 - Más contexto = más caro
 - Después de ~10 mensajes, contexto anterior poco relevante
@@ -308,13 +316,13 @@ const history = allMessages
 // Truncar mensajes muy largos
 function truncateMessage(content: string, maxLength = 500) {
   if (content.length <= maxLength) return content;
-  return content.substring(0, maxLength) + '... [mensaje truncado]';
+  return content.substring(0, maxLength) + "... [mensaje truncado]";
 }
 
 // Al guardar en historial:
-const truncatedHistory = history.map(m => ({
+const truncatedHistory = history.map((m) => ({
   ...m,
-  content: truncateMessage(m.content)
+  content: truncateMessage(m.content),
 }));
 ```
 
@@ -335,8 +343,8 @@ function getLocalStorageSize() {
 // Auto-cleanup si se llena
 function cleanupOldMessages(guestId: string) {
   const key = `wadi_conv_${guestId}`;
-  const messages = JSON.parse(localStorage.getItem(key) || '[]');
-  
+  const messages = JSON.parse(localStorage.getItem(key) || "[]");
+
   if (messages.length > 100) {
     // Mantener solo últimos 100
     const recent = messages.slice(-100);
@@ -354,16 +362,16 @@ function cleanupOldMessages(guestId: string) {
 
 ```typescript
 // Para futuras features como "typing indicator"
-import { useDebounce } from 'use-debounce';
+import { useDebounce } from "use-debounce";
 
 function ChatInput() {
-  const [input, setInput] = useState('');
+  const [input, setInput] = useState("");
   const [debouncedInput] = useDebounce(input, 300);
-  
+
   useEffect(() => {
     if (debouncedInput) {
       // Enviar "usuario está escribiendo..."
-      socket.send({ type: 'typing', userId });
+      socket.send({ type: "typing", userId });
     }
   }, [debouncedInput]);
 }
@@ -381,7 +389,7 @@ function MessageList({ messages }) {
       <MessageBubble message={messages[index]} />
     </div>
   );
-  
+
   return (
     <FixedSizeList
       height={600}
@@ -396,6 +404,7 @@ function MessageList({ messages }) {
 ```
 
 **Beneficio:**
+
 - Solo renderiza mensajes visibles
 - Perfecto para 1000+ mensajes
 - 60fps garantizado en scroll
@@ -412,14 +421,14 @@ upstream wadi_backend {
   server localhost:4000;
   server localhost:4001;
   server localhost:4002;
-  
+
   # Sticky sessions para WebSocket
   ip_hash;
 }
 
 server {
   listen 80;
-  
+
   location /api/ {
     proxy_pass http://wadi_backend;
     proxy_http_version 1.1;
@@ -441,7 +450,7 @@ import os from 'os';
 
 if (cluster.isPrimary) {
   const numCPUs = os.cpus().length;
-  
+
   for (let i = 0; i < numCPUs; i++) {
     cluster.fork();
   }
@@ -459,14 +468,10 @@ const supabaseRead = createClient(READ_REPLICA_URL, ANON_KEY);
 const supabaseWrite = createClient(PRIMARY_URL, SERVICE_KEY);
 
 // Lectura desde replica
-const messages = await supabaseRead
-  .from('messages')
-  .select('*');
+const messages = await supabaseRead.from("messages").select("*");
 
 // Escritura a primary
-await supabaseWrite
-  .from('messages')
-  .insert(newMessage);
+await supabaseWrite.from("messages").insert(newMessage);
 ```
 
 ---
@@ -479,8 +484,8 @@ await supabaseWrite
 // En App.tsx
 useEffect(() => {
   // Web Vitals
-  if (typeof window !== 'undefined') {
-    import('web-vitals').then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
+  if (typeof window !== "undefined") {
+    import("web-vitals").then(({ getCLS, getFID, getFCP, getLCP, getTTFB }) => {
       getCLS(console.log);
       getFID(console.log);
       getFCP(console.log);
@@ -495,34 +500,38 @@ useEffect(() => {
 
 ```typescript
 // Prometheus-style metrics
-import promClient from 'prom-client';
+import promClient from "prom-client";
 
 const register = new promClient.Registry();
 
 const httpRequestDuration = new promClient.Histogram({
-  name: 'http_request_duration_seconds',
-  help: 'Duration of HTTP requests in seconds',
-  labelNames: ['method', 'route', 'status_code'],
-  registers: [register]
+  name: "http_request_duration_seconds",
+  help: "Duration of HTTP requests in seconds",
+  labelNames: ["method", "route", "status_code"],
+  registers: [register],
 });
 
 // Middleware
 app.use((req, res, next) => {
   const start = Date.now();
-  
-  res.on('finish', () => {
+
+  res.on("finish", () => {
     const duration = (Date.now() - start) / 1000;
     httpRequestDuration
-      .labels(req.method, req.route?.path || req.path, res.statusCode.toString())
+      .labels(
+        req.method,
+        req.route?.path || req.path,
+        res.statusCode.toString(),
+      )
       .observe(duration);
   });
-  
+
   next();
 });
 
 // Endpoint de métricas
-app.get('/metrics', async (req, res) => {
-  res.set('Content-Type', register.contentType);
+app.get("/metrics", async (req, res) => {
+  res.set("Content-Type", register.contentType);
   res.end(await register.metrics());
 });
 ```
@@ -564,10 +573,10 @@ WebSocket:            1 conexión persistente ✅
 ### 1. Lazy load de imágenes/emojis grandes
 
 ```typescript
-<img 
-  src={emoji} 
-  loading="lazy" 
-  decoding="async" 
+<img
+  src={emoji}
+  loading="lazy"
+  decoding="async"
 />
 ```
 
@@ -575,24 +584,24 @@ WebSocket:            1 conexión persistente ✅
 
 ```typescript
 // public/sw.js
-self.addEventListener('install', (event) => {
+self.addEventListener("install", (event) => {
   event.waitUntil(
-    caches.open('wadi-v1').then((cache) => {
+    caches.open("wadi-v1").then((cache) => {
       return cache.addAll([
-        '/',
-        '/index.html',
-        '/assets/index.css',
-        '/assets/index.js',
+        "/",
+        "/index.html",
+        "/assets/index.css",
+        "/assets/index.js",
       ]);
-    })
+    }),
   );
 });
 
-self.addEventListener('fetch', (event) => {
+self.addEventListener("fetch", (event) => {
   event.respondWith(
     caches.match(event.request).then((response) => {
       return response || fetch(event.request);
-    })
+    }),
   );
 });
 ```

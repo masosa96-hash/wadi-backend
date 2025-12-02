@@ -19,6 +19,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Component Hierarchy and Atomic Design](#component-hierarchy-and-atomic-design)
 3. [Core Component Analysis](#core-component-analysis)
@@ -38,6 +39,7 @@ The WADI frontend component tree represents a well-structured React application 
 The application implements a mobile-first design approach with a "phone shell" wrapper that simulates a mobile app experience, while maintaining responsiveness across device sizes. The component tree reveals a thoughtful architecture that balances aesthetic sophistication with functional clarity, incorporating subtle animations, glass morphism effects, and a distinctive Y2K-inspired visual language that enhances the premium feel of the application.
 
 **Section sources**
+
 - [Home.tsx](file://apps/frontend/src/pages/Home.tsx#L1-L372)
 - [Chat.tsx](file://apps/frontend/src/pages/Chat.tsx#L1-L402)
 - [Settings.tsx](file://apps/frontend/src/pages/Settings.tsx#L1-L235)
@@ -76,6 +78,7 @@ D --> |Templates| D3[Settings Page]
 ```
 
 **Diagram sources**
+
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [Input.tsx](file://apps/frontend/src/components/Input.tsx#L1-L145)
 - [Badge.tsx](file://apps/frontend/src/components/ui/Badge.tsx#L1-L40)
@@ -91,6 +94,7 @@ D --> |Templates| D3[Settings Page]
 - [Settings.tsx](file://apps/frontend/src/pages/Settings.tsx#L1-L235)
 
 **Section sources**
+
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [Input.tsx](file://apps/frontend/src/components/Input.tsx#L1-L145)
 - [Badge.tsx](file://apps/frontend/src/components/ui/Badge.tsx#L1-L40)
@@ -113,6 +117,7 @@ The component implements a clean, focused UI with a header that displays connect
 The component handles the matching workflow by simulating a partner discovery process with a 2-second delay, after which a system message is displayed to guide the conversation. Message sending is implemented with proper form handling, including prevention of empty messages and automatic clearing of the input field after submission. The component also includes a mock reply mechanism that simulates partner responses after a 1.5-second delay.
 
 **Section sources**
+
 - [ChatInterface.tsx](file://apps/frontend/src/components/ChatInterface.tsx#L1-L236)
 
 ### MessageBubble Component
@@ -124,6 +129,7 @@ The component supports multiple interaction states, including hover effects that
 Message content is rendered using ReactMarkdown with syntax highlighting for code blocks, providing a rich text experience that supports formatting such as bold, italic, and inline code. The component uses framer-motion for entrance animations, creating a smooth, sequential appearance of messages that enhances the conversational flow.
 
 **Section sources**
+
 - [MessageBubble.tsx](file://apps/frontend/src/components/MessageBubble.tsx#L1-L316)
 
 ### Sidebar Component
@@ -135,6 +141,7 @@ The component implements visual feedback for navigation state, highlighting the 
 The Sidebar uses React Router's useLocation hook to determine the current route and update the active state accordingly. It also integrates with the authentication store to access user information and handle logout functionality, redirecting to the login page after sign-out.
 
 **Section sources**
+
 - [Sidebar.tsx](file://apps/frontend/src/components/Sidebar.tsx#L1-L168)
 
 ### WadiOrb Component
@@ -161,10 +168,12 @@ WadiOrb --> motion : "uses"
 ```
 
 **Diagram sources**
+
 - [WadiOrb.tsx](file://apps/frontend/src/components/WadiOrb.tsx#L1-L76)
 - [theme.ts](file://apps/frontend/src/styles/theme.ts#L1-L156)
 
 **Section sources**
+
 - [WadiOrb.tsx](file://apps/frontend/src/components/WadiOrb.tsx#L1-L76)
 
 ## Composition Patterns and Props Interface
@@ -230,6 +239,7 @@ MessageBubble --> SyntaxHighlighter : "uses"
 ```
 
 **Diagram sources**
+
 - [Badge.tsx](file://apps/frontend/src/components/ui/Badge.tsx#L1-L40)
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [MessageBubble.tsx](file://apps/frontend/src/components/MessageBubble.tsx#L1-L316)
@@ -237,6 +247,7 @@ MessageBubble --> SyntaxHighlighter : "uses"
 - [TagChip.tsx](file://apps/frontend/src/components/TagChip.tsx#L1-L104)
 
 **Section sources**
+
 - [Badge.tsx](file://apps/frontend/src/components/ui/Badge.tsx#L1-L40)
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [MessageBubble.tsx](file://apps/frontend/src/components/MessageBubble.tsx#L1-L316)
@@ -273,9 +284,11 @@ MessageBubble->>SpeechSynthesis : cancel() on component unmount
 ```
 
 **Diagram sources**
+
 - [MessageBubble.tsx](file://apps/frontend/src/components/MessageBubble.tsx#L1-L316)
 
 **Section sources**
+
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [Input.tsx](file://apps/frontend/src/components/Input.tsx#L1-L145)
 - [Card.tsx](file://apps/frontend/src/components/Card.tsx#L1-L43)
@@ -293,6 +306,7 @@ The page implements a mode toggle that allows users to switch between AI and mir
 The page manages complex state including message history, input text, and sending status, coordinating between the chat store and UI components. It implements keyboard shortcuts (Enter to send, Shift+Enter for new line, Ctrl+K to clear chat) to enhance user productivity. The page also handles guest user functionality, displaying a nickname modal for unauthenticated users and managing guest conversation history in localStorage.
 
 **Section sources**
+
 - [Chat.tsx](file://apps/frontend/src/pages/Chat.tsx#L1-L402)
 
 ### Home Page Implementation
@@ -304,6 +318,7 @@ The page implements a hero section with the application title and tagline, follo
 The page includes a quick actions section with buttons for common tasks like starting a new conversation or searching. It also displays recent conversations with skeleton loading states for asynchronous data loading. The design incorporates subtle background effects including noise texture and floating orbs to create depth and visual interest while maintaining a professional appearance.
 
 **Section sources**
+
 - [Home.tsx](file://apps/frontend/src/pages/Home.tsx#L1-L372)
 
 ### Settings Page Implementation
@@ -315,6 +330,7 @@ The page is organized into sections including Profile, Personalization, Preferen
 The Preferences section implements toggle switches for various settings, demonstrating how the application handles boolean configuration options. The Privacy & Data section includes the PrivacyPanel component for data management controls. The Danger Zone section provides logout functionality with appropriate visual styling to indicate the destructive nature of the action.
 
 **Section sources**
+
 - [Settings.tsx](file://apps/frontend/src/pages/Settings.tsx#L1-L235)
 
 ## Low-Level UI Component Reuse
@@ -354,6 +370,7 @@ A4 --> B2
 ```
 
 **Diagram sources**
+
 - [Badge.tsx](file://apps/frontend/src/components/ui/Badge.tsx#L1-L40)
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [Input.tsx](file://apps/frontend/src/components/Input.tsx#L1-L145)
@@ -364,6 +381,7 @@ A4 --> B2
 - [Home.tsx](file://apps/frontend/src/pages/Home.tsx#L1-L372)
 
 **Section sources**
+
 - [Badge.tsx](file://apps/frontend/src/components/ui/Badge.tsx#L1-L40)
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [Input.tsx](file://apps/frontend/src/components/Input.tsx#L1-L145)
@@ -382,6 +400,7 @@ Interactive elements implement touch-friendly targets with appropriate sizing fo
 The design system incorporates accessibility considerations at the component level, with color palettes that maintain contrast in both light and dark modes. Focus states are implemented with sufficient visual feedback, and interactive elements provide clear affordances for their functionality. The application avoids relying solely on color to convey information, using text labels and icons to ensure comprehension for users with color vision deficiencies.
 
 **Section sources**
+
 - [ChatInterface.tsx](file://apps/frontend/src/components/ChatInterface.tsx#L1-L236)
 - [MessageBubble.tsx](file://apps/frontend/src/components/MessageBubble.tsx#L1-L316)
 - [Sidebar.tsx](file://apps/frontend/src/components/Sidebar.tsx#L1-L168)
@@ -503,9 +522,11 @@ class GlassHover {
 ```
 
 **Diagram sources**
+
 - [theme.ts](file://apps/frontend/src/styles/theme.ts#L1-L156)
 
 **Section sources**
+
 - [theme.ts](file://apps/frontend/src/styles/theme.ts#L1-L156)
 
 ## Component Customization and Extension
@@ -523,6 +544,7 @@ The component architecture follows the single responsibility principle, with eac
 When extending components, developers should follow the established patterns for props, event handling, and styling. New components should integrate with the theme system and maintain consistency with the existing design language. The use of framer-motion for animations should be consistent with existing patterns to ensure a cohesive user experience.
 
 **Section sources**
+
 - [Badge.tsx](file://apps/frontend/src/components/ui/Badge.tsx#L1-L40)
 - [Button.tsx](file://apps/frontend/src/components/Button.tsx#L1-L87)
 - [Input.tsx](file://apps/frontend/src/components/Input.tsx#L1-L145)

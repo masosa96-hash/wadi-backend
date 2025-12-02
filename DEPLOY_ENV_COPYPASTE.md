@@ -6,7 +6,7 @@
 2. Go to your Railway project -> Select the Service -> **Variables**.
 3. For each line in the example file, create a variable with the same NAME.
 4. Paste the correct values:
-   - **SUPABASE_...**: Get these from Supabase -> Settings -> API.
+   - **SUPABASE\_...**: Get these from Supabase -> Settings -> API.
    - **JWT_SECRET**: Use the "JWT Secret" from Supabase -> Settings -> API.
    - **GROQ_API_KEY**: Your Groq API key.
    - **FRONTEND_URL**: Initially you can put `http://localhost:5173` or a placeholder, but once Vercel is deployed, come back and update this to the real Vercel URL.

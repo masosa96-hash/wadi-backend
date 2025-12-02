@@ -13,6 +13,7 @@ vercel --prod
 ```
 
 ### O usando el script:
+
 ```powershell
 cd E:\WADI
 .\deploy-vercel.ps1
@@ -37,12 +38,14 @@ Si preferís deployar desde `apps/frontend`:
 ## 📋 Explicación
 
 ### Con Root Directory = `apps/frontend`:
+
 - Vercel espera que corras el comando desde la **raíz del repositorio** (`E:\WADI`)
 - Vercel automáticamente va a `apps/frontend` según la configuración
 - ✅ Correcto: `cd E:\WADI && vercel --prod`
 - ❌ Incorrecto: `cd E:\WADI\apps\frontend && vercel --prod`
 
 ### Con Root Directory = `.` (vacío):
+
 - Deploy desde donde quieras
 - ✅ Correcto: `cd E:\WADI\apps\frontend && vercel --prod`
 - ⚠️ Nota: Puede requerir configuración adicional del monorepo

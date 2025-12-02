@@ -14,6 +14,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [Authentication Architecture Overview](#authentication-architecture-overview)
 3. [Frontend Authentication Implementation](#frontend-authentication-implementation)
@@ -29,6 +30,7 @@
 13. [Configuration Guidelines](#configuration-guidelines)
 
 ## Introduction
+
 This document provides a comprehensive analysis of the Supabase authentication integration within the WADI application. It details the implementation of user authentication infrastructure including registration, login, session management, and token verification processes. The documentation covers both frontend and backend components, focusing on the interaction between the Zustand auth store and Supabase's client SDK, session persistence mechanisms, and state synchronization patterns. The analysis includes concrete implementation examples, security considerations, and configuration requirements for a robust authentication system.
 
 ## Authentication Architecture Overview
@@ -62,11 +64,13 @@ style F fill:#f9f,stroke:#333
 ```
 
 **Diagram sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 - [auth.ts](file://apps/api/src/middleware/auth.ts)
 
 **Section sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 - [auth.ts](file://apps/api/src/middleware/auth.ts)
@@ -103,12 +107,14 @@ style F fill:#9C27B0,stroke:#333
 ```
 
 **Diagram sources**
+
 - [Login.tsx](file://apps/frontend/src/pages/Login.tsx)
 - [Register.tsx](file://apps/frontend/src/pages/Register.tsx)
 - [ForgotPassword.tsx](file://apps/frontend/src/pages/ForgotPassword.tsx)
 - [ResetPassword.tsx](file://apps/frontend/src/pages/ResetPassword.tsx)
 
 **Section sources**
+
 - [Login.tsx](file://apps/frontend/src/pages/Login.tsx)
 - [Register.tsx](file://apps/frontend/src/pages/Register.tsx)
 - [ForgotPassword.tsx](file://apps/frontend/src/pages/ForgotPassword.tsx)
@@ -146,9 +152,11 @@ Client --> AuthClient : contains
 ```
 
 **Diagram sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts)
 
 **Section sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts)
 
 ## User Registration Flow
@@ -177,10 +185,12 @@ end
 ```
 
 **Diagram sources**
+
 - [Register.tsx](file://apps/frontend/src/pages/Register.tsx)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
 **Section sources**
+
 - [Register.tsx](file://apps/frontend/src/pages/Register.tsx)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
@@ -209,10 +219,12 @@ LoginPage->>User : Redirect to /home
 ```
 
 **Diagram sources**
+
 - [Login.tsx](file://apps/frontend/src/pages/Login.tsx)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
 **Section sources**
+
 - [Login.tsx](file://apps/frontend/src/pages/Login.tsx)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
@@ -242,11 +254,13 @@ style N fill:#F44336,stroke:#333
 ```
 
 **Diagram sources**
+
 - [ForgotPassword.tsx](file://apps/frontend/src/pages/ForgotPassword.tsx)
 - [ResetPassword.tsx](file://apps/frontend/src/pages/ResetPassword.tsx)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
 **Section sources**
+
 - [ForgotPassword.tsx](file://apps/frontend/src/pages/ForgotPassword.tsx)
 - [ResetPassword.tsx](file://apps/frontend/src/pages/ResetPassword.tsx)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
@@ -281,9 +295,11 @@ AuthState --> Zustand : uses
 ```
 
 **Diagram sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
 **Section sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 
 ## Backend Authentication Middleware
@@ -315,9 +331,11 @@ end
 ```
 
 **Diagram sources**
+
 - [auth.ts](file://apps/api/src/middleware/auth.ts)
 
 **Section sources**
+
 - [auth.ts](file://apps/api/src/middleware/auth.ts)
 
 ## User Profile Creation and Database Triggers
@@ -344,10 +362,12 @@ style G fill:#4CAF50,stroke:#333
 ```
 
 **Diagram sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql)
 - [fix_auth_trigger.sql](file://fix_auth_trigger.sql)
 
 **Section sources**
+
 - [supabase_schema.sql](file://supabase_schema.sql)
 - [fix_auth_trigger.sql](file://fix_auth_trigger.sql)
 
@@ -380,6 +400,7 @@ style G fill:#4CAF50,stroke:#333
 ```
 
 **Section sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 - [auth.ts](file://apps/api/src/middleware/auth.ts)
@@ -412,6 +433,7 @@ style E fill:#FF9800,stroke:#333
 ```
 
 **Section sources**
+
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts)
 - [Login.tsx](file://apps/frontend/src/pages/Login.tsx)
 - [Register.tsx](file://apps/frontend/src/pages/Register.tsx)
@@ -451,6 +473,7 @@ style F fill:#4CAF50,stroke:#333
 ```
 
 **Section sources**
+
 - [supabase.ts](file://apps/frontend/src/config/supabase.ts)
 - [supabase_schema.sql](file://supabase_schema.sql)
 - [fix_auth_trigger.sql](file://fix_auth_trigger.sql)

@@ -13,51 +13,56 @@ This guide provides **step-by-step instructions** to complete Phases 3-6 of the 
 **Estimated Time:** 2-3 hours
 
 #### Step 1: Install Framer Motion
+
 ```bash
 cd "e:\WADI intento mil"
 pnpm add framer-motion
 ```
 
 #### Step 2: Create Animation Variants File
+
 **File:** `apps/frontend/src/utils/animations.ts`
+
 ```typescript
 import type { Variants } from "framer-motion";
 
 export const fadeIn: Variants = {
   initial: { opacity: 0 },
   animate: { opacity: 1, transition: { duration: 0.25 } },
-  exit: { opacity: 0, transition: { duration: 0.2 } }
+  exit: { opacity: 0, transition: { duration: 0.2 } },
 };
 
 export const slideIn: Variants = {
   initial: { opacity: 0, y: 20 },
   animate: { opacity: 1, y: 0, transition: { duration: 0.3 } },
-  exit: { opacity: 0, y: -20, transition: { duration: 0.2 } }
+  exit: { opacity: 0, y: -20, transition: { duration: 0.2 } },
 };
 
 export const scaleIn: Variants = {
   initial: { opacity: 0, scale: 0.95 },
   animate: { opacity: 1, scale: 1, transition: { duration: 0.2 } },
-  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } }
+  exit: { opacity: 0, scale: 0.95, transition: { duration: 0.2 } },
 };
 
 export const modalVariants: Variants = {
   initial: { opacity: 0, scale: 0.9 },
   animate: { opacity: 1, scale: 1, transition: { duration: 0.25 } },
-  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } }
+  exit: { opacity: 0, scale: 0.9, transition: { duration: 0.2 } },
 };
 
 export const staggerContainer: Variants = {
   animate: {
     transition: {
-      staggerChildren: 0.04
-    }
-  }
+      staggerChildren: 0.04,
+    },
+  },
 };
 ```
 
 #### Step 3: Update MessageBubble with Animation
+
 **File:** `apps/frontend/src/components/MessageBubble.tsx`
+
 ```typescript
 import { motion } from "framer-motion";
 import { slideIn } from "../utils/animations";
@@ -76,7 +81,9 @@ return (
 ```
 
 #### Step 4: Update Modal with Animation
+
 **File:** `apps/frontend/src/components/Modal.tsx`
+
 ```typescript
 import { motion, AnimatePresence } from "framer-motion";
 import { modalVariants, fadeIn } from "../utils/animations";
@@ -107,9 +114,12 @@ import { modalVariants, fadeIn } from "../utils/animations";
 ```
 
 #### Step 5: Add Accessibility Support
+
 ```typescript
 // Check for reduced motion preference
-const prefersReducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+const prefersReducedMotion = window.matchMedia(
+  "(prefers-reduced-motion: reduce)",
+).matches;
 
 const variants = prefersReducedMotion ? {} : slideIn;
 ```
@@ -121,38 +131,40 @@ const variants = prefersReducedMotion ? {} : slideIn;
 **Estimated Time:** 2-3 hours
 
 #### Step 1: Update Theme with Glass Styles
+
 **File:** `apps/frontend/src/styles/theme.ts`
+
 ```typescript
 export const theme = {
   // ... existing theme
-  
+
   glass: {
     subtle: {
-      background: 'rgba(26, 31, 43, 0.5)',
-      backdropFilter: 'blur(8px) saturate(180%)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      boxShadow: '0 4px 16px rgba(0, 0, 0, 0.2)',
+      background: "rgba(26, 31, 43, 0.5)",
+      backdropFilter: "blur(8px) saturate(180%)",
+      border: "1px solid rgba(255, 255, 255, 0.1)",
+      boxShadow: "0 4px 16px rgba(0, 0, 0, 0.2)",
     },
     medium: {
-      background: 'rgba(26, 31, 43, 0.7)',
-      backdropFilter: 'blur(12px) saturate(180%)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.3)',
+      background: "rgba(26, 31, 43, 0.7)",
+      backdropFilter: "blur(12px) saturate(180%)",
+      border: "1px solid rgba(255, 255, 255, 0.1)",
+      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.3)",
     },
     strong: {
-      background: 'rgba(26, 31, 43, 0.85)',
-      backdropFilter: 'blur(16px) saturate(180%)',
-      border: '1px solid rgba(255, 255, 255, 0.1)',
-      boxShadow: '0 8px 32px rgba(0, 0, 0, 0.4)',
+      background: "rgba(26, 31, 43, 0.85)",
+      backdropFilter: "blur(16px) saturate(180%)",
+      border: "1px solid rgba(255, 255, 255, 0.1)",
+      boxShadow: "0 8px 32px rgba(0, 0, 0, 0.4)",
     },
     accent: {
-      background: 'rgba(0, 217, 163, 0.3)',
-      backdropFilter: 'blur(12px) saturate(180%)',
-      border: '1px solid rgba(0, 217, 163, 0.4)',
-      boxShadow: '0 0 20px rgba(0, 217, 163, 0.15)',
-    }
+      background: "rgba(0, 217, 163, 0.3)",
+      backdropFilter: "blur(12px) saturate(180%)",
+      border: "1px solid rgba(0, 217, 163, 0.4)",
+      boxShadow: "0 0 20px rgba(0, 217, 163, 0.15)",
+    },
   },
-  
+
   zIndex: {
     base: 0,
     cards: 1,
@@ -160,12 +172,14 @@ export const theme = {
     dropdowns: 20,
     modals: 30,
     toasts: 40,
-  }
+  },
 } as const;
 ```
 
 #### Step 2: Update Card Component
+
 **File:** `apps/frontend/src/components/Card.tsx`
+
 ```typescript
 // Add glass effect to card style
 const cardStyle: CSSProperties = {
@@ -184,7 +198,9 @@ onMouseEnter={(e) => {
 ```
 
 #### Step 3: Update Modal with Glass Effect
+
 **File:** `apps/frontend/src/components/Modal.tsx`
+
 ```typescript
 const modalStyle: CSSProperties = {
   ...theme.glass.strong,
@@ -192,8 +208,8 @@ const modalStyle: CSSProperties = {
 };
 
 const backdropStyle: CSSProperties = {
-  background: 'rgba(0, 0, 0, 0.6)',
-  backdropFilter: 'blur(8px)',
+  background: "rgba(0, 0, 0, 0.6)",
+  backdropFilter: "blur(8px)",
   // ... rest
 };
 ```
@@ -207,21 +223,23 @@ const backdropStyle: CSSProperties = {
 Already partially complete. Additional enhancements:
 
 #### Add Syntax Highlighting
+
 ```bash
 pnpm add react-syntax-highlighter @types/react-syntax-highlighter
 ```
 
 **Update MessageBubble:**
-```typescript
-import { Prism as SyntaxHighlighter } from 'react-syntax-highlighter';
-import { vscDarkPlus } from 'react-syntax-highlighter/dist/esm/styles/prism';
+
+````typescript
+import { Prism as SyntaxHighlighter } from "react-syntax-highlighter";
+import { vscDarkPlus } from "react-syntax-highlighter/dist/esm/styles/prism";
 
 // Detect code blocks
 const renderContent = (content: string) => {
   const codeBlockRegex = /```(\w+)?\n([\s\S]+?)```/g;
   // Parse and render with syntax highlighting
 };
-```
+````
 
 ---
 
@@ -232,20 +250,26 @@ const renderContent = (content: string) => {
 **Estimated Time:** 3-4 hours
 
 #### Step 1: Install Dependencies
+
 ```bash
 pnpm add jspdf html2canvas file-saver
 pnpm add -D @types/file-saver
 ```
 
 #### Step 2: Create Export Utilities
-**File:** `apps/frontend/src/utils/export.ts`
-```typescript
-import { saveAs } from 'file-saver';
-import jsPDF from 'jspdf';
-import type { Run } from '../store/runsStore';
 
-export async function exportToMarkdown(run: Run, projectName: string): Promise<void> {
-  const markdown = `# ${run.custom_name || 'Run Export'}
+**File:** `apps/frontend/src/utils/export.ts`
+
+```typescript
+import { saveAs } from "file-saver";
+import jsPDF from "jspdf";
+import type { Run } from "../store/runsStore";
+
+export async function exportToMarkdown(
+  run: Run,
+  projectName: string,
+): Promise<void> {
+  const markdown = `# ${run.custom_name || "Run Export"}
 
 **Date:** ${new Date(run.created_at).toISOString()}
 **Project:** ${projectName}
@@ -266,43 +290,50 @@ ${run.output}
 *Exported from WADI*
 `;
 
-  const blob = new Blob([markdown], { type: 'text/markdown;charset=utf-8' });
-  saveAs(blob, `${run.custom_name || 'run'}-${run.id.substring(0, 8)}.md`);
+  const blob = new Blob([markdown], { type: "text/markdown;charset=utf-8" });
+  saveAs(blob, `${run.custom_name || "run"}-${run.id.substring(0, 8)}.md`);
 }
 
-export async function exportToPDF(run: Run, projectName: string): Promise<void> {
+export async function exportToPDF(
+  run: Run,
+  projectName: string,
+): Promise<void> {
   const doc = new jsPDF();
-  
+
   // Add header
   doc.setFontSize(18);
-  doc.text(run.custom_name || 'Run Export', 20, 20);
-  
+  doc.text(run.custom_name || "Run Export", 20, 20);
+
   // Add metadata
   doc.setFontSize(10);
   doc.text(`Date: ${new Date(run.created_at).toLocaleString()}`, 20, 30);
   doc.text(`Project: ${projectName}`, 20, 35);
   doc.text(`Model: ${run.model}`, 20, 40);
-  
+
   // Add content
   doc.setFontSize(12);
-  doc.text('User Input:', 20, 50);
+  doc.text("User Input:", 20, 50);
   doc.setFontSize(10);
   const splitInput = doc.splitTextToSize(run.input, 170);
   doc.text(splitInput, 20, 55);
-  
+
   const inputHeight = splitInput.length * 5;
   doc.setFontSize(12);
-  doc.text('AI Response:', 20, 60 + inputHeight);
+  doc.text("AI Response:", 20, 60 + inputHeight);
   doc.setFontSize(10);
   const splitOutput = doc.splitTextToSize(run.output, 170);
   doc.text(splitOutput, 20, 65 + inputHeight);
-  
-  doc.save(`${run.custom_name || 'run'}-${run.id.substring(0, 8)}.pdf`);
+
+  doc.save(`${run.custom_name || "run"}-${run.id.substring(0, 8)}.pdf`);
 }
 
-export function exportToJSON(run: Run, projectName: string, sessionName?: string): void {
+export function exportToJSON(
+  run: Run,
+  projectName: string,
+  sessionName?: string,
+): void {
   const exportData = {
-    export_version: '1.0',
+    export_version: "1.0",
     exported_at: new Date().toISOString(),
     run: {
       id: run.id,
@@ -312,20 +343,21 @@ export function exportToJSON(run: Run, projectName: string, sessionName?: string
       model: run.model,
       created_at: run.created_at,
       project: {
-        name: projectName
+        name: projectName,
       },
       session: sessionName ? { name: sessionName } : null,
-    }
+    },
   };
-  
-  const blob = new Blob([JSON.stringify(exportData, null, 2)], { 
-    type: 'application/json' 
+
+  const blob = new Blob([JSON.stringify(exportData, null, 2)], {
+    type: "application/json",
   });
   saveAs(blob, `run-${run.id.substring(0, 8)}.json`);
 }
 ```
 
 #### Step 3: Add Export Buttons to MessageBubble
+
 Update MessageBubble to include export options in the actions menu.
 
 ---
@@ -335,7 +367,9 @@ Update MessageBubble to include export options in the actions menu.
 **Estimated Time:** 3-4 hours
 
 #### Step 1: Create Database Schema
+
 **File:** `docs/database-schema-sharing.sql`
+
 ```sql
 CREATE TABLE IF NOT EXISTS share_tokens (
   id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
@@ -367,23 +401,28 @@ CREATE POLICY "Users can create shares for own content"
 ```
 
 #### Step 2: Backend Controller
-**File:** `apps/api/src/controllers/shareController.ts`
-```typescript
-import crypto from 'crypto';
 
-export async function createShareLink(req: Request, res: Response): Promise<void> {
+**File:** `apps/api/src/controllers/shareController.ts`
+
+```typescript
+import crypto from "crypto";
+
+export async function createShareLink(
+  req: Request,
+  res: Response,
+): Promise<void> {
   const userId = req.user_id;
   const { run_id, session_id, expires_in, max_views } = req.body;
-  
+
   // Generate secure token
-  const token = crypto.randomBytes(16).toString('hex');
-  
+  const token = crypto.randomBytes(16).toString("hex");
+
   // Calculate expiration
   const expiresAt = new Date();
   expiresAt.setHours(expiresAt.getHours() + (expires_in || 24));
-  
+
   const { data, error } = await supabase
-    .from('share_tokens')
+    .from("share_tokens")
     .insert({
       token,
       run_id: run_id || null,
@@ -394,19 +433,22 @@ export async function createShareLink(req: Request, res: Response): Promise<void
     })
     .select()
     .single();
-  
+
   if (error) {
-    res.status(500).json({ error: 'Failed to create share link' });
+    res.status(500).json({ error: "Failed to create share link" });
     return;
   }
-  
+
   const shareUrl = `${process.env.FRONTEND_URL}/share/${token}`;
   res.status(201).json({ token, url: shareUrl });
 }
 
-export async function getSharedContent(req: Request, res: Response): Promise<void> {
+export async function getSharedContent(
+  req: Request,
+  res: Response,
+): Promise<void> {
   const { token } = req.params;
-  
+
   // Verify token and increment view count
   // Return run or session data
   // Check expiration and max_views
@@ -422,89 +464,95 @@ export async function getSharedContent(req: Request, res: Response): Promise<voi
 **Estimated Time:** 4-6 hours
 
 #### Step 1: Update OpenAI Service for Streaming
+
 **File:** `apps/api/src/services/openai.ts`
+
 ```typescript
 export async function generateCompletionStream(
   input: string,
   model: string,
-  onChunk: (text: string) => void
+  onChunk: (text: string) => void,
 ): Promise<string> {
   const stream = await openai.chat.completions.create({
     model,
-    messages: [{ role: 'user', content: input }],
+    messages: [{ role: "user", content: input }],
     stream: true,
   });
-  
-  let fullResponse = '';
-  
+
+  let fullResponse = "";
+
   for await (const chunk of stream) {
-    const content = chunk.choices[0]?.delta?.content || '';
+    const content = chunk.choices[0]?.delta?.content || "";
     if (content) {
       fullResponse += content;
       onChunk(content);
     }
   }
-  
+
   return fullResponse;
 }
 ```
 
 #### Step 2: Create SSE Endpoint
+
 **File:** `apps/api/src/controllers/runsController.ts`
+
 ```typescript
 export async function streamRun(req: Request, res: Response): Promise<void> {
   const { input } = req.body;
-  
-  res.setHeader('Content-Type', 'text/event-stream');
-  res.setHeader('Cache-Control', 'no-cache');
-  res.setHeader('Connection', 'keep-alive');
-  
+
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache");
+  res.setHeader("Connection", "keep-alive");
+
   try {
-    await generateCompletionStream(input, 'gpt-3.5-turbo', (chunk) => {
+    await generateCompletionStream(input, "gpt-3.5-turbo", (chunk) => {
       res.write(`event: token\n`);
       res.write(`data: ${JSON.stringify({ content: chunk })}\n\n`);
     });
-    
+
     res.write(`event: done\n`);
     res.write(`data: ${JSON.stringify({ complete: true })}\n\n`);
     res.end();
   } catch (error) {
     res.write(`event: error\n`);
-    res.write(`data: ${JSON.stringify({ error: 'Stream failed' })}\n\n`);
+    res.write(`data: ${JSON.stringify({ error: "Stream failed" })}\n\n`);
     res.end();
   }
 }
 ```
 
 #### Step 3: Frontend Streaming Handler
+
 **File:** `apps/frontend/src/utils/streaming.ts`
+
 ```typescript
 export function createStreamingConnection(
   projectId: string,
   input: string,
   onToken: (text: string) => void,
   onComplete: () => void,
-  onError: (error: string) => void
+  onError: (error: string) => void,
 ): () => void {
   const eventSource = new EventSource(
-    `${API_URL}/api/projects/${projectId}/runs/stream`
+    `${API_URL}/api/projects/${projectId}/runs/stream`,
   );
-  
-  eventSource.addEventListener('token', (e) => {
+
+  eventSource.addEventListener("token", (e) => {
     const data = JSON.parse(e.data);
     onToken(data.content);
   });
-  
-  eventSource.addEventListener('done', () => {
+
+  eventSource.addEventListener("done", () => {
     eventSource.close();
     onComplete();
   });
-  
-  eventSource.addEventListener('error', (e) => {
+
+  eventSource.addEventListener("error", (e) => {
     eventSource.close();
-    onError('Stream error');
+    onError("Stream error");
   });
-  
+
   return () => eventSource.close();
 }
 ```
@@ -518,6 +566,7 @@ export function createStreamingConnection(
 These features require substantial implementation. Refer to the design document (`.qoder/quests/sprint-plan-automation.md`) for complete specifications.
 
 **Key Implementation Files Needed:**
+
 - `apps/api/src/services/memory.ts`
 - `apps/api/src/services/commands.ts`
 - `apps/api/src/services/modes.ts`
@@ -534,6 +583,7 @@ These features require substantial implementation. Refer to the design document 
 ### Checklist
 
 #### End-to-End Testing
+
 - [ ] User registration and login
 - [ ] Project creation
 - [ ] Session creation (auto and manual)
@@ -549,6 +599,7 @@ These features require substantial implementation. Refer to the design document 
 - [ ] Mode switching
 
 #### Console Error Elimination
+
 - [ ] No React warnings in console
 - [ ] No network errors
 - [ ] No uncaught promise rejections
@@ -556,6 +607,7 @@ These features require substantial implementation. Refer to the design document 
 - [ ] No infinite loops
 
 #### UI Consistency
+
 - [ ] All buttons use Button component
 - [ ] All inputs use Input component
 - [ ] All colors from theme
@@ -564,6 +616,7 @@ These features require substantial implementation. Refer to the design document 
 - [ ] Responsive on mobile/tablet/desktop
 
 #### Performance Benchmarks
+
 - [ ] Initial load < 2s
 - [ ] Time to interactive < 3s
 - [ ] Run creation < 1s (excluding AI)
@@ -574,12 +627,14 @@ These features require substantial implementation. Refer to the design document 
 ## Development Workflow
 
 ### Making Changes
+
 1. Create feature branch: `git checkout -b feature/your-feature`
 2. Implement following established patterns
 3. Test locally
 4. Create pull request
 
 ### Testing
+
 ```bash
 # Frontend
 cd apps/frontend
@@ -591,6 +646,7 @@ pnpm run build  # Check for TypeScript errors
 ```
 
 ### Deployment
+
 1. Push to main branch
 2. Deploy backend to your hosting service
 3. Deploy frontend to Vercel/Netlify
@@ -600,12 +656,12 @@ pnpm run build  # Check for TypeScript errors
 
 ## Estimated Total Time to Complete
 
-| Phase | Tasks | Estimated Hours |
-|-------|-------|-----------------|
-| Phase 3 | 3 tasks | 6-9 hours |
-| Phase 4 | 2 tasks | 6-8 hours |
-| Phase 5 | 4 tasks | 10-15 hours |
-| Phase 6 | 1 task | 4-6 hours |
+| Phase     | Tasks        | Estimated Hours |
+| --------- | ------------ | --------------- |
+| Phase 3   | 3 tasks      | 6-9 hours       |
+| Phase 4   | 2 tasks      | 6-8 hours       |
+| Phase 5   | 4 tasks      | 10-15 hours     |
+| Phase 6   | 1 task       | 4-6 hours       |
 | **Total** | **10 tasks** | **26-38 hours** |
 
 **Recommended Approach:** Complete one phase at a time, testing thoroughly before moving to the next.

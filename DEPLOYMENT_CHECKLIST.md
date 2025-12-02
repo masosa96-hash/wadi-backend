@@ -75,11 +75,13 @@
 ### 3. Update Backend Configuration
 
 #### If using Render:
+
 - [ ] Go back to Render service settings
 - [ ] Update `FRONTEND_URL` with your Vercel frontend URL
 - [ ] Click "Save Changes" to redeploy backend
 
 #### If using Railway:
+
 - [ ] Go to Railway project Variables tab
 - [ ] Update `FRONTEND_URL` with your Vercel frontend URL
 - [ ] Railway will auto-redeploy
@@ -119,7 +121,7 @@
 
 2. **Environment Variables**
    - Double-check all required variables are set
-   - Remember VITE_ prefix for frontend variables
+   - Remember VITE\_ prefix for frontend variables
 
 3. **Build Failures**
    - Check build logs in deployment dashboards

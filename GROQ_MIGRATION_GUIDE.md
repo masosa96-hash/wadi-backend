@@ -16,26 +16,31 @@ WADI has been successfully migrated from OpenAI to **Groq** as the primary LLM p
 ### 1. Environment Variables
 
 **New Required Variables:**
+
 - `GROQ_API_KEY` - Your Groq API key (get it from console.groq.com)
 - `GROQ_DEFAULT_MODEL` - Default: `llama-3.1-8b-instant`
 
 **Now Optional (Fallback):**
+
 - `OPENAI_API_KEY` - Only needed for embeddings and image analysis
 - `OPENAI_DEFAULT_MODEL` - Default: `gpt-3.5-turbo`
 
 ### 2. Supported Groq Models
 
 **Recommended for Production:**
+
 - `llama-3.1-8b-instant` - Fast, cheap, good quality (default)
 - `llama-3.3-70b-versatile` - Higher quality, slower, more expensive
 
 **Also Available:**
+
 - `mixtral-8x7b-32768` - Long context window
 - `gemma-7b-it` - Smaller, faster model
 
 ### 3. Architecture Changes
 
 **Files Modified:**
+
 - `.env.example` - Added Groq variables
 - `apps/api/src/config/env-validator.ts` - Groq now required, OpenAI optional
 - `apps/api/src/services/openai.ts` - Renamed to LLM client, uses Groq baseURL
@@ -44,6 +49,7 @@ WADI has been successfully migrated from OpenAI to **Groq** as the primary LLM p
 - `apps/api/src/index.ts` - Updated health check comments
 
 **Key Implementation Details:**
+
 ```typescript
 // Primary LLM client (Groq)
 const llmClient = new OpenAI({
@@ -52,7 +58,7 @@ const llmClient = new OpenAI({
 });
 
 // Secondary client for OpenAI-specific features (optional)
-const openaiClient = process.env.OPENAI_API_KEY 
+const openaiClient = process.env.OPENAI_API_KEY
   ? new OpenAI({ apiKey: process.env.OPENAI_API_KEY })
   : null;
 ```
@@ -75,23 +81,25 @@ These features will gracefully degrade if `OPENAI_API_KEY` is not set.
    - Create a new API key
 
 2. **Update your `.env` file:**
+
    ```env
    # Required
    GROQ_API_KEY=gsk_your_groq_api_key_here
    GROQ_DEFAULT_MODEL=llama-3.1-8b-instant
-   
+
    # Optional (for embeddings & image analysis)
    OPENAI_API_KEY=sk-your_openai_key_here
    OPENAI_DEFAULT_MODEL=gpt-3.5-turbo
    ```
 
 3. **Test locally:**
+
    ```bash
    pnpm dev:api
-   
+
    # Test health check
    curl http://localhost:4000/api/health
-   
+
    # Expected response:
    # {
    #   "status": "ok",
@@ -116,6 +124,7 @@ These features will gracefully degrade if `OPENAI_API_KEY` is not set.
 
 2. **Optional OpenAI Variables:**
    If you want embeddings and image analysis to work:
+
    ```
    OPENAI_API_KEY=sk_your_openai_key_here
    OPENAI_DEFAULT_MODEL=gpt-3.5-turbo
@@ -158,12 +167,12 @@ curl -X POST http://localhost:4000/api/chat/sessions \
 
 ## 📊 Performance Comparison
 
-| Feature | OpenAI (GPT-3.5) | Groq (Llama 3.1) |
-|---------|------------------|------------------|
-| Speed | ~2-4s | ~0.5-1s |
-| Cost | $0.50/1M tokens | $0.05/1M tokens |
-| Quality | Excellent | Very Good |
-| Max Tokens | 4096 | 8192 |
+| Feature    | OpenAI (GPT-3.5) | Groq (Llama 3.1) |
+| ---------- | ---------------- | ---------------- |
+| Speed      | ~2-4s            | ~0.5-1s          |
+| Cost       | $0.50/1M tokens  | $0.05/1M tokens  |
+| Quality    | Excellent        | Very Good        |
+| Max Tokens | 4096             | 8192             |
 
 ## 🔒 Security Notes
 
@@ -176,16 +185,19 @@ curl -X POST http://localhost:4000/api/chat/sessions \
 ## 🐛 Troubleshooting
 
 ### "Missing Groq API key" error
+
 - Check your `.env` file has `GROQ_API_KEY`
 - Verify the key is valid at console.groq.com
 - In Railway, check Variables tab
 
 ### Health check shows "degraded"
+
 - Check Railway logs for specific errors
 - Verify `GROQ_API_KEY` is set correctly
 - Test with `curl` to see full error response
 
 ### Embeddings not working
+
 - Add `OPENAI_API_KEY` to your environment
 - Groq doesn't support embeddings yet
 - This is expected if only using Groq

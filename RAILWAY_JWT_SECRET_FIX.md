@@ -5,6 +5,7 @@ This guide explains how to resolve the JWT_SECRET error when deploying the WADI 
 ## Understanding the Error
 
 The error you're seeing:
+
 ```
 ERROR: failed to build: failed to stat /tmp/railpack-build-3846039788/secrets/JWT_SECRET: stat /tmp/railpack-build-3846039788/secrets/JWT_SECRET: no such file or directory
 ```
@@ -16,6 +17,7 @@ This occurs because Railway's Railpack expects certain secrets to be mounted as 
 Here are all the environment variables/secrets required for the WADI backend on Railway:
 
 ### Regular Environment Variables (set in Variables tab):
+
 ```
 SUPABASE_URL=your-supabase-project-url.supabase.co
 SUPABASE_ANON_KEY=your-supabase-anon-key
@@ -27,6 +29,7 @@ FRONTEND_URL=https://placeholder.vercel.app (update after Vercel deployment)
 ```
 
 ### Secrets (set in Variables/Secrets UI):
+
 ```
 JWT_SECRET=your-supabase-jwt-secret
 ```

@@ -58,6 +58,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 **Goal**: Establish infrastructure and authentication base
 
 #### Task 1.1: Environment Configuration
+
 - **Description**: Create comprehensive environment variable configuration for all services
 - **Files/Folders**:
   - Create `.env.example` in root
@@ -73,6 +74,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: All subsequent tasks depend on proper environment configuration
 
 #### Task 1.2: Install Required Dependencies
+
 - **Description**: Add necessary packages for Supabase, OpenAI, and authentication
 - **Files/Folders**:
   - `apps/api/package.json`
@@ -90,6 +92,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Required libraries must be available before implementation
 
 #### Task 1.3: Database Schema Design
+
 - **Description**: Document the Supabase table structures and relationships
 - **Tables Required**:
   - profiles (user_id UUID PK, display_name TEXT, created_at TIMESTAMP)
@@ -117,6 +120,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 **Goal**: Build RESTful API with Supabase integration
 
 #### Task 2.1: Supabase Client Configuration
+
 - **Description**: Set up centralized Supabase client for backend use
 - **Files/Folders**:
   - Create `apps/api/src/config/supabase.ts`
@@ -129,6 +133,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Centralized configuration ensures consistency across API endpoints
 
 #### Task 2.2: Authentication Middleware
+
 - **Description**: Create middleware to validate Supabase JWT tokens
 - **Files/Folders**:
   - Create `apps/api/src/middleware/auth.ts`
@@ -141,6 +146,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: All protected endpoints require user authentication
 
 #### Task 2.3: Projects API Endpoints
+
 - **Description**: Implement project CRUD operations
 - **Files/Folders**:
   - Create `apps/api/src/routes/projects.ts`
@@ -159,6 +165,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Core functionality for project organization
 
 #### Task 2.4: OpenAI Integration Service
+
 - **Description**: Create service layer for OpenAI API calls
 - **Files/Folders**:
   - Create `apps/api/src/services/openai.ts`
@@ -172,6 +179,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Isolated service layer enables testing and model switching
 
 #### Task 2.5: Runs API Endpoints
+
 - **Description**: Implement run creation and retrieval with AI integration
 - **Files/Folders**:
   - Create `apps/api/src/routes/runs.ts`
@@ -194,6 +202,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Core AI execution functionality
 
 #### Task 2.6: Refactor Legacy Code
+
 - **Description**: Disable or archive brain modules and file-based storage
 - **Files/Folders**:
   - `apps/api/src/brain/memory.ts` (archive)
@@ -202,7 +211,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
   - `apps/api/data/memory.json` (remove)
   - Modify `apps/api/src/index.ts` (remove old /chat endpoint)
 - **Action**:
-  - Move brain folder to apps/api/src/_archived/brain
+  - Move brain folder to apps/api/src/\_archived/brain
   - Remove references to saveInteraction and buildUserProfile
   - Clean up old endpoint logic
 - **Dependencies**: Task 2.5
@@ -213,6 +222,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 **Goal**: Build multi-screen React application with authentication
 
 #### Task 3.1: Supabase Client Configuration
+
 - **Description**: Set up Supabase client for frontend authentication
 - **Files/Folders**:
   - Create `apps/frontend/src/config/supabase.ts`
@@ -225,6 +235,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Centralized configuration for auth and API calls
 
 #### Task 3.2: Authentication State Management
+
 - **Description**: Create global auth state using Zustand
 - **Files/Folders**:
   - Create `apps/frontend/src/store/authStore.ts`
@@ -241,6 +252,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Centralized auth state accessible across components
 
 #### Task 3.3: Router Setup
+
 - **Description**: Configure React Router with protected routes
 - **Files/Folders**:
   - Create `apps/frontend/src/router.tsx`
@@ -257,6 +269,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Navigation structure for multi-screen application
 
 #### Task 3.4: Login and Register Screens
+
 - **Description**: Build authentication UI
 - **Files/Folders**:
   - Create `apps/frontend/src/pages/Login.tsx`
@@ -280,6 +293,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: User onboarding and access control
 
 #### Task 3.5: Projects State Management
+
 - **Description**: Create Zustand store for projects data
 - **Files/Folders**:
   - Create `apps/frontend/src/store/projectsStore.ts`
@@ -294,6 +308,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Centralized projects data management
 
 #### Task 3.6: Projects List Screen
+
 - **Description**: Display user's projects with creation capability
 - **Files/Folders**:
   - Create `apps/frontend/src/pages/Projects.tsx`
@@ -318,6 +333,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Primary navigation hub for user's work
 
 #### Task 3.7: Runs State Management
+
 - **Description**: Create Zustand store for runs data per project
 - **Files/Folders**:
   - Create `apps/frontend/src/store/runsStore.ts`
@@ -334,6 +350,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Manage AI execution history per project
 
 #### Task 3.8: Project Detail Screen
+
 - **Description**: Display run history and input interface
 - **Files/Folders**:
   - Create `apps/frontend/src/pages/ProjectDetail.tsx`
@@ -358,6 +375,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Core user interaction for AI execution
 
 #### Task 3.9: UI Cleanup and Legacy Component Handling
+
 - **Description**: Integrate or remove root-level src/ components
 - **Files/Folders**:
   - `src/components/InsightsPanel.tsx` (evaluate)
@@ -365,7 +383,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
   - `src/store/settingsStore.ts` (evaluate)
   - `apps/frontend/src/App.tsx` (refactor)
 - **Decision**:
-  - InsightsPanel: Out of Beta 1 scope, move to apps/frontend/src/_archived/
+  - InsightsPanel: Out of Beta 1 scope, move to apps/frontend/src/\_archived/
   - SettingsPanel: Language selection could be useful, integrate if time permits, otherwise archive
   - settingsStore: Archive if SettingsPanel is archived
   - App.tsx: Replace chat UI with router outlet
@@ -377,6 +395,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 **Goal**: Ensure end-to-end functionality and fix integration issues
 
 #### Task 4.1: API-Frontend Integration Testing
+
 - **Description**: Verify complete user flows work correctly
 - **Test Scenarios**:
   - User registration creates profile and allows login
@@ -391,6 +410,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Validate complete user journey
 
 #### Task 4.2: Error Handling Review
+
 - **Description**: Ensure graceful handling of common error cases
 - **Error Scenarios**:
   - Network failures (API unavailable)
@@ -404,6 +424,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Production-ready error handling
 
 #### Task 4.3: Environment Variables Documentation
+
 - **Description**: Document all required environment variables
 - **Files/Folders**:
   - Update README.md with setup instructions
@@ -417,6 +438,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Enable other developers to run the project
 
 #### Task 4.4: Development Scripts Verification
+
 - **Description**: Ensure pnpm scripts work correctly
 - **Files/Folders**:
   - Verify `pnpm --filter api dev` starts backend
@@ -430,6 +452,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 **Goal**: Finalize Beta 1 release
 
 #### Task 5.1: UI/UX Polish
+
 - **Description**: Refine visual design and user experience
 - **Improvements**:
   - Consistent spacing and typography
@@ -442,6 +465,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Professional user experience
 
 #### Task 5.2: Code Cleanup
+
 - **Description**: Remove debug code and improve code quality
 - **Actions**:
   - Remove console.log statements
@@ -453,6 +477,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Maintainable codebase
 
 #### Task 5.3: Beta 1 Scope Verification
+
 - **Description**: Cross-check implementation against BETA_SCOPE.md
 - **Checklist**:
   - Auth with Supabase (registration and login) ✓
@@ -468,6 +493,7 @@ The root-level src/ directory contains components (InsightsPanel, SettingsPanel)
 - **Rationale**: Ensure nothing is missing
 
 #### Task 5.4: Final Documentation
+
 - **Description**: Update repository documentation
 - **Files/Folders**:
   - Update README.md with project overview
@@ -484,12 +510,12 @@ The repository structure is already well-aligned with Beta 1 objectives. The app
 
 ### Minor Adjustments Needed
 
-| Current Location | Issue | Recommended Action |
-|-----------------|-------|-------------------|
+| Current Location          | Issue                                                 | Recommended Action                                  |
+| ------------------------- | ----------------------------------------------------- | --------------------------------------------------- |
 | `src/components/` at root | Components should be within apps/frontend for clarity | Move to `apps/frontend/src/_archived/` or integrate |
-| `src/store/` at root | Store should be within apps/frontend | Move to `apps/frontend/src/_archived/` or integrate |
-| `apps/api/data/` | File-based storage conflicts with Supabase approach | Remove directory after migration |
-| `apps/api/src/brain/` | Experimental features outside Beta 1 scope | Move to `apps/api/src/_archived/` |
+| `src/store/` at root      | Store should be within apps/frontend                  | Move to `apps/frontend/src/_archived/` or integrate |
+| `apps/api/data/`          | File-based storage conflicts with Supabase approach   | Remove directory after migration                    |
+| `apps/api/src/brain/`     | Experimental features outside Beta 1 scope            | Move to `apps/api/src/_archived/`                   |
 
 ### Packages Organization
 
@@ -516,6 +542,7 @@ This path represents the minimum viable implementation of Beta 1 scope.
 ### Parallelization Opportunities
 
 After Phase 1 is complete:
+
 - Backend work (Phase 2) and Frontend configuration (Task 3.1, 3.2, 3.3) can proceed in parallel
 - UI component development (Task 3.4 onwards) can begin once API contracts are defined, even before backend implementation is complete (using mock data)
 
@@ -523,19 +550,19 @@ After Phase 1 is complete:
 
 ### Technical Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|-----------|
-| OpenAI API rate limits during testing | Medium | Medium | Implement retry logic with exponential backoff; use lower rate model for development |
-| Supabase schema migration issues | Low | High | Test schema thoroughly in development environment before production |
-| Token expiration handling | Medium | Medium | Implement token refresh logic in frontend middleware |
-| Large run outputs exceeding TEXT limits | Low | Medium | Set reasonable max_tokens limit in OpenAI calls; consider TEXT column type limits |
+| Risk                                    | Probability | Impact | Mitigation                                                                           |
+| --------------------------------------- | ----------- | ------ | ------------------------------------------------------------------------------------ |
+| OpenAI API rate limits during testing   | Medium      | Medium | Implement retry logic with exponential backoff; use lower rate model for development |
+| Supabase schema migration issues        | Low         | High   | Test schema thoroughly in development environment before production                  |
+| Token expiration handling               | Medium      | Medium | Implement token refresh logic in frontend middleware                                 |
+| Large run outputs exceeding TEXT limits | Low         | Medium | Set reasonable max_tokens limit in OpenAI calls; consider TEXT column type limits    |
 
 ### Process Risks
 
-| Risk | Probability | Impact | Mitigation |
-|------|-------------|--------|-----------|
-| Scope creep from FUTURE_IDEAS.md | Medium | High | Strict adherence to BETA_SCOPE.md; document all new ideas in FUTURE_IDEAS.md only |
-| Breaking existing Electron integration | Low | Medium | Test desktop build after major changes; ensure main.js and preload.js remain compatible |
+| Risk                                   | Probability | Impact | Mitigation                                                                              |
+| -------------------------------------- | ----------- | ------ | --------------------------------------------------------------------------------------- |
+| Scope creep from FUTURE_IDEAS.md       | Medium      | High   | Strict adherence to BETA_SCOPE.md; document all new ideas in FUTURE_IDEAS.md only       |
+| Breaking existing Electron integration | Low         | Medium | Test desktop build after major changes; ensure main.js and preload.js remain compatible |
 
 ## Out of Scope (Future Considerations)
 

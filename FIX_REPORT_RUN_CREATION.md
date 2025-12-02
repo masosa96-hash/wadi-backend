@@ -2,11 +2,12 @@
 
 ## Problema Identificado
 
-El endpoint `POST /api/projects/:projectId/runs` estaba respondiendo con un error 500 genérico "Failed to generate AI response". 
+El endpoint `POST /api/projects/:projectId/runs` estaba respondiendo con un error 500 genérico "Failed to generate AI response".
 
 ### Causas Raíz Encontradas:
 
 1. **Error en `.env`**: La variable `GROQ_DEFAULT_MODEL` y `PORT` estaban concatenadas en una sola línea:
+
    ```
    GROQ_DEFAULT_MODEL=llama-3.1-8b-instantPORT=4000
    ```
@@ -22,15 +23,19 @@ El endpoint `POST /api/projects/:projectId/runs` estaba respondiendo con un erro
 ## Archivos Modificados
 
 ### 1. **`e:\WADI\.env`**
+
 **Cambios**:
+
 - Separé las variables `GROQ_DEFAULT_MODEL` y `PORT` en líneas diferentes.
 
 **Antes**:
+
 ```env
 GROQ_DEFAULT_MODEL=llama-3.1-8b-instantPORT=4000
 ```
 
 **Después**:
+
 ```env
 GROQ_DEFAULT_MODEL=llama-3.1-8b-instant
 PORT=4000
@@ -43,6 +48,7 @@ PORT=4000
 #### a) Función `generateCompletion()` mejorada:
 
 **Cambios principales**:
+
 - ✅ Agregué logging detallado antes y después de la llamada a Groq
 - ✅ Implementé mapeo automático de modelos OpenAI a Groq usando `mapToGroqModel()`
 - ✅ Mejoré el manejo de errores con casos específicos:
@@ -55,21 +61,31 @@ PORT=4000
 - ✅ Cada error loguea detalles completos (message, status, type, code)
 
 **Ejemplo de log mejorado**:
+
 ```javascript
-console.log(`[OpenAI Service] Generating completion with model: gpt-3.5-turbo -> llama-3.1-8b-instant`);
+console.log(
+  `[OpenAI Service] Generating completion with model: gpt-3.5-turbo -> llama-3.1-8b-instant`,
+);
 console.log(`[OpenAI Service] Input length: 42 chars`);
 // ... después de la respuesta:
-console.log(`[OpenAI Service] Response generated successfully, length: 156 chars`);
+console.log(
+  `[OpenAI Service] Response generated successfully, length: 156 chars`,
+);
 ```
 
 **Manejo de errores específico**:
+
 ```javascript
 if (error.status === 401 || error.status === 403) {
-  throw new Error("LLM API authentication failed. Please check API key configuration.");
+  throw new Error(
+    "LLM API authentication failed. Please check API key configuration.",
+  );
 }
 
 if (error.status === 404) {
-  throw new Error(`Model '${model}' not found. Please check model name or use a supported model.`);
+  throw new Error(
+    `Model '${model}' not found. Please check model name or use a supported model.`,
+  );
 }
 ```
 
@@ -101,26 +117,35 @@ Agregué `gpt-4.1-mini` a la lista de modelos válidos para compatibilidad con s
 ### 3. **`apps/api/src/controllers/runsController.ts`**
 
 #### a) Importación actualizada:
+
 ```javascript
-import { generateCompletion, isValidModel, mapToGroqModel } from "../services/openai";
+import {
+  generateCompletion,
+  isValidModel,
+  mapToGroqModel,
+} from "../services/openai";
 ```
 
 #### b) Modelo por defecto cambiado:
 
 **Antes**:
+
 ```javascript
 const selectedModel = model || "gpt-3.5-turbo";
 ```
 
 **Después**:
+
 ```javascript
-const selectedModel = model || process.env.GROQ_DEFAULT_MODEL || "llama-3.1-8b-instant";
+const selectedModel =
+  model || process.env.GROQ_DEFAULT_MODEL || "llama-3.1-8b-instant";
 console.log(`[createRun] Using model: ${selectedModel}`);
 ```
 
 #### c) Validación de modelo mejorada:
 
 **Antes**:
+
 ```javascript
 if (model && !isValidModel(model)) {
   res.status(400).json({ error: "Invalid model name" });
@@ -129,6 +154,7 @@ if (model && !isValidModel(model)) {
 ```
 
 **Después**:
+
 ```javascript
 if (model && !isValidModel(model)) {
   console.error(`[createRun] Invalid model requested: ${model}`);
@@ -140,6 +166,7 @@ if (model && !isValidModel(model)) {
 #### d) Manejo de errores de generación mejorado:
 
 **Antes**:
+
 ```javascript
 } catch (aiError: any) {
   console.error("AI generation error:", aiError);
@@ -156,6 +183,7 @@ if (model && !isValidModel(model)) {
 ```
 
 **Después**:
+
 ```javascript
 } catch (aiError: any) {
   console.error("[createRun] AI generation error:", {
@@ -164,7 +192,7 @@ if (model && !isValidModel(model)) {
     model: selectedModel,
     inputLength: input.length,
   });
-  
+
   // Refund credits on AI failure
   console.log(`[createRun] Refunding ${creditCost} credits to user ${userId}`);
   await supabase.rpc("add_credits", {
@@ -173,10 +201,10 @@ if (model && !isValidModel(model)) {
     p_reason: "AI generation failed - refund",
     p_metadata: { model: selectedModel, project_id: projectId, error: aiError.message },
   });
-  
+
   // Return specific error message
   const errorMessage = aiError.message || "Failed to generate AI response";
-  res.status(500).json({ 
+  res.status(500).json({
     error: errorMessage,
     code: "AI_GENERATION_ERROR",
     details: {
@@ -203,6 +231,7 @@ console.log(`[createRun] AI response generated successfully`);
 **Modelo activo**: `llama-3.1-8b-instant` (Groq)
 
 **Modelos soportados**:
+
 - Groq nativos:
   - `llama-3.1-8b-instant` (rápido, económico)
   - `llama-3.3-70b-versatile` (más potente)
@@ -223,7 +252,7 @@ console.log(`[createRun] AI response generated successfully`);
 
 ```javascript
 // 1. Mapear modelo si viene de OpenAI
-const groqModel = mapToGroqModel(model); 
+const groqModel = mapToGroqModel(model);
 // "gpt-3.5-turbo" → "llama-3.1-8b-instant"
 
 // 2. Llamar a Groq API vía cliente compatible con OpenAI
@@ -249,15 +278,15 @@ const response = completion.choices[0]?.message?.content;
 
 ### Errores Específicos Identificados:
 
-| Error | Código HTTP | Mensaje al Frontend | Logging |
-|-------|-------------|---------------------|---------|
-| API Key inválida | 401/403 | "LLM API authentication failed. Please check API key configuration." | ✅ Detalles completos |
-| Modelo no encontrado | 404 | "Model 'xxx' not found. Please check model name or use a supported model." | ✅ Detalles completos |
-| Request inválido | 400 | "LLM API error: [mensaje específico]" | ✅ Detalles completos |
-| Rate limit | 429 | "Rate limit exceeded. Please try again later." | ✅ Detalles completos |
-| Servicio caído | 500+ | "LLM service is temporarily unavailable. Please try again later." | ✅ Detalles completos |
-| Red | ECONNREFUSED | "Cannot connect to LLM service. Please check your network connection." | ✅ Detalles completos |
-| Otros | - | "Failed to generate AI response: [error message]" | ✅ Detalles completos |
+| Error                | Código HTTP  | Mensaje al Frontend                                                        | Logging               |
+| -------------------- | ------------ | -------------------------------------------------------------------------- | --------------------- |
+| API Key inválida     | 401/403      | "LLM API authentication failed. Please check API key configuration."       | ✅ Detalles completos |
+| Modelo no encontrado | 404          | "Model 'xxx' not found. Please check model name or use a supported model." | ✅ Detalles completos |
+| Request inválido     | 400          | "LLM API error: [mensaje específico]"                                      | ✅ Detalles completos |
+| Rate limit           | 429          | "Rate limit exceeded. Please try again later."                             | ✅ Detalles completos |
+| Servicio caído       | 500+         | "LLM service is temporarily unavailable. Please try again later."          | ✅ Detalles completos |
+| Red                  | ECONNREFUSED | "Cannot connect to LLM service. Please check your network connection."     | ✅ Detalles completos |
+| Otros                | -            | "Failed to generate AI response: [error message]"                          | ✅ Detalles completos |
 
 ### Formato de Error en Response:
 
@@ -277,6 +306,7 @@ const response = completion.choices[0]?.message?.content;
 ## Verificación Realizada
 
 ### 1. Servidor iniciado correctamente:
+
 ```
 ✅ Environment variables loaded from: E:\WADI\.env
 ✅ Environment validation passed
@@ -289,6 +319,7 @@ API on 4000
 ```
 
 ### 2. Health check exitoso:
+
 ```bash
 $ curl http://localhost:4000/api/health
 {
@@ -300,6 +331,7 @@ $ curl http://localhost:4000/api/health
 ```
 
 ### 3. Compilación sin errores:
+
 - ✅ `apps/api/src/services/openai.ts` - Sin errores
 - ✅ `apps/api/src/controllers/runsController.ts` - Sin errores
 
@@ -316,6 +348,7 @@ Para probar el endpoint completamente necesitarás:
 2. **Un proyecto creado** que pertenezca a ese usuario
 
 3. **Ejecutar el test**:
+
    ```bash
    # Actualiza test-run-creation.js con user_id y project_id reales
    node scripts/test-run-creation.js
@@ -341,7 +374,7 @@ Para probar el endpoint completamente necesitarás:
 ✅ **Implementado**: Manejo de errores específico con mensajes descriptivos  
 ✅ **Agregado**: Validación mejorada de modelos con mensajes específicos  
 ✅ **Corregido**: Modelo por defecto ahora usa `GROQ_DEFAULT_MODEL` del env  
-✅ **Documentado**: Script de prueba creado en `scripts/test-run-creation.js`  
+✅ **Documentado**: Script de prueba creado en `scripts/test-run-creation.js`
 
 ---
 
@@ -351,7 +384,7 @@ Para probar el endpoint completamente necesitarás:
 Frontend:
   POST /api/projects/abc123/runs
   { input: "Hello!", model: "gpt-3.5-turbo" }
-  
+
 Backend logs:
   [createRun] Using model: gpt-3.5-turbo
   [createRun] Generating AI response for project abc123
@@ -359,7 +392,7 @@ Backend logs:
   [OpenAI Service] Input length: 6 chars
   [OpenAI Service] Response generated successfully, length: 89 chars
   [createRun] AI response generated successfully
-  
+
 Response 201:
   {
     "run": {

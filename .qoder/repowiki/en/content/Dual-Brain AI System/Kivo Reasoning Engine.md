@@ -15,6 +15,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [System Architecture](#system-architecture)
 3. [KivoThought Interface Structure](#kivothought-interface-structure)
@@ -67,11 +68,13 @@ end
 ```
 
 **Diagram sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L7-L40)
 - [apps/api/src/services/brain/wadi.ts](file://apps/api/src/services/brain/wadi.ts#L7-L42)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L157-L179)
 
 **Section sources**
+
 - [ARCHITECTURE_DEEP_DIVE.md](file://ARCHITECTURE_DEEP_DIVE.md#L1-L34)
 - [apps/api/src/services/brain/types.ts](file://apps/api/src/services/brain/types.ts#L54-L67)
 
@@ -97,20 +100,22 @@ KivoThought --> WadiAction : "drives"
 ```
 
 **Diagram sources**
+
 - [apps/api/src/services/brain/types.ts](file://apps/api/src/services/brain/types.ts#L54-L67)
 - [packages/chat-core/types.ts](file://packages/chat-core/types.ts#L54-L67)
 
 ### Interface Properties
 
-| Property | Type | Description | Example Values |
-|----------|------|-------------|----------------|
-| `intent` | `"chat" \| "command" \| "query" \| "creation"` | Primary user intention | `"creation"`, `"query"`, `"chat"` |
-| `confidence` | `number` | Confidence level (0-1) | `0.8`, `0.95` |
-| `reasoning` | `string[]` | Step-by-step reasoning process | `["User wants to create something"]` |
-| `plan` | `string[]` | Action plan steps | `["Identify resource type", "Ask for missing details"]` |
-| `context_needed` | `string[]` | Additional information required | `["resource_type", "project_details"]` |
+| Property         | Type                                           | Description                     | Example Values                                          |
+| ---------------- | ---------------------------------------------- | ------------------------------- | ------------------------------------------------------- |
+| `intent`         | `"chat" \| "command" \| "query" \| "creation"` | Primary user intention          | `"creation"`, `"query"`, `"chat"`                       |
+| `confidence`     | `number`                                       | Confidence level (0-1)          | `0.8`, `0.95`                                           |
+| `reasoning`      | `string[]`                                     | Step-by-step reasoning process  | `["User wants to create something"]`                    |
+| `plan`           | `string[]`                                     | Action plan steps               | `["Identify resource type", "Ask for missing details"]` |
+| `context_needed` | `string[]`                                     | Additional information required | `["resource_type", "project_details"]`                  |
 
 **Section sources**
+
 - [apps/api/src/services/brain/types.ts](file://apps/api/src/services/brain/types.ts#L54-L67)
 - [packages/chat-core/types.ts](file://packages/chat-core/types.ts#L54-L67)
 
@@ -136,19 +141,21 @@ Chat --> ChatReasoning[Standard conversation detected]
 ```
 
 **Diagram sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L15-L31)
 - [packages/chat-core/kivo.ts](file://packages/chat-core/kivo.ts#L15-L31)
 
 ### Intent Definitions
 
-| Intent Type | Purpose | Typical Patterns | Example Phrases |
-|-------------|---------|------------------|-----------------|
-| `chat` | General conversation | Neutral language, everyday topics | "Hello", "Tell me about yourself", "How are you?" |
-| `command` | Direct commands | Imperative verbs, specific actions | "Delete this file", "Rename this project" |
-| `query` | Information seeking | Question words, search terms | "Where is my project?", "What can you do?" |
-| `creation` | Resource creation | Creation verbs, new resource indicators | "Create a new project", "Make a workspace" |
+| Intent Type | Purpose              | Typical Patterns                        | Example Phrases                                   |
+| ----------- | -------------------- | --------------------------------------- | ------------------------------------------------- |
+| `chat`      | General conversation | Neutral language, everyday topics       | "Hello", "Tell me about yourself", "How are you?" |
+| `command`   | Direct commands      | Imperative verbs, specific actions      | "Delete this file", "Rename this project"         |
+| `query`     | Information seeking  | Question words, search terms            | "Where is my project?", "What can you do?"        |
+| `creation`  | Resource creation    | Creation verbs, new resource indicators | "Create a new project", "Make a workspace"        |
 
 **Section sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L15-L31)
 - [packages/chat-core/kivo.ts](file://packages/chat-core/kivo.ts#L15-L31)
 
@@ -178,6 +185,7 @@ Kivo->>User : Structured reasoning output
 ```
 
 **Diagram sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L7-L40)
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L157-L159)
 
@@ -190,6 +198,7 @@ Kivo implements a confidence scoring system that evaluates the reliability of in
 - **Low Confidence (0.0-0.49)**: Unclear intent requiring fallback to general conversation
 
 **Section sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L35-L35)
 - [packages/chat-core/kivo.ts](file://packages/chat-core/kivo.ts#L35-L35)
 
@@ -222,6 +231,7 @@ Chat-->>Chat : Return structured response
 ```
 
 **Diagram sources**
+
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L157-L179)
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L7-L40)
 - [apps/api/src/services/brain/wadi.ts](file://apps/api/src/services/brain/wadi.ts#L7-L42)
@@ -236,6 +246,7 @@ The integration between Kivo and Wadi ensures that each intent type receives app
 4. **Command Intent**: Executes direct action calls
 
 **Section sources**
+
 - [apps/api/src/controllers/chatController.ts](file://apps/api/src/controllers/chatController.ts#L157-L179)
 - [ARCHITECTURE_DEEP_DIVE.md](file://ARCHITECTURE_DEEP_DIVE.md#L1-L34)
 
@@ -248,6 +259,7 @@ When users express desire to create resources, Kivo generates a structured thoug
 **Input**: "Create a new project named 'Marketing Campaign'"
 
 **KivoThought Output**:
+
 ```typescript
 {
   intent: "creation",
@@ -269,6 +281,7 @@ For information-seeking requests, Kivo focuses on extracting search terms and pr
 **Input**: "Where is my latest report located?"
 
 **KivoThought Output**:
+
 ```typescript
 {
   intent: "query",
@@ -290,6 +303,7 @@ For general conversation, Kivo maintains a neutral stance while preparing for na
 **Input**: "How are you today?"
 
 **KivoThought Output**:
+
 ```typescript
 {
   intent: "chat",
@@ -305,6 +319,7 @@ For general conversation, Kivo maintains a neutral stance while preparing for na
 ```
 
 **Section sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L15-L31)
 - [packages/chat-core/kivo.ts](file://packages/chat-core/kivo.ts#L15-L31)
 
@@ -322,16 +337,19 @@ The current heuristic-based implementation provides excellent performance charac
 ### Performance Trade-offs
 
 **Ambiguous Intent Resolution**:
+
 - **Challenge**: Inputs that don't clearly match known patterns
 - **Solution**: Default to chat intent with medium confidence
 - **Trade-off**: Ensures graceful degradation but may miss specialized intents
 
 **Heuristic vs. LLM Analysis**:
+
 - **Current Approach**: Rule-based pattern matching
 - **Future Enhancement**: LLM-powered analysis for improved accuracy
 - **Trade-off**: Higher accuracy vs. increased latency and cost
 
 **Section sources**
+
 - [ARCHITECTURE_DEEP_DIVE.md](file://ARCHITECTURE_DEEP_DIVE.md#L683-L693)
 
 ## Extending Intent Types
@@ -342,23 +360,31 @@ To extend Kivo's capabilities with new intent types, developers can modify the i
 
 ```typescript
 // Example: Adding "analysis" intent
-if (normalizedInput.includes("analyze") || normalizedInput.includes("analyze")) {
-    intent = "analysis";
-    reasoning.push("User wants to perform data analysis");
-    plan.push("Identify analysis type", "Collect data requirements", "Execute analysis");
+if (
+  normalizedInput.includes("analyze") ||
+  normalizedInput.includes("analyze")
+) {
+  intent = "analysis";
+  reasoning.push("User wants to perform data analysis");
+  plan.push(
+    "Identify analysis type",
+    "Collect data requirements",
+    "Execute analysis",
+  );
 }
 ```
 
 ### Intent Type Expansion Guidelines
 
-| Aspect | Recommendation | Implementation Notes |
-|--------|---------------|---------------------|
-| **Intent Naming** | Use descriptive, lowercase terms | Follow existing pattern: "chat", "creation", "query" |
-| **Pattern Matching** | Include multiple related keywords | Cover synonyms and variations |
-| **Plan Generation** | Define clear action steps | Be specific about execution requirements |
-| **Context Needs** | Identify prerequisite information | List required parameters or clarifications |
+| Aspect               | Recommendation                    | Implementation Notes                                 |
+| -------------------- | --------------------------------- | ---------------------------------------------------- |
+| **Intent Naming**    | Use descriptive, lowercase terms  | Follow existing pattern: "chat", "creation", "query" |
+| **Pattern Matching** | Include multiple related keywords | Cover synonyms and variations                        |
+| **Plan Generation**  | Define clear action steps         | Be specific about execution requirements             |
+| **Context Needs**    | Identify prerequisite information | List required parameters or clarifications           |
 
 **Section sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L15-L31)
 - [packages/chat-core/kivo.ts](file://packages/chat-core/kivo.ts#L15-L31)
 
@@ -371,13 +397,28 @@ Kivo's pattern matching system can be customized to handle domain-specific termi
 ```typescript
 // Enhanced pattern matching with domain-specific terms
 const creationPatterns = [
-    "crear", "nuevo", "make", "generate", "establish", 
-    "iniciar", "comenzar", "desarrollar", "construir"
+  "crear",
+  "nuevo",
+  "make",
+  "generate",
+  "establish",
+  "iniciar",
+  "comenzar",
+  "desarrollar",
+  "construir",
 ];
 
 const queryPatterns = [
-    "buscar", "dónde", "qué", "cómo", "información sobre",
-    "find", "locate", "what", "how", "about"
+  "buscar",
+  "dónde",
+  "qué",
+  "cómo",
+  "información sobre",
+  "find",
+  "locate",
+  "what",
+  "how",
+  "about",
 ];
 ```
 
@@ -388,12 +429,13 @@ The reasoning process can be tailored to specific use cases:
 ```typescript
 // Domain-specific reasoning for project management
 if (normalizedInput.includes("project")) {
-    reasoning.push("Project management context identified");
-    plan.unshift("Consider project lifecycle stage");
+  reasoning.push("Project management context identified");
+  plan.unshift("Consider project lifecycle stage");
 }
 ```
 
 **Section sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L8-L31)
 - [packages/chat-core/kivo.ts](file://packages/chat-core/kivo.ts#L8-L31)
 
@@ -408,8 +450,8 @@ if (normalizedInput.includes("project")) {
 ```typescript
 // Enhanced ambiguity handling
 if (intent === "chat" && confidence < 0.6) {
-    reasoning.push("Input is ambiguous, defaulting to general conversation");
-    plan.push("Ask for clarification", "Provide multiple interpretation options");
+  reasoning.push("Input is ambiguous, defaulting to general conversation");
+  plan.push("Ask for clarification", "Provide multiple interpretation options");
 }
 ```
 
@@ -423,11 +465,14 @@ if (intent === "chat" && confidence < 0.6) {
 // Pattern caching for frequently used terms
 const patternCache = new Map();
 const cachedPatternMatch = (input: string, patterns: string[]) => {
-    const cacheKey = patterns.join("|");
-    if (!patternCache.has(cacheKey)) {
-        patternCache.set(cacheKey, patterns.some(p => input.includes(p)));
-    }
-    return patternCache.get(cacheKey);
+  const cacheKey = patterns.join("|");
+  if (!patternCache.has(cacheKey)) {
+    patternCache.set(
+      cacheKey,
+      patterns.some((p) => input.includes(p)),
+    );
+  }
+  return patternCache.get(cacheKey);
 };
 ```
 
@@ -440,14 +485,15 @@ const cachedPatternMatch = (input: string, patterns: string[]) => {
 ```typescript
 // Context-aware intent classification
 const getContextAwareIntent = (input: string, context: any) => {
-    if (context.currentProject && input.includes("this")) {
-        return "command"; // Reference to current context
-    }
-    return classifyIntent(input);
+  if (context.currentProject && input.includes("this")) {
+    return "command"; // Reference to current context
+  }
+  return classifyIntent(input);
 };
 ```
 
 **Section sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L35-L39)
 - [packages/chat-core/kivo.ts](file://packages/chat-core/kivo.ts#L35-L39)
 
@@ -465,28 +511,31 @@ The Kivo Reasoning Engine implements several optimization strategies for product
 ### Advanced Optimization Techniques
 
 **Parallel Pattern Matching**:
+
 ```typescript
 // Parallel intent pattern checking
 const intentChecks = [
-    () => input.includes("crear"),
-    () => input.includes("buscar"),
-    () => input.includes("nuevo")
+  () => input.includes("crear"),
+  () => input.includes("buscar"),
+  () => input.includes("nuevo"),
 ];
 
-const results = await Promise.all(intentChecks.map(check => check()));
+const results = await Promise.all(intentChecks.map((check) => check()));
 ```
 
 **Pattern Indexing**:
+
 ```typescript
 // Pre-built pattern index for faster lookups
 const patternIndex = new Map([
-    ["creation", ["crear", "nuevo", "make"]],
-    ["query", ["buscar", "dónde", "qué"]],
-    ["chat", []] // Default case
+  ["creation", ["crear", "nuevo", "make"]],
+  ["query", ["buscar", "dónde", "qué"]],
+  ["chat", []], // Default case
 ]);
 ```
 
 **Section sources**
+
 - [apps/api/src/services/brain/kivo.ts](file://apps/api/src/services/brain/kivo.ts#L8-L10)
 - [ARCHITECTURE_DEEP_DIVE.md](file://ARCHITECTURE_DEEP_DIVE.md#L498-L548)
 
@@ -499,7 +548,7 @@ The roadmap includes transitioning from heuristic-based to LLM-powered intent an
 ```typescript
 // Future LLM-based implementation
 async function advancedIntentAnalysis(input: string, context: any) {
-    const analysisPrompt = `
+  const analysisPrompt = `
     Analyze the following user input and determine:
     1. Primary intent (chat, command, query, creation, analysis)
     2. Confidence level (0-1)
@@ -512,17 +561,17 @@ async function advancedIntentAnalysis(input: string, context: any) {
     
     Respond with JSON format.
     `;
-    
-    const response = await openai.chat.completions.create({
-        model: "gpt-4",
-        messages: [
-            { role: "system", content: "You are an intent analysis expert." },
-            { role: "user", content: analysisPrompt }
-        ],
-        temperature: 0.3
-    });
-    
-    return JSON.parse(response.choices[0].message.content);
+
+  const response = await openai.chat.completions.create({
+    model: "gpt-4",
+    messages: [
+      { role: "system", content: "You are an intent analysis expert." },
+      { role: "user", content: analysisPrompt },
+    ],
+    temperature: 0.3,
+  });
+
+  return JSON.parse(response.choices[0].message.content);
 }
 ```
 
@@ -541,22 +590,23 @@ The system will evolve to support a comprehensive tool registry:
 ```typescript
 // Future tool integration
 interface ToolRegistry {
-    [toolName: string]: {
-        execute: (params: any) => Promise<any>;
-        validate: (params: any) => boolean;
-        describe: () => ToolDefinition;
-    };
+  [toolName: string]: {
+    execute: (params: any) => Promise<any>;
+    validate: (params: any) => boolean;
+    describe: () => ToolDefinition;
+  };
 }
 
 const toolRegistry: ToolRegistry = {
-    "create_project": {
-        execute: createProject,
-        validate: validateProjectParams,
-        describe: () => projectToolDefinition
-    }
+  create_project: {
+    execute: createProject,
+    validate: validateProjectParams,
+    describe: () => projectToolDefinition,
+  },
 };
 ```
 
 **Section sources**
+
 - [ARCHITECTURE_DEEP_DIVE.md](file://ARCHITECTURE_DEEP_DIVE.md#L93-L131)
 - [ARCHITECTURE_DEEP_DIVE.md](file://ARCHITECTURE_DEEP_DIVE.md#L195-L200)

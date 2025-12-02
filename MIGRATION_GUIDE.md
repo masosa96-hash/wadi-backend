@@ -7,9 +7,11 @@ Este documento explica cómo ejecutar las migraciones de base de datos necesaria
 ## 🗂️ Migraciones Disponibles
 
 ### 001_workspace_enhancements.sql (P5)
+
 **Descripción**: Workspaces dinámicos con creación automática y organización de conversaciones
 
 **Cambios**:
+
 - ✅ Añade campos a `workspaces`: `is_auto_created`, `detected_topic`, `message_count`, `last_message_at`
 - ✅ Crea tabla `workspace_conversations` (unión workspace-conversación)
 - ✅ Añade `workspace_id` a `conversations`
@@ -22,9 +24,11 @@ Este documento explica cómo ejecutar las migraciones de base de datos necesaria
 ---
 
 ### 002_files_and_storage.sql (P6)
+
 **Descripción**: Sistema completo de subida, almacenamiento y procesamiento de archivos
 
 **Cambios**:
+
 - ✅ Crea tabla `files` (metadata de archivos)
 - ✅ Crea tabla `file_processing_queue` (cola de procesamiento)
 - ✅ Añade campos a `messages`: `has_attachments`, `attachment_count`
@@ -35,6 +39,7 @@ Este documento explica cómo ejecutar las migraciones de base de datos necesaria
 **Impacto**: Bajo riesgo, solo añade tablas nuevas
 
 **Pasos adicionales**:
+
 ```sql
 -- Ejecutar en Supabase SQL Editor (con autenticación)
 INSERT INTO storage.buckets (id, name, public) VALUES ('user-files', 'user-files', false);
@@ -56,9 +61,11 @@ USING (bucket_id = 'user-files' AND (storage.foldername(name))[1] = auth.uid()::
 ---
 
 ### 003_user_memory.sql (P6)
+
 **Descripción**: Sistema de memoria de usuario para personalización
 
 **Cambios**:
+
 - ✅ Crea tabla `user_memory` (preferencias y contexto del usuario)
 - ✅ Crea tabla `memory_templates` (plantillas de memoria default)
 - ✅ Función `get_user_memory_for_chat()` para obtener memoria activa
@@ -72,9 +79,11 @@ USING (bucket_id = 'user-files' AND (storage.foldername(name))[1] = auth.uid()::
 ---
 
 ### 004_onboarding.sql (P8)
+
 **Descripción**: Sistema de onboarding y experiencia de primer uso
 
 **Cambios**:
+
 - ✅ Añade campos a `profiles`: `onboarding_completed`, `onboarding_step`, `first_login_at`, etc.
 - ✅ Crea tabla `onboarding_events` (analytics de onboarding)
 - ✅ Crea tabla `user_permissions` (permisos de voz, archivos, etc.)
@@ -88,9 +97,11 @@ USING (bucket_id = 'user-files' AND (storage.foldername(name))[1] = auth.uid()::
 ---
 
 ### 005_monetization.sql (P9)
+
 **Descripción**: Sistema de planes, límites y medición de uso
 
 **Cambios**:
+
 - ✅ Crea tabla `subscription_plans` (Free, Pro, Business)
 - ✅ Crea tabla `user_subscriptions` (suscripciones activas)
 - ✅ Crea tabla `usage_metrics` (uso agregado por mes)
@@ -177,9 +188,9 @@ psql "postgresql://postgres:[PASSWORD]@[HOST]:[PORT]/postgres"
 
 ```sql
 -- Ver todas las tablas nuevas
-SELECT table_name 
-FROM information_schema.tables 
-WHERE table_schema = 'public' 
+SELECT table_name
+FROM information_schema.tables
+WHERE table_schema = 'public'
   AND table_name IN (
     'workspace_conversations',
     'files',
@@ -201,9 +212,9 @@ WHERE table_schema = 'public'
 
 ```sql
 -- Ver funciones nuevas
-SELECT routine_name 
-FROM information_schema.routines 
-WHERE routine_schema = 'public' 
+SELECT routine_name
+FROM information_schema.routines
+WHERE routine_schema = 'public'
   AND routine_name LIKE '%workspace%'
      OR routine_name LIKE '%memory%'
      OR routine_name LIKE '%usage%'
@@ -214,19 +225,19 @@ WHERE routine_schema = 'public'
 
 ```sql
 -- Verificar planes creados
-SELECT plan_key, display_name, max_messages_per_month, price_monthly 
-FROM subscription_plans 
+SELECT plan_key, display_name, max_messages_per_month, price_monthly
+FROM subscription_plans
 ORDER BY display_order;
 
 -- Verificar templates de memoria
-SELECT key, default_value, memory_type 
-FROM memory_templates 
+SELECT key, default_value, memory_type
+FROM memory_templates
 WHERE is_active = true;
 
 -- Verificar tips de onboarding
-SELECT tip_key, title 
-FROM first_time_tips 
-WHERE is_active = true 
+SELECT tip_key, title
+FROM first_time_tips
+WHERE is_active = true
 ORDER BY display_order;
 ```
 
@@ -234,20 +245,20 @@ ORDER BY display_order;
 
 ```sql
 -- Verificar que usuarios existentes tengan suscripción
-SELECT 
+SELECT
   COUNT(*) as total_users,
   COUNT(DISTINCT us.user_id) as users_with_subscription
 FROM profiles p
 LEFT JOIN user_subscriptions us ON us.user_id = p.user_id;
 
 -- Verificar que conversaciones estén asignadas a workspaces
-SELECT 
+SELECT
   COUNT(*) as total_conversations,
   COUNT(workspace_id) as conversations_with_workspace
 FROM conversations;
 
 -- Verificar memoria inicializada
-SELECT 
+SELECT
   COUNT(DISTINCT user_id) as users_with_memory
 FROM user_memory;
 ```
@@ -257,15 +268,19 @@ FROM user_memory;
 ## 🔧 Troubleshooting
 
 ### Error: "relation already exists"
+
 **Solución**: La tabla ya fue creada previamente. Podés ignorar o usar `IF NOT EXISTS` (ya incluido en migraciones).
 
 ### Error: "permission denied for table storage.objects"
+
 **Solución**: Las policies de storage deben ejecutarse con autenticación en Supabase Dashboard, no por CLI.
 
 ### Error: "function does not exist"
+
 **Solución**: Asegurate de ejecutar las migraciones en orden. Algunas funciones dependen de tablas creadas en migraciones anteriores.
 
 ### Rollback de migración
+
 Si necesitás revertir:
 
 ```sql
@@ -293,6 +308,7 @@ DROP FUNCTION IF EXISTS track_usage_event CASCADE;
 ## 🔐 Seguridad
 
 Todas las migraciones incluyen:
+
 - ✅ Foreign keys con `ON DELETE CASCADE` apropiados
 - ✅ Constraints de validación en campos enum
 - ✅ Índices para prevenir scans completos de tabla
@@ -316,6 +332,7 @@ Después de ejecutar las migraciones:
 ## 📞 Soporte
 
 Si tenés problemas ejecutando las migraciones:
+
 1. Verificá los logs de Supabase Dashboard
 2. Revisá que tu plan de Supabase tenga espacio suficiente
 3. Consultá la documentación de Supabase sobre migraciones

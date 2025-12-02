@@ -15,13 +15,14 @@ WADI ahora tiene un **flujo de chat completo y funcional** que conecta la interf
 ✅ **Interfaz web3** manteniendo el diseño actual  
 ✅ **Tono amigable** en español  
 ✅ **Sin errores** de compilación ni runtime  
-✅ **Manejo de errores** robusto  
+✅ **Manejo de errores** robusto
 
 ---
 
 ## 📦 Archivos Creados
 
 ### Backend (5 archivos)
+
 1. **`docs/database/chat-schema.sql`** (171 líneas)
    - Tablas: `conversations`, `messages`
    - Triggers, RLS, índices
@@ -44,6 +45,7 @@ WADI ahora tiene un **flujo de chat completo y funcional** que conecta la interf
    - Registro de rutas de chat
 
 ### Frontend (4 archivos)
+
 1. **`apps/frontend/src/pages/Chat.tsx`** (473 líneas)
    - Pantalla principal de chat
    - Burbujas de mensajes animadas
@@ -66,6 +68,7 @@ WADI ahora tiene un **flujo de chat completo y funcional** que conecta la interf
    - Nueva ruta: `/chat`
 
 ### Documentación (3 archivos)
+
 1. **`CHAT_IMPLEMENTATION_GUIDE.md`** (353 líneas)
    - Guía técnica completa
    - Arquitectura y flujo de datos
@@ -83,6 +86,7 @@ WADI ahora tiene un **flujo de chat completo y funcional** que conecta la interf
 ## 🏗️ Arquitectura
 
 ### Base de Datos
+
 ```
 conversations
 ├── id (UUID, PK)
@@ -104,6 +108,7 @@ messages
 ```
 
 ### API Endpoints
+
 ```
 POST   /api/chat                      - Enviar mensaje
 GET    /api/chat                      - Listar conversaciones
@@ -112,6 +117,7 @@ DELETE /api/chat/:conversationId      - Eliminar conversación
 ```
 
 ### Frontend Routes
+
 ```
 /home   - Pantalla principal (con hero input)
 /chat   - Pantalla de chat (nueva)
@@ -122,23 +128,26 @@ DELETE /api/chat/:conversationId      - Eliminar conversación
 ## 🔄 Flujo de Usuario
 
 ### Opción 1: Desde Hero Input
+
 ```
-Home → Escribir "Hola WADI" → Enter → 
-Navega a /chat con state.initialMessage → 
-Envía mensaje automáticamente → 
+Home → Escribir "Hola WADI" → Enter →
+Navega a /chat con state.initialMessage →
+Envía mensaje automáticamente →
 WADI responde
 ```
 
 ### Opción 2: Desde Card
+
 ```
-Home → Click "Conversa con WADI" → 
-Navega a /chat → 
+Home → Click "Conversa con WADI" →
+Navega a /chat →
 Pantalla vacía esperando mensaje
 ```
 
 ### Opción 3: Desde Bottom Nav
+
 ```
-Cualquier pantalla → Click "Workspaces" → 
+Cualquier pantalla → Click "Workspaces" →
 Navega a /chat
 ```
 
@@ -147,6 +156,7 @@ Navega a /chat
 ## 💻 Stack Tecnológico
 
 ### Backend
+
 - **Framework:** Express.js + TypeScript
 - **Base de Datos:** Supabase (PostgreSQL)
 - **IA:** OpenAI GPT-3.5-turbo / GPT-4
@@ -154,6 +164,7 @@ Navega a /chat
 - **Logging:** Console con niveles
 
 ### Frontend
+
 - **Framework:** React 18 + TypeScript
 - **Routing:** React Router v6
 - **Estado:** Zustand
@@ -166,6 +177,7 @@ Navega a /chat
 ## ✨ Características Implementadas
 
 ### Funcionalidades Core
+
 - ✅ Enviar mensaje y recibir respuesta de IA
 - ✅ Historial de conversación (contexto)
 - ✅ Persistencia en base de datos
@@ -173,6 +185,7 @@ Navega a /chat
 - ✅ Auto-crear conversación si no existe
 
 ### UX/UI
+
 - ✅ Diseño web3 con PhoneShell
 - ✅ Burbujas diferenciadas (usuario/WADI)
 - ✅ Avatar de WADI pulsante
@@ -183,6 +196,7 @@ Navega a /chat
 - ✅ Animaciones suaves
 
 ### Manejo de Errores
+
 - ✅ Errores de API mostrados al usuario
 - ✅ Fallback si OpenAI falla
 - ✅ Mensajes en español amigables
@@ -190,6 +204,7 @@ Navega a /chat
 - ✅ Logging detallado en backend
 
 ### Seguridad
+
 - ✅ Row Level Security (RLS)
 - ✅ Autenticación requerida
 - ✅ Validación de permisos
@@ -200,16 +215,19 @@ Navega a /chat
 ## 📋 Checklist de Despliegue
 
 ### Antes de usar
+
 - [ ] Ejecutar `docs/database/chat-schema.sql` en Supabase
 - [ ] Verificar variables de entorno (`.env`)
 - [ ] Instalar dependencias (`pnpm install`)
 
 ### Para desarrollo
+
 - [ ] Iniciar backend: `cd apps/api && pnpm dev`
 - [ ] Iniciar frontend: `cd apps/frontend && pnpm dev`
 - [ ] Abrir `http://localhost:5173`
 
 ### Para producción
+
 - [ ] Build frontend: `cd apps/frontend && pnpm build`
 - [ ] Build backend: `cd apps/api && pnpm build`
 - [ ] Configurar variables de entorno en servidor
@@ -220,18 +238,21 @@ Navega a /chat
 ## 🎨 Diseño Visual
 
 ### Colores
+
 - **Gradiente primario:** `linear-gradient(135deg, #255FF5 0%, #7B8CFF 100%)`
 - **Usuario:** Burbujas con gradiente azul-morado
 - **WADI:** Burbujas blancas/glass con borde sutil
 - **Error:** `#EF4444` (rojo)
 
 ### Tipografía
+
 - **Font:** Inter (sans-serif)
 - **Títulos:** Bold/Semibold
 - **Cuerpo:** Regular, 16px
 - **Pequeño:** 14px, 13px
 
 ### Animaciones
+
 - **Entrada de mensajes:** Fade + slide up
 - **Orb de WADI:** Pulsante con escala
 - **Typing indicator:** Bouncing dots
@@ -242,14 +263,17 @@ Navega a /chat
 ## 🐛 Problemas Conocidos y Soluciones
 
 ### 1. "No pude hablar con WADI ahora mismo"
+
 **Causa:** Backend no responde o OpenAI falló  
 **Solución:** Verificar logs del backend, API key de OpenAI
 
 ### 2. Mensajes no persisten
+
 **Causa:** Schema de DB no aplicado  
 **Solución:** Ejecutar `chat-schema.sql`
 
 ### 3. TypeScript errors
+
 **Causa:** Tipos no encontrados  
 **Solución:** `pnpm install` y verificar imports
 
@@ -270,16 +294,19 @@ Navega a /chat
 ## 🚀 Próximos Pasos (Opcionales)
 
 ### Corto Plazo
+
 - Streaming de respuestas (SSE)
 - Títulos automáticos para conversaciones
 - Sidebar con lista de conversaciones
 
 ### Mediano Plazo
+
 - Búsqueda en historial
 - Compartir conversaciones
 - Exportar chat (PDF/Markdown)
 
 ### Largo Plazo
+
 - Comandos slash (/help, /clear)
 - Adjuntar archivos
 - Modo voz
@@ -290,18 +317,21 @@ Navega a /chat
 ## 📝 Notas Técnicas
 
 ### Por qué Zustand
+
 - Más ligero que Redux
 - API simple
 - TypeScript nativo
 - No requiere providers
 
 ### Por qué Framer Motion
+
 - Animaciones declarativas
 - Performance optimizado
 - Integración con React
 - Ya usado en el proyecto
 
 ### Por qué Inline Styles
+
 - Consistencia con código existente
 - Evitar conflictos de CSS
 - TypeScript autocomplete
@@ -336,7 +366,7 @@ Para problemas o preguntas:
 
 ## 🎉 Conclusión
 
-**WADI ahora puede conversar de verdad.** 
+**WADI ahora puede conversar de verdad.**
 
 La implementación está completa, probada, y lista para usar. El código está limpio, tipado, y sin errores de compilación. El diseño mantiene la identidad web3 de WADI y la experiencia de usuario es fluida y amigable.
 

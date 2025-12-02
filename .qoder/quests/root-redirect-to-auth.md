@@ -15,11 +15,13 @@ Currently, when accessing `http://localhost:5173/`, users encounter a black scre
 ## Scope
 
 ### In Scope
+
 - Modify the root route redirect target from `/projects` to `/auth`
 - Add or update the `/auth` route to serve the Login page
 - Ensure backward compatibility with existing authentication flow
 
 ### Out of Scope
+
 - Changes to the Login component UI or functionality
 - Modifications to protected routes logic
 - Changes to authentication store or business logic
@@ -31,13 +33,13 @@ Currently, when accessing `http://localhost:5173/`, users encounter a black scre
 
 The routing table in `apps/frontend/src/router.tsx` will be modified as follows:
 
-| Route Path | Current Behavior | New Behavior |
-|------------|------------------|--------------|
-| `/` | Redirects to `/projects` | Redirects to `/auth` |
-| `/login` | Displays Login component | Remains unchanged (existing route) |
-| `/auth` | Does not exist | Displays Login component (new route) |
-| `/projects` | Protected route to Projects page | No change |
-| `/projects/:id` | Protected route to ProjectDetail page | No change |
+| Route Path      | Current Behavior                      | New Behavior                         |
+| --------------- | ------------------------------------- | ------------------------------------ |
+| `/`             | Redirects to `/projects`              | Redirects to `/auth`                 |
+| `/login`        | Displays Login component              | Remains unchanged (existing route)   |
+| `/auth`         | Does not exist                        | Displays Login component (new route) |
+| `/projects`     | Protected route to Projects page      | No change                            |
+| `/projects/:id` | Protected route to ProjectDetail page | No change                            |
 
 ### Routing Strategy
 
@@ -75,7 +77,7 @@ graph TD
     D --> E{User authenticates?}
     E -->|Success| F[Redirect to /projects]
     E -->|Failure| G[Show error on /auth]
-    
+
     H[ProtectedRoute fails] --> I[Navigate to /login]
     I --> J[Login component renders]
     J --> E

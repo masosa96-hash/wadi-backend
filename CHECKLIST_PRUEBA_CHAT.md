@@ -5,6 +5,7 @@
 ### ✅ Variables de Entorno Verificadas
 
 #### **Backend (`apps/api/.env`)**
+
 ```env
 PORT=4000
 NODE_ENV=development
@@ -17,9 +18,11 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 **⚠️ ACCIÓN REQUERIDA:**
+
 - Completar `SUPABASE_SERVICE_KEY` con la Service Role Key real de Supabase
 
 #### **Frontend (`apps/frontend/.env`)**
+
 ```env
 SUPABASE_URL=https://smkbiguvgiscojwxgbae.supabase.co ✅
 SUPABASE_ANON_KEY=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9... ✅
@@ -37,17 +40,20 @@ FRONTEND_PORT=5173
 ## 🛣️ Endpoints del Backend
 
 ### Ruta del Chat
+
 - **Archivo**: `apps/api/src/routes/chat.ts`
 - **Base Path**: `/api/chat`
 - **Controlador**: `apps/api/src/controllers/chatController.ts`
 
 ### Endpoints Disponibles
+
 1. ✅ **POST /api/chat** - Enviar mensaje y recibir respuesta AI
 2. ✅ **GET /api/chat** - Obtener todas las conversaciones
 3. ✅ **GET /api/chat/:conversationId** - Obtener conversación específica
 4. ✅ **DELETE /api/chat/:conversationId** - Eliminar conversación
 
 ### Configuración del Servidor
+
 - **Puerto Backend**: 4000
 - **Puerto Frontend**: 5173
 - **CORS**: Configurado para `http://localhost:5173`
@@ -58,6 +64,7 @@ FRONTEND_PORT=5173
 ## 🔧 Configuración de OpenAI
 
 ### Servicio OpenAI
+
 - **Archivo**: `apps/api/src/services/openai.ts`
 - **Modelo por defecto**: `gpt-3.5-turbo` (configurable via env)
 - **Modelos válidos soportados**:
@@ -68,6 +75,7 @@ FRONTEND_PORT=5173
   - `gpt-4o-mini`
 
 ### Personalidad de WADI
+
 ```javascript
 {
   role: "system",
@@ -84,6 +92,7 @@ FRONTEND_PORT=5173
 **Ruta**: `/home` → `/chat`
 
 **Pasos:**
+
 ```
 □ 1. Loguearse con cuenta real
 □ 2. Verificar que caes en /home
@@ -96,6 +105,7 @@ FRONTEND_PORT=5173
 ```
 
 **Código relevante:**
+
 - Input: `apps/frontend/src/pages/Home.tsx` (línea 29-36)
 - Chat: `apps/frontend/src/pages/Chat.tsx`
 - Store: `apps/frontend/src/store/chatStore.ts`
@@ -107,6 +117,7 @@ FRONTEND_PORT=5173
 **Ruta**: `/chat`
 
 **Pasos:**
+
 ```
 □ 1. En /chat, escribir nuevo mensaje
 □ 2. Presionar Enter o click en botón enviar
@@ -118,6 +129,7 @@ FRONTEND_PORT=5173
 ```
 
 **Elementos UI:**
+
 - Avatar WADI: Círculo azul con "W"
 - Mensaje usuario: Fondo azul gradiente, alineado derecha
 - Mensaje asistente: Fondo blanco glassmorphism, alineado izquierda
@@ -128,6 +140,7 @@ FRONTEND_PORT=5173
 ### 3️⃣ Persistencia: Refresh de página
 
 **Pasos:**
+
 ```
 □ 1. Estando en /chat con mensajes
 □ 2. Presionar F5 (refresh)
@@ -138,6 +151,7 @@ FRONTEND_PORT=5173
 ```
 
 **Implementación:**
+
 - Store usa Zustand con persist
 - Los mensajes se cargan del backend al montar el componente
 
@@ -148,6 +162,7 @@ FRONTEND_PORT=5173
 **Escenarios a probar:**
 
 #### A. Error de red
+
 ```
 □ 1. Cortar internet 10 segundos
 □ 2. Enviar mensaje
@@ -158,11 +173,13 @@ FRONTEND_PORT=5173
 ```
 
 **Mensaje esperado:**
+
 ```
 "Network error. Please check your connection."
 ```
 
 #### B. API Key inválida
+
 ```
 □ 1. Modificar OPENAI_API_KEY en backend .env (temporalmente)
 □ 2. Reiniciar backend
@@ -172,11 +189,13 @@ FRONTEND_PORT=5173
 ```
 
 **Respuesta fallback del servidor:**
+
 ```
 "Lo siento, tuve un problema al generar la respuesta. ¿Podés intentar de nuevo?"
 ```
 
 #### C. Timeout
+
 ```
 □ 1. Enviar mensaje
 □ 2. Si tarda más de 30 segundos
@@ -189,6 +208,7 @@ FRONTEND_PORT=5173
 ## 📊 Verificaciones de Consola
 
 ### Frontend Console (F12)
+
 ```javascript
 // Mensajes esperados:
 ✅ [API] POST /api/chat { data: {...} }
@@ -204,6 +224,7 @@ FRONTEND_PORT=5173
 ```
 
 ### Backend Console
+
 ```javascript
 // Mensajes esperados:
 ✅ [sendMessage] Request from user: <userId>
@@ -224,6 +245,7 @@ FRONTEND_PORT=5173
 ## 🗂️ Estructura de Datos
 
 ### Mensaje en Frontend
+
 ```typescript
 interface Message {
   id: string;
@@ -237,6 +259,7 @@ interface Message {
 ```
 
 ### Request POST /api/chat
+
 ```typescript
 {
   message: string;          // Requerido
@@ -245,6 +268,7 @@ interface Message {
 ```
 
 ### Response POST /api/chat
+
 ```typescript
 {
   ok: true;
@@ -261,27 +285,35 @@ interface Message {
 ## 🚨 Problemas Comunes y Soluciones
 
 ### Problema: 401 Unauthorized
+
 **Causa**: Token de Supabase expirado o inválido
-**Solución**: 
+**Solución**:
+
 1. Cerrar sesión y volver a loguear
 2. Verificar que el middleware de auth está funcionando
 
 ### Problema: CORS Error
+
 **Causa**: Frontend y backend en diferentes orígenes
-**Solución**: 
+**Solución**:
+
 1. Verificar `FRONTEND_URL` en backend .env
 2. Verificar configuración CORS en `apps/api/src/index.ts`
 
 ### Problema: No aparece respuesta
+
 **Causa**: OPENAI_API_KEY inválida o modelo no soportado
 **Solución**:
+
 1. Verificar API key en backend .env
 2. Verificar logs del backend para ver error específico
 3. Verificar que el modelo existe en OpenAI
 
 ### Problema: Mensajes no persisten
+
 **Causa**: Supabase no está guardando correctamente
 **Solución**:
+
 1. Verificar SUPABASE_SERVICE_KEY en backend
 2. Verificar schema de base de datos (tabla `conversations` y `messages`)
 3. Revisar logs de Supabase
@@ -291,6 +323,7 @@ interface Message {
 ## 📝 Comandos de Inicio
 
 ### Iniciar Backend
+
 ```bash
 cd apps/api
 pnpm install
@@ -299,6 +332,7 @@ pnpm dev
 ```
 
 ### Iniciar Frontend
+
 ```bash
 cd apps/frontend
 pnpm install
@@ -307,6 +341,7 @@ pnpm dev
 ```
 
 ### Iniciar ambos (desde root)
+
 ```bash
 # Terminal 1
 pnpm --filter api dev

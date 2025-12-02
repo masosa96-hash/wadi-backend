@@ -9,6 +9,7 @@ Successfully fixed the `/api/chat` endpoint to use the Groq LLM provider (alread
 ### 1. `apps/api/src/services/openai.ts`
 
 **Changes:**
+
 - Updated `generateChatCompletion()` function to return an object with both `response` and `model` instead of just a string
 - Added model mapping using `mapToGroqModel()` function (already existed)
 - Improved error handling with detailed logging and specific error types
@@ -16,6 +17,7 @@ Successfully fixed the `/api/chat` endpoint to use the Groq LLM provider (alread
 - Enhanced console logging with `[Chat Service]` prefix for better debugging
 
 **Key improvements:**
+
 - Consistent model mapping: Converts OpenAI model names (e.g., "gpt-3.5-turbo") to Groq equivalents ("llama-3.1-8b-instant")
 - Better error messages distinguishing between auth errors, rate limits, model errors, and network issues
 - Returns the actual model used in the response for transparency
@@ -23,6 +25,7 @@ Successfully fixed the `/api/chat` endpoint to use the Groq LLM provider (alread
 ### 2. `apps/api/src/controllers/chatController.ts`
 
 **Changes:**
+
 - Imported `DEFAULT_MODEL` and `mapToGroqModel` from openai service
 - Updated to destructure `{ response, model }` from `generateChatCompletion()`
 - Changed hardcoded model from "gpt-3.5-turbo" to the actual `modelUsed` variable when saving to database
@@ -30,6 +33,7 @@ Successfully fixed the `/api/chat` endpoint to use the Groq LLM provider (alread
 - Added `model` field to the response JSON
 
 **Error handling improvements:**
+
 - `RATE_LIMIT` - Rate limit exceeded (429 status)
 - `AUTH_ERROR` - Authentication/API key issues (503 status)
 - `MODEL_ERROR` - Invalid model name (400 status)
@@ -39,6 +43,7 @@ Successfully fixed the `/api/chat` endpoint to use the Groq LLM provider (alread
 ### 3. `apps/api/src/services/topic-detection.ts`
 
 **Changes:**
+
 - Updated all three functions to destructure `{ response }` from `generateChatCompletion()`
 - Functions affected:
   - `detectTopicChange()`
@@ -48,6 +53,7 @@ Successfully fixed the `/api/chat` endpoint to use the Groq LLM provider (alread
 ### 4. `scripts/test-chat-endpoint.js` (NEW)
 
 **Created:**
+
 - Comprehensive test script to verify the `/api/chat` endpoint
 - Tests guest mode functionality
 - Validates response structure and model usage
@@ -71,6 +77,7 @@ The system uses the following model mapping (defined in `openai.ts`):
 ### Default Model
 
 The default model is set via environment variable:
+
 - `GROQ_DEFAULT_MODEL=llama-3.1-8b-instant` (from .env)
 
 ### API Contract
@@ -78,6 +85,7 @@ The default model is set via environment variable:
 **POST /api/chat**
 
 Request body:
+
 ```json
 {
   "message": "User's message",
@@ -87,6 +95,7 @@ Request body:
 ```
 
 Response (success):
+
 ```json
 {
   "ok": true,
@@ -112,6 +121,7 @@ Response (success):
 ```
 
 Response (error):
+
 ```json
 {
   "ok": false,
@@ -197,6 +207,7 @@ curl -X POST http://localhost:4000/api/chat \
 ## Conclusion
 
 The `/api/chat` endpoint now successfully:
+
 - Uses Groq as the LLM provider (same as runs)
 - Maps model names correctly
 - Returns detailed responses with model information

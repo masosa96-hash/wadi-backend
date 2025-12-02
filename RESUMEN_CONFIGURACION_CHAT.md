@@ -29,6 +29,7 @@
 ## 📁 Archivos Verificados
 
 ### Backend
+
 ```
 ✅ apps/api/src/routes/chat.ts
 ✅ apps/api/src/controllers/chatController.ts
@@ -39,6 +40,7 @@
 ```
 
 ### Frontend
+
 ```
 ✅ apps/frontend/src/pages/Home.tsx
 ✅ apps/frontend/src/pages/Chat.tsx
@@ -52,6 +54,7 @@
 ## 🔧 Configuración de Variables de Entorno
 
 ### Backend (`apps/api/.env`)
+
 ```env
 PORT=4000                                                    ✅
 NODE_ENV=development                                         ✅
@@ -64,6 +67,7 @@ FRONTEND_URL=http://localhost:5173                          ✅
 ```
 
 ### Frontend (`apps/frontend/.env`)
+
 ```env
 SUPABASE_URL=https://smkbiguvgiscojwxgbae.supabase.co       ✅
 SUPABASE_ANON_KEY=eyJhbGci...                               ✅
@@ -79,16 +83,20 @@ FRONTEND_PORT=5173                                          ✅
 ## 🛣️ Endpoints Implementados
 
 ### POST /api/chat
+
 **Descripción**: Enviar mensaje y recibir respuesta de IA  
 **Autenticación**: Requerida  
 **Request Body**:
+
 ```json
 {
   "message": "Hola WADI",
   "conversationId": "optional-uuid"
 }
 ```
+
 **Response**:
+
 ```json
 {
   "ok": true,
@@ -101,14 +109,17 @@ FRONTEND_PORT=5173                                          ✅
 ```
 
 ### GET /api/chat
+
 **Descripción**: Obtener todas las conversaciones del usuario  
 **Autenticación**: Requerida
 
 ### GET /api/chat/:conversationId
+
 **Descripción**: Obtener conversación específica con mensajes  
 **Autenticación**: Requerida
 
 ### DELETE /api/chat/:conversationId
+
 **Descripción**: Eliminar conversación y mensajes  
 **Autenticación**: Requerida
 
@@ -117,10 +128,12 @@ FRONTEND_PORT=5173                                          ✅
 ## 🤖 Configuración de OpenAI
 
 ### Modelo Actual
+
 - **Por defecto**: `gpt-3.5-turbo`
 - **Configurable vía**: `OPENAI_DEFAULT_MODEL` en `apps/api/.env`
 
 ### Modelos Soportados
+
 - `gpt-3.5-turbo` (actual)
 - `gpt-4`
 - `gpt-4-turbo`
@@ -128,10 +141,11 @@ FRONTEND_PORT=5173                                          ✅
 - `gpt-4o-mini`
 
 ### Personalidad de WADI
+
 ```
-"Sos WADI, un asistente de IA amigable y útil. 
-Hablás en español de forma cercana y natural, 
-como si fueras un amigo que ayuda con cualquier tarea. 
+"Sos WADI, un asistente de IA amigable y útil.
+Hablás en español de forma cercana y natural,
+como si fueras un amigo que ayuda con cualquier tarea.
 Respondés de manera clara, concisa y práctica."
 ```
 
@@ -140,29 +154,33 @@ Respondés de manera clara, concisa y práctica."
 ## 🔄 Flujo de Usuario Implementado
 
 ### 1. Login → Home
+
 ```
 Usuario hace login → Redirección a /home
 ```
 
 ### 2. Home → Chat con mensaje inicial
+
 ```
-/home → Escribir en input hero → Click enviar → 
-Navigate a /chat con state.initialMessage → 
+/home → Escribir en input hero → Click enviar →
+Navigate a /chat con state.initialMessage →
 Auto-envío del mensaje → Respuesta de WADI
 ```
 
 ### 3. Chat continuo
+
 ```
 /chat → Escribir mensaje → Enter/Click enviar →
-Mensaje aparece → Typing indicator → 
+Mensaje aparece → Typing indicator →
 Respuesta de WADI → Auto-scroll
 ```
 
 ### 4. Persistencia
+
 ```
-Refresh en /chat → 
-Carga conversación desde Supabase → 
-Muestra historial completo → 
+Refresh en /chat →
+Carga conversación desde Supabase →
+Muestra historial completo →
 Puede continuar conversación
 ```
 
@@ -171,6 +189,7 @@ Puede continuar conversación
 ## 📦 Dependencias Clave
 
 ### Backend
+
 ```json
 {
   "openai": "^4.x",
@@ -180,6 +199,7 @@ Puede continuar conversación
 ```
 
 ### Frontend
+
 ```json
 {
   "zustand": "^4.x",
@@ -194,18 +214,21 @@ Puede continuar conversación
 ## 🧪 Cómo Probar
 
 ### Paso 1: Completar Configuración
+
 ```powershell
 # Ver instrucciones detalladas
 code COMPLETAR_SUPABASE_SERVICE_KEY.md
 ```
 
 ### Paso 2: Verificar Estado
+
 ```powershell
 # Ejecutar script de verificación
 .\test-chat-ready.ps1
 ```
 
 ### Paso 3: Iniciar Servicios
+
 ```powershell
 # Terminal 1 - Backend
 pnpm --filter api dev
@@ -215,6 +238,7 @@ pnpm --filter frontend dev
 ```
 
 ### Paso 4: Probar Chat
+
 ```powershell
 # Abrir navegador
 http://localhost:5173/login
@@ -228,19 +252,23 @@ code CHECKLIST_PRUEBA_CHAT.md
 ## 📋 Scripts de Ayuda Creados
 
 ### 1. `test-chat-ready.ps1`
+
 **Descripción**: Verifica que todas las configuraciones están correctas  
 **Uso**: `.\test-chat-ready.ps1`  
 **Output**: Lista de verificación con ✅/❌/⚠️
 
 ### 2. `CHECKLIST_PRUEBA_CHAT.md`
+
 **Descripción**: Checklist completo de pruebas funcionales  
 **Incluye**:
+
 - Flujos de usuario
 - Casos de error
 - Verificaciones de consola
 - Troubleshooting
 
 ### 3. `COMPLETAR_SUPABASE_SERVICE_KEY.md`
+
 **Descripción**: Guía paso a paso para obtener y configurar la Service Role Key  
 **Incluye**: Screenshots conceptuales y ejemplos
 
@@ -249,15 +277,19 @@ code CHECKLIST_PRUEBA_CHAT.md
 ## 🚨 Problemas Conocidos y Soluciones
 
 ### Problema: 401 Unauthorized
+
 **Solución**: Verificar token de autenticación en localStorage/sessionStorage
 
 ### Problema: CORS Error
+
 **Solución**: Verificar `FRONTEND_URL` en backend .env = `http://localhost:5173`
 
 ### Problema: OpenAI API Error
+
 **Solución**: Verificar `OPENAI_API_KEY` válida y con créditos
 
 ### Problema: Mensajes no se guardan
+
 **Solución**: Completar `SUPABASE_SERVICE_KEY` en backend .env
 
 ---
@@ -265,6 +297,7 @@ code CHECKLIST_PRUEBA_CHAT.md
 ## 📊 Métricas de Implementación
 
 ### Archivos Modificados/Creados
+
 - **Backend**: 4 archivos principales
 - **Frontend**: 4 archivos principales
 - **Configuración**: 2 archivos .env
@@ -272,12 +305,14 @@ code CHECKLIST_PRUEBA_CHAT.md
 - **Scripts**: 1 archivo PS1
 
 ### Líneas de Código
+
 - **Backend Controller**: ~312 líneas
 - **Frontend Chat Page**: ~473 líneas
 - **Chat Store**: ~214 líneas
 - **API Client**: ~287 líneas
 
 ### Endpoints
+
 - **Implementados**: 4/4 (100%)
 - **Con autenticación**: 4/4 (100%)
 - **Con manejo de errores**: 4/4 (100%)
@@ -302,7 +337,7 @@ Si encontrás algún problema:
 1. **Verificar**: `.\test-chat-ready.ps1`
 2. **Revisar**: Consola del navegador (F12)
 3. **Revisar**: Consola del backend (terminal)
-4. **Reportar**: 
+4. **Reportar**:
    - URL donde ocurre
    - Errores de consola
    - Pasos para reproducir
@@ -317,7 +352,7 @@ Si encontrás algún problema:
 **Archivos a revisar**: 1 (`apps/api/.env`)  
 **Documentación lista**: ✅  
 **Código listo**: ✅  
-**Tests preparados**: ✅  
+**Tests preparados**: ✅
 
 **Una vez completada la configuración de Supabase, el chat estará 100% funcional.**
 

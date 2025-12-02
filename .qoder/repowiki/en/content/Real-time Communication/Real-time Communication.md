@@ -16,6 +16,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [WebSocket Architecture Overview](#websocket-architecture-overview)
 3. [Connection Management](#connection-management)
@@ -75,10 +76,12 @@ ErrorHandler --> Logger
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L20-L80)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L52-L144)
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L20-L80)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L52-L144)
 
@@ -117,6 +120,7 @@ Server->>Server : Cleanup Client State
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L28-L77)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L82-L102)
 
@@ -140,10 +144,12 @@ Reconnecting --> Disconnected : reconnectFailed
 ```
 
 **Diagram sources**
+
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L52-L144)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L131-L137)
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L28-L77)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L52-L144)
 
@@ -153,16 +159,16 @@ Reconnecting --> Disconnected : reconnectFailed
 
 WADI defines a comprehensive set of message types for different communication scenarios:
 
-| Message Type | Purpose | Payload Structure | Direction |
-|--------------|---------|-------------------|-----------|
-| `connected` | Connection establishment | `{ type: "connected", clientId: string }` | Server → Client |
-| `auth` | Authentication request | `{ type: "auth", token: string }` | Client → Server |
-| `authenticated` | Authentication success | `{ type: "authenticated", userId: string }` | Server → Client |
-| `message` | Chat message content | `{ type: "message", content: string }` | Client → Server |
-| `start` | AI response start | `{ type: "start", conversationId: string }` | Server → Client |
-| `chunk` | AI response chunk | `{ type: "chunk", content: string }` | Server → Client |
-| `complete` | AI response complete | `{ type: "complete", fullOutput: string }` | Server → Client |
-| `error` | Error notification | `{ type: "error", message: string }` | Bidirectional |
+| Message Type    | Purpose                  | Payload Structure                           | Direction       |
+| --------------- | ------------------------ | ------------------------------------------- | --------------- |
+| `connected`     | Connection establishment | `{ type: "connected", clientId: string }`   | Server → Client |
+| `auth`          | Authentication request   | `{ type: "auth", token: string }`           | Client → Server |
+| `authenticated` | Authentication success   | `{ type: "authenticated", userId: string }` | Server → Client |
+| `message`       | Chat message content     | `{ type: "message", content: string }`      | Client → Server |
+| `start`         | AI response start        | `{ type: "start", conversationId: string }` | Server → Client |
+| `chunk`         | AI response chunk        | `{ type: "chunk", content: string }`        | Server → Client |
+| `complete`      | AI response complete     | `{ type: "complete", fullOutput: string }`  | Server → Client |
+| `error`         | Error notification       | `{ type: "error", message: string }`        | Bidirectional   |
 
 ### Message Flow Patterns
 
@@ -193,10 +199,12 @@ ShowError --> End
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L105-L167)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L140-L288)
 
 **Section sources**
+
 - [chat.ts](file://apps/frontend/src/types/chat.ts#L19-L25)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L47-L61)
 
@@ -236,6 +244,7 @@ WSClient --> WebSocket : wraps
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L9-L18)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L47-L61)
 
@@ -265,10 +274,12 @@ UI->>UI : Re-render
 ```
 
 **Diagram sources**
+
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L140-L288)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L76-L120)
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L47-L61)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L76-L120)
 
@@ -301,21 +312,23 @@ end
 ```
 
 **Diagram sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L82-L102)
 
 ### Security Measures
 
 The system implements multiple security layers to protect against unauthorized access and malicious activity:
 
-| Security Layer | Implementation | Purpose |
-|----------------|----------------|---------|
-| Token Validation | JWT verification via Supabase | Ensures valid user authentication |
-| Rate Limiting | Per-user request throttling | Prevents abuse and DDoS attacks |
-| Connection Limits | Maximum concurrent connections | Controls server resource usage |
-| Message Validation | JSON schema validation | Prevents malformed message attacks |
-| Graceful Degradation | REST API fallback | Maintains functionality during WebSocket failures |
+| Security Layer       | Implementation                 | Purpose                                           |
+| -------------------- | ------------------------------ | ------------------------------------------------- |
+| Token Validation     | JWT verification via Supabase  | Ensures valid user authentication                 |
+| Rate Limiting        | Per-user request throttling    | Prevents abuse and DDoS attacks                   |
+| Connection Limits    | Maximum concurrent connections | Controls server resource usage                    |
+| Message Validation   | JSON schema validation         | Prevents malformed message attacks                |
+| Graceful Degradation | REST API fallback              | Maintains functionality during WebSocket failures |
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L82-L102)
 - [rateLimit.ts](file://apps/api/src/middleware/rateLimit.ts#L32-L38)
 
@@ -349,6 +362,7 @@ NotifyUser --> End
 ```
 
 **Diagram sources**
+
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L131-L137)
 - [api.ts](file://apps/frontend/src/config/api.ts#L195-L200)
 
@@ -356,15 +370,16 @@ NotifyUser --> End
 
 The system categorizes errors into different types and applies appropriate recovery strategies:
 
-| Error Category | Examples | Recovery Strategy |
-|----------------|----------|-------------------|
-| Network Errors | Connection timeouts, DNS failures | Automatic retry with exponential backoff |
-| Authentication Errors | Expired tokens, invalid credentials | Token refresh and re-authentication |
-| Server Errors | 5xx HTTP responses, service unavailable | Circuit breaker pattern with fallback |
-| Client Errors | Malformed messages, invalid state | Graceful degradation and user notification |
-| Rate Limiting | Too many requests | Queue management and user feedback |
+| Error Category        | Examples                                | Recovery Strategy                          |
+| --------------------- | --------------------------------------- | ------------------------------------------ |
+| Network Errors        | Connection timeouts, DNS failures       | Automatic retry with exponential backoff   |
+| Authentication Errors | Expired tokens, invalid credentials     | Token refresh and re-authentication        |
+| Server Errors         | 5xx HTTP responses, service unavailable | Circuit breaker pattern with fallback      |
+| Client Errors         | Malformed messages, invalid state       | Graceful degradation and user notification |
+| Rate Limiting         | Too many requests                       | Queue management and user feedback         |
 
 **Section sources**
+
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L131-L137)
 - [api.ts](file://apps/frontend/src/config/api.ts#L195-L200)
 
@@ -403,6 +418,7 @@ RealTime --> Persistent
 ```
 
 **Diagram sources**
+
 - [GUEST_MODE_IMPLEMENTATION.md](file://GUEST_MODE_IMPLEMENTATION.md#L22-L40)
 - [README_GUEST_MODE.md](file://README_GUEST_MODE.md#L131-L198)
 
@@ -410,15 +426,16 @@ RealTime --> Persistent
 
 Guest mode provides essential functionality while maintaining simplicity and performance:
 
-| Feature | Implementation | Benefits |
-|---------|----------------|----------|
-| Automatic Guest ID Generation | `crypto.randomUUID()` | Unique user identification |
-| Local Storage Persistence | `localStorage` with `wadi_conv_${guestId}` | Conversation history retention |
-| REST API Fallback | Automatic fallback from WebSocket | Reliable message delivery |
-| Nickname Management | Modal prompt on first visit | Personalized experience |
-| Rate Limiting | Same limits as authenticated users | Fair usage enforcement |
+| Feature                       | Implementation                             | Benefits                       |
+| ----------------------------- | ------------------------------------------ | ------------------------------ |
+| Automatic Guest ID Generation | `crypto.randomUUID()`                      | Unique user identification     |
+| Local Storage Persistence     | `localStorage` with `wadi_conv_${guestId}` | Conversation history retention |
+| REST API Fallback             | Automatic fallback from WebSocket          | Reliable message delivery      |
+| Nickname Management           | Modal prompt on first visit                | Personalized experience        |
+| Rate Limiting                 | Same limits as authenticated users         | Fair usage enforcement         |
 
 **Section sources**
+
 - [GUEST_MODE_IMPLEMENTATION.md](file://GUEST_MODE_IMPLEMENTATION.md#L22-L40)
 - [README_GUEST_MODE.md](file://README_GUEST_MODE.md#L131-L198)
 
@@ -449,21 +466,23 @@ Memoization --> Latency
 ```
 
 **Diagram sources**
+
 - [PERFORMANCE_OPTIMIZATION.md](file://PERFORMANCE_OPTIMIZATION.md#L351-L431)
 
 ### Backend Performance Features
 
 The server-side implementation includes several performance optimization techniques:
 
-| Optimization | Implementation | Impact |
-|--------------|----------------|--------|
-| Connection Pooling | WebSocket connection reuse | Reduced overhead |
-| Message Chunking | Streaming AI responses | Lower latency |
-| Database Indexing | Conversation history indexing | Faster queries |
-| Rate Limiting | Per-user request throttling | Resource protection |
-| Memory Management | Automatic cleanup of inactive connections | Stable memory usage |
+| Optimization       | Implementation                            | Impact              |
+| ------------------ | ----------------------------------------- | ------------------- |
+| Connection Pooling | WebSocket connection reuse                | Reduced overhead    |
+| Message Chunking   | Streaming AI responses                    | Lower latency       |
+| Database Indexing  | Conversation history indexing             | Faster queries      |
+| Rate Limiting      | Per-user request throttling               | Resource protection |
+| Memory Management  | Automatic cleanup of inactive connections | Stable memory usage |
 
 **Section sources**
+
 - [PERFORMANCE_OPTIMIZATION.md](file://PERFORMANCE_OPTIMIZATION.md#L323-L431)
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L178-L185)
 
@@ -505,20 +524,22 @@ WS3 --> Supabase
 ```
 
 **Diagram sources**
+
 - [PERFORMANCE_OPTIMIZATION.md](file://PERFORMANCE_OPTIMIZATION.md#L405-L431)
 
 ### Connection Scaling Limits
 
 The system implements configurable limits to manage resource consumption:
 
-| Resource | Default Limit | Configurable | Purpose |
-|----------|---------------|--------------|---------|
-| Concurrent Connections | Unlimited | Yes | Server capacity management |
-| Message Rate | 20/min (guest) | Yes | Abuse prevention |
-| Conversation History | 10 messages | Yes | Memory optimization |
-| Connection Timeout | 30 minutes | Yes | Resource cleanup |
+| Resource               | Default Limit  | Configurable | Purpose                    |
+| ---------------------- | -------------- | ------------ | -------------------------- |
+| Concurrent Connections | Unlimited      | Yes          | Server capacity management |
+| Message Rate           | 20/min (guest) | Yes          | Abuse prevention           |
+| Conversation History   | 10 messages    | Yes          | Memory optimization        |
+| Connection Timeout     | 30 minutes     | Yes          | Resource cleanup           |
 
 **Section sources**
+
 - [PERFORMANCE_OPTIMIZATION.md](file://PERFORMANCE_OPTIMIZATION.md#L405-L431)
 - [rateLimit.ts](file://apps/api/src/middleware/rateLimit.ts#L32-L38)
 
@@ -549,6 +570,7 @@ The system implements configurable limits to manage resource consumption:
 ### Production Deployment
 
 1. **Environment Configuration**
+
    ```bash
    # Production environment variables
    VITE_API_URL=https://api.wadi.ai
@@ -569,13 +591,13 @@ The system implements configurable limits to manage resource consumption:
 
 ### Common Issues and Solutions
 
-| Issue | Symptoms | Solution |
-|-------|----------|----------|
-| Connection Drops | Frequent disconnections | Check network stability, implement reconnection logic |
-| Slow Message Delivery | Delays in message display | Optimize database queries, reduce message payload size |
-| Authentication Failures | Cannot connect as authenticated user | Verify token validity, check Supabase configuration |
-| Guest Mode Issues | Cannot send messages as guest | Verify guest mode configuration, check REST API accessibility |
-| Rate Limiting | Getting 429 errors | Implement exponential backoff, reduce message frequency |
+| Issue                   | Symptoms                             | Solution                                                      |
+| ----------------------- | ------------------------------------ | ------------------------------------------------------------- |
+| Connection Drops        | Frequent disconnections              | Check network stability, implement reconnection logic         |
+| Slow Message Delivery   | Delays in message display            | Optimize database queries, reduce message payload size        |
+| Authentication Failures | Cannot connect as authenticated user | Verify token validity, check Supabase configuration           |
+| Guest Mode Issues       | Cannot send messages as guest        | Verify guest mode configuration, check REST API accessibility |
+| Rate Limiting           | Getting 429 errors                   | Implement exponential backoff, reduce message frequency       |
 
 ### Diagnostic Commands
 
@@ -614,5 +636,6 @@ ws.on('error', err => console.error('Error:', err));
    - Response time measurements
 
 **Section sources**
+
 - [websocket.ts](file://apps/api/src/services/websocket.ts#L28-L77)
 - [chatStore.ts](file://apps/frontend/src/store/chatStore.ts#L52-L144)

@@ -15,6 +15,7 @@
 ### Backend (Railway)
 
 1. **Crear cuenta en Railway**
+
    ```
    https://railway.app/
    ```
@@ -25,19 +26,20 @@
    - Buscar tu repositorio
 
 3. **Configurar variables de entorno**
+
    ```
    PORT=4000
    NODE_ENV=production
-   
+
    SUPABASE_URL=https://xxx.supabase.co
    SUPABASE_ANON_KEY=eyJ...
    SUPABASE_SERVICE_KEY=eyJ...
-   
+
    OPENAI_API_KEY=sk-proj-...
    OPENAI_DEFAULT_MODEL=gpt-3.5-turbo
-   
+
    FRONTEND_URL=https://tu-app.vercel.app
-   
+
    GUEST_MODE=true
    ```
 
@@ -55,6 +57,7 @@
 ### Frontend (Vercel)
 
 1. **Crear cuenta en Vercel**
+
    ```
    https://vercel.com/
    ```
@@ -66,12 +69,13 @@
    - Root Directory: `apps/frontend`
 
 3. **Configurar variables de entorno**
+
    ```
    VITE_SUPABASE_URL=https://xxx.supabase.co
    VITE_SUPABASE_ANON_KEY=eyJ...
-   
+
    VITE_API_URL=https://wadi-api.up.railway.app
-   
+
    VITE_GUEST_MODE=true
    ```
 
@@ -81,11 +85,13 @@
    - Install Command: `pnpm install`
 
 5. **Deploy desde CLI (OPCIÓN 1 - Recomendada)**
+
    ```bash
    # Deployar desde la raíz del monorepo
    cd E:\WADI
    vercel --prod
    ```
+
    ⚠️ **IMPORTANTE**: Con Root Directory = `apps/frontend` en Vercel, siempre deployá desde `E:\WADI`, NO desde `E:\WADI\apps\frontend`
 
 6. **Deploy desde Dashboard (OPCIÓN 2)**
@@ -93,9 +99,10 @@
    - Obtendrás URL tipo: `https://wadi.vercel.app`
 
 **Alternativa**: Si preferís deployar desde `apps/frontend`:
-   - Ir a Vercel → Settings → General → Root Directory
-   - Cambiar a `.` (vacío)
-   - Redeploy el proyecto
+
+- Ir a Vercel → Settings → General → Root Directory
+- Cambiar a `.` (vacío)
+- Redeploy el proyecto
 
 ---
 
@@ -104,6 +111,7 @@
 ### DNS Custom
 
 **Vercel:**
+
 ```
 1. Ir a Settings → Domains
 2. Agregar tu dominio (ej: app.wadi.ai)
@@ -112,6 +120,7 @@
 ```
 
 **Railway:**
+
 ```
 1. Ir a Settings → Domains
 2. Agregar custom domain
@@ -123,6 +132,7 @@
 ### Environment Variables por Entorno
 
 **Development:**
+
 ```bash
 # .env.development
 VITE_API_URL=http://localhost:4000
@@ -130,6 +140,7 @@ VITE_GUEST_MODE=true
 ```
 
 **Staging:**
+
 ```bash
 # .env.staging
 VITE_API_URL=https://wadi-api-staging.up.railway.app
@@ -137,6 +148,7 @@ VITE_GUEST_MODE=true
 ```
 
 **Production:**
+
 ```bash
 # .env.production
 VITE_API_URL=https://api.wadi.ai
@@ -215,7 +227,7 @@ CMD ["nginx", "-g", "daemon off;"]
 ### docker-compose.yml
 
 ```yaml
-version: '3.8'
+version: "3.8"
 
 services:
   api:
@@ -247,6 +259,7 @@ services:
 ```
 
 **Ejecutar:**
+
 ```bash
 docker-compose up -d
 ```
@@ -353,21 +366,21 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node
         uses: actions/setup-node@v3
         with:
-          node-version: '20'
-      
+          node-version: "20"
+
       - name: Install pnpm
         run: npm install -g pnpm
-      
+
       - name: Install dependencies
         run: pnpm install
-      
+
       - name: Build
         run: pnpm --filter api build
-      
+
       - name: Deploy to Railway
         run: railway up
         env:
@@ -377,7 +390,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Deploy to Vercel
         uses: amondnet/vercel-action@v20
         with:
@@ -455,6 +468,7 @@ curl https://wadi.vercel.app
 ## 🆘 Rollback
 
 ### Vercel:
+
 ```bash
 # Ver deployments
 vercel ls
@@ -464,6 +478,7 @@ vercel rollback [deployment-url]
 ```
 
 ### Railway:
+
 ```bash
 # Desde dashboard:
 # 1. Ir a Deployments
@@ -478,6 +493,7 @@ vercel rollback [deployment-url]
 ### Error: "Cannot connect to API"
 
 **Solución:**
+
 1. Verificar `VITE_API_URL` en frontend
 2. Verificar `FRONTEND_URL` en backend (CORS)
 3. Check logs de Railway
@@ -485,6 +501,7 @@ vercel rollback [deployment-url]
 ### Error: "OpenAI API key invalid"
 
 **Solución:**
+
 1. Verificar `OPENAI_API_KEY` en Railway
 2. Verificar key en platform.openai.com
 3. Regenerar key si es necesario
@@ -492,6 +509,7 @@ vercel rollback [deployment-url]
 ### Error: 502 Bad Gateway
 
 **Solución:**
+
 1. Verificar backend está corriendo
 2. Check logs en Railway
 3. Verificar health endpoint
@@ -539,6 +557,7 @@ Una vez completados todos los pasos:
 **¡Tu app WADI está en producción!** 🎉
 
 URL de ejemplo:
+
 - Frontend: `https://wadi.vercel.app`
 - Backend: `https://wadi-api.up.railway.app`
 

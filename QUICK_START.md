@@ -5,11 +5,14 @@
 ### Open TWO Terminal Windows:
 
 **Terminal 1 - Backend API:**
+
 ```powershell
 cd E:\WADI
 pnpm --filter api dev
 ```
+
 Should show:
+
 ```
 🚀 WADI API running on http://localhost:4000
 📊 Health check: http://localhost:4000/health
@@ -17,11 +20,14 @@ Should show:
 ```
 
 **Terminal 2 - Frontend:**
+
 ```powershell
 cd E:\WADI
 pnpm --filter frontend dev
 ```
+
 Should show:
+
 ```
 VITE v... ready in ... ms
 ➜  Local:   http://localhost:5173/
@@ -65,6 +71,7 @@ cd apps/frontend && npx tsc --noEmit
 ## 📋 Environment Variables Quick Reference
 
 ### Root .env (E:\WADI\.env)
+
 ```env
 SUPABASE_URL=https://xxxxx.supabase.co
 SUPABASE_ANON_KEY=eyJhbGc...
@@ -76,6 +83,7 @@ FRONTEND_URL=http://localhost:5173
 ```
 
 ### Frontend .env (E:\WADI\apps\frontend\.env)
+
 ```env
 VITE_API_URL=http://localhost:4000
 VITE_SUPABASE_URL=https://xxxxx.supabase.co
@@ -85,6 +93,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGc...
 ## 🎯 What You Should See
 
 ### ✅ Backend Logs (Terminal 1):
+
 ```
 [Auth] Checking auth for: GET /api/projects
 [Auth] Success: User authenticated: user-id-here
@@ -93,6 +102,7 @@ VITE_SUPABASE_ANON_KEY=eyJhbGc...
 ```
 
 ### ✅ Frontend (Browser):
+
 - Modern dashboard with stats cards
 - No errors in browser console
 - Smooth animations

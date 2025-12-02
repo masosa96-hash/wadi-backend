@@ -32,6 +32,7 @@ cd E:\WADI
 ```
 
 Este script:
+
 - ✅ Se asegura que estés en el directorio correcto
 - ✅ Verifica la configuración
 - ✅ Te pide confirmación antes de deployar
@@ -51,6 +52,7 @@ Si preferís deployar siempre desde `apps/frontend`:
 5. Guardar y redeploy
 
 Después podés hacer:
+
 ```powershell
 cd E:\WADI\apps\frontend
 vercel --prod
@@ -143,12 +145,12 @@ curl -I https://[TU-URL-DE-VERCEL]
 
 ## 📊 Matriz de Configuración
 
-| Root Directory en Vercel | Desde dónde correr | Resultado |
-|-------------------------|-------------------|-----------|
-| `apps/frontend` | `E:\WADI` | ✅ **FUNCIONA** |
-| `apps/frontend` | `E:\WADI\apps\frontend` | ❌ Falla |
-| `.` (vacío) | `E:\WADI\apps\frontend` | ✅ Funciona |
-| `.` (vacío) | `E:\WADI` | ⚠️ Necesita config |
+| Root Directory en Vercel | Desde dónde correr      | Resultado          |
+| ------------------------ | ----------------------- | ------------------ |
+| `apps/frontend`          | `E:\WADI`               | ✅ **FUNCIONA**    |
+| `apps/frontend`          | `E:\WADI\apps\frontend` | ❌ Falla           |
+| `.` (vacío)              | `E:\WADI\apps\frontend` | ✅ Funciona        |
+| `.` (vacío)              | `E:\WADI`               | ⚠️ Necesita config |
 
 ---
 
@@ -163,21 +165,27 @@ Esto es consistente con la estructura de monorepo y funciona perfecto con el scr
 ## 🆘 Si Algo Sale Mal
 
 ### Error: "Cannot find vercel.json"
+
 **Solución:** Asegurate de estar en `E:\WADI`, no en `apps/frontend`
 
 ### Error: "Unauthorized" o "Not logged in"
-**Solución:** 
+
+**Solución:**
+
 ```powershell
 vercel login
 ```
 
 ### Error: "Build failed"
+
 **Solución:**
+
 1. Verificar que las environment variables estén en Vercel
 2. Verificar que el build funcione localmente: `cd apps/frontend && pnpm build`
 3. Revisar logs en Vercel Dashboard
 
 ### Otros Errores
+
 Ver `VERCEL_DEPLOYMENT_FIX.md` para troubleshooting completo.
 
 ---
@@ -185,12 +193,14 @@ Ver `VERCEL_DEPLOYMENT_FIX.md` para troubleshooting completo.
 ## ✅ Checklist Final
 
 Antes de deployar:
+
 - [ ] Estás en `E:\WADI` (raíz del repo)
 - [ ] Tenés Vercel CLI instalado: `vercel --version`
 - [ ] Estás logueado: `vercel whoami`
 - [ ] Las env variables están configuradas en Vercel Dashboard
 
 Para deployar:
+
 - [ ] `cd E:\WADI`
 - [ ] `vercel --prod` o `.\deploy-vercel.ps1`
 - [ ] Confirmar deployment
@@ -213,11 +223,13 @@ Para deployar:
 El problema está completamente solucionado. Ahora podés deployar a Vercel sin problemas usando cualquiera de los métodos documentados.
 
 **Comando más simple:**
+
 ```powershell
 cd E:\WADI && vercel --prod
 ```
 
 **Comando más seguro:**
+
 ```powershell
 cd E:\WADI && .\deploy-vercel.ps1
 ```

@@ -26,37 +26,37 @@ graph LR
 
 ### Backend Readiness Checklist
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| TypeScript compilation | Ready | tsconfig.json configured for CommonJS output |
-| Production dependencies | Ready | All runtime dependencies in package.json |
-| Environment validation | Ready | Comprehensive env-validator.ts checks all required vars |
-| Health check endpoint | Ready | /health endpoint with Supabase connection check |
-| CORS configuration | Ready | Dynamic FRONTEND_URL support |
-| Security headers | Ready | Helmet middleware with CSP, HSTS |
-| Rate limiting | Ready | Express rate limiter on /api routes |
-| Error handling | Ready | Centralized error handler middleware |
-| WebSocket support | Ready | WS server setup on HTTP server |
-| PORT configuration | Ready | Dynamic PORT from env (Railway compatible) |
+| Component               | Status | Notes                                                   |
+| ----------------------- | ------ | ------------------------------------------------------- |
+| TypeScript compilation  | Ready  | tsconfig.json configured for CommonJS output            |
+| Production dependencies | Ready  | All runtime dependencies in package.json                |
+| Environment validation  | Ready  | Comprehensive env-validator.ts checks all required vars |
+| Health check endpoint   | Ready  | /health endpoint with Supabase connection check         |
+| CORS configuration      | Ready  | Dynamic FRONTEND_URL support                            |
+| Security headers        | Ready  | Helmet middleware with CSP, HSTS                        |
+| Rate limiting           | Ready  | Express rate limiter on /api routes                     |
+| Error handling          | Ready  | Centralized error handler middleware                    |
+| WebSocket support       | Ready  | WS server setup on HTTP server                          |
+| PORT configuration      | Ready  | Dynamic PORT from env (Railway compatible)              |
 
 ### Frontend Readiness Checklist
 
-| Component | Status | Notes |
-|-----------|--------|-------|
-| Production build | Ready | Vite build configuration present |
-| Environment variables | Ready | VITE_ prefixed vars for runtime access |
-| Static asset optimization | Ready | Vite handles bundling and tree-shaking |
-| Routing configuration | Ready | React Router with SPA fallback in nginx.conf |
-| API endpoint configuration | Ready | VITE_API_URL for dynamic backend URL |
-| Nginx configuration | Ready | Gzip, caching, security headers configured |
-| Health check endpoint | Ready | /health route in nginx.conf |
+| Component                  | Status | Notes                                        |
+| -------------------------- | ------ | -------------------------------------------- |
+| Production build           | Ready  | Vite build configuration present             |
+| Environment variables      | Ready  | VITE\_ prefixed vars for runtime access      |
+| Static asset optimization  | Ready  | Vite handles bundling and tree-shaking       |
+| Routing configuration      | Ready  | React Router with SPA fallback in nginx.conf |
+| API endpoint configuration | Ready  | VITE_API_URL for dynamic backend URL         |
+| Nginx configuration        | Ready  | Gzip, caching, security headers configured   |
+| Health check endpoint      | Ready  | /health route in nginx.conf                  |
 
 ### External Service Dependencies
 
-| Service | Configuration Required | Status |
-|---------|------------------------|--------|
+| Service  | Configuration Required       | Status     |
+| -------- | ---------------------------- | ---------- |
 | Supabase | URL + ANON_KEY + SERVICE_KEY | Configured |
-| OpenAI | API_KEY + DEFAULT_MODEL | Configured |
+| OpenAI   | API_KEY + DEFAULT_MODEL      | Configured |
 
 ## Railway Backend Deployment Configuration
 
@@ -64,16 +64,16 @@ graph LR
 
 Railway will need these environment variables configured:
 
-| Variable Name | Description | Example | Required |
-|---------------|-------------|---------|----------|
-| SUPABASE_URL | Supabase project URL | https://xxx.supabase.co | Yes |
-| SUPABASE_ANON_KEY | Supabase anonymous key | eyJhbGci... | Yes |
-| SUPABASE_SERVICE_KEY | Supabase service role key | eyJhbGci... | Yes |
-| OPENAI_API_KEY | OpenAI API key | sk-... | Yes |
-| OPENAI_DEFAULT_MODEL | OpenAI model to use | gpt-3.5-turbo | No (default provided) |
-| FRONTEND_URL | Frontend domain URL | https://wadi.vercel.app | Yes |
-| NODE_ENV | Environment mode | production | Yes |
-| PORT | Server port | Auto-assigned by Railway | No (Railway provides) |
+| Variable Name        | Description               | Example                  | Required              |
+| -------------------- | ------------------------- | ------------------------ | --------------------- |
+| SUPABASE_URL         | Supabase project URL      | https://xxx.supabase.co  | Yes                   |
+| SUPABASE_ANON_KEY    | Supabase anonymous key    | eyJhbGci...              | Yes                   |
+| SUPABASE_SERVICE_KEY | Supabase service role key | eyJhbGci...              | Yes                   |
+| OPENAI_API_KEY       | OpenAI API key            | sk-...                   | Yes                   |
+| OPENAI_DEFAULT_MODEL | OpenAI model to use       | gpt-3.5-turbo            | No (default provided) |
+| FRONTEND_URL         | Frontend domain URL       | https://wadi.vercel.app  | Yes                   |
+| NODE_ENV             | Environment mode          | production               | Yes                   |
+| PORT                 | Server port               | Auto-assigned by Railway | No (Railway provides) |
 
 ### Railway Configuration File
 
@@ -91,12 +91,14 @@ Health Check Timeout: 30 seconds
 ### Railway Deployment Strategy
 
 **Build Process**:
+
 1. Railway detects monorepo structure via pnpm-workspace.yaml
 2. Installs all dependencies using pnpm
 3. Compiles TypeScript from apps/api/src to apps/api/dist
 4. Starts production server with compiled JavaScript
 
 **Runtime Characteristics**:
+
 - Auto-scaling based on HTTP traffic
 - Persistent storage not required (stateless API)
 - WebSocket support enabled
@@ -109,11 +111,11 @@ Health Check Timeout: 30 seconds
 
 Vercel will need these environment variables configured:
 
-| Variable Name | Description | Example | Required |
-|---------------|-------------|---------|----------|
-| VITE_SUPABASE_URL | Supabase project URL | https://xxx.supabase.co | Yes |
-| VITE_SUPABASE_ANON_KEY | Supabase anonymous key | eyJhbGci... | Yes |
-| VITE_API_URL | Backend API base URL | https://wadi-api.railway.app | Yes |
+| Variable Name          | Description            | Example                      | Required |
+| ---------------------- | ---------------------- | ---------------------------- | -------- |
+| VITE_SUPABASE_URL      | Supabase project URL   | https://xxx.supabase.co      | Yes      |
+| VITE_SUPABASE_ANON_KEY | Supabase anonymous key | eyJhbGci...                  | Yes      |
+| VITE_API_URL           | Backend API base URL   | https://wadi-api.railway.app | Yes      |
 
 ### Vercel Configuration File
 
@@ -131,6 +133,7 @@ Node Version: 20.x
 ### Vercel Deployment Strategy
 
 **Build Process**:
+
 1. Vercel detects Vite project
 2. Installs dependencies using pnpm
 3. Runs TypeScript compilation and Vite build
@@ -141,6 +144,7 @@ Node Version: 20.x
 Vercel must rewrite all routes to index.html for client-side routing to work properly.
 
 **Caching Strategy**:
+
 - Static assets (JS/CSS): Immutable, 1-year cache
 - index.html: No cache, always fresh
 - API requests: Not cached (proxied to Railway)
@@ -160,14 +164,14 @@ sequenceDiagram
     Railway->>Railway: Build & compile TypeScript
     Railway->>Services: Verify Supabase & OpenAI connectivity
     Railway-->>Dev: Backend URL assigned
-    
+
     Dev->>Vercel: 2. Deploy Frontend (with Backend URL)
     Vercel->>Vercel: Build static assets
     Vercel-->>Dev: Frontend URL assigned
-    
+
     Dev->>Railway: 3. Update FRONTEND_URL on Railway
     Railway->>Railway: Restart with new CORS config
-    
+
     Dev->>Dev: 4. Verify end-to-end connectivity
 ```
 
@@ -310,11 +314,13 @@ Verify no CORS errors when making API requests
 If using custom domains:
 
 **Frontend Custom Domain**:
+
 1. Add custom domain in Vercel dashboard
 2. Configure DNS CNAME record pointing to cname.vercel-dns.com
 3. Update FRONTEND_URL on Railway to match custom domain
 
 **Backend Custom Domain**:
+
 1. Add custom domain in Railway dashboard
 2. Configure DNS CNAME record pointing to Railway's endpoint
 3. Update VITE_API_URL on Vercel to match custom domain
@@ -324,9 +330,9 @@ If using custom domains:
 
 Both platforms must have synchronized credentials:
 
-| Variable | Frontend (VITE_) | Backend |
-|----------|------------------|---------|
-| Supabase URL | VITE_SUPABASE_URL | SUPABASE_URL |
+| Variable          | Frontend (VITE\_)      | Backend           |
+| ----------------- | ---------------------- | ----------------- |
+| Supabase URL      | VITE_SUPABASE_URL      | SUPABASE_URL      |
 | Supabase Anon Key | VITE_SUPABASE_ANON_KEY | SUPABASE_ANON_KEY |
 
 **Mismatch Prevention**: Always update both platforms when rotating Supabase credentials.
@@ -334,16 +340,19 @@ Both platforms must have synchronized credentials:
 ### Monitoring Setup
 
 **Railway Monitoring**:
+
 - Enable built-in metrics dashboard
 - Monitor: CPU usage, memory, request count, response times
 - Set up alerts for downtime or errors
 
 **Vercel Monitoring**:
+
 - Enable Analytics in Vercel dashboard
 - Monitor: Page views, build times, deployment status
 - Configure deployment notifications
 
 **External Monitoring**:
+
 - Set up uptime monitoring (e.g., UptimeRobot, Better Uptime)
 - Monitor both /health endpoints
 - Alert on: 5xx errors, slow response times, downtime
@@ -388,17 +397,17 @@ Alternative via dashboard:
 
 Execute these tests before deploying:
 
-| Test Category | Test Description | Pass Criteria |
-|---------------|------------------|---------------|
-| Build | Run pnpm --filter api tsc | Compiles without errors |
-| Build | Run pnpm --filter frontend build | Builds without errors |
-| Environment | Verify all required env vars present | No validation errors |
-| Health | Start backend locally, curl /health | Returns 200 OK with supabase:connected |
-| Authentication | Login/Register flow | User can authenticate |
-| CORS | Frontend can call backend APIs | No CORS errors in console |
-| WebSocket | Real-time features work | WS connection established |
-| Database | Create/read/update/delete operations | Data persists correctly |
-| AI Features | OpenAI integration functional | AI responses generated |
+| Test Category  | Test Description                     | Pass Criteria                          |
+| -------------- | ------------------------------------ | -------------------------------------- |
+| Build          | Run pnpm --filter api tsc            | Compiles without errors                |
+| Build          | Run pnpm --filter frontend build     | Builds without errors                  |
+| Environment    | Verify all required env vars present | No validation errors                   |
+| Health         | Start backend locally, curl /health  | Returns 200 OK with supabase:connected |
+| Authentication | Login/Register flow                  | User can authenticate                  |
+| CORS           | Frontend can call backend APIs       | No CORS errors in console              |
+| WebSocket      | Real-time features work              | WS connection established              |
+| Database       | Create/read/update/delete operations | Data persists correctly                |
+| AI Features    | OpenAI integration functional        | AI responses generated                 |
 
 ## Known Issues and Mitigations
 
@@ -407,6 +416,7 @@ Execute these tests before deploying:
 **Problem**: Some Railway regions may have WebSocket latency or connection issues.
 
 **Mitigation**:
+
 - Deploy to region closest to primary user base
 - Implement WebSocket reconnection logic in frontend
 - Add fallback to HTTP polling if WS fails
@@ -416,6 +426,7 @@ Execute these tests before deploying:
 **Problem**: Railway may spin down services after inactivity, causing slow first request.
 
 **Mitigation**:
+
 - Upgrade to Railway Pro plan (no cold starts)
 - Implement keep-alive ping from external monitor
 - Add loading indicators for initial requests
@@ -425,6 +436,7 @@ Execute these tests before deploying:
 **Problem**: Sensitive keys in .env files might be committed to git.
 
 **Mitigation**:
+
 - Verify .env is in .gitignore
 - Use platform-specific secret management
 - Rotate keys if accidentally exposed
@@ -434,6 +446,7 @@ Execute these tests before deploying:
 **Problem**: Railway/Vercel may not correctly detect monorepo structure.
 
 **Mitigation**:
+
 - Explicitly set root directory in platform configs
 - Use full pnpm commands with --filter flags
 - Verify pnpm-workspace.yaml is in repository root
@@ -472,7 +485,7 @@ Deployment is considered successful when:
 ### CORS Policy
 
 - Restrict FRONTEND_URL to exact production domain
-- Avoid wildcard (*) CORS origins in production
+- Avoid wildcard (\*) CORS origins in production
 - Verify credentials: true is only enabled for trusted origins
 
 ### API Key Security

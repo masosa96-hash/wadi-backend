@@ -17,15 +17,17 @@
    - Prueba básica
 
 2. **Verificar configuración**:
+
    ```powershell
    .\test-chat-ready.ps1
    ```
 
 3. **Iniciar servicios**:
+
    ```powershell
    # Terminal 1
    pnpm --filter api dev
-   
+
    # Terminal 2
    pnpm --filter frontend dev
    ```
@@ -41,23 +43,23 @@
 
 ### Para Usuarios
 
-| Documento | Descripción | Cuándo usar |
-|-----------|-------------|-------------|
-| **[INICIO_RAPIDO_CHAT.md](./INICIO_RAPIDO_CHAT.md)** | Guía de inicio en 3 pasos | Primera vez o setup rápido |
-| **[CHECKLIST_PRUEBA_CHAT.md](./CHECKLIST_PRUEBA_CHAT.md)** | Checklist completo de pruebas | Antes de entregar/deployment |
-| **[COMPLETAR_SUPABASE_SERVICE_KEY.md](./COMPLETAR_SUPABASE_SERVICE_KEY.md)** | Obtener Service Role Key | Configuración inicial |
+| Documento                                                                    | Descripción                   | Cuándo usar                  |
+| ---------------------------------------------------------------------------- | ----------------------------- | ---------------------------- |
+| **[INICIO_RAPIDO_CHAT.md](./INICIO_RAPIDO_CHAT.md)**                         | Guía de inicio en 3 pasos     | Primera vez o setup rápido   |
+| **[CHECKLIST_PRUEBA_CHAT.md](./CHECKLIST_PRUEBA_CHAT.md)**                   | Checklist completo de pruebas | Antes de entregar/deployment |
+| **[COMPLETAR_SUPABASE_SERVICE_KEY.md](./COMPLETAR_SUPABASE_SERVICE_KEY.md)** | Obtener Service Role Key      | Configuración inicial        |
 
 ### Para Desarrolladores
 
-| Documento | Descripción | Cuándo usar |
-|-----------|-------------|-------------|
+| Documento                                                            | Descripción              | Cuándo usar           |
+| -------------------------------------------------------------------- | ------------------------ | --------------------- |
 | **[RESUMEN_CONFIGURACION_CHAT.md](./RESUMEN_CONFIGURACION_CHAT.md)** | Resumen técnico completo | Entender arquitectura |
-| **[ENTREGA_CHAT_WADI.md](./ENTREGA_CHAT_WADI.md)** | Documento de entrega | Ver qué se implementó |
+| **[ENTREGA_CHAT_WADI.md](./ENTREGA_CHAT_WADI.md)**                   | Documento de entrega     | Ver qué se implementó |
 
 ### Herramientas
 
-| Archivo | Tipo | Descripción |
-|---------|------|-------------|
+| Archivo                                          | Tipo   | Descripción             |
+| ------------------------------------------------ | ------ | ----------------------- |
 | **[test-chat-ready.ps1](./test-chat-ready.ps1)** | Script | Verificación automática |
 
 ---
@@ -65,16 +67,19 @@
 ## 🎯 Flujos de Usuario Implementados
 
 ### 1. Home → Chat
+
 ```
 /home → Escribir mensaje → Enviar → /chat con mensaje
 ```
 
 ### 2. Chat Continuo
+
 ```
 /chat → Escribir → Enviar → Respuesta de WADI
 ```
 
 ### 3. Persistencia
+
 ```
 F5 (refresh) → Mensajes persisten → Continuar conversación
 ```
@@ -84,6 +89,7 @@ F5 (refresh) → Mensajes persisten → Continuar conversación
 ## 🛠️ Arquitectura
 
 ### Backend
+
 ```
 POST /api/chat
 ├── Auth middleware
@@ -95,6 +101,7 @@ POST /api/chat
 ```
 
 ### Frontend
+
 ```
 Chat Page
 ├── Chat Store (Zustand)
@@ -120,12 +127,12 @@ Chat Page
 
 ## 🚨 Problemas Comunes
 
-| Problema | Solución |
-|----------|----------|
-| 401 Unauthorized | Re-loguear |
-| CORS Error | Verificar `FRONTEND_URL` en backend |
-| No aparece respuesta | Verificar `OPENAI_API_KEY` |
-| Mensajes no persisten | Completar `SUPABASE_SERVICE_KEY` |
+| Problema              | Solución                            |
+| --------------------- | ----------------------------------- |
+| 401 Unauthorized      | Re-loguear                          |
+| CORS Error            | Verificar `FRONTEND_URL` en backend |
+| No aparece respuesta  | Verificar `OPENAI_API_KEY`          |
+| Mensajes no persisten | Completar `SUPABASE_SERVICE_KEY`    |
 
 📖 **Más detalles**: Ver [CHECKLIST_PRUEBA_CHAT.md](./CHECKLIST_PRUEBA_CHAT.md#-problemas-comunes-y-soluciones)
 
@@ -134,6 +141,7 @@ Chat Page
 ## 📊 Estado de Implementación
 
 ### ✅ Completado
+
 - Endpoints backend (4/4)
 - Frontend UI
 - Store de chat
@@ -143,6 +151,7 @@ Chat Page
 - Documentación
 
 ### ⚠️ Requiere Acción
+
 - Completar `SUPABASE_SERVICE_KEY`
 
 **Tiempo para completar**: 5 minutos  
@@ -185,6 +194,7 @@ curl http://localhost:4000/health
 ## 🎓 Aprende Más
 
 ### Estructura de Archivos
+
 ```
 apps/
 ├── api/
@@ -204,6 +214,7 @@ apps/
 ### Variables de Entorno
 
 **Frontend** (`apps/frontend/.env`):
+
 ```env
 VITE_SUPABASE_URL=...
 VITE_SUPABASE_ANON_KEY=...
@@ -211,6 +222,7 @@ VITE_API_URL=http://localhost:4000
 ```
 
 **Backend** (`apps/api/.env`):
+
 ```env
 SUPABASE_URL=...
 SUPABASE_ANON_KEY=...

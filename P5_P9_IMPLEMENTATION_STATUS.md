@@ -7,12 +7,12 @@
 
 ## 📊 Resumen General
 
-| Proyecto | Estado | Completado | Descripción |
-|----------|--------|------------|-------------|
-| P5 | 🟢 80% | Base + UI | Workspaces dinámicos con detección automática |
-| P6 | 🟡 60% | Base | Sistema de archivos y memoria de usuario |
-| P8 | 🟡 50% | Base | Onboarding y primera experiencia |
-| P9 | 🟢 70% | Base | Planes, límites y medición de uso |
+| Proyecto | Estado | Completado | Descripción                                   |
+| -------- | ------ | ---------- | --------------------------------------------- |
+| P5       | 🟢 80% | Base + UI  | Workspaces dinámicos con detección automática |
+| P6       | 🟡 60% | Base       | Sistema de archivos y memoria de usuario      |
+| P8       | 🟡 50% | Base       | Onboarding y primera experiencia              |
+| P9       | 🟢 70% | Base       | Planes, límites y medición de uso             |
 
 **Leyenda**: 🟢 Avanzado | 🟡 Base Completada | 🔴 Pendiente
 
@@ -21,6 +21,7 @@
 ## ✅ Completado
 
 ### 📁 Migraciones de Base de Datos (100%)
+
 Todas las migraciones SQL están listas para ejecutar:
 
 - ✅ **001_workspace_enhancements.sql** - Workspaces dinámicos
@@ -59,6 +60,7 @@ Todas las migraciones SQL están listas para ejecutar:
   - Auto-asignación de plan Free a nuevos usuarios
 
 ### 📝 Documentación (100%)
+
 - ✅ **P5_P9_IMPLEMENTATION_PLAN.md** (1,100+ líneas)
   - Análisis completo de arquitectura
   - Diseño detallado por proyecto
@@ -75,6 +77,7 @@ Todas las migraciones SQL están listas para ejecutar:
   - Análisis de impacto
 
 ### 🔧 Backend - Servicios (70%)
+
 - ✅ **topic-detection.ts** (167 líneas)
   - Detección automática de cambio de tema con OpenAI
   - Generación de nombres de workspace
@@ -90,6 +93,7 @@ Todas las migraciones SQL están listas para ejecutar:
   - **Nota**: Requiere `formidable` package
 
 ### 🎨 Frontend - Páginas (40%)
+
 - ✅ **Workspaces.tsx** (520+ líneas)
   - Lista de workspaces con stats
   - Filtros (Todos, Recientes, Archivados)
@@ -104,25 +108,31 @@ Todas las migraciones SQL están listas para ejecutar:
 ## 🚧 Parcialmente Completado
 
 ### P5 - Workspaces Dinámicos (80%)
+
 **Completado**:
+
 - ✅ Schema de BD completo
 - ✅ Funciones SQL para stats y mover conversaciones
 - ✅ Servicio de detección de temas
 - ✅ UI de gestión de workspaces
 
 **Pendiente**:
+
 - 🔲 Integrar detección en chatController
 - 🔲 Actualizar Home.tsx con workspace principal
 - 🔲 Modal para mover conversaciones
 - 🔲 Actualizar workspacesStore con nuevas acciones
 
 ### P6 - Archivos y Memoria (60%)
+
 **Completado**:
+
 - ✅ Schema completo de `files` y `user_memory`
 - ✅ Funciones SQL de contexto y queries
 - ✅ Scaffold de filesController
 
 **Pendiente**:
+
 - 🔲 Instalar y configurar `formidable` en backend
 - 🔲 Implementar procesamiento de archivos (PDF, imágenes, DOCX)
 - 🔲 Servicios de extracción de texto (pdf-parse, tesseract)
@@ -133,12 +143,15 @@ Todas las migraciones SQL están listas para ejecutar:
 - 🔲 memoryController y memoryStore
 
 ### P8 - Onboarding (50%)
+
 **Completado**:
+
 - ✅ Schema completo de onboarding
 - ✅ Eventos y permisos en BD
 - ✅ Tips default en español
 
 **Pendiente**:
+
 - 🔲 Página Onboarding.tsx (3 steps)
 - 🔲 Componente OnboardingStep
 - 🔲 Estado de primer uso en Home
@@ -147,13 +160,16 @@ Todas las migraciones SQL están listas para ejecutar:
 - 🔲 onboardingController
 
 ### P9 - Monetización (70%)
+
 **Completado**:
+
 - ✅ Schema completo de planes
 - ✅ 3 planes configurados (Free, Pro, Business)
 - ✅ Sistema de métricas y eventos
 - ✅ Funciones de tracking y validación
 
 **Pendiente**:
+
 - 🔲 Middleware `limit-check.ts`
 - 🔲 Middleware `usage-tracking.ts`
 - 🔲 Integrar tracking en chatController y filesController
@@ -167,13 +183,16 @@ Todas las migraciones SQL están listas para ejecutar:
 ## 📋 Próximos Pasos Prioritarios
 
 ### Inmediato (Esta semana)
+
 1. **Ejecutar migraciones en Supabase**
+
    ```bash
    # Ver MIGRATION_GUIDE.md para instrucciones
    # Ejecutar en orden: 001, 002, 003, 004, 005
    ```
 
 2. **Instalar dependencias faltantes**
+
    ```bash
    cd apps/api
    npm install formidable pdf-parse mammoth
@@ -188,6 +207,7 @@ Todas las migraciones SQL están listas para ejecutar:
    - Crear workspace automático cuando detecta cambio
 
 ### Corto Plazo (Próxima semana)
+
 5. **Implementar UI de archivos**
    - Componente FileUpload
    - FileAttachment en mensajes
@@ -209,6 +229,7 @@ Todas las migraciones SQL están listas para ejecutar:
    - Modales de límite alcanzado
 
 ### Mediano Plazo (2-3 semanas)
+
 9. **Procesamiento de archivos**
    - Worker para procesar PDFs
    - OCR para imágenes
@@ -228,6 +249,7 @@ Todas las migraciones SQL están listas para ejecutar:
 ## 📊 Métricas Actuales
 
 ### Código Generado
+
 - **SQL**: ~1,500 líneas (5 migraciones)
 - **TypeScript Backend**: ~500 líneas (2 servicios, 1 controller)
 - **TypeScript Frontend**: ~520 líneas (1 página completa)
@@ -235,6 +257,7 @@ Todas las migraciones SQL están listas para ejecutar:
 - **Total**: ~4,000 líneas de código + docs
 
 ### Cobertura por Proyecto
+
 - **P5 Workspaces**: 80% (4/5 tareas)
 - **P6 Archivos**: 60% (3/5 tareas)
 - **P8 Onboarding**: 50% (2/4 tareas)
@@ -246,10 +269,12 @@ Todas las migraciones SQL están listas para ejecutar:
 ## 🎯 Tareas Pendientes Desglosadas
 
 ### P5 - 2 tareas restantes
+
 - [ ] Integrar detección automática en chatController
 - [ ] Actualizar Home adaptativa con workspace principal
 
 ### P6 - 6 tareas restantes
+
 - [ ] Completar filesController con upload funcional
 - [ ] Implementar file-processor service
 - [ ] UI de subida en Chat
@@ -258,12 +283,14 @@ Todas las migraciones SQL están listas para ejecutar:
 - [ ] Integración de archivos con IA
 
 ### P8 - 4 tareas restantes
+
 - [ ] Páginas de onboarding (3 steps)
 - [ ] Estado de primer uso en Home
 - [ ] Componentes de permisos
 - [ ] onboardingController
 
 ### P9 - 3 tareas restantes
+
 - [ ] Middlewares de límites y tracking
 - [ ] Actualizar Billing UI
 - [ ] Modales de límite alcanzado
@@ -277,27 +304,32 @@ Todas las migraciones SQL están listas para ejecutar:
 Con las migraciones ejecutadas, el sistema ya puede:
 
 ✅ **Workspaces**:
+
 - Crear workspaces manualmente
 - Ver stats de workspace (mensajes, última actividad)
 - Mover conversaciones entre workspaces (vía función SQL)
 - Archivar workspaces
 
 ✅ **Archivos** (con upload manual):
+
 - Guardar metadata de archivos
 - Encolar para procesamiento
 - Asociar archivos a conversaciones y mensajes
 
 ✅ **Memoria**:
+
 - Guardar preferencias de usuario
 - Recuperar memoria para contexto de chat
 - Auto-inicializar con defaults
 
 ✅ **Onboarding**:
+
 - Trackear progreso de onboarding
 - Registrar eventos
 - Manejar permisos
 
 ✅ **Billing**:
+
 - Asignar planes a usuarios
 - Trackear uso (mensajes, archivos, workspaces)
 - Validar límites (vía función SQL)
@@ -308,6 +340,7 @@ Con las migraciones ejecutadas, el sistema ya puede:
 ## 🛠️ Stack Técnico Utilizado
 
 ### Base de Datos
+
 - PostgreSQL (Supabase)
 - Funciones PL/pgSQL
 - Triggers
@@ -315,6 +348,7 @@ Con las migraciones ejecutadas, el sistema ya puede:
 - JSONB para metadata flexible
 
 ### Backend (API)
+
 - Node.js + Express
 - TypeScript
 - OpenAI API (GPT-3.5 Turbo)
@@ -322,6 +356,7 @@ Con las migraciones ejecutadas, el sistema ya puede:
 - Middleware de autenticación
 
 ### Frontend
+
 - React + TypeScript
 - Vite
 - Zustand (state management)
@@ -329,6 +364,7 @@ Con las migraciones ejecutadas, el sistema ya puede:
 - Mobile-first responsive
 
 ### Herramientas
+
 - Git para versionado
 - Migraciones SQL versionadas
 - ESLint + TypeScript para calidad
@@ -348,6 +384,7 @@ Con las migraciones ejecutadas, el sistema ya puede:
 ## ⚠️ Notas Importantes
 
 ### Antes de Deploy
+
 1. ✅ Ejecutar migraciones en orden (001 → 005)
 2. ✅ Crear bucket de Supabase Storage con policies
 3. ✅ Verificar variables de entorno (OpenAI API Key)
@@ -355,6 +392,7 @@ Con las migraciones ejecutadas, el sistema ya puede:
 5. ✅ Testear endpoints básicos
 
 ### Consideraciones
+
 - Las migraciones usan `IF NOT EXISTS` - son re-ejecutables
 - Datos existentes se migran automáticamente
 - Plan Free se asigna automáticamente a nuevos usuarios

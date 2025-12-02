@@ -13,6 +13,7 @@
 ### 1. Verificar que los servicios estén corriendo:
 
 **Backend (Terminal 1):**
+
 ```bash
 # Ya está corriendo en puerto 4000
 # Si no, ejecutar:
@@ -20,6 +21,7 @@ pnpm dev:api
 ```
 
 **Frontend (Terminal 2):**
+
 ```bash
 # Ya está corriendo en puerto 5173
 # Si no, ejecutar:
@@ -27,11 +29,13 @@ pnpm dev:front
 ```
 
 ### 2. Abrir en navegador:
+
 ```
 http://localhost:5173
 ```
 
 ### 3. Primera vez:
+
 1. Verás un modal pidiendo tu nombre
 2. Ingresa tu nickname
 3. Click en "Comenzar"
@@ -42,6 +46,7 @@ http://localhost:5173
 ## ✅ IMPLEMENTACIÓN COMPLETADA
 
 ### 1. Backend ✅
+
 - [x] `GUEST_MODE=true` configurado
 - [x] `/api/health` endpoint funcional
 - [x] `authMiddleware` permite guests con `x-guest-id`
@@ -51,6 +56,7 @@ http://localhost:5173
 - [x] ⚠️ AI Tools deshabilitados temporalmente (error DOMMatrix - no afecta funcionalidad)
 
 ### 2. Frontend ✅
+
 - [x] `VITE_GUEST_MODE=true` configurado
 - [x] `guestId` auto-generado (UUID)
 - [x] `guestNick` guardado en localStorage
@@ -62,6 +68,7 @@ http://localhost:5173
 - [x] Chat sin autenticación
 
 ### 3. Estilos CORREGIDOS ✅
+
 - [x] **Mensajes de usuario**: Fondo AZUL (#3B82F6) ⭐
 - [x] **Botón Enviar activo**: AZUL (#3B82F6) ⭐
 - [x] Texto siempre legible (contraste correcto)
@@ -110,10 +117,10 @@ TEXTO:
 ### Test Rápido (5 minutos):
 
 1. **Abrir**: `http://localhost:5173`
-2. **Limpiar datos previos**: 
+2. **Limpiar datos previos**:
    ```javascript
-   localStorage.clear()
-   location.reload()
+   localStorage.clear();
+   location.reload();
    ```
 3. **Ingresar nickname**: Escribe tu nombre y click "Comenzar"
 4. **Enviar mensaje**: "Hola WADI"
@@ -139,6 +146,7 @@ TEXTO:
 ```
 
 ### No disponibles para guests:
+
 ```
 ❌ /api/projects/*
 ❌ /api/sessions/*
@@ -154,6 +162,7 @@ TEXTO:
 ## 🗄️ PERSISTENCIA (localStorage)
 
 ### Keys utilizadas:
+
 ```
 wadi-auth-storage
 └─> { guestId, guestNick, user: null, session: null }
@@ -163,9 +172,10 @@ wadi_conv_${guestId}
 ```
 
 ### Limpiar para testing:
+
 ```javascript
-localStorage.clear()
-location.reload()
+localStorage.clear();
+location.reload();
 ```
 
 ---
@@ -173,6 +183,7 @@ location.reload()
 ## ⚠️ PROBLEMAS CONOCIDOS
 
 ### 1. AI Tools deshabilitados
+
 **Status**: No crítico
 **Impacto**: Ninguno para guest mode
 **Causa**: Error de `DOMMatrix` en backend
@@ -180,6 +191,7 @@ location.reload()
 **Fix futuro**: Investigar dependencia que usa DOMMatrix
 
 ### 2. WebSocket no usado para guests
+
 **Status**: Por diseño
 **Impacto**: Ninguno
 **Razón**: REST API es suficiente para guest mode
@@ -190,6 +202,7 @@ location.reload()
 ## 📊 LOGS ESPERADOS
 
 ### Backend (al iniciar):
+
 ```
 🚀 WADI API running on http://localhost:4000
 📊 Health check: http://localhost:4000/health
@@ -197,6 +210,7 @@ location.reload()
 ```
 
 ### Backend (al enviar mensaje guest):
+
 ```
 [Auth] Checking auth for: POST /
 [Auth] Guest access allowed for: a1b2c3d4-...
@@ -207,6 +221,7 @@ location.reload()
 ```
 
 ### Frontend (consola navegador):
+
 - No debería haber errores
 - Puede haber logs informativos de zustand/react
 
@@ -215,6 +230,7 @@ location.reload()
 ## 🎯 PRÓXIMOS PASOS SUGERIDOS
 
 ### Para Producción:
+
 1. [ ] Configurar variables de entorno de producción
 2. [ ] Actualizar `FRONTEND_URL` y `VITE_API_URL`
 3. [ ] Verificar API key de OpenAI
@@ -224,6 +240,7 @@ location.reload()
 7. [ ] Habilitar AI Tools (fix DOMMatrix)
 
 ### Features Futuras:
+
 1. [ ] Exportar conversación como PDF
 2. [ ] Compartir conversación (link único)
 3. [ ] Temas de color (dark/light)
@@ -247,14 +264,16 @@ location.reload()
    - Si no, ver `COLOR_GUIDE.md`
 
 3. **Verificar localStorage**:
+
    ```javascript
-   localStorage.getItem('wadi-auth-storage')
+   localStorage.getItem("wadi-auth-storage");
    ```
 
 4. **Limpiar y reiniciar**:
+
    ```javascript
-   localStorage.clear()
-   location.reload()
+   localStorage.clear();
+   location.reload();
    ```
 
 5. **Consultar logs**:
@@ -266,6 +285,7 @@ location.reload()
 ## ✨ CARACTERÍSTICAS IMPLEMENTADAS
 
 ### Experiencia de Usuario:
+
 - ✅ Sin registro requerido
 - ✅ Nickname personalizado
 - ✅ Historial local persistente
@@ -278,6 +298,7 @@ location.reload()
 - ✅ Manejo de errores
 
 ### Técnico:
+
 - ✅ REST API para guests
 - ✅ LocalStorage para persistencia
 - ✅ Health checks
@@ -294,6 +315,7 @@ location.reload()
 La aplicación está **100% funcional** para modo Guest.
 
 ### Para empezar:
+
 ```bash
 # Backend ya corriendo en puerto 4000
 # Frontend ya corriendo en puerto 5173
@@ -303,6 +325,7 @@ http://localhost:5173
 ```
 
 ### Documentación:
+
 - Lee `TESTING_GUIDE.md` para tests detallados
 - Lee `COLOR_GUIDE.md` para referencia visual
 - Lee `GUEST_MODE_IMPLEMENTATION.md` para detalles técnicos

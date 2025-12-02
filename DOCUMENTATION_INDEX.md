@@ -8,10 +8,12 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 
 ## 🚀 Para Empezar
 
-### 1. **README_GUEST_MODE.md** 
+### 1. **README_GUEST_MODE.md**
+
 **👉 EMPEZA AQUÍ**
 
 📄 Resumen ejecutivo con todo lo que necesitas para empezar
+
 - ✅ Estado actual del proyecto
 - 🚀 Inicio rápido (2 minutos)
 - 📁 Archivos importantes
@@ -23,9 +25,11 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ---
 
 ### 2. **TESTING_GUIDE.md**
+
 **🧪 Guía de Testing Paso a Paso**
 
 📋 Tests completos con verificación en cada paso
+
 - ✅ Test 1-9: Flujos completos
 - 🎨 Verificación de colores
 - 🐛 Casos edge
@@ -36,9 +40,11 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ---
 
 ### 3. **COLOR_GUIDE.md**
+
 **🎨 Referencia Visual de Colores**
 
 🌈 Guía completa de la paleta y diseño
+
 - 🎯 Componentes y sus colores
 - ✅ Antes/después (problemas resueltos)
 - 📊 Ratios de contraste (WCAG)
@@ -51,9 +57,11 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ## 🔧 Documentación Técnica
 
 ### 4. **GUEST_MODE_IMPLEMENTATION.md**
+
 **📖 Documentación Técnica Completa**
 
 🏗️ Detalles de implementación
+
 - ✅ Backend: GUEST_MODE, endpoints, auth
 - ✅ Frontend: stores, components, router
 - 🔄 Flujo completo de un mensaje
@@ -64,9 +72,11 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ---
 
 ### 5. **ARCHITECTURE_DEEP_DIVE.md**
+
 **🧠 Arquitectura Profunda del Cerebro**
 
 💡 Funcionamiento interno de WADI
+
 - 🧠 Cerebro Dual (Kivo + Wadi)
 - 🔍 Análisis paso a paso
 - ⚡ Optimizaciones implementadas
@@ -78,9 +88,11 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ---
 
 ### 6. **DEBUGGING_GUIDE.md**
+
 **🔧 Debugging & Troubleshooting**
 
 🐛 Soluciones para problemas comunes
+
 - 🛠️ Herramientas de debugging
 - ❌ Problemas comunes y soluciones
 - 🔬 Testing avanzado
@@ -91,9 +103,11 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ---
 
 ### 7. **PERFORMANCE_OPTIMIZATION.md**
+
 **⚡ Performance & Escalabilidad**
 
 🚀 Optimización y rendimiento
+
 - 📊 Métricas actuales
 - ✅ Optimizaciones implementadas
 - 🎯 Performance budget
@@ -107,9 +121,11 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ## 🗺️ Planificación
 
 ### 8. **ROADMAP.md**
+
 **🗺️ Roadmap de Desarrollo**
 
 📅 Plan de features futuras
+
 - Phase 1: Core Enhancements (Q1-Q2 2025)
 - Phase 2: Collaboration (Q2 2025)
 - Phase 3: Advanced Features (Q3 2025)
@@ -123,27 +139,32 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ## 📊 Documentos por Rol
 
 ### Si eres **Product Manager**:
+
 1. README_GUEST_MODE.md (overview)
 2. ROADMAP.md (planning)
 3. GUEST_MODE_STATUS.md (status)
 
 ### Si eres **Desarrollador**:
+
 1. README_GUEST_MODE.md (inicio rápido)
 2. GUEST_MODE_IMPLEMENTATION.md (implementación)
 3. ARCHITECTURE_DEEP_DIVE.md (arquitectura)
 4. DEBUGGING_GUIDE.md (troubleshooting)
 
 ### Si eres **Diseñador**:
+
 1. COLOR_GUIDE.md (paleta y estilos)
 2. TESTING_GUIDE.md (verificar diseño)
 3. README_GUEST_MODE.md (overview)
 
 ### Si eres **QA/Tester**:
+
 1. TESTING_GUIDE.md (tests paso a paso)
 2. DEBUGGING_GUIDE.md (debugging)
 3. README_GUEST_MODE.md (funcionalidad esperada)
 
 ### Si eres **DevOps**:
+
 1. PERFORMANCE_OPTIMIZATION.md (optimización)
 2. DEBUGGING_GUIDE.md (monitoring)
 3. DEPLOYMENT_GUIDE.md (deployment)
@@ -153,24 +174,31 @@ Esta es la documentación completa de WADI. Cada documento está enfocado en un 
 ## 📖 Documentos por Situación
 
 ### "Es mi primera vez con WADI"
+
 → **README_GUEST_MODE.md**
 
 ### "Algo no funciona"
+
 → **DEBUGGING_GUIDE.md** → Sección "Problemas Comunes"
 
 ### "Los colores se ven mal"
+
 → **COLOR_GUIDE.md** → Comparar con "Componentes y sus Colores"
 
 ### "¿Cómo funciona internamente?"
+
 → **ARCHITECTURE_DEEP_DIVE.md** → "Flujo Completo de un Mensaje"
 
 ### "¿Cómo testeo todo?"
+
 → **TESTING_GUIDE.md** → Test 1 al 9
 
 ### "¿Qué viene después?"
+
 → **ROADMAP.md** → Phase 1+
 
 ### "La app va lenta"
+
 → **PERFORMANCE_OPTIMIZATION.md** → "Optimizaciones"
 
 ---
@@ -224,6 +252,7 @@ e:\WADI\
 ## 🎯 Flujo de Trabajo Recomendado
 
 ### Primera Implementación:
+
 ```
 1. README_GUEST_MODE.md (leer overview)
    ↓
@@ -237,6 +266,7 @@ e:\WADI\
 ```
 
 ### Debugging:
+
 ```
 1. Identificar problema
    ↓
@@ -250,6 +280,7 @@ e:\WADI\
 ```
 
 ### Desarrollo de Features:
+
 ```
 1. ROADMAP.md (identificar feature)
    ↓
@@ -267,6 +298,7 @@ e:\WADI\
 ## 📝 Convenciones de Documentación
 
 ### Emojis Usados:
+
 - ✅ Completado/Funcional
 - ❌ Error/No funciona
 - ⚠️ Advertencia/Precaución
@@ -283,6 +315,7 @@ e:\WADI\
 - 📁 Archivos/Folders
 
 ### Formato de Código:
+
 ```typescript
 // Código con sintaxis highlighting
 function ejemplo() {
@@ -291,12 +324,14 @@ function ejemplo() {
 ```
 
 ### Comandos:
+
 ```bash
 # Comandos de terminal
 pnpm dev:api
 ```
 
 ### HTTP Requests:
+
 ```http
 POST /api/chat
 Content-Type: application/json
@@ -311,31 +346,37 @@ Content-Type: application/json
 ### Temas Principales:
 
 **Guest Mode:**
+
 - Implementación: GUEST_MODE_IMPLEMENTATION.md
 - Testing: TESTING_GUIDE.md → Test 2-6
 - Estado: README_GUEST_MODE.md
 
 **Cerebro (Kivo + Wadi):**
+
 - Arquitectura: ARCHITECTURE_DEEP_DIVE.md → "Diseño del Sistema"
 - Flujo: ARCHITECTURE_DEEP_DIVE.md → "Flujo Completo"
 - Optimización: PERFORMANCE_OPTIMIZATION.md → "Backend"
 
 **Colores y Diseño:**
+
 - Paleta: COLOR_GUIDE.md → "Paleta de Colores"
 - Componentes: COLOR_GUIDE.md → "Componentes y sus Colores"
 - Verificación: TESTING_GUIDE.md → Test 3
 
 **Performance:**
+
 - Métricas: PERFORMANCE_OPTIMIZATION.md → "Objetivos"
 - Optimizaciones: PERFORMANCE_OPTIMIZATION.md → "Optimizaciones Implementadas"
 - Escalabilidad: PERFORMANCE_OPTIMIZATION.md → "Escalabilidad"
 
 **Debugging:**
+
 - Problemas comunes: DEBUGGING_GUIDE.md → "Problemas Comunes"
 - Herramientas: DEBUGGING_GUIDE.md → "Herramientas de Debugging"
 - Logs: DEBUGGING_GUIDE.md → "Backend Logging"
 
 **Futuro:**
+
 - Roadmap: ROADMAP.md
 - Features próximas: ROADMAP.md → "Immediate Next Steps"
 - Vision: ROADMAP.md → "Vision 2026"
@@ -363,14 +404,17 @@ Content-Type: application/json
 ## 🎓 Recursos Externos
 
 ### React:
+
 - [Documentación oficial](https://react.dev)
 - [Zustand docs](https://github.com/pmndrs/zustand)
 
 ### OpenAI:
+
 - [API Reference](https://platform.openai.com/docs)
 - [Best Practices](https://platform.openai.com/docs/guides/best-practices)
 
 ### Supabase:
+
 - [Documentación](https://supabase.com/docs)
 - [Auth Guide](https://supabase.com/docs/guides/auth)
 
@@ -379,6 +423,7 @@ Content-Type: application/json
 ## ✨ Resumen
 
 WADI es un **asistente de IA conversacional** con:
+
 - ✅ **Guest mode** completo (sin registro)
 - 🧠 **Cerebro dual** (Kivo + Wadi)
 - ⚡ **Optimizado** para performance

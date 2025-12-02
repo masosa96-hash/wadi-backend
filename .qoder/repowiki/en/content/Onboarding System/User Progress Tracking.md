@@ -13,6 +13,7 @@
 </cite>
 
 ## Table of Contents
+
 1. [Introduction](#introduction)
 2. [System Architecture Overview](#system-architecture-overview)
 3. [Frontend State Management](#frontend-state-management)
@@ -66,6 +67,7 @@ Auth --> Triggers
 ```
 
 **Diagram sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L1-L28)
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L1-L156)
 
@@ -91,14 +93,17 @@ OnboardingState --> ZustandStore : "managed by"
 ```
 
 **Diagram sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L4-L8)
 
 The store defines three core properties:
+
 - **hasCompletedOnboarding**: Boolean flag indicating whether the user has completed the onboarding process
 - **completeOnboarding()**: Action that sets the completion flag to true
 - **resetOnboarding()**: Action that resets the completion flag to false
 
 **Section sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L1-L28)
 
 ### Complete Onboarding Action
@@ -106,6 +111,7 @@ The store defines three core properties:
 The `completeOnboarding()` action represents the core functionality for marking onboarding as complete. This action performs an immediate state update that triggers UI re-rendering and persists the change to local storage.
 
 **Section sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L15-L17)
 - [Onboarding.tsx](file://apps/frontend/src/pages/Onboarding.tsx#L28-L30)
 
@@ -115,14 +121,14 @@ The `completeOnboarding()` action represents the core functionality for marking 
 
 The database schema enhancement adds several columns to track onboarding progress comprehensively:
 
-| Column | Type | Default | Purpose |
-|--------|------|---------|---------|
-| `onboarding_completed` | BOOLEAN | false | Tracks final onboarding completion |
-| `onboarding_step` | INTEGER | 0 | Current step in onboarding (0-based) |
-| `onboarding_completed_at` | TIMESTAMPTZ | NULL | Timestamp when onboarding was completed |
-| `first_login_at` | TIMESTAMPTZ | NULL | First login timestamp |
-| `last_login_at` | TIMESTAMPTZ | NULL | Most recent login timestamp |
-| `login_count` | INTEGER | 0 | Total number of logins |
+| Column                    | Type        | Default | Purpose                                 |
+| ------------------------- | ----------- | ------- | --------------------------------------- |
+| `onboarding_completed`    | BOOLEAN     | false   | Tracks final onboarding completion      |
+| `onboarding_step`         | INTEGER     | 0       | Current step in onboarding (0-based)    |
+| `onboarding_completed_at` | TIMESTAMPTZ | NULL    | Timestamp when onboarding was completed |
+| `first_login_at`          | TIMESTAMPTZ | NULL    | First login timestamp                   |
+| `last_login_at`           | TIMESTAMPTZ | NULL    | Most recent login timestamp             |
+| `login_count`             | INTEGER     | 0       | Total number of logins                  |
 
 ```mermaid
 erDiagram
@@ -160,28 +166,31 @@ PROFILES ||--o{ USER_PERMISSIONS : "manages"
 ```
 
 **Diagram sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L8-L14)
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L26-L46)
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L8-L14)
 
 ### Onboarding Events Table
 
 The onboarding_events table captures detailed analytics about the onboarding process:
 
-| Event Type | Description | Data Structure |
-|------------|-------------|----------------|
-| `onboarding_started` | User begins onboarding | `{}` |
-| `step_viewed` | User views a specific step | `{step_number: int}` |
-| `step_completed` | User completes a step | `{step_number: int}` |
-| `onboarding_completed` | User finishes onboarding | `{}` |
-| `onboarding_skipped` | User skips onboarding | `{}` |
-| `permission_requested` | Permission requested | `{type: string}` |
-| `permission_granted` | Permission granted | `{type: string}` |
-| `permission_denied` | Permission denied | `{type: string}` |
+| Event Type             | Description                | Data Structure       |
+| ---------------------- | -------------------------- | -------------------- |
+| `onboarding_started`   | User begins onboarding     | `{}`                 |
+| `step_viewed`          | User views a specific step | `{step_number: int}` |
+| `step_completed`       | User completes a step      | `{step_number: int}` |
+| `onboarding_completed` | User finishes onboarding   | `{}`                 |
+| `onboarding_skipped`   | User skips onboarding      | `{}`                 |
+| `permission_requested` | Permission requested       | `{type: string}`     |
+| `permission_granted`   | Permission granted         | `{type: string}`     |
+| `permission_denied`    | Permission denied          | `{type: string}`     |
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L26-L46)
 
 ## Dual-Layer Persistence Strategy
@@ -205,6 +214,7 @@ UI-->>User : Visual feedback
 ```
 
 **Diagram sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L15-L17)
 - [Onboarding.tsx](file://apps/frontend/src/pages/Onboarding.tsx#L28-L30)
 
@@ -229,9 +239,11 @@ Trigger-->>Auth : Continue login process
 ```
 
 **Diagram sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L104-L113)
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L104-L113)
 
 ## Complete Onboarding Flow
@@ -255,9 +267,11 @@ Redirect --> Complete
 ```
 
 **Diagram sources**
+
 - [Onboarding.tsx](file://apps/frontend/src/pages/Onboarding.tsx#L28-L31)
 
 **Section sources**
+
 - [Onboarding.tsx](file://apps/frontend/src/pages/Onboarding.tsx#L1-L163)
 
 ### State Synchronization Mechanism
@@ -270,6 +284,7 @@ The system ensures synchronization between frontend and backend states through m
 4. **Database Triggers**: Automatic database updates on user actions
 
 **Section sources**
+
 - [RootGuard.tsx](file://apps/frontend/src/components/RootGuard.tsx#L1-L76)
 
 ## Database Functions and Triggers
@@ -292,11 +307,13 @@ $$ LANGUAGE plpgsql;
 ```
 
 This function performs three critical updates:
+
 - Sets the `last_login_at` timestamp to the current time
 - Increments the `login_count` by 1
 - Sets `first_login_at` only if it's currently NULL (ensures first login is captured)
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L104-L113)
 
 ### complete_user_onboarding Function
@@ -311,7 +328,7 @@ BEGIN
     onboarding_completed = true,
     onboarding_completed_at = now()
   WHERE user_id = p_user_id;
-  
+
   -- Log event
   INSERT INTO onboarding_events (user_id, event_type, event_data)
   VALUES (p_user_id, 'onboarding_completed', '{}');
@@ -320,10 +337,12 @@ $$ LANGUAGE plpgsql;
 ```
 
 This function performs two operations:
+
 1. Updates the `profiles` table to mark onboarding as complete
 2. Creates an event record in the `onboarding_events` table for analytics
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L86-L97)
 
 ## Data Flow Analysis
@@ -355,6 +374,7 @@ API-->>User : Application Ready
 ```
 
 **Diagram sources**
+
 - [onboardingStore.ts](file://apps/frontend/src/store/onboardingStore.ts#L15-L17)
 - [authStore.ts](file://apps/frontend/src/store/authStore.ts#L34-L46)
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L104-L113)
@@ -369,6 +389,7 @@ The system implements several mechanisms to ensure state consistency:
 4. **Transaction Safety**: Database functions use atomic operations
 
 **Section sources**
+
 - [004_onboarding.sql](file://apps/api/migrations/004_onboarding.sql#L86-L97)
 
 ## Common Issues and Solutions
@@ -378,11 +399,13 @@ The system implements several mechanisms to ensure state consistency:
 **Problem**: Frontend state doesn't match backend database state
 
 **Causes**:
+
 - Network failures during state synchronization
 - Browser cache issues
 - Concurrent user modifications
 
 **Solutions**:
+
 1. **Implement State Validation**: Compare frontend and backend states on critical operations
 2. **Add Retry Logic**: Implement exponential backoff for failed state updates
 3. **Use Optimistic Updates**: Update frontend immediately, rollback on failure
@@ -393,11 +416,13 @@ The system implements several mechanisms to ensure state consistency:
 **Problem**: Database constraints prevent state updates
 
 **Causes**:
+
 - Race conditions in concurrent updates
 - Invalid data types or formats
 - Missing required field validations
 
 **Solutions**:
+
 1. **Implement Proper Error Handling**: Catch and handle constraint violations gracefully
 2. **Add Defensive Programming**: Validate data before database operations
 3. **Use Transactions**: Wrap related operations in database transactions
@@ -408,6 +433,7 @@ The system implements several mechanisms to ensure state consistency:
 **Problem**: Slow state updates affecting user experience
 
 **Solutions**:
+
 1. **Optimize Database Queries**: Use appropriate indexes and query patterns
 2. **Implement Caching**: Cache frequently accessed state data
 3. **Batch Operations**: Group related state updates together
@@ -443,12 +469,14 @@ The system implements several mechanisms to ensure state consistency:
 **Symptoms**: User completes onboarding but appears to be in onboarding flow on subsequent visits
 
 **Diagnosis Steps**:
+
 1. Check local storage for the `wadi-onboarding-storage` key
 2. Verify Zustand store state in browser developer tools
 3. Inspect network requests for state synchronization failures
 4. Review browser console for JavaScript errors
 
 **Resolution**:
+
 - Clear browser cache and cookies
 - Check for Content Security Policy restrictions
 - Verify localStorage permissions
@@ -459,12 +487,14 @@ The system implements several mechanisms to ensure state consistency:
 **Symptoms**: Backend database shows different onboarding state than frontend
 
 **Diagnosis Steps**:
+
 1. Query the `profiles` table for the specific user's onboarding state
 2. Check the `onboarding_events` table for recent activity
 3. Review database logs for constraint violations
 4. Verify database trigger execution
 
 **Resolution**:
+
 - Implement state reconciliation logic
 - Add database state validation
 - Review trigger implementation
@@ -475,12 +505,14 @@ The system implements several mechanisms to ensure state consistency:
 **Symptoms**: Slow onboarding completion or state updates
 
 **Diagnosis Steps**:
+
 1. Profile database query performance
 2. Monitor frontend performance metrics
 3. Check network latency and bandwidth
 4. Review concurrent user impact
 
 **Resolution**:
+
 - Optimize database indexes
 - Implement client-side caching
 - Reduce unnecessary state updates

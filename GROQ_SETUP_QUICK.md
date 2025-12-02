@@ -34,6 +34,7 @@ curl http://localhost:4000/api/health
 ```
 
 Expected response:
+
 ```json
 {
   "status": "ok",
@@ -46,6 +47,7 @@ Expected response:
 ### 4. Deploy to Railway (2 minutes)
 
 **Option A - Railway Dashboard:**
+
 1. Go to railway.app and open your project
 2. Click on the API service
 3. Go to "Variables" tab
@@ -55,6 +57,7 @@ Expected response:
 5. Click "Deploy"
 
 **Option B - Railway CLI:**
+
 ```bash
 railway variables set GROQ_API_KEY="gsk_your_key_here"
 railway variables set GROQ_DEFAULT_MODEL="llama-3.1-8b-instant"
@@ -102,14 +105,17 @@ But this is **optional** - chat works fine with just Groq.
 ## 🐛 Troubleshooting
 
 ### "Missing Groq API key" error
+
 ➡️ Check `.env` has `GROQ_API_KEY`
 ➡️ Restart the API server
 
 ### Health check fails
+
 ➡️ Check Railway logs: `railway logs`
 ➡️ Verify the API key is valid at console.groq.com
 
 ### Chat responses are slow
+
 ➡️ Make sure you're using `llama-3.1-8b-instant`
 ➡️ Check Groq status: https://status.groq.com
 

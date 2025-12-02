@@ -24,12 +24,12 @@ This design defines an automated system to detect the public URL of the Railway-
 
 The system must detect the Railway service URL through one of the following methods:
 
-| Method | Description | Priority |
-|--------|-------------|----------|
-| Railway CLI | Query Railway CLI for the deployed service URL | High |
-| Environment Variable | Read from RAILWAY_STATIC_URL or similar Railway-provided variables | High |
-| Configuration File | Read from a local configuration or deployment record | Medium |
-| User Input | Prompt user to provide the URL if automatic detection fails | Low |
+| Method               | Description                                                        | Priority |
+| -------------------- | ------------------------------------------------------------------ | -------- |
+| Railway CLI          | Query Railway CLI for the deployed service URL                     | High     |
+| Environment Variable | Read from RAILWAY_STATIC_URL or similar Railway-provided variables | High     |
+| Configuration File   | Read from a local configuration or deployment record               | Medium   |
+| User Input           | Prompt user to provide the URL if automatic detection fails        | Low      |
 
 ### 2. Console Output
 
@@ -40,6 +40,7 @@ The system must display:
 - Clear formatting for easy readability
 
 Example output format:
+
 ```
 [2024-01-15 10:30:45] Railway Service URL Detected
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -57,6 +58,7 @@ The system must:
 - Validate the response structure and status
 
 Expected health endpoint response structure:
+
 ```
 {
   "status": "ok",
@@ -68,16 +70,17 @@ Expected health endpoint response structure:
 
 The system must display validation results including:
 
-| Information | Description |
-|-------------|-------------|
-| Endpoint URL | Full URL tested (base URL + /health) |
+| Information      | Description                                |
+| ---------------- | ------------------------------------------ |
+| Endpoint URL     | Full URL tested (base URL + /health)       |
 | HTTP Status Code | Response status code (200, 404, 500, etc.) |
-| Response Time | Time taken for the request in milliseconds |
-| Health Status | Value of "status" field from response |
-| Supabase Status | Value of "supabase" field from response |
-| Overall Result | PASSED or FAILED with reason |
+| Response Time    | Time taken for the request in milliseconds |
+| Health Status    | Value of "status" field from response      |
+| Supabase Status  | Value of "supabase" field from response    |
+| Overall Result   | PASSED or FAILED with reason               |
 
 Example success output:
+
 ```
 [2024-01-15 10:30:46] Health Endpoint Validation
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -91,6 +94,7 @@ Result: ✓ PASSED
 ```
 
 Example failure output:
+
 ```
 [2024-01-15 10:30:46] Health Endpoint Validation
 ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
@@ -115,12 +119,12 @@ The detection process follows this priority sequence:
 
 ### HTTP Request Configuration
 
-| Parameter | Value |
-|-----------|-------|
-| Method | GET |
-| Timeout | 10 seconds |
-| Headers | Accept: application/json |
-| Follow Redirects | Yes (max 3) |
+| Parameter        | Value                    |
+| ---------------- | ------------------------ |
+| Method           | GET                      |
+| Timeout          | 10 seconds               |
+| Headers          | Accept: application/json |
+| Follow Redirects | Yes (max 3)              |
 
 ### Validation Criteria
 
@@ -143,13 +147,13 @@ The health check is considered FAILED when:
 
 The system must handle the following error scenarios:
 
-| Error Type | Handling Strategy |
-|------------|-------------------|
-| URL not detected | Display error message and prompt for manual input |
-| Network timeout | Display timeout error with timeout duration |
-| Invalid response | Display response parsing error with received content |
-| Connection refused | Display connection error and suggest service may be down |
-| SSL/TLS errors | Display certificate error and suggest checking deployment |
+| Error Type         | Handling Strategy                                         |
+| ------------------ | --------------------------------------------------------- |
+| URL not detected   | Display error message and prompt for manual input         |
+| Network timeout    | Display timeout error with timeout duration               |
+| Invalid response   | Display response parsing error with received content      |
+| Connection refused | Display connection error and suggest service may be down  |
+| SSL/TLS errors     | Display certificate error and suggest checking deployment |
 
 ## Constraints
 
@@ -161,12 +165,12 @@ The system must handle the following error scenarios:
 
 ## Non-Functional Requirements
 
-| Requirement | Description |
-|-------------|-------------|
-| Performance | Complete detection and validation within 30 seconds |
-| Reliability | Handle network failures gracefully |
-| Usability | Provide clear, human-readable console output |
-| Security | Do not expose sensitive credentials in console output |
+| Requirement | Description                                           |
+| ----------- | ----------------------------------------------------- |
+| Performance | Complete detection and validation within 30 seconds   |
+| Reliability | Handle network failures gracefully                    |
+| Usability   | Provide clear, human-readable console output          |
+| Security    | Do not expose sensitive credentials in console output |
 
 ## Out of Scope
 

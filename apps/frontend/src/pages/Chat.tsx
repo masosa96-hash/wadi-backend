@@ -139,7 +139,7 @@ const MessageBubble = ({ message, isTyping }: { message: any, isTyping?: boolean
         {!isTyping && (
           <div className={`flex items-center gap-2 mt-1.5 px-1 ${isUser ? 'flex-row-reverse' : 'flex-row'}`}>
             <span className="text-[10px] text-gray-600 font-mono">
-              {new Date(message.created_at || Date.now()).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}
+              {message.created_at ? new Date(message.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }) : '--:--'}
             </span>
             {!isUser && (
               <div className="flex gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
