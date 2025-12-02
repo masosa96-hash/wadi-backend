@@ -1,3 +1,4 @@
+
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useAuthStore } from "./store/authStore";
 // import { useOnboardingStore } from "./store/onboardingStore"; // TODO: Add onboarding flow
@@ -27,6 +28,7 @@ import NotFound from "./pages/NotFound";
 import SharedConversation from "./pages/SharedConversation";
 import { theme } from "./styles/theme";
 import RootLayout from "./layouts/RootLayout";
+import WadiChatInterface from "./components/WadiChatInterface";
 
 
 // Root redirect component - sends users to appropriate page based on auth state
@@ -66,6 +68,10 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <RootRedirect />,
+      },
+      {
+        path: "/design-preview",
+        element: <WadiChatInterface />,
       },
       {
         path: "/auth",
@@ -246,4 +252,3 @@ export const router = createBrowserRouter([
     ],
   },
 ]);
-
