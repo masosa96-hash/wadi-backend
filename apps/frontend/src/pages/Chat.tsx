@@ -1,9 +1,11 @@
 
 import React, { useState, useEffect, useRef } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useChatStore } from "../store/chatStore";
 import { useAuthStore } from "../store/authStore";
 import ChatInterface from "../components/ChatInterface"; // Mirror Mode Component
+import ShareModal from "../components/ShareModal";
 
 // --- Icons (Lucide-style inline SVGs) ---
 const Icons = {
@@ -163,13 +165,26 @@ const MessageBubble = ({ message, isTyping }: { message: any, isTyping?: boolean
 export default function Chat() {
   const { user } = useAuthStore();
   const { messages, sendMessage, sendingMessage } = useChatStore();
+  const navigate = useNavigate();
+  const location = useLocation();
   
-  const [activeTab, setActiveTab] = useState('chat');
   const [input, setInput] = useState('');
   const [isMirrorMode, setIsMirrorMode] = useState(false);
+  const [showShareModal, setShowShareModal] = useState(false);
   
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const getActiveTab = () => {
+    const path = location.pathname;
+    if (path === '/home') return 'home';
+    if (path === '/chat') return 'chat';
+    if (path === '/history') return 'history';
+    if (path === '/profile') return 'profile';
+    return 'chat';
+  };
+
+  const activeTab = getActiveTab();
 
   const scrollToBottom = () => {
     messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
@@ -212,6 +227,13 @@ export default function Chat() {
   return (
     <div className="flex h-screen w-full bg-[#0D0D0F] text-[#E4E4E7] font-sans overflow-hidden selection:bg-cyan-500/20 selection:text-cyan-200">
       
+      {showShareModal && (
+        <ShareModal
+          conversationId="current" // In a real app, pass the actual ID
+          onClose={() => setShowShareModal(false)}
+        />
+      )}
+
       {/* Sidebar (Desktop) / Bottom Nav (Mobile) */}
       <nav className="
         fixed bottom-0 left-0 w-full h-16 bg-[#0D0D0F]/90 backdrop-blur-xl border-t border-white/5 z-30
@@ -231,24 +253,24 @@ export default function Chat() {
 
           {/* Navigation */}
           <div className="space-y-1">
-            <NavItem icon={Icons.Home} label="Inicio" active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
-            <NavItem icon={Icons.Chat} label="Chat" active={activeTab === 'chat'} onClick={() => setActiveTab('chat')} />
-            <NavItem icon={Icons.History} label="Historial" active={activeTab === 'history'} onClick={() => setActiveTab('history')} />
+            <NavItem icon={Icons.Home} label="Inicio" active={activeTab === 'home'} onClick={() => navigate('/home')} />
+            <NavItem icon={Icons.Chat} label="Chat" active={activeTab === 'chat'} onClick={() => navigate('/chat')} />
+            <NavItem icon={Icons.History} label="Historial" active={activeTab === 'history'} onClick={() => navigate('/projects')} />
           </div>
         </div>
 
         {/* Mobile Navigation Items (Horizontal) */}
         <div className="flex justify-around items-center h-full md:hidden px-2">
-           <NavItem icon={Icons.Home} label="Inicio" active={activeTab === 'home'} onClick={() => setActiveTab('home')} />
-           <NavItem icon={Icons.Chat} label="Chat" active={activeTab === 'chat'} onClick={() => setActiveTab('chat')} />
-           <NavItem icon={Icons.History} label="Historial" active={activeTab === 'history'} onClick={() => setActiveTab('history')} />
-           <NavItem icon={Icons.User} label="Perfil" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
+           <NavItem icon={Icons.Home} label="Inicio" active={activeTab === 'home'} onClick={() => navigate('/home')} />
+           <NavItem icon={Icons.Chat} label="Chat" active={activeTab === 'chat'} onClick={() => navigate('/chat')} />
+           <NavItem icon={Icons.History} label="Historial" active={activeTab === 'history'} onClick={() => navigate('/projects')} />
+           <NavItem icon={Icons.User} label="Perfil" active={activeTab === 'profile'} onClick={() => navigate('/profile')} />
         </div>
 
         {/* Profile (Desktop) */}
         <div className="hidden md:block mt-auto">
           <div className="h-px w-full bg-white/5 mb-4" />
-          <NavItem icon={Icons.User} label="Perfil" active={activeTab === 'profile'} onClick={() => setActiveTab('profile')} />
+          <NavItem icon={Icons.User} label="Perfil" active={activeTab === 'profile'} onClick={() => navigate('/profile')} />
         </div>
       </nav>
 
@@ -279,7 +301,10 @@ export default function Chat() {
               </button>
             </div>
             
-            <button className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1A1A1D] hover:bg-[#222225] border border-white/5 transition-all text-xs font-medium text-gray-300">
+            <button 
+              onClick={() => setShowShareModal(true)}
+              className="flex items-center gap-2 px-3 py-1.5 rounded-lg bg-[#1A1A1D] hover:bg-[#222225] border border-white/5 transition-all text-xs font-medium text-gray-300"
+            >
               <Icons.Share />
               <span className="hidden sm:block">Share</span>
             </button>

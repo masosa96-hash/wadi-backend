@@ -28,7 +28,7 @@ import NotFound from "./pages/NotFound";
 import SharedConversation from "./pages/SharedConversation";
 import { theme } from "./styles/theme";
 import RootLayout from "./layouts/RootLayout";
-import WadiChatInterface from "./components/WadiChatInterface";
+
 
 
 // Root redirect component - sends users to appropriate page based on auth state
@@ -68,10 +68,6 @@ export const router = createBrowserRouter([
       {
         path: "/",
         element: <RootRedirect />,
-      },
-      {
-        path: "/design-preview",
-        element: <WadiChatInterface />,
       },
       {
         path: "/auth",
