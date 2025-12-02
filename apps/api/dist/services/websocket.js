@@ -40,7 +40,7 @@ function setupWebSocketServer(server) {
                 }
                 else if (data.type === "stop") {
                     if (client.runId)
-                        await handleStopRun(clientId, client.runId);
+                        await handleStopRun(clientId);
                 }
             }
             catch (error) {
@@ -90,7 +90,7 @@ async function handleChatMessage(clientId, content) {
         return;
     try {
         // 1. Save user message
-        const { data: userMessage, error: userMsgError } = await supabase_1.supabase
+        const { error: userMsgError } = await supabase_1.supabase
             .from("messages")
             .insert({
             conversation_id: client.conversationId,
@@ -140,10 +140,12 @@ async function handleChatMessage(clientId, content) {
     }
     catch (error) {
         console.error("[WebSocket] Chat error:", error);
-        client.ws.send(JSON.stringify({ type: "error", message: error.message }));
+        const errorMessage = error instanceof Error ? error.message : "Unknown error";
+        client.ws.send(JSON.stringify({ type: "error", message: errorMessage }));
     }
 }
-async function handleStopRun(clientId, runId) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function handleStopRun(clientId) {
     // Existing stop logic...
     const client = clients.get(clientId);
     if (!client)

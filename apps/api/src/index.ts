@@ -1,4 +1,5 @@
 import "./config/env";
+import "./config/polyfill"; // Polyfill for DOMMatrix (required by pdf-parse)
 import { validateEnvironment } from "./config/env-validator";
 import express from "express";
 import cors from "cors";
@@ -26,7 +27,7 @@ import { checkOpenAIHealth } from "./services/openai";
 import { setupWebSocketServer } from "./services/websocket";
 import { generalApiLimiter } from "./middleware/rateLimit";
 import { errorHandler } from "./middleware/errorHandler";
-// import "./services/ai-tools"; // Initialize AI tools - TEMPORARILY DISABLED (causes DOMMatrix error)
+import "./services/ai-tools"; // Initialize AI tools
 
 // Validate environment variables before starting
 validateEnvironment();

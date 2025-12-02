@@ -1,4 +1,5 @@
 import OpenAI from "openai";
+import { ChatCompletionMessageParam } from "openai/resources/chat/completions";
 
 // Groq API configuration (primary LLM provider)
 const apiKey = process.env.GROQ_API_KEY;
@@ -58,7 +59,7 @@ export async function generateChatCompletion(
 
     const completion = await llmClient.chat.completions.create({
       model: groqModel,
-      messages: messages as any,
+      messages: messages as ChatCompletionMessageParam[],
       max_tokens: 1000,
       temperature: 0.7,
     });
@@ -72,45 +73,47 @@ export async function generateChatCompletion(
 
     console.log(`[Chat Service] Response generated successfully, length: ${response.length} chars`);
     return { response, model: groqModel };
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as { message: string; status?: number; code?: string; type?: string };
+
     // Detailed error logging
     console.error("[Chat Service] Error details:", {
-      message: error.message,
-      status: error.status,
-      type: error.type,
-      code: error.code,
+      message: err.message,
+      status: err.status,
+      type: err.type,
+      code: err.code,
     });
 
     // Handle specific API errors
-    if (error.status === 429) {
+    if (err.status === 429) {
       throw new Error("Rate limit exceeded. Please try again later.");
     }
 
-    if (error.status === 401 || error.status === 403) {
+    if (err.status === 401 || err.status === 403) {
       throw new Error("LLM API authentication failed. Please check GROQ_API_KEY configuration.");
     }
 
-    if (error.status === 400) {
-      const errorMessage = error.message || "Invalid request to LLM API";
+    if (err.status === 400) {
+      const errorMessage = err.message || "Invalid request to LLM API";
       console.error("[Chat Service] Bad request:", errorMessage);
       throw new Error(`LLM API error: ${errorMessage}`);
     }
 
-    if (error.status === 404) {
+    if (err.status === 404) {
       throw new Error(`Model '${model}' not found. Please check model name or use a supported model.`);
     }
 
-    if (error.status >= 500) {
+    if (err.status && err.status >= 500) {
       throw new Error("LLM service is temporarily unavailable. Please try again later.");
     }
 
     // Handle network errors
-    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+    if (err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND') {
       throw new Error("Cannot connect to LLM service. Please check your network connection.");
     }
 
     // Generic error with as much detail as possible
-    const errorMsg = error.message || "Unknown error occurred";
+    const errorMsg = err.message || "Unknown error occurred";
     console.error("[Chat Service] Unexpected error:", error);
     throw new Error(`Failed to generate AI response: ${errorMsg}`);
   }
@@ -153,45 +156,47 @@ export async function generateCompletion(
 
     console.log(`[OpenAI Service] Response generated successfully, length: ${response.length} chars`);
     return response;
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as { message: string; status?: number; code?: string; type?: string };
+
     // Detailed error logging
     console.error("[OpenAI Service] Error details:", {
-      message: error.message,
-      status: error.status,
-      type: error.type,
-      code: error.code,
+      message: err.message,
+      status: err.status,
+      type: err.type,
+      code: err.code,
     });
 
     // Handle specific API errors
-    if (error.status === 429) {
+    if (err.status === 429) {
       throw new Error("Rate limit exceeded. Please try again later.");
     }
 
-    if (error.status === 401 || error.status === 403) {
+    if (err.status === 401 || err.status === 403) {
       throw new Error("LLM API authentication failed. Please check API key configuration.");
     }
 
-    if (error.status === 400) {
-      const errorMessage = error.message || "Invalid request to LLM API";
+    if (err.status === 400) {
+      const errorMessage = err.message || "Invalid request to LLM API";
       console.error("[OpenAI Service] Bad request:", errorMessage);
       throw new Error(`LLM API error: ${errorMessage}`);
     }
 
-    if (error.status === 404) {
+    if (err.status === 404) {
       throw new Error(`Model '${model}' not found. Please check model name or use a supported model.`);
     }
 
-    if (error.status >= 500) {
+    if (err.status && err.status >= 500) {
       throw new Error("LLM service is temporarily unavailable. Please try again later.");
     }
 
     // Handle network errors
-    if (error.code === 'ECONNREFUSED' || error.code === 'ENOTFOUND') {
+    if (err.code === 'ECONNREFUSED' || err.code === 'ENOTFOUND') {
       throw new Error("Cannot connect to LLM service. Please check your network connection.");
     }
 
     // Generic error with as much detail as possible
-    const errorMsg = error.message || "Unknown error occurred";
+    const errorMsg = err.message || "Unknown error occurred";
     console.error("[OpenAI Service] Unexpected error:", error);
     throw new Error(`Failed to generate AI response: ${errorMsg}`);
   }
@@ -252,7 +257,7 @@ export async function* generateCompletionStream(
   try {
     const stream = await llmClient.chat.completions.create({
       model: model,
-      messages: messages as any,
+      messages: messages as ChatCompletionMessageParam[],
       max_tokens: 1000,
       temperature: 0.7,
       stream: true,
@@ -264,20 +269,21 @@ export async function* generateCompletionStream(
         yield content;
       }
     }
-  } catch (error: any) {
+  } catch (error: unknown) {
+    const err = error as { response?: { status: number; data: any } };
     // Handle API errors
-    if (error.response) {
-      console.error("LLM API error:", error.response.status, error.response.data);
+    if (err.response) {
+      console.error("LLM API error:", err.response.status, err.response.data);
 
-      if (error.response.status === 429) {
+      if (err.response.status === 429) {
         throw new Error("Rate limit exceeded. Please try again later.");
       }
 
-      if (error.response.status === 401) {
+      if (err.response.status === 401) {
         throw new Error("Invalid LLM API key");
       }
 
-      throw new Error(`LLM API error: ${error.response.data?.error?.message || "Unknown error"}`);
+      throw new Error(`LLM API error: ${err.response.data?.error?.message || "Unknown error"}`);
     }
 
     console.error("LLM service error:", error);

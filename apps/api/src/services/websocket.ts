@@ -1,10 +1,7 @@
 import { Server } from "http";
 import { WebSocket, WebSocketServer } from "ws";
-import jwt from "jsonwebtoken";
 import { supabase } from "../config/supabase";
 import { generateCompletionStream } from "./openai";
-import { generateChatCompletion } from "./openai";
-import { WebSocketMessage, WebSocketMessageType } from "../services/brain/types";
 
 interface WSClient {
   ws: WebSocket;
@@ -53,7 +50,7 @@ export function setupWebSocketServer(server: Server) {
         } else if (data.type === "message") {
           await handleChatMessage(clientId, data.content);
         } else if (data.type === "stop") {
-          if (client.runId) await handleStopRun(clientId, client.runId);
+          if (client.runId) await handleStopRun(clientId);
         }
       } catch (error) {
         console.error("[WebSocket] Error handling message:", error);
@@ -108,7 +105,7 @@ async function handleChatMessage(clientId: string, content: string) {
 
   try {
     // 1. Save user message
-    const { data: userMessage, error: userMsgError } = await supabase
+    const { error: userMsgError } = await supabase
       .from("messages")
       .insert({
         conversation_id: client.conversationId,
@@ -133,7 +130,7 @@ async function handleChatMessage(clientId: string, content: string) {
         role: "system",
         content: "Sos WADI, un asistente de IA amigable y útil. Hablás en español de forma cercana y natural.",
       },
-      ...(history || []).map((msg: any) => ({
+      ...(history || []).map((msg: { role: string; content: string }) => ({
         role: msg.role,
         content: msg.content,
       })),
@@ -161,13 +158,15 @@ async function handleChatMessage(clientId: string, content: string) {
 
     client.ws.send(JSON.stringify({ type: "complete", fullOutput }));
 
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("[WebSocket] Chat error:", error);
-    client.ws.send(JSON.stringify({ type: "error", message: error.message }));
+    const errorMessage = error instanceof Error ? error.message : "Unknown error";
+    client.ws.send(JSON.stringify({ type: "error", message: errorMessage }));
   }
 }
 
-async function handleStopRun(clientId: string, runId: string) {
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+async function handleStopRun(clientId: string) {
   // Existing stop logic...
   const client = clients.get(clientId);
   if (!client) return;

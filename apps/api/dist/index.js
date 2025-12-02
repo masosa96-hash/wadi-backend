@@ -4,6 +4,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 require("./config/env");
+require("./config/polyfill"); // Polyfill for DOMMatrix (required by pdf-parse)
 const env_validator_1 = require("./config/env-validator");
 const express_1 = __importDefault(require("express"));
 const cors_1 = __importDefault(require("cors"));
@@ -31,7 +32,7 @@ const openai_1 = require("./services/openai");
 const websocket_1 = require("./services/websocket");
 const rateLimit_1 = require("./middleware/rateLimit");
 const errorHandler_1 = require("./middleware/errorHandler");
-// import "./services/ai-tools"; // Initialize AI tools - TEMPORARILY DISABLED (causes DOMMatrix error)
+require("./services/ai-tools"); // Initialize AI tools
 // Validate environment variables before starting
 (0, env_validator_1.validateEnvironment)();
 const app = (0, express_1.default)();
