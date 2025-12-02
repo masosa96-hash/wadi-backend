@@ -136,7 +136,7 @@ app.use(errorHandler);
 const server = createServer(app);
 
 // Setup WebSocket server
-const wss = setupWebSocketServer(server);
+setupWebSocketServer(server);
 
 // Start server
 server.listen(PORT, "0.0.0.0", () => {
