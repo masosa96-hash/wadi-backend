@@ -12,46 +12,46 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
-      
+          node-version-file: ".nvmrc"
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 10.21.0
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build Frontend
         run: pnpm build:frontend
         env:
-          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL }}
-          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY }}
-          VITE_API_URL: ${{ secrets.VITE_API_URL }}
+          VITE_SUPABASE_URL: ${{ secrets.VITE_SUPABASE_URL || 'https://mock.supabase.co' }}
+          VITE_SUPABASE_ANON_KEY: ${{ secrets.VITE_SUPABASE_ANON_KEY || 'mock_key' }}
+          VITE_API_URL: ${{ secrets.VITE_API_URL || 'http://localhost:4000' }}
 
   build-backend:
     name: Build Backend
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
-      
+          node-version-file: ".nvmrc"
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 10.21.0
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Build Backend
         run: pnpm build:api
 
@@ -60,19 +60,19 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version-file: '.nvmrc'
-      
+          node-version-file: ".nvmrc"
+
       - name: Setup pnpm
         uses: pnpm/action-setup@v2
         with:
           version: 10.21.0
-      
+
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
-      
+
       - name: Lint
         run: cd apps/frontend && pnpm lint
