@@ -1,10 +1,8 @@
 # 🤖 WADI - AI Conversational Assistant
 
-<div align="center">
-
 ![WADI Logo](https://via.placeholder.com/150x150/09090B/FAFAFA?text=WADI)
 
-**Your intelligent conversational AI assistant**
+## Your intelligent conversational AI assistant
 
 [![License](https://img.shields.io/badge/license-MIT-blue.svg)](LICENSE)
 [![Node](https://img.shields.io/badge/node-%3E%3D20-brightgreen)](https://nodejs.org)
@@ -17,15 +15,13 @@
 [Deployment](#-deployment) •
 [Contributing](#-contributing)
 
-</div>
-
 ---
 
 ## 🎯 What is WADI?
 
 WADI is a modern, open-source AI conversational assistant built with a **dual-brain architecture** (Kivo + Wadi) that provides intelligent, context-aware conversations. It features a **guest mode** for immediate use without registration, beautiful dark UI, and seamless local storage persistence.
 
-### Key Highlights:
+### Key Highlights
 
 - 🧠 **Dual-Brain Architecture**: Kivo (reasoning) + Wadi (execution)
 - 🎨 **Modern Dark UI**: Beautiful, accessible design
@@ -38,7 +34,7 @@ WADI is a modern, open-source AI conversational assistant built with a **dual-br
 
 ## ✨ Features
 
-### Core Features:
+### Core Features
 
 - ✅ Intelligent conversational AI powered by OpenAI GPT
 - ✅ Guest mode with localStorage persistence
@@ -49,7 +45,7 @@ WADI is a modern, open-source AI conversational assistant built with a **dual-br
 - ✅ Health check system
 - ✅ Rate limiting and security headers
 
-### Coming Soon:
+### Coming Soon
 
 - 🔄 Streaming responses
 - 🎤 Voice interface
@@ -75,6 +71,7 @@ WADI is a modern, open-source AI conversational assistant built with a **dual-br
 For a streamlined setup experience, use the automated setup script:
 
 1. **Run the setup script**:
+
    ```powershell
    .\setup-wadi.ps1
    ```
@@ -82,12 +79,13 @@ For a streamlined setup experience, use the automated setup script:
 2. **Follow the prompts** to configure your environment variables.
 
 3. **Start the app**:
+
    ```bash
    pnpm --filter api dev
    pnpm --filter frontend dev
    ```
 
-> **Note**: If you prefer manual setup, follow the [Installation](#-installation) guide below.
+> **Note**: If you prefer manual setup, follow the [Installation](#installation) guide below.
 
 ### Installation
 
@@ -121,7 +119,7 @@ pnpm dev:front
 pnpm dev:all
 ```
 
-Open [http://localhost:5173](http://localhost:5173) in your browser.
+Open <http://localhost:5173> in your browser.
 
 ---
 
@@ -143,7 +141,7 @@ Open [http://localhost:5173](http://localhost:5173) in your browser.
 
 ## 🏗️ Project Structure
 
-```
+```text
 wadi/
 ├── apps/
 │   ├── api/              # Backend (Node.js + Express)
@@ -173,7 +171,7 @@ wadi/
 
 ## 🛠️ Tech Stack
 
-### Backend:
+### Backend
 
 - **Runtime**: Node.js 20+
 - **Framework**: Express
@@ -182,7 +180,7 @@ wadi/
 - **WebSocket**: ws
 - **Auth**: Supabase Auth
 
-### Frontend:
+### Frontend
 
 - **Framework**: React 18
 - **Build Tool**: Vite
@@ -191,7 +189,7 @@ wadi/
 - **Animations**: Framer Motion
 - **Styling**: Inline styles with theme system
 
-### DevOps:
+### DevOps
 
 - **Package Manager**: pnpm
 - **Monorepo**: pnpm workspaces
@@ -202,9 +200,9 @@ wadi/
 
 ## 🚀 Deployment
 
-### Quick Deploy (Recommended):
+### Quick Deploy (Recommended)
 
-**Backend** → [Railway](https://railway.app)  
+**Backend** → [Railway](https://railway.app)
 **Frontend** → [Vercel](https://vercel.com)
 
 **Quick deployment commands:**
@@ -281,7 +279,7 @@ _User messages in blue, AI responses in dark gray_
 
 Contributions are welcome! Please check our [Contributing Guide](CONTRIBUTING.md) (coming soon).
 
-### Development Workflow:
+### Development Workflow
 
 1. Fork the repo
 2. Create feature branch (`git checkout -b feature/amazing-feature`)
@@ -352,10 +350,6 @@ See [ROADMAP.md](ROADMAP.md) for detailed future plans including:
 
 ---
 
-<div align="center">
-
 **Built with ❤️ by the WADI team**
 
 [Website](https://wadi.ai) • [Documentation](DOCUMENTATION_INDEX.md) • [Twitter](https://twitter.com/wadi_ai)
-
-</div>

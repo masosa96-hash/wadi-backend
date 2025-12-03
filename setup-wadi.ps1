@@ -60,12 +60,11 @@ Write-Header "Configuring Backend (API)"
 
 $apiEnvPath = "apps/api/.env"
 $apiExamplePath = "apps/api/.env.example"
-$backendConfigured = $false
 
 if (Test-Path $apiEnvPath) {
     Write-Info "Backend .env file already exists. Skipping creation."
-    $backendConfigured = $true
-} else {
+}
+else {
     if (-not (Test-Path $apiExamplePath)) {
         Write-ErrorMsg "apps/api/.env.example not found!"
         exit 1
@@ -96,7 +95,8 @@ if (Test-Path $apiEnvPath) {
         # Check if GROQ_API_KEY exists in example, if not append it
         if ($envContent -match "GROQ_API_KEY=") {
             $envContent = $envContent -replace "GROQ_API_KEY=.*", "GROQ_API_KEY=$groqApiKey"
-        } else {
+        }
+        else {
             $envContent += "`nGROQ_API_KEY=$groqApiKey"
             $envContent += "`nGROQ_DEFAULT_MODEL=llama-3.1-8b-instant"
         }
@@ -118,7 +118,8 @@ $frontendExamplePath = "apps/frontend/.env.example"
 
 if (Test-Path $frontendEnvPath) {
     Write-Info "Frontend .env file already exists. Skipping creation."
-} else {
+}
+else {
     if (-not (Test-Path $frontendExamplePath)) {
         Write-ErrorMsg "apps/frontend/.env.example not found!"
         exit 1
@@ -157,10 +158,12 @@ try {
     pnpm install
     if ($LASTEXITCODE -eq 0) {
         Write-Success "Dependencies installed successfully"
-    } else {
+    }
+    else {
         throw "pnpm install failed with exit code $LASTEXITCODE"
     }
-} catch {
+}
+catch {
     Write-ErrorMsg "Failed to install dependencies: $_"
     exit 1
 }
