@@ -220,7 +220,10 @@ export async function sendMessage(req: Request, res: Response): Promise<void> {
     let errorCode = "INTERNAL_ERROR";
     let statusCode = 500;
 
-    const err = error as { message?: string };
+    // Type guard to safely access error properties
+    const err = error && typeof error === 'object' && 'message' in error 
+      ? error as { message?: string } 
+      : { message: undefined };
 
     if (err.message) {
       // Check for specific error types

@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
 import { supabase } from "../config/supabase";
-import { generateCompletion, isValidModel, mapToGroqModel } from "../services/openai";
+import { generateCompletion, isValidModel } from "../services/openai";
 
 /**
  * GET /api/projects/:id/runs
@@ -159,10 +159,10 @@ export async function createRun(req: Request, res: Response): Promise<void> {
       console.log(`[createRun] Generating AI response for project ${projectId}`);
       output = await generateCompletion(input.trim(), selectedModel);
       console.log(`[createRun] AI response generated successfully`);
-    } catch (aiError: any) {
+    } catch (aiError: unknown) {
       console.error("[createRun] AI generation error:", {
-        message: aiError.message,
-        stack: aiError.stack,
+        message: aiError instanceof Error ? aiError.message : String(aiError),
+        stack: aiError instanceof Error ? aiError.stack : undefined,
         model: selectedModel,
         inputLength: input.length,
       });
@@ -173,11 +173,11 @@ export async function createRun(req: Request, res: Response): Promise<void> {
         p_user_id: userId,
         p_amount: creditCost,
         p_reason: "AI generation failed - refund",
-        p_metadata: { model: selectedModel, project_id: projectId, error: aiError.message },
+        p_metadata: { model: selectedModel, project_id: projectId, error: aiError instanceof Error ? aiError.message : String(aiError) },
       });
       
       // Return specific error message
-      const errorMessage = aiError.message || "Failed to generate AI response";
+      const errorMessage = aiError instanceof Error ? aiError.message : "Failed to generate AI response";
       res.status(500).json({ 
         error: errorMessage,
         code: "AI_GENERATION_ERROR",
@@ -277,7 +277,7 @@ export async function updateRun(req: Request, res: Response): Promise<void> {
       return;
     }
 
-    const updates: any = {};
+    const updates: Record<string, unknown> = {};
     if (custom_name !== undefined) {
       updates.custom_name = custom_name;
     }

@@ -3,8 +3,14 @@ import { readFileSync } from "fs";
 import { join } from "path";
 
 // pdf-parse is a CommonJS module
-// eslint-disable-next-line @typescript-eslint/no-require-imports
-const pdfParse = require("pdf-parse");
+let _pdfParse: any;
+
+async function getPdfParse() {
+  if (!_pdfParse) {
+    _pdfParse = (await import('pdf-parse')).default;
+  }
+  return _pdfParse;
+}
 
 export class PDFAnalysisTool extends AITool {
   readonly id = "pdf_analyzer";
@@ -62,7 +68,8 @@ export class PDFAnalysisTool extends AITool {
       }
 
       // Parse PDF
-      const pdfData = await pdfParse(pdfBuffer);
+      const pdfParseFn = await getPdfParse();
+      const pdfData = await pdfParseFn(pdfBuffer);
 
       // Extract based on mode
       const result: any = {};
