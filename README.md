@@ -70,6 +70,25 @@ WADI is a modern, open-source AI conversational assistant built with a **dual-br
 - OpenAI API Key
 - Supabase account (optional for auth users)
 
+### Quick Setup (Automated)
+
+For a streamlined setup experience, use the automated setup script:
+
+1. **Run the setup script**:
+   ```powershell
+   .\setup-wadi.ps1
+   ```
+
+2. **Follow the prompts** to configure your environment variables.
+
+3. **Start the app**:
+   ```bash
+   pnpm --filter api dev
+   pnpm --filter frontend dev
+   ```
+
+> **Note**: If you prefer manual setup, follow the [Installation](#-installation) guide below.
+
 ### Installation
 
 ```bash
