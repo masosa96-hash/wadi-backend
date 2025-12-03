@@ -21,13 +21,13 @@ export default defineConfig([
     },
     rules: {
       // Temporarily disable for deployment - TODO: Fix these incrementally
-      '@typescript-eslint/no-explicit-any': 'off',
-      '@typescript-eslint/no-unused-vars': 'off',
-      'react-hooks/exhaustive-deps': 'off',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      '@typescript-eslint/no-unused-vars': 'warn',
+      'react-hooks/exhaustive-deps': 'warn',
       'react-hooks/rules-of-hooks': 'warn',
-      'react-hooks/set-state-in-effect': 'off',
-      'react-refresh/only-export-components': 'off',
-      'prefer-const': 'off',
+      'react-hooks/set-state-in-effect': 'warn',
+      'react-refresh/only-export-components': 'warn',
+      'prefer-const': 'warn',
     },
   },
 ])
