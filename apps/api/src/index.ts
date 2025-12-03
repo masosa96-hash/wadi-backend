@@ -1,5 +1,5 @@
 import "./config/env";
-// import "./config/polyfill"; // Polyfill for DOMMatrix (required by pdf-parse)
+import "./config/polyfill"; // Polyfill for DOMMatrix (required by pdf-parse)
 // import { validateEnvironment } from "./config/env-validator";
 import express from "express";
 import cors from "cors";
