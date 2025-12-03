@@ -1,0 +1,4 @@
+run = "bash replit.sh"
+
+[env]
+NODE_VERSION = "22"
